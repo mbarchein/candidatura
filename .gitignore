@@ -5,3 +5,6 @@ fuentes/
 
 # salidas del navegador al generar el A3
 a3-candidatura/vista.png
+
+# extracciones temporales para validar sintaxis
+/[a-z][0-9].js
