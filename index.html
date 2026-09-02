@@ -695,6 +695,53 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
     transition-duration:.01ms !important;scroll-behavior:auto !important
   }
 }
+
+/* ---------- Móvil de verdad: por debajo de 620px --------------------
+   Chrome no abre una ventana más estrecha de 519px, justo por encima del
+   breakpoint de 520, así que este tramo nunca se pudo ver mientras se
+   construía la web. Está medido con un iframe de ancho fijo a 320, 360,
+   390 y 414px, que es donde vive la gente. */
+@media (max-width:620px){
+
+  /* La barra provocaba scroll horizontal en toda la página: la marca no
+     se partía —237px de una pieza— y con el botón del reto no entraba en
+     320px. Ahora la marca se parte en dos líneas y los enlaces de sección
+     se retiran: esto es una sola página, se navega bajando, y quedan los
+     dos botones que hacen algo, el tema y el reto. */
+  .nav__in{gap:.6rem;min-height:54px}
+  .nav__mark{
+    font-size:.7rem;letter-spacing:.05em;
+    white-space:normal;line-height:1.22;min-width:0;flex:1 1 auto
+  }
+  .nav__links{margin-left:auto;gap:.45rem;flex:0 0 auto;flex-wrap:nowrap}
+  .nav__links a:not(.nav__cta){display:none}
+  .nav__cta{
+    font-size:.66rem;letter-spacing:.03em;padding:0 .85rem;
+    display:inline-flex;align-items:center;min-height:44px
+  }
+
+  /* Un dedo pide unos 44px. El aro del tema medía 34 y el de la música 23
+     de alto, que en un móvil se falla más de lo que se acierta. */
+  .tema{width:44px;height:44px}
+  .tema svg{width:19px;height:19px}
+  .son{padding:0 .9rem;font-size:.74rem;min-height:44px}
+
+  /* La tira de caras caía en 5+5+1 y la última quedaba huérfana. A cuatro
+     por fila sale 4+4+3, los discos crecen de 56 a ~78px y los nombres
+     dejan de partirse en tres líneas. */
+  .crew__item{flex:0 0 calc((100% - 3 * .55rem) / 4)}
+  .crew__item a{width:100%}
+
+  /* Nada de texto por debajo de 11px a un palmo de la cara. Los 9px del
+     sello se quedan: son parte del dibujo y escalan con su viewBox. */
+  .grupo__pie span{font-size:.74rem}
+  .empresa span{font-size:.74rem}
+  .tag{font-size:.72rem}
+  .fact__l{font-size:.74rem}
+  .q__kind{font-size:.74rem}
+  .result__label{font-size:.74rem}
+  .mascota-pie{font-size:.74rem}
+}
 </style>
 
 <!-- ===================== NAVEGACIÓN ===================== -->
