@@ -40,7 +40,6 @@
   --ink:#0a0c16; --ink-2:#100f1c; --panel:#171525;
   --texto:#f1efe9; --texto-2:#dbe6f4; --apagado:#b0aea8; --apagado-2:#8b8880;
   --cian-txt:#3fc9f0; --coral-txt:#f9a79d;
-  --marco-logo:transparent;
   --cian:#3fc9f0; --cian-claro:#9ce2f6; --coral:#f4796b; --coral-claro:#f9a79d;
   --linea:rgba(208,192,176,.17); --linea-fuerte:rgba(208,192,176,.3);
   /* tipos */
@@ -60,9 +59,6 @@
   --texto:#191820; --texto-2:#3a3742; --apagado:#5e574e; --apagado-2:#8a8177;
   --cian-txt:#0d6f92; --coral-txt:#bf3f2f;
   --linea:rgba(74,58,46,.18); --linea-fuerte:rgba(74,58,46,.32);
-  /* el logotipo es la versión menta para fondo oscuro: sobre claro va en
-     una pastilla oscura para que se lea */
-  --marco-logo:#12111c;
 }
 :root[data-tema="claro"] .hoja{
   background:
@@ -73,7 +69,10 @@
 .grupo img.grupo__clara{display:none}
 :root[data-tema="claro"] .grupo img.grupo__oscura{display:none}
 :root[data-tema="claro"] .grupo img.grupo__clara{display:block}
-.marca-empresa img{background:var(--marco-logo);border-radius:2mm;padding:1.2mm 2mm}
+/* menta sobre oscuro, positivo sobre claro: ya no hace falta la pastilla */
+.marca-empresa img.logo__claro{display:none}
+:root[data-tema="claro"] .marca-empresa img.logo__oscuro{display:none}
+:root[data-tema="claro"] .marca-empresa img.logo__claro{display:block}
 
 @page{ size:A3; margin:0 }
 *{box-sizing:border-box}
@@ -368,7 +367,8 @@ if(location.search.indexOf("claro") >= 0) document.documentElement.dataset.tema 
       <p class="legal">Candidatura registrada conforme a la normativa de elecciones sindicales. La firmamos los once candidatos: no es una comunicación de la empresa.</p>
       <p class="marca-empresa">
         <span>Elecciones al Comité de Empresa de</span>
-        <img src="img/nazaries.png" alt="Nazaríes">
+        <img class="logo__oscuro" src="img/nazaries.png" alt="Nazaríes">
+        <img class="logo__claro" src="img/nazaries_positivo.png" alt="Nazaríes">
       </p>
     </div>
   </footer>
