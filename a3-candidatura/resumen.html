@@ -240,9 +240,14 @@ html,body{margin:0;padding:0;background:#060d20;-webkit-print-color-adjust:exact
   display:block;margin-top:1.6mm;font-family:var(--mono);font-size:var(--t-mini);
   letter-spacing:.08em;text-transform:uppercase;color:var(--coral-txt)
 }
-.pie__web a{
-  font-family:var(--mono);font-size:var(--t-mini);letter-spacing:.04em;color:var(--cian-txt);
-  display:block;margin-top:1.5mm;text-decoration:none;line-height:1.5
+.pie__web a{display:block;text-decoration:none}
+.pie__url{
+  font-family:var(--display);font-weight:500;font-size:13pt;letter-spacing:-.01em;
+  color:var(--cian-txt);margin-top:2mm;line-height:1.05
+}
+.pie__alt{
+  font-family:var(--mono);font-size:6pt;letter-spacing:.04em;color:var(--apagado);
+  margin-top:1.2mm;line-height:1.4
 }
 .cierre{display:flex;align-items:center;gap:6mm;margin-top:4mm}
 .legal{
@@ -362,7 +367,8 @@ if(location.search.indexOf("claro") >= 0) document.documentElement.dataset.tema 
       <div class="pie__web">
         <b class="pie__fecha">29 de septiembre</b>
         <span class="pie__cta">Recuerda elegirnos también ese día</span>
-        <a href="https://celebrated-marzipan-d4f9a2.netlify.app/">celebrated-marzipan-d4f9a2.netlify.app</a>
+        <a class="pie__url" href="http://sin-siglas.info/">sin-siglas.info</a>
+        <a class="pie__alt" href="https://celebrated-marzipan-d4f9a2.netlify.app/">celebrated-marzipan-d4f9a2.netlify.app</a>
       </div>
     </div>
     <div class="cierre">

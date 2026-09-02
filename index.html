@@ -180,7 +180,10 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
 .hero__in{position:relative}
 .hero h1{
   font-size:clamp(2.6rem,7.9vw,5.1rem);font-weight:500;text-transform:uppercase;
-  margin:.7rem 0 0;letter-spacing:-.042em
+  margin:.7rem 0 0;letter-spacing:-.042em;
+  /* Gellix no tiene Bold. El trazo le da cuerpo sin la negrita falsa
+     del navegador, que deforma los astiles */
+  -webkit-text-stroke:.5px currentColor
 }
 .hero h1 em{font-style:normal;color:var(--cian-txt);display:block}
 .hero__sub{
@@ -1308,11 +1311,11 @@ const CANDIDATOS = [
   { n: 2, nombre:"Raúl Navarro Raya",                 codigo:"RNA", mono:"RN", corto:"Raúl Navarro",          puesto:"People & Values Specialist",       anios:null, suplente:false,
     frase:"",
     fraseCompi:"Raúl empatiza y trata de buscar siempre la mejor solución ante cualquier problema.",
-    foto:FOTOS.navarro, comites:[] },
+    foto:FOTOS.navarro, comites:["seguridad"] },
   { n: 3, nombre:"María del Rocío Galindo Dengra",    codigo:"RGL", mono:"RG", corto:"Rocío Galindo",         puesto:"Customer Success Director",        anios:null, suplente:false,
     frase:"",
     fraseCompi:"Con Rocío puedes hablar de cualquier cosa, y te escucha de verdad.",
-    foto:FOTOS.galindo, comites:[] },
+    foto:FOTOS.galindo, comites:["seguridad","igualdad"] },
   { n: 4, nombre:"José Pablo Fernández Guerra",       codigo:"PFE", mono:"JP", corto:"José Pablo Fernández",  puesto:"Engineering Technical Lead",       anios:null, suplente:false,
     frase:"Cada semana forma a los que llegan y escucha lo que traen. Cada día, a quien viene con una duda o un problema.",
     fraseCompi:"",
@@ -1324,7 +1327,7 @@ const CANDIDATOS = [
   { n: 6, nombre:"Francisco Javier Bolívar Lupiáñez", codigo:"", mono:"FB", corto:"Fran Bolívar",          puesto:"Engineering Technical Lead",       anios:null, suplente:false,
     frase:"",
     fraseCompi:"Fran estaba de vacaciones el día de la foto: sale en la pantalla del fondo. Lo conocerás más de la Stamm que del organigrama.",
-    foto:FOTOS.bolivar, comites:[] },
+    foto:FOTOS.bolivar, comites:["seguridad","igualdad"] },
   { n: 7, nombre:"Leticia Algarra Ulierte",           codigo:"LAL", mono:"LA", corto:"Leticia Algarra",       puesto:"Project Management Specialist",    anios:8, suplente:false,
     frase:"",
     fraseCompi:"Leticia, cuidando de sus equipos cada día desde hace 8 años.",
