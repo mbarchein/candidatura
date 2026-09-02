@@ -1,0 +1,7 @@
+# La tipografía corporativa (Gellix, Displaay Type Foundry) es comercial y este
+# repo es público: los ficheros de fuente no se suben. Van incrustados en el
+# HTML, que es lo que necesita el despliegue.
+fuentes/
+
+# salidas del navegador al generar el A3
+a3-candidatura/vista.png
