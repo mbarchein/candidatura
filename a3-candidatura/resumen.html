@@ -38,7 +38,9 @@
   --w:297mm; --h:420mm; --margen:13mm;   /* alto completo de A3: a 419 quedaba 1mm blanco al imprimir */
   /* color, la paleta del cartel */
   --ink:#0a0c16; --ink-2:#100f1c; --panel:#171525;
-  --texto:#f1efe9; --apagado:#b0aea8; --apagado-2:#8b8880;
+  --texto:#f1efe9; --texto-2:#dbe6f4; --apagado:#b0aea8; --apagado-2:#8b8880;
+  --cian-txt:#3fc9f0; --coral-txt:#f9a79d;
+  --marco-logo:transparent;
   --cian:#3fc9f0; --cian-claro:#9ce2f6; --coral:#f4796b; --coral-claro:#f9a79d;
   --linea:rgba(208,192,176,.17); --linea-fuerte:rgba(208,192,176,.3);
   /* tipos */
@@ -48,9 +50,31 @@
   --mono:"IBM Plex Mono","DejaVu Sans Mono",monospace;
   --mano:"Caveat",cursive;
   /* escala tipográfica: saltos grandes a propósito */
-  --t-titular:64pt; --t-cifra:29pt; --t-medio:12pt; --t-nombre:8.4pt;
+  --t-titular:66pt; --t-cifra:29pt; --t-medio:12pt; --t-nombre:8.4pt;
   --t-cuerpo:9pt; --t-mini:7pt; --t-puesto:7pt;
 }
+/* ---- versión luminosa: se pide con ?claro en la URL al exportar, así el
+        mismo fichero da los dos PDF sin duplicar el diseño ---- */
+:root[data-tema="claro"]{
+  --ink:#f6f2ea; --ink-2:#efe9df; --panel:#fffdf9;
+  --texto:#191820; --texto-2:#3a3742; --apagado:#5e574e; --apagado-2:#8a8177;
+  --cian-txt:#0d6f92; --coral-txt:#bf3f2f;
+  --linea:rgba(74,58,46,.18); --linea-fuerte:rgba(74,58,46,.32);
+  /* el logotipo es la versión menta para fondo oscuro: sobre claro va en
+     una pastilla oscura para que se lea */
+  --marco-logo:#12111c;
+}
+:root[data-tema="claro"] .hoja{
+  background:
+    radial-gradient(46% 30% at 14% 4%,rgba(150,120,170,.20),transparent 70%),
+    radial-gradient(40% 26% at 88% 12%,rgba(244,121,107,.18),transparent 72%),
+    var(--ink);
+}
+.grupo img.grupo__clara{display:none}
+:root[data-tema="claro"] .grupo img.grupo__oscura{display:none}
+:root[data-tema="claro"] .grupo img.grupo__clara{display:block}
+.marca-empresa img{background:var(--marco-logo);border-radius:2mm;padding:1.2mm 2mm}
+
 @page{ size:A3; margin:0 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;background:#060d20;-webkit-print-color-adjust:exact;print-color-adjust:exact}
@@ -72,18 +96,18 @@ html,body{margin:0;padding:0;background:#060d20;-webkit-print-color-adjust:exact
 /* ---------- 1. cabecera ---------- */
 .marca{
   font-family:var(--mono);font-size:var(--t-mini);letter-spacing:.2em;text-transform:uppercase;
-  color:var(--cian);margin:0 0 4mm
+  color:var(--cian-txt);margin:0 0 4mm
 }
 .titular{
   font-family:var(--display);font-weight:500;font-size:var(--t-titular);
-  line-height:.92;letter-spacing:-.035em;text-transform:uppercase;margin:0
+  line-height:.92;letter-spacing:-.045em;text-transform:uppercase;margin:0
 }
-.titular em{font-style:normal;color:var(--cian);display:block;white-space:nowrap}
+.titular em{font-style:normal;color:var(--cian-txt);display:block;white-space:nowrap}
 .claim{
   font-family:var(--display);font-weight:500;font-size:var(--t-medio);
-  text-transform:uppercase;letter-spacing:-.01em;margin:4mm 0 0;color:#dbe6f4
+  text-transform:uppercase;letter-spacing:-.01em;margin:4mm 0 0;color:var(--texto-2)
 }
-.claim b{color:var(--coral-claro)}
+.claim b{color:var(--coral-txt)}
 
 /* ---------- 2. cifras ---------- */
 .cifras{
@@ -94,9 +118,9 @@ html,body{margin:0;padding:0;background:#060d20;-webkit-print-color-adjust:exact
 .cifra{padding-right:4mm}
 .cifra b{
   font-family:var(--display);font-weight:500;font-size:var(--t-cifra);line-height:1;
-  color:var(--cian);display:block
+  color:var(--cian-txt);display:block
 }
-.cifra:nth-child(2) b,.cifra:nth-child(4) b{color:var(--coral-claro)}
+.cifra:nth-child(2) b,.cifra:nth-child(4) b{color:var(--coral-txt)}
 .cifra span{
   font-family:var(--mono);font-size:var(--t-mini);letter-spacing:.13em;text-transform:uppercase;
   color:var(--apagado);display:block;margin-top:1.5mm
@@ -127,14 +151,14 @@ html,body{margin:0;padding:0;background:#060d20;-webkit-print-color-adjust:exact
 /* ---------- 4. las once personas ---------- */
 .rotulo{
   font-family:var(--mono);font-size:var(--t-mini);letter-spacing:.2em;text-transform:uppercase;
-  color:var(--coral-claro);margin:0 0 3.5mm;
+  color:var(--coral-txt);margin:0 0 3.5mm;
   display:flex;align-items:center;gap:3mm
 }
 .rotulo::after{content:"";flex:1;height:.8pt;background:var(--linea)}
 .gente{display:flex;flex-wrap:wrap;justify-content:center;gap:5mm 3mm;margin:0;padding:0;list-style:none}
 .gente li{text-align:center;flex:0 0 calc((100% - 15mm)/6)}
 .gente i{
-  font-style:normal;font-family:var(--mono);font-size:7pt;color:var(--cian);
+  font-style:normal;font-family:var(--mono);font-size:7pt;color:var(--cian-txt);
   margin-right:1.2mm;font-weight:500
 }
 .gente u{
@@ -174,18 +198,18 @@ html,body{margin:0;padding:0;background:#060d20;-webkit-print-color-adjust:exact
 .compromiso:nth-child(3),.compromiso:nth-child(4){border-left-color:#4fa9a2}
 .compromiso h3{
   font-family:var(--mono);font-weight:500;font-size:var(--t-mini);letter-spacing:.14em;
-  text-transform:uppercase;color:var(--cian-claro);margin:0 0 2.5mm
+  text-transform:uppercase;color:var(--cian-txt);margin:0 0 2.5mm
 }
-.compromiso:nth-child(3) h3,.compromiso:nth-child(4) h3{color:#c8f2e8}
-.compromiso p{margin:0;font-size:var(--t-cuerpo);line-height:1.4;color:#dbe6f4}
+.compromiso:nth-child(3) h3,.compromiso:nth-child(4) h3{color:var(--cian-txt)}
+.compromiso p{margin:0;font-size:var(--t-cuerpo);line-height:1.4;color:var(--texto-2)}
 
 /* ---------- 6. cómo se vota ---------- */
 .votar{display:grid;grid-template-columns:repeat(3,1fr);gap:5mm}
 .votar b{
   font-family:var(--mono);font-weight:500;font-size:var(--t-mini);letter-spacing:.14em;
-  text-transform:uppercase;color:var(--cian);display:block;margin-bottom:1.8mm
+  text-transform:uppercase;color:var(--cian-txt);display:block;margin-bottom:1.8mm
 }
-.votar span{font-size:var(--t-cuerpo);line-height:1.4;color:#cfdcee;display:block}
+.votar span{font-size:var(--t-cuerpo);line-height:1.4;color:var(--texto-2);display:block}
 
 /* ---------- 7. pie ---------- */
 .hoja > footer{margin-top:auto}
@@ -197,26 +221,26 @@ html,body{margin:0;padding:0;background:#060d20;-webkit-print-color-adjust:exact
 .sello__aro{fill:none;stroke:var(--coral);stroke-width:2.4}
 .sello__pica{fill:none;stroke:rgba(63,201,240,.55);stroke-width:5.5;stroke-dasharray:1.6 10.4}
 .sello__aro2{fill:none;stroke:rgba(156,226,246,.32);stroke-width:1}
-.sello__vuelta{font-family:var(--display);font-weight:500;font-size:11px;fill:var(--cian-claro)}
-.sello__urna{fill:none;stroke:var(--cian-claro);stroke-width:2}
+.sello__vuelta{font-family:var(--display);font-weight:500;font-size:11px;fill:var(--cian-txt)}
+.sello__urna{fill:none;stroke:var(--cian-txt);stroke-width:2}
 .sello__x{fill:none;stroke:var(--coral);stroke-width:3;stroke-linecap:round}
-.sello__t1{font-family:var(--display);font-weight:500;font-size:20px;fill:#eaf6ff;text-anchor:middle}
-.sello__t2{font-family:var(--mono);font-size:9.5px;fill:#d3e0ee;text-anchor:middle;letter-spacing:.16em}
-.sello__t3{font-family:var(--mono);font-size:9.5px;fill:#ffc9c1;text-anchor:middle}
-.pie__mano{font-family:var(--mano);font-size:17pt;line-height:1.15;color:#e9eff8;margin:0;flex:1 1 auto}
-.pie__mano b{color:var(--cian);font-weight:600}
+.sello__t1{font-family:var(--display);font-weight:500;font-size:20px;fill:var(--texto);text-anchor:middle}
+.sello__t2{font-family:var(--mono);font-size:9.5px;fill:var(--texto-2);text-anchor:middle;letter-spacing:.16em}
+.sello__t3{font-family:var(--mono);font-size:9.5px;fill:var(--coral-txt);text-anchor:middle}
+.pie__mano{font-family:var(--mano);font-size:17pt;line-height:1.15;color:var(--texto);margin:0;flex:1 1 auto}
+.pie__mano b{color:var(--cian-txt);font-weight:600}
 .pie__web{text-align:right;flex:0 0 auto}
 .pie__web b{
   font-family:var(--display);font-weight:500;font-size:16pt;
-  letter-spacing:-.015em;display:block;color:#fff
+  letter-spacing:-.015em;display:block;color:var(--texto)
 }
 .pie__fecha{border-bottom:1.6pt solid var(--coral);padding-bottom:.8mm}
 .pie__cta{
   display:block;margin-top:1.6mm;font-family:var(--mono);font-size:var(--t-mini);
-  letter-spacing:.08em;text-transform:uppercase;color:var(--coral-claro)
+  letter-spacing:.08em;text-transform:uppercase;color:var(--coral-txt)
 }
 .pie__web a{
-  font-family:var(--mono);font-size:var(--t-mini);letter-spacing:.04em;color:var(--cian);
+  font-family:var(--mono);font-size:var(--t-mini);letter-spacing:.04em;color:var(--cian-txt);
   display:block;margin-top:1.5mm;text-decoration:none;line-height:1.5
 }
 .cierre{display:flex;align-items:center;gap:6mm;margin-top:4mm}
@@ -233,6 +257,10 @@ html,body{margin:0;padding:0;background:#060d20;-webkit-print-color-adjust:exact
 }
 .marca-empresa img{width:30mm;height:auto;opacity:.92;display:block}
 </style>
+<script>
+/* la versión luminosa se pide con ?claro en la URL */
+if(location.search.indexOf("claro") >= 0) document.documentElement.dataset.tema = "claro";
+</script>
 </head>
 <body>
 <div class="hoja">
@@ -241,12 +269,12 @@ html,body{margin:0;padding:0;background:#060d20;-webkit-print-color-adjust:exact
   <header>
     <p class="marca">Elecciones al Comité de Empresa &middot; Nazaríes</p>
     <h1 class="titular">Sin siglas.<em>Solo compañerxs.</em></h1>
-    <p class="claim">Representación de compañerxs, <b>hecha por compañerxs</b>.</p>
+    <p class="claim">Representación de la plantilla, <b>hecha desde dentro</b>.</p>
   </header>
 
   <!-- 2. cifras -->
   <div class="cifras">
-    <div class="cifra"><b>11</b><span>Compañerxs en la lista</span></div>
+    <div class="cifra"><b>11</b><span>Personas en la lista</span></div>
     <div class="cifra"><b>0</b><span>Siglas detrás</span></div>
     <div class="cifra"><b>4</b><span>Compromisos concretos</span></div>
     <div class="cifra"><b>100%</b><span>Plantilla a la que respondemos</span></div>
@@ -254,7 +282,8 @@ html,body{margin:0;padding:0;background:#060d20;-webkit-print-color-adjust:exact
 
   <!-- 3. foto de grupo -->
   <figure class="grupo">
-    <img src="img/grupo_cartel.jpg" alt="Foto de grupo de la candidatura en el hall de Nazaríes.">
+    <img class="grupo__oscura" src="img/grupo_cartel.jpg" alt="Foto de grupo de la candidatura en el hall de Nazaríes.">
+    <img class="grupo__clara" src="img/grupo_cartel_claro.jpg" alt="Foto de grupo de la candidatura en el hall de Nazaríes.">
     <figcaption>
       <b>Esto somos.</b>
       <span>Los dos que faltan salen en la pantalla</span>
