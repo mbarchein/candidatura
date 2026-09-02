@@ -1493,8 +1493,9 @@ malla($("#mesh-close"), 34);
 (function tema(){
   const CLAVE = "candidatura-tema";
   const raiz = document.documentElement, bot = $("#tema");
-  let claro = false;
-  try{ claro = localStorage.getItem(CLAVE) === "claro"; }catch(e){}
+  /* el claro es el tono por defecto; el oscuro solo si lo elige quien mira */
+  let claro = true;
+  try{ const v = localStorage.getItem(CLAVE); if(v) claro = v === "claro"; }catch(e){}
   function pinta(){
     if(claro) raiz.dataset.tema = "claro"; else delete raiz.dataset.tema;
     if(bot){
