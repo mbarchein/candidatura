@@ -197,7 +197,16 @@ Cosas que no dependen del diseño y que hay que confirmar entre los once:
 
 `buzon.html` es una página del propio sitio con un formulario de **Netlify Forms**: basta el
 atributo `data-netlify="true"` para que Netlify recoja los envíos en su panel sin backend
-ninguno. No pide nombre, ni área, ni correo, y no guarda IP en el formulario.
+ninguno. No pide nombre, ni área, ni correo.
+
+Un detalle técnico, por si alguien lo pregunta: Netlify guarda la IP de quien envía en cada
+respuesta y no se puede desactivar. En la práctica no identifica a nadie —en la oficina toda la
+plantilla sale por la misma IP pública, y desde casa haría falta pedir los datos al operador con
+una orden judicial—. Lo único que permite es ver que dos respuestas vienen del mismo sitio, lo
+que solo importaría si alguien envía desde casa y en una de ellas se delata por el contenido.
+
+Aun así una IP es dato personal, así que: quien tenga acceso al panel no se dedica a mirarlas, y
+lo del cartel 06 sigue en pie —no se publica nada que permita atar una respuesta a una persona.
 
 Para que funcione:
 
