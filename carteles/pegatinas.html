@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Pegatinas de Compi · Sin siglas, solo compañerxs</title>
+<link rel="stylesheet" href="tipos.css">
+<style>
+/* ==================================================================
+   HOJA DE PEGATINAS · A4, para papel adhesivo de impresora
+   ------------------------------------------------------------------
+   Catorce pegatinas: seis anchas con frase, para portátil o botella, y
+   ocho cuadradas, cuatro con Compi y cuatro de palabra. Las de palabra
+   están porque a 25 mm las poses de Compi no se distinguen entre sí:
+   lo que cambia entre una y otra son ángulos de brazo y cara.
+
+   La hoja va en blanco porque es el color del papel adhesivo; lo que
+   se imprime en crema es cada pegatina. La línea de puntos es la guía
+   de corte y va 1,5 mm por fuera del color, así que al cortar por ella
+   queda un filete blanco alrededor y perdona el pulso con las tijeras.
+
+   Compi se pinta con compi.js a escala 10 (270x360 px de mapa de bits)
+   y se muestra a la medida en milímetros: así llega a la impresora con
+   resolución de sobra y el píxel sale cuadrado, no borroso.
+
+   Exportar:  ./carteles/exportar.sh pegatinas
+   ================================================================== */
+:root{
+  --w:210mm; --h:297mm; --margen:12mm;
+
+  /* la paleta clara de la campaña */
+  --papel:#f6f2ea; --panel:#fffdf9;
+  --texto:#191820; --texto-2:#3a3742; --apagado:#5e574e; --apagado-2:#8a8177;
+  --cian:#0d6f92; --coral:#bf3f2f;
+  --cian-vivo:#3fc9f0; --coral-vivo:#f4796b;
+  --linea:rgba(74,58,46,.18); --linea-fuerte:rgba(74,58,46,.3);
+
+  --display:"Gellix","Helvetica Neue",Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  --mano:"Caveat",cursive;
+
+  /* guía de corte */
+  --corte:rgba(74,58,46,.5);
+}
+
+@page{ size:A4; margin:0 }
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#fff;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+.hoja{
+  width:var(--w);height:var(--h);padding:var(--margen);overflow:hidden;
+  background:#fff;color:var(--texto);font-family:var(--display);
+  display:flex;flex-direction:column
+}
+
+/* ---------------- cabecera de la hoja ---------------- */
+.tapa{
+  display:flex;justify-content:space-between;align-items:baseline;gap:6mm;
+  border-bottom:1pt solid var(--linea-fuerte);padding-bottom:2.5mm;margin-bottom:6mm
+}
+.tapa h1{
+  font-weight:500;font-size:15pt;line-height:1;letter-spacing:-.03em;text-transform:uppercase;
+  margin:0
+}
+.tapa h1 em{font-style:normal;color:var(--coral)}
+.tapa p{
+  font-family:var(--mono);font-size:6pt;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--apagado);margin:0;text-align:right;line-height:1.6;max-width:105mm
+}
+
+/* ---------------- la pegatina, base común ----------------
+   el color llega hasta el borde del bloque y la guía de corte va por
+   fuera con outline-offset: no se imprime encima de la pegatina */
+.peg{
+  background:var(--papel);border-radius:4mm;overflow:hidden;position:relative;
+  outline:.5pt dashed var(--corte);outline-offset:1.5mm
+}
+.peg canvas{display:block;image-rendering:pixelated}
+
+/* ---------------- seis anchas, con frase ---------------- */
+.anchas{display:grid;grid-template-columns:repeat(2,1fr);gap:6mm;margin-bottom:8mm}
+.ancha{
+  height:42mm;display:flex;align-items:center;gap:4mm;padding:4mm 5mm 4mm 4mm;
+  border-left:1.6mm solid var(--cian-vivo)
+}
+.ancha:nth-child(even){border-left-color:var(--coral-vivo)}
+.ancha__txt{flex:1 1 auto;min-width:0}
+.ancha b{
+  display:block;font-weight:500;font-size:15.5pt;line-height:1.06;letter-spacing:-.03em
+}
+.ancha b i{font-style:normal;color:var(--cian);display:block}
+.ancha:nth-child(even) b i{color:var(--coral)}
+.ancha span{
+  display:block;font-family:var(--mono);font-size:5.6pt;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--apagado-2);margin-top:2.4mm
+}
+/* la del 29 grita más que las otras: es la única con fecha */
+.ancha--grita b{font-size:20pt;line-height:.98;letter-spacing:-.04em}
+.ancha--url b{font-size:13pt;letter-spacing:-.015em;color:var(--cian)}
+
+/* ---------------- ocho cuadradas, solo Compi ---------------- */
+.pequenas{display:grid;grid-template-columns:repeat(4,1fr);gap:6mm}
+.peq{
+  aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:1.5mm;padding:3mm
+}
+.peq span{
+  font-family:var(--mono);font-size:4.6pt;font-weight:500;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--cian)
+}
+.peq:nth-child(even) span{color:var(--coral)}
+/* las de palabra: sin muñeco, tipografía a tope, que se lean de lejos */
+.peq--txt b{
+  display:block;font-weight:500;line-height:.94;letter-spacing:-.035em;
+  text-transform:uppercase;text-align:center;color:var(--cian)
+}
+.peq--txt:nth-child(4n+2) b{color:var(--coral)}
+.peq--txt b{font-size:15pt}
+.peq--txt.grande b{font-size:27pt;letter-spacing:-.05em}
+.peq--txt em{
+  font-style:normal;display:block;font-family:var(--mono);font-size:4.6pt;font-weight:500;
+  letter-spacing:.14em;color:var(--apagado-2);margin-top:2mm
+}
+
+/* ---------------- pie de la hoja ---------------- */
+.pie{
+  margin-top:auto;border-top:1pt solid var(--linea);padding-top:2.5mm;
+  display:flex;justify-content:space-between;align-items:baseline;gap:6mm
+}
+.pie p{
+  font-family:var(--mono);font-size:5.4pt;letter-spacing:.06em;color:var(--apagado-2);
+  margin:0;line-height:1.6;max-width:120mm
+}
+.pie b{font-family:var(--mano);font-size:11pt;color:var(--texto);font-weight:600;
+  letter-spacing:0;flex:0 0 auto}
+</style>
+</head>
+<body>
+<div class="hoja">
+
+  <div class="tapa">
+    <h1>Este es Compi.<em> Llévatelo.</em></h1>
+    <p>Imprime en A4 adhesivo, al 100 % · corta por la línea de puntos</p>
+  </div>
+
+  <!-- seis anchas: portátil, botella, carpeta -->
+  <div class="anchas">
+    <div class="peg ancha">
+      <canvas data-pose="saluda" data-tt="620" data-mm="26"></canvas>
+      <div class="ancha__txt">
+        <b>Sin siglas.<i>Solo compañerxs.</i></b>
+        <span>Comité de Empresa · Nazaríes</span>
+      </div>
+    </div>
+
+    <div class="peg ancha">
+      <canvas data-pose="chuleo" data-tt="60" data-mm="26"></canvas>
+      <div class="ancha__txt">
+        <b>Once personas.<i>Cero siglas.</i></b>
+        <span>Candidatura independiente</span>
+      </div>
+    </div>
+
+    <div class="peg ancha">
+      <canvas data-pose="cansado" data-tt="1500" data-mm="26"></canvas>
+      <div class="ancha__txt">
+        <b>Yo a las 19:00<i>ya no leo.</i></b>
+        <span>Desconexión digital · art. 20 bis ET</span>
+      </div>
+    </div>
+
+    <div class="peg ancha">
+      <canvas data-pose="celebra" data-tt="330" data-mm="26"></canvas>
+      <div class="ancha__txt">
+        <b>Trabajamos por y<i>para nosotros.</i></b>
+        <span>Unidos por nuestro futuro</span>
+      </div>
+    </div>
+
+    <div class="peg ancha ancha--grita">
+      <canvas data-pose="baile" data-tt="500" data-mm="26"></canvas>
+      <div class="ancha__txt">
+        <b>El 29,<i>vota.</i></b>
+        <span>Vaya quien vaya en tu papeleta</span>
+      </div>
+    </div>
+
+    <div class="peg ancha ancha--url">
+      <canvas data-pose="quieto" data-tt="200" data-mm="26"></canvas>
+      <div class="ancha__txt">
+        <b>sin-siglas.info</b>
+        <span>El buzón sigue abierto · /buzon</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ocho cuadradas: solo Compi, para repartir a puñados -->
+  <div class="pequenas">
+    <div class="peg peq"><canvas data-pose="saluda" data-tt="620" data-mm="25"></canvas><span>Sin siglas</span></div>
+    <div class="peg peq peq--txt grande"><b>Vota</b><em>29-S</em></div>
+    <div class="peg peq"><canvas data-pose="baile" data-tt="500" data-mm="25"></canvas><span>Sin siglas</span></div>
+    <div class="peg peq peq--txt grande"><b>29-S</b><em>Comité de empresa</em></div>
+    <div class="peg peq"><canvas data-pose="cansado" data-tt="1500" data-mm="25"></canvas><span>Sin siglas</span></div>
+    <div class="peg peq peq--txt"><b>Sin siglas<br>solo<br>compañerxs</b></div>
+    <div class="peg peq"><canvas data-pose="serio" data-tt="0" data-mm="25"></canvas><span>Sin siglas</span></div>
+    <div class="peg peq peq--txt"><b>Once.<br>Cero<br>siglas.</b></div>
+  </div>
+
+  <div class="pie">
+    <p>Candidatura registrada conforme a la normativa de elecciones sindicales. La hacemos los
+      once candidatos: no es una comunicación de la empresa. Compi es dibujo de píxeles: si
+      reescalas la hoja, imprímela al 100 % para que el píxel siga saliendo cuadrado.</p>
+    <b>29 de septiembre</b>
+  </div>
+
+</div>
+
+<script src="compi.js"></script>
+<script>
+/* Cada pegatina pide su pose y el fotograma que congela. Se pinta a
+   escala 10 y luego se fija el tamaño en milímetros: pintaCompi deja
+   el ancho en píxeles y aquí manda el papel, no la pantalla. */
+document.querySelectorAll("canvas[data-pose]").forEach(c => {
+  const alto = +c.dataset.mm;
+  pintaCompi(c, c.dataset.pose, +c.dataset.tt, 10);
+  c.style.height = alto + "mm";
+  c.style.width  = (alto * REJ_W / REJ_H).toFixed(2) + "mm";
+});
+</script>
+</body>
+</html>
