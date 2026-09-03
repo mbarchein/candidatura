@@ -2,7 +2,11 @@
 # Exporta los carteles a PNG de 1080x1350 exactos.
 #
 #   ./carteles/exportar.sh          todos
-#   ./carteles/exportar.sh 2 6      solo el 02 y el 06
+#   ./carteles/exportar.sh 2 6      solo esos dos
+#
+# Los números son identificadores del fuente (el ?n= de carteles.html),
+# no el orden de envío: los carteles no llevan numeración impresa para
+# poder reordenarlos o añadir piezas sin que los ya enviados queden mal.
 #
 # Chrome captura el viewport tal cual, así que la ventana se pide del
 # tamaño del lienzo y el cartel va pegado a la esquina (eso lo hace
@@ -16,16 +20,16 @@ SALIDA="$AQUI/png"
 PERFIL="$(mktemp -d)"
 trap 'rm -rf "$PERFIL"' EXIT
 
-# nombre de fichero por cartel: el número manda, el nombre es para
-# reconocerlo cuando lo vas a enviar
+# nombre de fichero por cartel, sin número: el orden lo decide
+# ESTRATEGIA.md, no el nombre del PNG
 declare -A NOMBRE=(
-  [1]=01-buzon [2]=02-conciliacion [3]=03-ambiente [4]=04-comunicacion
-  [5]=05-lo-que-no-podemos [6]=06-voces-del-buzon [7]=07-semaforo
-  [8]=08-donde-encontrarnos [9]=09-vispera
+  [1]=buzon [2]=conciliacion [3]=ambiente [4]=comunicacion
+  [5]=lo-que-no-podemos [6]=voces-del-buzon [7]=semaforo
+  [8]=donde-encontrarnos [9]=vispera [10]=por-que-votar
 )
 
 CUALES=("$@")
-[ ${#CUALES[@]} -eq 0 ] && CUALES=(1 2 3 4 5 6 7 8 9)
+[ ${#CUALES[@]} -eq 0 ] && CUALES=(1 2 3 4 5 6 7 8 9 10)
 
 mkdir -p "$SALIDA"
 for n in "${CUALES[@]}"; do

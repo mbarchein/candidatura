@@ -52,13 +52,15 @@ el giro de la campaña.
 | Nivel | Qué dice | Dónde vive |
 |---|---|---|
 | Marca | Sin siglas. Solo compañerxs. | Web + A3 (ya hechos) |
-| Temas | Tres acciones concretas por compromiso | Carteles 02, 03, 04 |
-| Prueba | Que somos comprobables y honestos | Carteles 01, 05, 06, 07 |
-| Conversión | Cómo, cuándo y por qué votar | Carteles 08, 09 |
+| Temas | Tres acciones concretas por compromiso | `conciliacion`, `ambiente`, `comunicacion` |
+| Prueba | Que somos comprobables y honestos | `buzon`, `lo-que-no-podemos`, `voces-del-buzon`, `semaforo` |
+| Conversión | Cómo, cuándo y por qué votar | `donde-encontrarnos`, `por-que-votar`, `vispera` |
 
 Los carteles nuevos son **1080 × 1350 px, tema claro**, pensados para enviar por el canal
-donde ya se habla. Van numerados `01/09 … 09/09` en la esquina: se coleccionan y se nota si te
-perdiste uno.
+donde ya se habla. **Ninguno lleva número de orden**: en la esquina va la fecha, `29-S`, que es
+lo único que no cambia y lo que se ve en la miniatura del móvil antes de leer nada. Así se pueden
+reordenar, quitar o añadir piezas sin que las ya enviadas queden mal. Los números del `?n=` del
+fuente son identificadores para poder capturarlos, no el orden de envío.
 
 ---
 
@@ -66,11 +68,11 @@ perdiste uno.
 
 ### 4.1 El buzón anónimo → «Nos lo dijisteis vosotros»
 
-**Cartel 01 (4 de septiembre).** Abrimos la campaña *preguntando*, no prometiendo. QR a un
+**`buzon` (4 de septiembre).** Abrimos la campaña *preguntando*, no prometiendo. QR a un
 formulario anónimo: sin nombre, sin área, sin correo. Una sola pregunta: qué cambiarías de tu
 día a día.
 
-**Cartel 06 (18 de septiembre).** El pago: las respuestas más repetidas, sin retocar, cada una
+**`voces-del-buzon` (18 de septiembre).** El pago: las respuestas más repetidas, sin retocar, cada una
 con su etiqueta —*ya está pedido* / *va al programa* / *no podemos, y te decimos por qué*.
 
 Por qué funciona: la campaña deja de ser un monólogo, el material se lo escribe la plantilla, y
@@ -81,8 +83,8 @@ que se recogen las respuestas sin backend ni servicio de terceros. Detalles al f
 
 ### 4.2 El semáforo del mandato
 
-**Cartel 07 (22 de septiembre).** Un cartel-contrato con las once firmas y el tablero que
-publicaremos cada trimestre durante los cuatro años: cada acción de los carteles 02-04 en
+**`semaforo` (22 de septiembre).** Un cartel-contrato con las once firmas y el tablero que
+publicaremos cada trimestre durante los cuatro años: cada acción de los tres carteles de tema en
 **conseguido / en negociación / se cayó / todavía por pedir**.
 
 El cartel muestra el tablero **con todo en gris**, tal y como está el día 22: nada pedido
@@ -98,19 +100,21 @@ logotipo. Es la parte barata y la que más va a circular.
 
 ## 5. Calendario
 
-| # | Día | Pieza | Rol | Quién lo manda |
-|---|---|---|---|---|
-| 01 | vie 4 sep | **Primero tú** · el buzón + QR | Apertura: pedimos antes de prometer | Rocío Galindo |
-| 02 | mar 8 sep | **La conciliación no es un favor** | Tema | Leticia Algarra |
-| 03 | vie 11 sep | **Se puede medir** · ambiente y salud | Tema | Raúl Navarro |
-| 04 | mar 15 sep | **Que te lo cuenten antes** · comunicación | Tema | José Pablo Fernández |
-| 05 | jue 17 sep | **Lo que un comité no te va a conseguir** | Diferenciación por honestidad | Mario Barchéin |
-| 06 | vie 18 sep | **Esto no lo decimos nosotros** · buzón | Pago del golpe 1 | Rocío Galindo |
-| 07 | mar 22 sep | **El semáforo del mandato** | Golpe 2 · lo firman los once | Rafael López |
-| 08 | jue 24 sep | **No hace falta que pidas cita** | Movilización | María Emilia Castillo |
-| 09 | lun 28 sep | **Mañana** | Conversión | Violeta López |
+| Día | Pieza | Rol | Quién la manda |
+|---|---|---|---|
+| vie 4 sep | **Primero tú** · el buzón + QR | Apertura: pedimos antes de prometer | Rocío Galindo |
+| mar 8 sep | **La conciliación no es un favor** | Tema | Leticia Algarra |
+| vie 11 sep | **Se puede medir** · ambiente y salud | Tema | Raúl Navarro |
+| mar 15 sep | **Que te lo cuenten antes** · comunicación | Tema | José Pablo Fernández |
+| jue 17 sep | **Lo que un comité no te va a conseguir** | Diferenciación por honestidad | Mario Barchéin |
+| vie 18 sep | **Esto no lo decimos nosotros** · buzón | Pago del golpe 1 | Rocío Galindo |
+| mar 22 sep | **El semáforo del mandato** | Golpe 2 · lo firman los once | Rafael López |
+| jue 24 sep | **No hace falta que pidas cita** | Movilización | María Emilia Castillo |
+| vie 25 sep | **La próxima vez, en 2030** · por qué votar | Llamada al voto, sin pedirlo para nosotros | Fran Bolívar |
+| lun 28 sep | **Mañana** | Conversión · cómo y dónde se vota | Violeta López |
 
-Nueve piezas en 26 días: **dos por semana como máximo**. Más satura y la gente deja de abrirlas.
+Diez piezas en 26 días: **dos por semana**, y tres en la última, que es cuando hay que apretar.
+Más de eso satura y la gente deja de abrirlas.
 
 ### Reglas de envío
 
@@ -142,7 +146,7 @@ Nueve piezas en 26 días: **dos por semana como máximo**. Más satura y la gent
 
 | Señal | Objetivo antes del 29 |
 |---|---|
-| Respuestas en el buzón | ≥ 25 (basta para que el cartel 06 tenga contenido real) |
+| Respuestas en el buzón | ≥ 25 (basta para que `voces-del-buzon` tenga contenido real) |
 | Temas distintos en el buzón | ≥ 6 (si sale uno solo, el programa se reordena) |
 | Gente que pregunta a alguien de la lista sin que la abordemos | ≥ 15 |
 | Participación el 29-S | por encima de la de las elecciones anteriores |
@@ -181,15 +185,15 @@ lista completa, para que cualquiera de los once la pueda defender si le pregunta
 
 Cosas que no dependen del diseño y que hay que confirmar entre los once:
 
-1. **Desplegar `buzon.html`.** El QR del cartel 01 apunta a `https://sin-siglas.info/buzon` y
+1. **Desplegar `buzon.html`.** El QR de `buzon` apunta a `https://sin-siglas.info/buzon` y
    está verificado leyéndolo del PNG final, pero esa ruta devuelve 404 hasta que la página esté
-   subida. **El cartel 01 no se puede enviar antes de desplegarla**: un QR que no lleva a ningún
+   subida. **`buzon` no se puede enviar antes de desplegarla**: un QR que no lleva a ningún
    sitio se lo carga.
-2. **La hora de comité del cartel 08.** Está propuesta como *primer jueves de mes, 13:30–14:30,
+2. **La hora de comité de `donde-encontrarnos`.** Está propuesta como *primer jueves de mes, 13:30–14:30,
    en la cocina*. Hay que confirmar día y sitio, o cambiarlo antes de enviarlo.
-3. **Cartel 06.** Es una plantilla: las citas se rellenan el día 18 con lo que haya llegado al
+3. **`voces-del-buzon`.** Es una plantilla: las citas se rellenan el día 18 con lo que haya llegado al
    buzón. No se puede enviar antes.
-4. **Horario y lugar de la urna** para el cartel 09: los publica la mesa electoral, no nosotros.
+4. **Horario y lugar de la urna** para `vispera`: los publica la mesa electoral, no nosotros.
 
 ---
 
@@ -206,7 +210,7 @@ una orden judicial—. Lo único que permite es ver que dos respuestas vienen de
 que solo importaría si alguien envía desde casa y en una de ellas se delata por el contenido.
 
 Aun así una IP es dato personal, así que: quien tenga acceso al panel no se dedica a mirarlas, y
-lo del cartel 06 sigue en pie —no se publica nada que permita atar una respuesta a una persona.
+lo de `voces-del-buzon` sigue en pie —no se publica nada que permita atar una respuesta a una persona.
 
 Para que funcione:
 
@@ -220,4 +224,4 @@ Comprobado el 3 de septiembre: `sin-siglas.info` ya resuelve y sirve la web desd
 `/buzon` responde 404 solo porque la página todavía no está subida.
 
 Si preferís no usar Netlify, sirve igual un formulario anónimo de Google o de Microsoft: solo
-hay que cambiar `URL` en `qr.py`, regenerar el QR y reexportar el cartel 01.
+hay que cambiar `URL` en `qr.py`, regenerar el QR y reexportar `buzon`.

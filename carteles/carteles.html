@@ -8,13 +8,17 @@
 /* ==================================================================
    CARTELES TEMÁTICOS · 1080 × 1350, tema claro
    ------------------------------------------------------------------
-   Nueve piezas para enviar de aquí al 29 de septiembre. El plan de
-   qué se manda cada día está en ESTRATEGIA.md; aquí solo está el
-   diseño y el texto.
+   Las piezas para enviar de aquí al 29 de septiembre. El plan de qué
+   se manda cada día está en ESTRATEGIA.md; aquí solo está el diseño y
+   el texto.
 
-   Sin ?n en la URL salen los nueve seguidos, para revisarlos de una
-   pasada. Con ?n=3 sale solo el tercero, a tamaño exacto y pegado a
-   la esquina: es así como los captura exportar.sh.
+   Ningún cartel lleva número de orden: se pueden reordenar, quitar o
+   añadir sin que los ya enviados queden mal. El ?n= del fuente es solo
+   un identificador para poder capturarlos, no el orden de envío.
+
+   Sin ?n en la URL salen todos seguidos, para revisarlos de una
+   pasada. Con ?n=3 sale solo ese, a tamaño exacto y pegado a la
+   esquina: es así como los captura exportar.sh.
 
    Todo lo editable está en el bloque :root y en los nodos de texto.
    Los colores vivos (--cian-vivo, --coral-vivo) son para los trazos
@@ -210,6 +214,32 @@ body.solo .cartel.elegido{display:flex}
   color:var(--apagado);margin:0;line-height:1.7;text-align:right
 }
 
+/* Por qué votar · el par de cifras es el elemento dominante: lo que
+   cuesta contra lo que decide */
+.par{
+  display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:32px;
+  border-top:2px solid var(--linea-fuerte);border-bottom:2px solid var(--linea-fuerte);
+  padding:26px 0
+}
+.par > div + div{border-left:2px solid var(--linea);padding-left:38px}
+.par b{
+  display:block;font-weight:500;font-size:76px;line-height:.9;letter-spacing:-.05em;
+  color:var(--cian)
+}
+.par > div + div b{color:var(--coral)}
+.par span{
+  display:block;font-family:var(--mono);font-size:var(--t-mini);letter-spacing:.13em;
+  text-transform:uppercase;color:var(--apagado);margin-top:14px;line-height:1.5
+}
+.razones{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.razones li{border-top:3px solid var(--acento-vivo);padding-top:14px}
+.razones strong{
+  display:block;font-weight:500;font-size:23px;line-height:1.15;letter-spacing:-.02em;
+  margin-bottom:9px
+}
+.razones p{margin:0;font-size:19px;line-height:1.4;color:var(--texto-2)}
+.razones .ley{margin-top:10px;font-size:13px;padding:2px 9px}
+
 /* 05 · dos columnas enfrentadas: lo que no / lo que sí */
 .balanza{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:34px;
   border-top:2px solid var(--linea-fuerte)}
@@ -329,11 +359,11 @@ body.solo .cartel.elegido{display:flex}
 <body>
 
 <!-- ==================================================================
-     01 · EL BUZÓN · viernes 4 de septiembre · lo manda Rocío Galindo
+     EL BUZÓN · viernes 4 de septiembre · lo manda Rocío Galindo
      Abre la campaña preguntando. El QR es lo dominante.
      ================================================================== -->
 <section class="cartel cartel--coral" id="c1">
-  <div class="tapa"><span>Elecciones al Comité · Nazaríes</span><b>01/09</b></div>
+  <div class="tapa"><span>Elecciones al Comité · Nazaríes</span><b>29-S</b></div>
 
   <h1 class="titular">Primero tú.<em>Luego el programa.</em></h1>
   <p class="bajada bajada--ancha">
@@ -375,10 +405,10 @@ body.solo .cartel.elegido{display:flex}
 </section>
 
 <!-- ==================================================================
-     02 · CONCILIACIÓN · martes 8 de septiembre · lo manda Leticia Algarra
+     CONCILIACIÓN · martes 8 de septiembre · lo manda Leticia Algarra
      ================================================================== -->
 <section class="cartel" id="c2">
-  <div class="tapa"><span>Compromiso · Conciliación</span><b>02/09</b></div>
+  <div class="tapa"><span>Compromiso · Conciliación</span><b>29-S</b></div>
 
   <h1 class="titular">La conciliación<em>no es un favor.</em></h1>
   <p class="bajada">
@@ -437,10 +467,10 @@ body.solo .cartel.elegido{display:flex}
 </section>
 
 <!-- ==================================================================
-     03 · AMBIENTE Y SALUD · viernes 11 de septiembre · lo manda Raúl Navarro
+     AMBIENTE Y SALUD · viernes 11 de septiembre · lo manda Raúl Navarro
      ================================================================== -->
 <section class="cartel" id="c3">
-  <div class="tapa"><span>Compromiso · Ambiente</span><b>03/09</b></div>
+  <div class="tapa"><span>Compromiso · Ambiente</span><b>29-S</b></div>
 
   <h1 class="titular">Un sitio donde<em>dé gusto trabajar.</em>Y se puede medir.</h1>
   <p class="bajada">
@@ -498,10 +528,10 @@ body.solo .cartel.elegido{display:flex}
 </section>
 
 <!-- ==================================================================
-     04 · COMUNICACIÓN · martes 15 de septiembre · lo manda José Pablo Fernández
+     COMUNICACIÓN · martes 15 de septiembre · lo manda José Pablo Fernández
      ================================================================== -->
 <section class="cartel" id="c4">
-  <div class="tapa"><span>Compromiso · Comunicación</span><b>04/09</b></div>
+  <div class="tapa"><span>Compromiso · Comunicación</span><b>29-S</b></div>
 
   <h1 class="titular">Que te lo cuenten<em>antes.</em>No después.</h1>
   <p class="bajada">
@@ -560,11 +590,11 @@ body.solo .cartel.elegido{display:flex}
 </section>
 
 <!-- ==================================================================
-     05 · LO QUE NO PODEMOS · jueves 17 de septiembre · lo manda Mario Barchéin
+     LO QUE NO PODEMOS · jueves 17 de septiembre · lo manda Mario Barchéin
      El cartel que ninguna lista con aparato detrás manda.
      ================================================================== -->
 <section class="cartel cartel--coral" id="c5">
-  <div class="tapa"><span>Sin letra pequeña</span><b>05/09</b></div>
+  <div class="tapa"><span>Sin letra pequeña</span><b>29-S</b></div>
 
   <h1 class="titular titular--largo">Lo que un comité<em>no te va a conseguir.</em></h1>
   <p class="bajada bajada--ancha">
@@ -617,7 +647,7 @@ body.solo .cartel.elegido{display:flex}
 </section>
 
 <!-- ==================================================================
-     06 · LAS VOCES DEL BUZÓN · viernes 18 de septiembre · lo manda Rocío Galindo
+     LAS VOCES DEL BUZÓN · viernes 18 de septiembre · lo manda Rocío Galindo
      ------------------------------------------------------------------
      PLANTILLA. No se puede enviar hasta el día 18: las cuatro citas se
      sustituyen por lo que de verdad haya llegado al buzón, y la cifra
@@ -626,7 +656,7 @@ body.solo .cartel.elegido{display:flex}
      propósito, para que no se escape sin rellenar.
      ================================================================== -->
 <section class="cartel cartel--coral" id="c6">
-  <div class="tapa"><span>El buzón · lo que nos habéis escrito</span><b>06/09</b></div>
+  <div class="tapa"><span>El buzón · lo que nos habéis escrito</span><b>29-S</b></div>
 
   <h1 class="titular">Esto no lo<em>decimos nosotros.</em></h1>
   <p class="bajada bajada--ancha">
@@ -672,11 +702,11 @@ body.solo .cartel.elegido{display:flex}
 </section>
 
 <!-- ==================================================================
-     07 · EL SEMÁFORO DEL MANDATO · martes 22 de septiembre · lo manda Rafael López
+     EL SEMÁFORO DEL MANDATO · martes 22 de septiembre · lo manda Rafael López
      El tablero sale con todo en gris a propósito: así está el día 22.
      ================================================================== -->
 <section class="cartel" id="c7">
-  <div class="tapa"><span>El semáforo del mandato</span><b>07/09</b></div>
+  <div class="tapa"><span>El semáforo del mandato</span><b>29-S</b></div>
 
   <h1 class="titular titular--largo">Cuatro años dan<em>para que se te olvide</em>lo que prometiste.</h1>
   <p class="bajada bajada--ancha">
@@ -723,12 +753,12 @@ body.solo .cartel.elegido{display:flex}
 </section>
 
 <!-- ==================================================================
-     08 · DÓNDE ENCONTRARNOS · jueves 24 de septiembre · lo manda María Emilia Castillo
+     DÓNDE ENCONTRARNOS · jueves 24 de septiembre · lo manda María Emilia Castillo
      Confirmar entre los once el día y el sitio de la hora de comité
      antes de mandar este.
      ================================================================== -->
 <section class="cartel cartel--coral" id="c8">
-  <div class="tapa"><span>Cómo llegar a nosotros</span><b>08/09</b></div>
+  <div class="tapa"><span>Cómo llegar a nosotros</span><b>29-S</b></div>
 
   <h1 class="titular">No hace falta<em>que pidas cita.</em></h1>
   <p class="bajada bajada--ancha">
@@ -787,10 +817,67 @@ body.solo .cartel.elegido{display:flex}
 </section>
 
 <!-- ==================================================================
-     09 · LA VÍSPERA · lunes 28 de septiembre · lo manda Violeta López
+     POR QUÉ VOTAR · viernes 25 de septiembre · lo manda Fran Bolívar
+     La que llama al voto y da la razón para molestarse en bajar. No
+     pide el voto para nosotros: pide participación, que es lo que le
+     da peso al comité que salga, sea el que sea.
+     ================================================================== -->
+<section class="cartel cartel--coral" id="c10">
+  <div class="tapa"><span>Por qué merece la pena</span><b>29-S</b></div>
+
+  <h1 class="titular">La próxima vez,<em>en 2030.</em></h1>
+  <p class="bajada bajada--ancha">
+    El comité que salga el 29 está <b>cuatro años</b>. Todo lo que se negocie en ese tiempo se
+    negocia con él, votes o no votes.
+  </p>
+
+  <div class="par">
+    <div><b>5 min</b><span>Lo que te cuesta votar</span></div>
+    <div><b>4 años</b><span>Lo que decide tu voto</span></div>
+  </div>
+
+  <p class="rotulo">Qué compra tu voto</p>
+  <ul class="razones">
+    <li>
+      <strong>Peso en la mesa</strong>
+      <p>Un comité elegido por mucha gente no negocia igual que uno elegido por veinte. No está en
+        ninguna ley: se nota en la primera reunión.</p>
+    </li>
+    <li>
+      <strong>Todo lo que te cambia el día</strong>
+      <p>Horarios, sistemas de trabajo, funciones y formación pasan por el comité antes de
+        aplicarse. Durante cuatro años. <span style="white-space:nowrap">(art. 64.5 ET)</span></p>
+    </li>
+    <li>
+      <strong>Si no votas, deciden otros</strong>
+      <p>El comité se constituye igual. La diferencia es que lo eligen otros por ti, y te
+        representa a ti también.</p>
+    </li>
+  </ul>
+
+  <p class="remate">
+    No hace falta que nos votes a nosotros. Hace falta que <b>vayas a votar</b>: un comité con poca
+    participación se sienta a negociar sin peso, y eso lo pagamos todos hasta 2030.
+  </p>
+
+  <footer class="pie">
+    <div class="compi"><p class="compi__globo">Voy para allá.</p><canvas data-pose="anda" data-tt="80"></canvas></div>
+    <div class="pie__medio">
+      <p class="pie__quien">Mandato</p>
+      <p class="pie__nombres">Cuatro años <span>· art. 67.3 ET</span></p>
+    </div>
+    <div class="pie__voto">
+      <p class="pie__fecha">29 de septiembre</p>
+      <p class="pie__url">sin-siglas.info</p>
+    </div>
+  </footer>
+</section>
+
+<!-- ==================================================================
+     LA VÍSPERA · lunes 28 de septiembre · lo manda Violeta López
      ================================================================== -->
 <section class="cartel cartel--coral" id="c9">
-  <div class="tapa"><span>Elecciones al Comité · Nazaríes</span><b>09/09</b></div>
+  <div class="tapa"><span>Elecciones al Comité · Nazaríes</span><b>29-S</b></div>
 
   <h1 class="titular titular--corto">Mañana<em>se vota.</em></h1>
 
@@ -857,8 +944,8 @@ body.solo .cartel.elegido{display:flex}
 <script src="compi.js"></script>
 <script>
 /* ==================================================================
-   ?n=3 deja solo el tercer cartel, pegado a la esquina y sin fondo
-   alrededor: es lo que captura exportar.sh. Sin ?n salen los nueve
+   ?n=3 deja solo ese cartel, pegado a la esquina y sin fondo
+   alrededor: es lo que captura exportar.sh. Sin ?n salen todos
    para revisarlos de un vistazo.
    ================================================================== */
 const pedido = new URLSearchParams(location.search).get("n");
