@@ -55,6 +55,7 @@ h1{
 h1 em{font-style:normal;color:var(--coral);display:block}
 .entrada{font-size:1.05rem;line-height:1.55;color:var(--texto-2);margin:1.5rem 0 0;max-width:32rem}
 .entrada b{color:var(--texto);font-weight:500}
+.entrada i{font-style:normal;color:var(--coral);font-weight:500}
 
 /* las tres garantías, que es lo que hace que alguien escriba */
 .pactos{list-style:none;margin:2rem 0 0;padding:0;display:grid;gap:.9rem}
@@ -62,6 +63,7 @@ h1 em{font-style:normal;color:var(--coral);display:block}
   display:flex;gap:.85rem;align-items:baseline;
   font-size:.95rem;line-height:1.5;color:var(--texto-2)
 }
+.pactos b.rojo{color:var(--coral);font-weight:500}
 .pactos i{
   font-style:normal;font-family:var(--mono);font-size:.72rem;font-weight:500;
   letter-spacing:.1em;color:var(--cian);flex:0 0 1.6rem
@@ -117,12 +119,12 @@ button:hover{background:#a93526}
 
   <p class="entrada">
     Somos once compañerxs y no traemos un programa escrito de fuera. Antes de prometerte nada,
-    queremos saber qué cambiarías tú. <b>Una sola pregunta, y es anónima.</b>
+    queremos saber qué cambiarías tú. <b>Una sola pregunta, y es <i>anónima</i>.</b>
   </p>
 
   <ul class="pactos">
-    <li><i>01</i><span>No te pedimos el nombre, ni el área, ni el correo. No hay ningún campo que
-      te identifique porque no lo hemos puesto.</span></li>
+    <li><i>01</i><span>No te pedimos el nombre, ni el área, ni el correo. <b class="rojo">No hay
+      ningún campo que te identifique</b> porque no lo hemos puesto.</span></li>
     <li><i>02</i><span>Nada de lo que escribas se publica con un dato que permita saber quién eres.
       Ni aunque tenga gracia.</span></li>
     <li><i>03</i><span>El <b>22 de septiembre</b> publicamos lo que más se repita, sin retocar, y
