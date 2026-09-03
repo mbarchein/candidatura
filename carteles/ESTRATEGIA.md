@@ -99,10 +99,22 @@ logotipo. Es la parte barata y la que más va a circular.
 **Las hojas de pegatinas** son la extensión física de esto. Dos A4 para papel adhesivo de
 impresora, catorce pegatinas cada uno, que se cortan con tijeras por la línea de puntos:
 
-- `pegatinas.html` — con Compi: seis anchas con frase y ocho cuadradas.
-- `pegatinas-frases.html` — solo tipografía, para quien no quiere un muñeco en el portátil: dos
-  bandas de ancho completo, cuatro medianas con los titulares de los carteles y ocho cuadradas
-  cortas (`Vota`, `29-S`, `Pregúntame`, `Once. Cero siglas.`).
+- `pegatinas.html` — **HUD del juego de Compi**: cuadro de diálogo de RPG, ficha de personaje con
+  Compi a 40 mm, «1 vida extra el 29-S», dos «objeto conseguido» con la reivindicación y su
+  artículo, y una barra de participación que no llega al 100 %.
+- `pegatinas-frases.html` — **solo letra**, para quien no quiere un muñeco en el portátil:
+  Archivo Black recortado por el campo de color, el `29-S` sangrando por arriba, `Vota` a sangre,
+  las frases de los carteles con su artículo, `Pregúntame` manuscrito, y **una pegatina de QR al
+  buzón** (comprobada: se decodifica desde 20 mm impresos, va a 30 por margen).
+
+Tres reglas de producción que mandan sobre el diseño, y que son la razón de que la primera
+versión no valiera:
+
+1. **El color para 3 mm antes de la línea de corte.** Una impresora de oficina desvía 1-2 mm, así
+   que el error de tijera cae en crema y queda el filete blanco de una pegatina troquelada.
+2. **Radio de esquina 6 mm mínimo.** Por debajo, la esquina no se resuelve en un solo arco.
+3. **Las piezas van en absoluto y giradas una a una**, ninguna comparte borde con otra. Una
+   rejilla regular de tarjetas iguales se lee como tabla, no como hoja de pegatinas.
 
 Coste: dos folios adhesivos. Se reparten a mano y en la hora de comité, nunca dejándolas por las
 mesas de nadie.

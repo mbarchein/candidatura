@@ -5,34 +5,34 @@
 <title>Pegatinas de frases · Sin siglas, solo compañerxs</title>
 <link rel="stylesheet" href="tipos.css">
 <style>
-/* ==================================================================
-   HOJA DE PEGATINAS · frases, sin Compi
-   ------------------------------------------------------------------
-   Segunda hoja A4 para papel adhesivo. Aquí manda la tipografía: la
-   otra hoja lleva la mascota y esta lleva las frases de la campaña,
-   para quien no quiere un muñeco en el portátil.
+/* Segunda hoja A4 de pegatinas, sin mascota: aquí la letra es el dibujo.
+   La otra hoja lleva a Compi y el lenguaje de HUD.
 
-   Cuatro van en negativo (fondo de color, letra crema) porque una hoja
-   entera de letra sobre crema se lee plana; el negativo es lo que
-   hace que una pegatina se vea desde el otro lado de la mesa.
+   El recurso de esta hoja: Archivo Black a cuerpos que no caben, y el
+   campo de color recorta la letra. Gellix no tiene negrita, así que sin
+   una display de peso 900 real un titular de pegatina no puede gritar.
 
-   La guía de corte va 1,5 mm por fuera del color con outline-offset,
-   igual que en pegatinas.html: al cortar por la línea de puntos queda
-   un filete blanco que perdona el pulso.
+   Las mismas tres reglas de producción que en pegatinas.html:
+   - El color para 3 mm antes del corte (el padding de .pieza), para que
+     el error de tijera caiga en crema.
+   - Radio de esquina 6 mm mínimo.
+   - Nada a menos de 10 mm del borde del A4.
+   Y una más: las letras nunca son el contorno de corte. Se recortan
+   contra el campo de color, no contra la línea de tijera.
 
-   Exportar:  ./carteles/exportar.sh pegatinas
-   ================================================================== */
+   El QR está comprobado: se lee decodificándolo desde 20 mm impresos.
+   Va a 30 mm por margen, que la impresión real es peor que el render.
+
+   Exportar: ./carteles/exportar.sh pegatinas */
 :root{
-  --w:210mm; --h:297mm; --margen:12mm;
-
-  --papel:#f6f2ea;
-  --texto:#191820; --apagado:#5e574e; --apagado-2:#8a8177;
+  --papel:#f6f2ea; --tinta:#191820;
   --cian:#0d6f92; --coral:#bf3f2f;
   --cian-vivo:#3fc9f0; --coral-vivo:#f4796b;
-  --linea:rgba(74,58,46,.18); --linea-fuerte:rgba(74,58,46,.3);
-  --corte:rgba(74,58,46,.5);
+  --apagado:#5e574e; --apagado-2:#8a8177;
+  --corte:rgba(74,58,46,.55);
 
   --display:"Gellix","Helvetica Neue",Arial,sans-serif;
+  --grito:"Archivo Black","Arial Black",sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,monospace;
   --mano:"Caveat",cursive;
 }
@@ -41,88 +41,86 @@
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;background:#fff;
   -webkit-print-color-adjust:exact;print-color-adjust:exact}
+.hoja{width:210mm;height:297mm;position:relative;overflow:hidden;background:#fff;
+  font-family:var(--display);color:var(--tinta)}
 
-.hoja{
-  width:var(--w);height:var(--h);padding:var(--margen);overflow:hidden;
-  background:#fff;color:var(--texto);font-family:var(--display);
-  display:flex;flex-direction:column;gap:7mm
-}
-
-/* ---------------- cabecera ---------------- */
-.tapa{
+.tapa{position:absolute;left:10mm;top:7mm;width:190mm;
   display:flex;justify-content:space-between;align-items:baseline;gap:6mm;
-  border-bottom:1pt solid var(--linea-fuerte);padding-bottom:2.5mm
-}
-.tapa h1{
-  font-weight:500;font-size:14pt;line-height:1;letter-spacing:-.03em;text-transform:uppercase;
-  margin:0
-}
+  border-bottom:1pt solid rgba(74,58,46,.3);padding-bottom:2mm}
+.tapa h1{font-family:var(--grito);font-size:10pt;line-height:1;letter-spacing:-.02em;
+  text-transform:uppercase;margin:0}
 .tapa h1 em{font-style:normal;color:var(--cian)}
-.tapa p{
-  font-family:var(--mono);font-size:6pt;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--apagado);margin:0;text-align:right;line-height:1.6
-}
+.tapa p{font-family:var(--mono);font-size:5.4pt;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--apagado);margin:0;text-align:right;line-height:1.6}
 
-/* ---------------- base de la pegatina ---------------- */
-.peg{
-  background:var(--papel);border-radius:4mm;overflow:hidden;
-  outline:.5pt dashed var(--corte);outline-offset:1.5mm;
-  display:flex;flex-direction:column;justify-content:center;padding:5mm 7mm
-}
-.peg b{
-  display:block;font-weight:500;line-height:1;letter-spacing:-.035em;text-transform:uppercase
-}
-.peg b i{font-style:normal;color:var(--cian)}
-.peg em{
-  font-style:normal;display:block;font-family:var(--mono);font-size:5.4pt;font-weight:500;
-  letter-spacing:.14em;text-transform:uppercase;color:var(--apagado-2);margin-top:2.6mm
-}
-/* negativo: el color va al fondo y la letra al crema */
-.peg--inv{background:var(--coral)}
-.peg--inv b,.peg--inv b i{color:var(--papel)}
-.peg--inv em{color:rgba(246,242,234,.72)}
-.peg--cian{background:var(--cian)}
-.peg--cian b,.peg--cian b i{color:var(--papel)}
-.peg--cian em{color:rgba(246,242,234,.72)}
-/* la frase de la asamblea va de puño, no en caja alta */
-.peg--mano b{
-  font-family:var(--mano);font-weight:600;text-transform:none;letter-spacing:0;line-height:1.1
-}
+.pieza{position:absolute;border:.6mm dashed var(--corte);padding:3mm;background:var(--papel)}
+.pieza > .arte{width:100%;height:100%;overflow:hidden;position:relative;
+  display:flex;flex-direction:column;justify-content:center}
+.r-m{border-radius:9mm} .r-m > .arte{border-radius:6mm}
 
-/* ---------------- dos de ancho completo ---------------- */
-.banda{height:32mm}
-.banda b{font-size:23pt}
-.banda--larga b{font-size:15pt;line-height:1.12;letter-spacing:-.02em;text-transform:none}
+/* campos de color */
+.f-tinta > .arte{background:var(--tinta)}
+.f-cian  > .arte{background:var(--cian)}
+.f-coral > .arte{background:var(--coral)}
+.f-papel > .arte{background:var(--papel);border:1.2mm solid var(--tinta)}
 
-/* ---------------- cuatro medianas ---------------- */
-.medianas{display:grid;grid-template-columns:repeat(2,1fr);gap:6mm}
-.mediana{height:30mm}
-.mediana b{font-size:15pt;line-height:1.06}
-.mediana b i{display:block}
-.mediana--mano b{font-size:19pt}
+/* el grito: cuerpo que no cabe, recortado por el campo */
+.grito{font-family:var(--grito);text-transform:uppercase;letter-spacing:-.045em;
+  line-height:.86;margin:0;display:block}
+.crema{color:var(--papel)} .tint{color:var(--tinta)}
+.c-cian{color:var(--cian-vivo)} .c-coral{color:var(--coral-vivo)}
+.c-cian-op{color:var(--cian)} .c-coral-op{color:var(--coral)}
+.sello{font-family:var(--mono);font-weight:500;letter-spacing:.2em;text-transform:uppercase;
+  display:block;margin:0}
 
-/* ---------------- ocho cuadradas ---------------- */
-.cuadradas{display:grid;grid-template-columns:repeat(4,1fr);gap:6mm}
-.cuad{aspect-ratio:1;align-items:center;text-align:center;padding:4mm}
-.cuad b{font-size:13pt;line-height:1.02}
-.cuad--grande b{font-size:29pt;letter-spacing:-.05em}
-.cuad--url b{
-  font-family:var(--mono);font-size:7pt;font-weight:500;letter-spacing:.02em;
-  text-transform:none;color:var(--cian)
-}
-.cuad--mano b{font-size:16pt}
-.cuad--ancho b{font-size:15pt;letter-spacing:-.045em}
+/* marca: dos líneas, la segunda en color, apretadas hasta tocarse */
+.marca > .arte{padding:5mm 6mm}
+.marca .grito{font-size:26pt}
+.marca .sello{font-size:5.6pt;color:rgba(246,242,234,.62);margin-top:2.4mm}
 
-/* ---------------- pie ---------------- */
-.pie{
-  margin-top:auto;border-top:1pt solid var(--linea);padding-top:2.5mm;
-  display:flex;justify-content:space-between;align-items:baseline;gap:6mm
-}
-.pie p{
-  font-family:var(--mono);font-size:5.4pt;letter-spacing:.06em;color:var(--apagado-2);
-  margin:0;line-height:1.6;max-width:130mm
-}
-.pie b{font-family:var(--mano);font-size:11pt;color:var(--texto);font-weight:600;flex:0 0 auto}
+/* 29-S apilado, el número sangra por arriba */
+.fecha > .arte{padding:0}
+.fecha .g1{font-family:var(--grito);font-size:62pt;line-height:.8;letter-spacing:-.06em;
+  color:var(--papel);margin:-6mm 0 0 -2mm;display:block}
+.fecha .raya{height:4mm;background:var(--coral-vivo);margin:1mm 0 0}
+.fecha .g2{font-family:var(--grito);font-size:40pt;line-height:.85;letter-spacing:-.05em;
+  color:var(--papel);text-align:right;margin:0 2mm -4mm 0;display:block}
+
+/* VOTA a sangre del campo */
+.vota > .arte{padding:0;align-items:center}
+.vota .grito{font-size:44pt;color:var(--papel);margin:0 -3mm}
+
+/* QR del buzón */
+.qr > .arte{padding:4mm;align-items:center;justify-content:space-between}
+.qr img{display:block;width:30mm;height:30mm}
+.qr .sello{font-size:5.4pt;color:var(--apagado);text-align:center;line-height:1.6}
+.qr b{font-family:var(--display);font-weight:500;font-size:8.5pt;letter-spacing:-.01em;
+  color:var(--cian);display:block;text-align:center;margin-top:1.6mm}
+
+/* frases largas apiladas, con salto de escala */
+.frase > .arte{padding:4.5mm 5mm}
+.frase .chico{font-family:var(--display);font-weight:500;font-size:11pt;line-height:1.05;
+  letter-spacing:-.02em;display:block;margin-bottom:1.4mm}
+.frase .grito{font-size:19pt}
+.frase .sello{font-size:5.2pt;color:var(--apagado-2);margin-top:2.6mm}
+
+/* la manuscrita, girada y cruzando la pegatina */
+.mano > .arte{align-items:center;justify-content:center;overflow:hidden}
+.mano span{font-family:var(--mano);font-weight:600;font-size:31pt;line-height:1;
+  color:var(--papel);transform:rotate(-9deg);display:block;white-space:nowrap}
+
+/* píldoras cortas */
+.pildora > .arte{align-items:center;padding:3mm 5mm}
+.pildora .grito{font-size:13pt}
+.pildora .sello{font-family:var(--mono);font-weight:500;font-size:8pt;letter-spacing:.02em;
+  text-transform:none;color:var(--cian)}
+
+.pie{position:absolute;left:10mm;bottom:6mm;width:190mm;
+  display:flex;justify-content:space-between;align-items:baseline;gap:6mm;
+  border-top:1pt solid rgba(74,58,46,.2);padding-top:2mm}
+.pie p{font-family:var(--mono);font-size:5pt;letter-spacing:.05em;color:var(--apagado-2);
+  margin:0;line-height:1.6;max-width:132mm}
+.pie b{font-family:var(--mano);font-size:10pt;color:var(--tinta);font-weight:600;flex:0 0 auto}
 </style>
 </head>
 <body>
@@ -130,49 +128,79 @@ html,body{margin:0;padding:0;background:#fff;
 
   <div class="tapa">
     <h1>Solo la frase.<em> Sin muñeco.</em></h1>
-    <p>Imprime en A4 adhesivo, al 100 % · corta por la línea de puntos</p>
+    <p>A4 adhesivo al 100 % · corta por los puntos · el filete crema es margen de tijera</p>
   </div>
 
-  <!-- dos de ancho completo: la marca y el cierre de la asamblea -->
-  <div class="peg peg--inv banda">
-    <b>Sin siglas. Solo compañerxs.</b>
-    <em>Elecciones al Comité de Empresa · Nazaríes · 29-S</em>
-  </div>
-
-  <div class="peg banda banda--larga">
-    <b>Representación de la plantilla,<i> hecha desde dentro.</i></b>
-    <em>Candidatura independiente · sin-siglas.info</em>
-  </div>
-
-  <!-- cuatro medianas: los titulares de los carteles -->
-  <div class="medianas">
-    <div class="peg mediana">
-      <b>La conciliación<i> no es un favor.</i></b>
-      <em>art. 34.8 ET</em>
-    </div>
-    <div class="peg peg--inv mediana">
-      <b>Que te lo cuenten<i> antes. No después.</i></b>
-      <em>art. 64.5 ET</em>
-    </div>
-    <div class="peg mediana">
-      <b>Lo que no se mide,<i> no se negocia.</i></b>
-      <em>Registro de jornada · art. 34.9 ET</em>
-    </div>
-    <div class="peg peg--mano mediana mediana--mano">
-      <b>Trabajamos por y para nosotros.<br>Unidos por nuestro futuro.</b>
+  <!-- la marca, la pieza grande de la hoja -->
+  <div class="pieza r-m f-tinta marca" style="left:11mm;top:22mm;width:130mm;height:38mm;transform:rotate(-2deg)">
+    <div class="arte">
+      <b class="grito crema">Sin siglas.</b>
+      <b class="grito c-coral">Solo compañerxs.</b>
+      <span class="sello">Candidatura independiente · Comité de Empresa · Nazaríes</span>
     </div>
   </div>
 
-  <!-- ocho cuadradas -->
-  <div class="cuadradas">
-    <div class="peg peg--inv cuad cuad--grande"><b>Vota</b></div>
-    <div class="peg peg--cian cuad cuad--grande"><b>29-S</b></div>
-    <div class="peg cuad"><b>Once.<br><i>Cero siglas.</i></b></div>
-    <div class="peg cuad"><b>Hecho<br>desde<br><i>dentro</i></b></div>
-    <div class="peg peg--cian cuad cuad--ancho"><b>Pregúntame</b></div>
-    <div class="peg cuad cuad--url"><b>sin-siglas.info</b></div>
-    <div class="peg cuad"><b>El buzón<br><i>está abierto</i></b></div>
-    <div class="peg peg--mano cuad cuad--mano"><b>Sin siglas,<br>solo<br>compañerxs</b></div>
+  <!-- 29-S: el 29 sangra por arriba, la raya hace de guión -->
+  <div class="pieza r-m f-cian fecha" style="left:150mm;top:26mm;width:44mm;height:52mm;transform:rotate(4deg)">
+    <div class="arte">
+      <b class="g1">29</b>
+      <div class="raya"></div>
+      <b class="g2">S</b>
+    </div>
+  </div>
+
+  <div class="pieza r-m f-coral vota" style="left:12mm;top:70mm;width:66mm;height:38mm;transform:rotate(-4deg)">
+    <div class="arte"><b class="grito">Vota</b></div>
+  </div>
+
+  <!-- el QR del buzón: comprobado legible desde 20 mm, va a 30 -->
+  <div class="pieza r-m f-papel qr" style="left:88mm;top:66mm;width:52mm;height:60mm;transform:rotate(2.5deg)">
+    <div class="arte">
+      <img src="qr-buzon.svg" alt="Código QR al buzón anónimo de la candidatura.">
+      <div>
+        <span class="sello">El buzón · es anónimo</span>
+        <b>sin-siglas.info/buzon</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="pieza r-m f-papel frase" style="left:12mm;top:118mm;width:92mm;height:40mm;transform:rotate(3deg)">
+    <div class="arte">
+      <span class="chico">La conciliación</span>
+      <b class="grito c-cian-op">no es un favor.</b>
+      <span class="sello">art. 34.8 ET</span>
+    </div>
+  </div>
+
+  <div class="pieza r-m f-tinta frase" style="left:112mm;top:134mm;width:84mm;height:44mm;transform:rotate(-3deg)">
+    <div class="arte">
+      <span class="chico crema">Lo que no se mide,</span>
+      <b class="grito c-coral">no se negocia.</b>
+      <span class="sello">Registro de jornada · art. 34.9 ET</span>
+    </div>
+  </div>
+
+  <div class="pieza r-m f-papel frase" style="left:14mm;top:168mm;width:88mm;height:42mm;transform:rotate(-2deg)">
+    <div class="arte">
+      <span class="chico">Que te lo cuenten</span>
+      <b class="grito c-coral-op">antes. No después.</b>
+      <span class="sello">art. 64.5 ET</span>
+    </div>
+  </div>
+
+  <div class="pieza r-m f-cian mano" style="left:114mm;top:190mm;width:76mm;height:44mm;transform:rotate(4deg)">
+    <div class="arte"><span>Pregúntame</span></div>
+  </div>
+
+  <div class="pieza r-m f-papel frase" style="left:16mm;top:220mm;width:78mm;height:40mm;transform:rotate(4deg)">
+    <div class="arte">
+      <span class="chico">Once personas.</span>
+      <b class="grito c-cian-op">Cero siglas.</b>
+    </div>
+  </div>
+
+  <div class="pieza r-m f-papel pildora" style="left:108mm;top:246mm;width:82mm;height:22mm;transform:rotate(-2deg)">
+    <div class="arte"><b class="sello">sin-siglas.info</b></div>
   </div>
 
   <div class="pie">

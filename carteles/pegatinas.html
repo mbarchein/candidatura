@@ -5,134 +5,121 @@
 <title>Pegatinas de Compi · Sin siglas, solo compañerxs</title>
 <link rel="stylesheet" href="tipos.css">
 <style>
-/* ==================================================================
-   HOJA DE PEGATINAS · A4, para papel adhesivo de impresora
-   ------------------------------------------------------------------
-   Catorce pegatinas: seis anchas con frase, para portátil o botella, y
-   ocho cuadradas, cuatro con Compi y cuatro de palabra. Las de palabra
-   están porque a 25 mm las poses de Compi no se distinguen entre sí:
-   lo que cambia entre una y otra son ángulos de brazo y cara.
+/* Hoja de pegatinas A4 para papel adhesivo, en lenguaje de HUD de
+   videojuego: Compi ya es un sprite de 8 bits, así que el resto de la
+   hoja habla su idioma en vez de llevarle un estilo encima.
 
-   La hoja va en blanco porque es el color del papel adhesivo; lo que
-   se imprime en crema es cada pegatina. La línea de puntos es la guía
-   de corte y va 1,5 mm por fuera del color, así que al cortar por ella
-   queda un filete blanco alrededor y perdona el pulso con las tijeras.
+   Tres restricciones de producción que mandan sobre el diseño:
+   - El color para 3 mm antes de la línea de corte (el padding de
+     .pieza). Una impresora de oficina desvía 1-2 mm; así el error de
+     tijera cae en crema y queda el filete de una pegatina troquelada.
+   - Radio de esquina 6 mm mínimo: por debajo, la esquina no se resuelve
+     en un solo arco y hay que dar varios recortes.
+   - Nada a menos de 10 mm del borde del A4, que es lo que no imprime la
+     mayoría de impresoras de oficina.
 
-   Compi se pinta con compi.js a escala 10 (270x360 px de mapa de bits)
-   y se muestra a la medida en milímetros: así llega a la impresora con
-   resolución de sobra y el píxel sale cuadrado, no borroso.
+   Las piezas van en posición absoluta y giradas una a una: ninguna
+   comparte borde con otra. Es lo que separa una hoja de pegatinas de
+   una tabla de tarjetas.
 
-   Exportar:  ./carteles/exportar.sh pegatinas
-   ================================================================== */
+   Exportar: ./carteles/exportar.sh pegatinas */
 :root{
-  --w:210mm; --h:297mm; --margen:12mm;
-
-  /* la paleta clara de la campaña */
-  --papel:#f6f2ea; --panel:#fffdf9;
-  --texto:#191820; --texto-2:#3a3742; --apagado:#5e574e; --apagado-2:#8a8177;
+  --papel:#f6f2ea; --tinta:#191820;
   --cian:#0d6f92; --coral:#bf3f2f;
   --cian-vivo:#3fc9f0; --coral-vivo:#f4796b;
-  --linea:rgba(74,58,46,.18); --linea-fuerte:rgba(74,58,46,.3);
+  --apagado:#5e574e; --apagado-2:#8a8177;
+  --corte:rgba(74,58,46,.55);
 
   --display:"Gellix","Helvetica Neue",Arial,sans-serif;
+  --grito:"Archivo Black","Arial Black",sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,monospace;
   --mano:"Caveat",cursive;
-
-  /* guía de corte */
-  --corte:rgba(74,58,46,.5);
 }
 
 @page{ size:A4; margin:0 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;background:#fff;
   -webkit-print-color-adjust:exact;print-color-adjust:exact}
+.hoja{width:210mm;height:297mm;position:relative;overflow:hidden;background:#fff;
+  font-family:var(--display);color:var(--tinta)}
 
-.hoja{
-  width:var(--w);height:var(--h);padding:var(--margen);overflow:hidden;
-  background:#fff;color:var(--texto);font-family:var(--display);
-  display:flex;flex-direction:column
-}
-
-/* ---------------- cabecera de la hoja ---------------- */
-.tapa{
+.tapa{position:absolute;left:10mm;top:7mm;width:190mm;
   display:flex;justify-content:space-between;align-items:baseline;gap:6mm;
-  border-bottom:1pt solid var(--linea-fuerte);padding-bottom:2.5mm;margin-bottom:6mm
-}
-.tapa h1{
-  font-weight:500;font-size:15pt;line-height:1;letter-spacing:-.03em;text-transform:uppercase;
-  margin:0
-}
+  border-bottom:1pt solid rgba(74,58,46,.3);padding-bottom:2mm}
+.tapa h1{font-family:var(--grito);font-size:10pt;line-height:1;letter-spacing:-.02em;
+  text-transform:uppercase;margin:0}
 .tapa h1 em{font-style:normal;color:var(--coral)}
-.tapa p{
-  font-family:var(--mono);font-size:6pt;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--apagado);margin:0;text-align:right;line-height:1.6;max-width:105mm
-}
+.tapa p{font-family:var(--mono);font-size:5.4pt;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--apagado);margin:0;text-align:right;line-height:1.6}
 
-/* ---------------- la pegatina, base común ----------------
-   el color llega hasta el borde del bloque y la guía de corte va por
-   fuera con outline-offset: no se imprime encima de la pegatina */
-.peg{
-  background:var(--papel);border-radius:4mm;overflow:hidden;position:relative;
-  outline:.5pt dashed var(--corte);outline-offset:1.5mm
-}
-.peg canvas{display:block;image-rendering:pixelated}
+/* .pieza es la línea de tijera más el filete de seguridad (su padding);
+   .arte es lo único que se imprime en color. No se tocan nunca. */
+.pieza{position:absolute;border:.6mm dashed var(--corte);padding:3mm;background:var(--papel)}
+.pieza > .arte{width:100%;height:100%;overflow:hidden;position:relative;
+  display:flex;flex-direction:column}
+.r-m{border-radius:9mm} .r-m > .arte{border-radius:6mm}
 
-/* ---------------- seis anchas, con frase ---------------- */
-.anchas{display:grid;grid-template-columns:repeat(2,1fr);gap:6mm;margin-bottom:8mm}
-.ancha{
-  height:42mm;display:flex;align-items:center;gap:4mm;padding:4mm 5mm 4mm 4mm;
-  border-left:1.6mm solid var(--cian-vivo)
-}
-.ancha:nth-child(even){border-left-color:var(--coral-vivo)}
-.ancha__txt{flex:1 1 auto;min-width:0}
-.ancha b{
-  display:block;font-weight:500;font-size:15.5pt;line-height:1.06;letter-spacing:-.03em
-}
-.ancha b i{font-style:normal;color:var(--cian);display:block}
-.ancha:nth-child(even) b i{color:var(--coral)}
-.ancha span{
-  display:block;font-family:var(--mono);font-size:5.6pt;letter-spacing:.13em;
-  text-transform:uppercase;color:var(--apagado-2);margin-top:2.4mm
-}
-/* la del 29 grita más que las otras: es la única con fecha */
-.ancha--grita b{font-size:20pt;line-height:.98;letter-spacing:-.04em}
-.ancha--url b{font-size:13pt;letter-spacing:-.015em;color:var(--cian)}
+/* cuadro de diálogo de RPG: marco de tinta gruesa y pico escalonado, la
+   convención que ya significa "te hablo claro" sin tener que decirlo */
+.dialogo > .arte{background:var(--cian);border:1.4mm solid var(--tinta);padding:5mm 5.5mm;
+  justify-content:center}
+.dialogo p{font-family:var(--mono);font-weight:500;font-size:10.5pt;line-height:1.35;
+  color:var(--papel);margin:0}
+.dialogo p b{color:var(--cian-vivo);font-weight:500}
+.dialogo .sig{position:absolute;right:5.5mm;bottom:4mm;font-family:var(--mono);font-size:6.4pt;
+  letter-spacing:.16em;color:var(--cian-vivo)}
 
-/* ---------------- ocho cuadradas, solo Compi ---------------- */
-.pequenas{display:grid;grid-template-columns:repeat(4,1fr);gap:6mm}
-.peq{
-  aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:1.5mm;padding:3mm
-}
-.peq span{
-  font-family:var(--mono);font-size:4.6pt;font-weight:500;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--cian)
-}
-.peq:nth-child(even) span{color:var(--coral)}
-/* las de palabra: sin muñeco, tipografía a tope, que se lean de lejos */
-.peq--txt b{
-  display:block;font-weight:500;line-height:.94;letter-spacing:-.035em;
-  text-transform:uppercase;text-align:center;color:var(--cian)
-}
-.peq--txt:nth-child(4n+2) b{color:var(--coral)}
-.peq--txt b{font-size:15pt}
-.peq--txt.grande b{font-size:27pt;letter-spacing:-.05em}
-.peq--txt em{
-  font-style:normal;display:block;font-family:var(--mono);font-size:4.6pt;font-weight:500;
-  letter-spacing:.14em;color:var(--apagado-2);margin-top:2mm
-}
+.ficha > .arte{background:var(--papel);border:1.4mm solid var(--tinta);align-items:center;
+  justify-content:center}
+.ficha canvas{display:block;image-rendering:pixelated;margin:auto auto 2mm}
+.ficha .placa{width:100%;background:var(--tinta);padding:1.8mm 2mm;text-align:center;
+  margin-top:0}
+.ficha .placa b{font-family:var(--mono);font-weight:500;font-size:6.4pt;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--papel);display:block}
+.ficha .placa span{font-family:var(--mono);font-size:5pt;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--cian-vivo);display:block;margin-top:.7mm}
 
-/* ---------------- pie de la hoja ---------------- */
-.pie{
-  margin-top:auto;border-top:1pt solid var(--linea);padding-top:2.5mm;
-  display:flex;justify-content:space-between;align-items:baseline;gap:6mm
-}
-.pie p{
-  font-family:var(--mono);font-size:5.4pt;letter-spacing:.06em;color:var(--apagado-2);
-  margin:0;line-height:1.6;max-width:120mm
-}
-.pie b{font-family:var(--mano);font-size:11pt;color:var(--texto);font-weight:600;
-  letter-spacing:0;flex:0 0 auto}
+.vida > .arte{background:var(--coral);align-items:center;justify-content:center;padding:4mm}
+.vida svg{display:block;width:27mm;height:auto;margin-bottom:3mm}
+.vida b{font-family:var(--grito);font-size:13.5pt;line-height:1.05;letter-spacing:-.03em;
+  text-transform:uppercase;color:var(--papel);text-align:center;display:block}
+
+.objeto > .arte{background:var(--tinta);flex-direction:row;align-items:center;gap:4mm;
+  padding:3.5mm 5mm}
+.objeto canvas{display:block;image-rendering:pixelated;flex:0 0 auto}
+.objeto .txt{min-width:0}
+.objeto em{font-style:normal;font-family:var(--mono);font-size:5.4pt;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--coral-vivo);display:block;margin-bottom:1.2mm}
+.objeto b{font-family:var(--grito);font-size:13pt;line-height:1;letter-spacing:-.03em;
+  text-transform:uppercase;color:var(--papel);display:block}
+.objeto span{font-family:var(--mono);font-size:5.4pt;letter-spacing:.09em;color:var(--cian-vivo);
+  display:block;margin-top:1.4mm}
+
+.barra > .arte{background:var(--papel);border:1.4mm solid var(--tinta);padding:4.5mm;
+  justify-content:center}
+.barra em{font-style:normal;font-family:var(--mono);font-weight:500;font-size:6.2pt;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--cian);display:block;margin-bottom:2.4mm}
+.barra .celdas{display:flex;gap:1.1mm;margin-bottom:2.6mm}
+.barra .celdas i{flex:1 1 0;height:6mm;background:var(--coral)}
+.barra .celdas i.hueco{background:transparent;box-shadow:inset 0 0 0 .5mm var(--tinta)}
+.barra span{font-family:var(--display);font-weight:500;font-size:8pt;line-height:1.28;
+  color:var(--tinta);display:block}
+
+.pildora > .arte{align-items:center;justify-content:center;padding:3mm 5mm}
+.pildora b{font-family:var(--grito);font-size:12.5pt;line-height:1;letter-spacing:-.03em;
+  text-transform:uppercase;display:block;text-align:center}
+.pildora--cian > .arte{background:var(--cian)}
+.pildora--cian b{color:var(--papel)}
+.pildora--mono > .arte{background:var(--papel);border:1.2mm solid var(--tinta)}
+.pildora--mono b{font-family:var(--mono);font-weight:500;font-size:8.5pt;letter-spacing:.03em;
+  text-transform:none;color:var(--cian)}
+
+.pie{position:absolute;left:10mm;bottom:6mm;width:190mm;
+  display:flex;justify-content:space-between;align-items:baseline;gap:6mm;
+  border-top:1pt solid rgba(74,58,46,.2);padding-top:2mm}
+.pie p{font-family:var(--mono);font-size:5pt;letter-spacing:.05em;color:var(--apagado-2);
+  margin:0;line-height:1.6;max-width:132mm}
+.pie b{font-family:var(--mano);font-size:10pt;color:var(--tinta);font-weight:600;flex:0 0 auto}
 </style>
 </head>
 <body>
@@ -140,76 +127,94 @@ html,body{margin:0;padding:0;background:#fff;
 
   <div class="tapa">
     <h1>Este es Compi.<em> Llévatelo.</em></h1>
-    <p>Imprime en A4 adhesivo, al 100 % · corta por la línea de puntos</p>
+    <p>A4 adhesivo al 100 % · corta por los puntos · el filete crema es margen de tijera</p>
   </div>
 
-  <!-- seis anchas: portátil, botella, carpeta -->
-  <div class="anchas">
-    <div class="peg ancha">
-      <canvas data-pose="saluda" data-tt="620" data-mm="26"></canvas>
-      <div class="ancha__txt">
-        <b>Sin siglas.<i>Solo compañerxs.</i></b>
-        <span>Comité de Empresa · Nazaríes</span>
-      </div>
-    </div>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+    <symbol id="corazon" viewBox="0 0 7 6">
+      <path d="M1 0h2v1H1zM4 0h2v1H4zM0 1h7v1H0zM0 2h7v1H0zM1 3h5v1H1zM2 4h3v1H2zM3 5h1v1H3z"/>
+    </symbol>
+    <symbol id="corazon-hueco" viewBox="0 0 7 6">
+      <path d="M1 0h2v1H1zM4 0h2v1H4zM0 1h1v1H0zM3 1h1v1H3zM6 1h1v1H6zM0 2h1v1H0zM6 2h1v1H6zM1 3h1v1H1zM5 3h1v1H5zM2 4h1v1H2zM4 4h1v1H4zM3 5h1v1H3z"/>
+    </symbol>
+  </defs></svg>
 
-    <div class="peg ancha">
-      <canvas data-pose="chuleo" data-tt="60" data-mm="26"></canvas>
-      <div class="ancha__txt">
-        <b>Once personas.<i>Cero siglas.</i></b>
-        <span>Candidatura independiente</span>
-      </div>
+  <div class="pieza r-m dialogo" style="left:11mm;top:24mm;width:100mm;height:40mm;transform:rotate(-2.5deg)">
+    <div class="arte">
+      <p>Cuéntanoslo tú. Para eso está <b>el buzón</b>.</p>
+      <span class="sig">▶ SIGUIENTE</span>
     </div>
+  </div>
 
-    <div class="peg ancha">
-      <canvas data-pose="cansado" data-tt="1500" data-mm="26"></canvas>
-      <div class="ancha__txt">
-        <b>Yo a las 19:00<i>ya no leo.</i></b>
-        <span>Desconexión digital · art. 20 bis ET</span>
-      </div>
+  <div class="pieza r-m ficha" style="left:127mm;top:22mm;width:60mm;height:76mm;transform:rotate(3.5deg)">
+    <div class="arte">
+      <canvas data-pose="serio" data-tt="0" data-mm="40"></canvas>
+      <div class="placa"><b>Compi</b><span>Sin siglas</span></div>
     </div>
+  </div>
 
-    <div class="peg ancha">
-      <canvas data-pose="celebra" data-tt="330" data-mm="26"></canvas>
-      <div class="ancha__txt">
-        <b>Trabajamos por y<i>para nosotros.</i></b>
-        <span>Unidos por nuestro futuro</span>
-      </div>
+  <div class="pieza r-m vida" style="left:12mm;top:80mm;width:54mm;height:54mm;transform:rotate(5deg)">
+    <div class="arte">
+      <svg viewBox="0 0 25 6" aria-hidden="true">
+        <use href="#corazon" x="0" y="0" width="7" height="6" fill="#f6f2ea"/>
+        <use href="#corazon" x="9" y="0" width="7" height="6" fill="#f6f2ea"/>
+        <use href="#corazon-hueco" x="18" y="0" width="7" height="6" fill="#f6f2ea"/>
+      </svg>
+      <b>1 vida extra<br>el 29-S</b>
     </div>
+  </div>
 
-    <div class="peg ancha ancha--grita">
-      <canvas data-pose="baile" data-tt="500" data-mm="26"></canvas>
-      <div class="ancha__txt">
-        <b>El 29,<i>vota.</i></b>
-        <span>Vaya quien vaya en tu papeleta</span>
-      </div>
-    </div>
-
-    <div class="peg ancha ancha--url">
-      <canvas data-pose="quieto" data-tt="200" data-mm="26"></canvas>
-      <div class="ancha__txt">
-        <b>sin-siglas.info</b>
-        <span>El buzón sigue abierto · /buzon</span>
+  <div class="pieza r-m objeto" style="left:78mm;top:112mm;width:106mm;height:30mm;transform:rotate(-1.5deg)">
+    <div class="arte">
+      <canvas data-pose="celebra" data-tt="330" data-mm="20"></canvas>
+      <div class="txt">
+        <em>Objeto conseguido</em>
+        <b>Conciliación</b>
+        <span>protocolo escrito · art. 34.8 ET</span>
       </div>
     </div>
   </div>
 
-  <!-- ocho cuadradas: solo Compi, para repartir a puñados -->
-  <div class="pequenas">
-    <div class="peg peq"><canvas data-pose="saluda" data-tt="620" data-mm="25"></canvas><span>Sin siglas</span></div>
-    <div class="peg peq peq--txt grande"><b>Vota</b><em>29-S</em></div>
-    <div class="peg peq"><canvas data-pose="baile" data-tt="500" data-mm="25"></canvas><span>Sin siglas</span></div>
-    <div class="peg peq peq--txt grande"><b>29-S</b><em>Comité de empresa</em></div>
-    <div class="peg peq"><canvas data-pose="cansado" data-tt="1500" data-mm="25"></canvas><span>Sin siglas</span></div>
-    <div class="peg peq peq--txt"><b>Sin siglas<br>solo<br>compañerxs</b></div>
-    <div class="peg peq"><canvas data-pose="serio" data-tt="0" data-mm="25"></canvas><span>Sin siglas</span></div>
-    <div class="peg peq peq--txt"><b>Once.<br>Cero<br>siglas.</b></div>
+  <div class="pieza r-m objeto" style="left:14mm;top:204mm;width:106mm;height:30mm;transform:rotate(2deg)">
+    <div class="arte">
+      <canvas data-pose="chuleo" data-tt="60" data-mm="20"></canvas>
+      <div class="txt">
+        <em>Objeto conseguido</em>
+        <b>Las horas contadas</b>
+        <span>registro de jornada · art. 34.9 ET</span>
+      </div>
+    </div>
   </div>
 
+  <div class="pieza r-m barra" style="left:11mm;top:152mm;width:84mm;height:42mm;transform:rotate(-4deg)">
+    <div class="arte">
+      <em>Participación</em>
+      <div class="celdas">
+        <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="hueco"></i><i class="hueco"></i>
+      </div>
+      <span>Es la única barra que sube si bajas a votar.</span>
+    </div>
+  </div>
+
+  <div class="pieza r-m ficha" style="left:128mm;top:196mm;width:58mm;height:72mm;transform:rotate(-3deg)">
+    <div class="arte">
+      <canvas data-pose="baile" data-tt="500" data-mm="38"></canvas>
+      <div class="placa"><b>29 de septiembre</b><span>Solo compañerxs</span></div>
+    </div>
+  </div>
+
+  <div class="pieza r-m pildora pildora--cian" style="left:108mm;top:154mm;width:54mm;height:26mm;transform:rotate(6deg)">
+    <div class="arte"><b>Pregúntame</b></div>
+  </div>
+
+  <div class="pieza r-m pildora pildora--mono" style="left:16mm;top:248mm;width:76mm;height:22mm;transform:rotate(-2deg)">
+    <div class="arte"><b>sin-siglas.info/buzon</b></div>
+  </div>
+
+  
   <div class="pie">
     <p>Candidatura registrada conforme a la normativa de elecciones sindicales. La hacemos los
-      once candidatos: no es una comunicación de la empresa. Compi es dibujo de píxeles: si
-      reescalas la hoja, imprímela al 100 % para que el píxel siga saliendo cuadrado.</p>
+      once candidatos: no es una comunicación de la empresa.</p>
     <b>29 de septiembre</b>
   </div>
 
@@ -217,12 +222,11 @@ html,body{margin:0;padding:0;background:#fff;
 
 <script src="compi.js"></script>
 <script>
-/* Cada pegatina pide su pose y el fotograma que congela. Se pinta a
-   escala 10 y luego se fija el tamaño en milímetros: pintaCompi deja
-   el ancho en píxeles y aquí manda el papel, no la pantalla. */
+/* Compi a escala 8 y luego a la medida en mm: el mapa de bits llega a la
+   impresora con resolución de sobra y el píxel sale cuadrado. */
 document.querySelectorAll("canvas[data-pose]").forEach(c => {
   const alto = +c.dataset.mm;
-  pintaCompi(c, c.dataset.pose, +c.dataset.tt, 10);
+  pintaCompi(c, c.dataset.pose, +c.dataset.tt, 8);
   c.style.height = alto + "mm";
   c.style.width  = (alto * REJ_W / REJ_H).toFixed(2) + "mm";
 });
