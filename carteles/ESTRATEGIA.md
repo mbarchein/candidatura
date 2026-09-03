@@ -54,7 +54,7 @@ el giro de la campaña.
 | Marca | Sin siglas. Solo compañerxs. | Web + A3 (ya hechos) |
 | Temas | Tres acciones concretas por compromiso | `conciliacion`, `ambiente`, `comunicacion` |
 | Prueba | Que somos comprobables y honestos | `buzon`, `lo-que-no-podemos`, `voces-del-buzon`, `semaforo` |
-| Conversión | Cómo, cuándo y por qué votar | `donde-encontrarnos`, `por-que-votar`, `vispera` |
+| Conversión | Cómo, cuándo y por qué votar | `donde-encontrarnos`, `por-que-votar`, `ultima-llamada` |
 
 Los carteles nuevos son **1080 × 1350 px, tema claro**, pensados para enviar por el canal
 donde ya se habla. **Ninguno lleva número de orden**: en la esquina va la fecha, `29-S`, que es
@@ -72,22 +72,22 @@ fuente son identificadores para poder capturarlos, no el orden de envío.
 formulario anónimo: sin nombre, sin área, sin correo. Una sola pregunta: qué cambiarías de tu
 día a día.
 
-**`voces-del-buzon` (18 de septiembre).** El pago: las respuestas más repetidas, sin retocar, cada una
+**`voces-del-buzon` (22 de septiembre).** El pago: las respuestas más repetidas, sin retocar, cada una
 con su etiqueta —*ya está pedido* / *va al programa* / *no podemos, y te decimos por qué*.
 
 Por qué funciona: la campaña deja de ser un monólogo, el material se lo escribe la plantilla, y
-el día 18 tenemos algo que ninguna otra lista puede tener. Coste: cero.
+el día 22 tenemos algo que ninguna otra lista puede tener. Coste: cero.
 
 Implementación real: `buzon.html` con formulario de Netlify —el sitio ya está en Netlify—, así
 que se recogen las respuestas sin backend ni servicio de terceros. Detalles al final.
 
 ### 4.2 El semáforo del mandato
 
-**`semaforo` (22 de septiembre).** Un cartel-contrato con las once firmas y el tablero que
+**`semaforo` (23 de septiembre).** Un cartel-contrato con las once firmas y el tablero que
 publicaremos cada trimestre durante los cuatro años: cada acción de los tres carteles de tema en
 **conseguido / en negociación / se cayó / todavía por pedir**.
 
-El cartel muestra el tablero **con todo en gris**, tal y como está el día 22: nada pedido
+El cartel muestra el tablero **con todo en gris**, tal y como está el día 23: nada pedido
 todavía. Convierte *«os iremos contando»* en un objeto que se puede comparar con el de enero.
 
 ### 4.3 Compi
@@ -132,14 +132,19 @@ mesas de nadie.
 | vie 11 sep | **Se puede medir** · ambiente y salud | Tema | Raúl Navarro |
 | mar 15 sep | **Que te lo cuenten antes** · comunicación | Tema | José Pablo Fernández |
 | jue 17 sep | **Lo que un comité no te va a conseguir** | Diferenciación por honestidad | Mario Barchéin |
-| vie 18 sep | **Esto no lo decimos nosotros** · buzón | Pago del golpe 1 | Rocío Galindo |
-| mar 22 sep | **El semáforo del mandato** | Golpe 2 · lo firman los once | Rafael López |
-| jue 24 sep | **No hace falta que pidas cita** | Movilización | María Emilia Castillo |
-| vie 25 sep | **La próxima vez, en 2030** · por qué votar | Llamada al voto, sin pedirlo para nosotros | Fran Bolívar |
-| lun 28 sep | **Mañana** | Conversión · cómo y dónde se vota | Violeta López |
+| vie 18 sep | **No hace falta que pidas cita** | Movilización | María Emilia Castillo |
+| mar 22 sep | **Esto no lo decimos nosotros** · buzón | Pago del golpe 1 | Rocío Galindo |
+| mié 23 sep | **El semáforo del mandato** | Golpe 2 · lo firman los once | Rafael López |
+| jue 24 sep | **La próxima vez, en 2030** · por qué votar | Llamada al voto, sin pedirlo para nosotros | Fran Bolívar |
+| vie 25 sep | **El martes se vota** · última llamada | Conversión · cómo y dónde se vota | Violeta López |
+| lun 28 sep | — nada — | **Prohibido por el art. 8.4 del RD 1844/1994** | — |
 
-Diez piezas en 26 días: **dos por semana**, y tres en la última, que es cuando hay que apretar.
-Más de eso satura y la gente deja de abrirlas.
+Diez piezas, y la última el **viernes 25**. El buzón se cierra y se publica el 22, no el 18, para
+dar más margen a que llegue gente.
+
+**El lunes 28 no se manda nada, y no es una decisión de estilo:** el art. 8.4 del RD 1844/1994
+corta la propaganda electoral a las cero horas del día anterior al de la votación. Ver el
+apartado 10.
 
 ### Reglas de envío
 
@@ -216,9 +221,44 @@ Cosas que no dependen del diseño y que hay que confirmar entre los once:
    sitio se lo carga.
 2. **La hora de comité de `donde-encontrarnos`.** Está propuesta como *primer jueves de mes, 13:30–14:30,
    en la cocina*. Hay que confirmar día y sitio, o cambiarlo antes de enviarlo.
-3. **`voces-del-buzon`.** Es una plantilla: las citas se rellenan el día 18 con lo que haya llegado al
+3. **`voces-del-buzon`.** Es una plantilla: las citas se rellenan el día 22 con lo que haya llegado al
    buzón. No se puede enviar antes.
-4. **Horario y lugar de la urna** para `vispera`: los publica la mesa electoral, no nosotros.
+4. **Horario y lugar de la urna** para `ultima-llamada`: los publica la mesa electoral, no nosotros.
+
+---
+
+## 10. Hasta cuándo se puede hacer campaña
+
+**Art. 8.4 del RD 1844/1994**, literal:
+
+> Proclamados los candidatos definitivamente, los promotores de las elecciones, los
+> presentadores de candidatos y los propios candidatos podrán efectuar **desde el mismo día de
+> tal proclamación, hasta las cero horas del día anterior al señalado para la votación**, la
+> propaganda electoral que consideren oportuna, **siempre y cuando no se altere la prestación
+> normal del trabajo**. Esta limitación no se aplicará a las empresas que tengan hasta 30
+> trabajadores.
+
+Tres consecuencias para este plan:
+
+1. **La ventana se abre el día de la proclamación definitiva, no antes.** Hay que mirar el acta
+   de la mesa y confirmar la fecha: cualquier pieza enviada antes de ese día queda fuera de la
+   ventana del artículo.
+2. **La ventana se cierra a las cero horas del lunes 28**, o sea al acabar el domingo 27. El
+   lunes 28 es día sin propaganda. Por eso el último cartel es el del viernes 25 y por eso dice
+   «el martes se vota» y no «mañana».
+3. **«Sin alterar la prestación normal del trabajo»** es la otra mitad del artículo, y es la que
+   sostiene lo que ya decíamos: nada de correo corporativo, nada de listas de la empresa, nada de
+   pararle la mañana a nadie. Se manda por el canal donde ya se habla y se lee cuando se pueda.
+
+La excepción de las empresas de hasta 30 trabajadores no nos aplica: hay comité de empresa, y el
+comité solo existe desde 50 personas.
+
+El Estatuto, por su parte, solo fija el plazo mínimo del proceso: **«entre la proclamación de
+candidatos y la votación mediarán al menos cinco días»** (art. 74.3 ET). No regula la campaña ni
+menciona jornada de reflexión; eso está solo en el reglamento.
+
+**Confirmadlo con la mesa electoral de todos modos.** Es quien publica el calendario y quien fija
+la fecha y hora de la votación, y el cómputo del cierre depende de esa fecha.
 
 ---
 

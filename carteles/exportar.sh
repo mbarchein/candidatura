@@ -26,7 +26,7 @@ trap 'rm -rf "$PERFIL"' EXIT
 declare -A NOMBRE=(
   [1]=buzon [2]=conciliacion [3]=ambiente [4]=comunicacion
   [5]=lo-que-no-podemos [6]=voces-del-buzon [7]=semaforo
-  [8]=donde-encontrarnos [9]=vispera [10]=por-que-votar
+  [8]=donde-encontrarnos [9]=ultima-llamada [10]=por-que-votar
 )
 
 # la hoja de pegatinas es A4 y va por otro sitio: lo que hace falta es
