@@ -98,6 +98,7 @@ body.solo .cartel.elegido{display:flex}
   margin:22px 0 0;max-width:36ch
 }
 .bajada b{color:var(--texto);font-weight:500}
+.bajada i{font-style:normal;color:var(--coral);font-weight:500}
 .bajada--ancha{max-width:none}
 
 /* ---------------- rótulo de sección ---------------- */
@@ -192,6 +193,10 @@ body.solo .cartel.elegido{display:flex}
 .qr figcaption{
   font-family:var(--mono);font-size:var(--t-mini);letter-spacing:.1em;text-transform:uppercase;
   color:var(--apagado);margin-top:16px;text-align:center;line-height:1.5
+}
+.qr figcaption i{
+  font-style:normal;display:block;font-weight:500;font-size:19px;letter-spacing:.22em;
+  color:var(--coral);margin-bottom:6px
 }
 .qr figcaption b{display:block;color:var(--cian);letter-spacing:.02em;text-transform:none;
   font-family:var(--display);font-size:22px;margin-top:6px}
@@ -329,7 +334,7 @@ body.solo .cartel.elegido{display:flex}
 .puertas p b{color:var(--texto);font-weight:500}
 
 /* 09 · la víspera: el sello manda */
-.vispera{display:grid;grid-template-columns:1fr 300px;gap:40px;align-items:center;margin-top:30px}
+.vispera{display:grid;grid-template-columns:1fr 300px;gap:40px;align-items:center;margin-top:24px}
 .sello{width:300px;height:300px;transform:rotate(-5deg)}
 .sello__aro{fill:none;stroke:var(--coral-vivo);stroke-width:2.4}
 .sello__pica{fill:none;stroke:rgba(13,111,146,.5);stroke-width:5.5;stroke-dasharray:1.6 10.4}
@@ -340,7 +345,7 @@ body.solo .cartel.elegido{display:flex}
 .sello__t1{font-family:var(--display);font-weight:500;font-size:20px;fill:var(--texto);text-anchor:middle}
 .sello__t2{font-family:var(--mono);font-size:9.5px;fill:var(--texto-2);text-anchor:middle;letter-spacing:.16em}
 .sello__t3{font-family:var(--mono);font-size:9.5px;fill:var(--coral);text-anchor:middle}
-.datos{list-style:none;margin:0;padding:0;display:grid;gap:20px}
+.datos{list-style:none;margin:0;padding:0;display:grid;gap:16px}
 .datos li{border-top:1px solid var(--linea);padding-top:14px}
 .datos strong{
   display:block;font-family:var(--mono);font-weight:500;font-size:var(--t-mini);
@@ -349,11 +354,16 @@ body.solo .cartel.elegido{display:flex}
 .datos p{margin:0;font-size:var(--t-cuerpo);line-height:1.42;color:var(--texto-2)}
 .datos p b{color:var(--texto);font-weight:500}
 .remate{
-  margin-top:30px;background:var(--panel);border:1px solid var(--linea);
-  border-left:5px solid var(--cian-vivo);border-radius:6px;padding:22px 28px;
+  margin-top:22px;background:var(--panel);border:1px solid var(--linea);
+  border-left:5px solid var(--cian-vivo);border-radius:6px;padding:20px 26px;
   font-size:26px;line-height:1.35;letter-spacing:-.01em
 }
 .remate b{color:var(--cian);font-weight:500}
+.ultimo{
+  margin-top:12px;font-family:var(--mono);font-size:var(--t-mini);letter-spacing:.06em;
+  line-height:1.5;color:var(--apagado)
+}
+.ultimo b{color:var(--coral);font-weight:500}
 </style>
 </head>
 <body>
@@ -368,7 +378,7 @@ body.solo .cartel.elegido{display:flex}
   <h1 class="titular">Primero tú.<em>Luego el programa.</em></h1>
   <p class="bajada bajada--ancha">
     Somos once compañerxs y no traemos un programa escrito de fuera. Antes de prometerte nada,
-    queremos saber <b>qué cambiarías tú</b>. Una pregunta, y es anónima.
+    queremos saber <b>qué cambiarías tú</b>. Una pregunta, y es <i>anónima</i>.
   </p>
 
   <div class="buzon">
@@ -382,7 +392,7 @@ body.solo .cartel.elegido{display:flex}
     </ul>
     <figure class="qr">
       <img src="qr-buzon.svg" alt="Código QR al buzón anónimo de la candidatura.">
-      <figcaption>Apunta con la cámara<b>sin-siglas.info/buzon</b></figcaption>
+      <figcaption><i>Es anónimo</i>Apunta con la cámara<b>sin-siglas.info/buzon</b></figcaption>
     </figure>
   </div>
 
@@ -882,7 +892,7 @@ body.solo .cartel.elegido{display:flex}
      viernes 25, y por eso dice "el martes" y no "mañana".
      ================================================================== -->
 <section class="cartel cartel--coral" id="c9">
-  <div class="tapa"><span>Última llamada · el martes se vota</span><b>29-S</b></div>
+  <div class="tapa"><span>Última llamada · viernes 25</span><b>29-S</b></div>
 
   <h1 class="titular titular--corto">El martes<em>se vota.</em></h1>
 
@@ -930,6 +940,8 @@ body.solo .cartel.elegido{display:flex}
     Y si no nos votas a nosotros, <b>vota</b>. Un comité elegido por poca gente se sienta a
     negociar sin peso, y eso lo pagamos todos durante cuatro años.
   </p>
+  <p class="ultimo"><b>Este es el último cartel que te mandamos:</b> la ley corta la propaganda
+    el día antes de votar. Nos vemos el martes en la urna. · art. 8.4 RD 1844/1994</p>
 
   <footer class="pie">
     <div class="compi"><p class="compi__globo">¡El martes!</p><canvas data-pose="baile" data-tt="500"></canvas></div>
