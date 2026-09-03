@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Pegatinas de frases · Sin siglas, solo compañerxs</title>
+<link rel="stylesheet" href="tipos.css">
+<style>
+/* ==================================================================
+   HOJA DE PEGATINAS · frases, sin Compi
+   ------------------------------------------------------------------
+   Segunda hoja A4 para papel adhesivo. Aquí manda la tipografía: la
+   otra hoja lleva la mascota y esta lleva las frases de la campaña,
+   para quien no quiere un muñeco en el portátil.
+
+   Cuatro van en negativo (fondo de color, letra crema) porque una hoja
+   entera de letra sobre crema se lee plana; el negativo es lo que
+   hace que una pegatina se vea desde el otro lado de la mesa.
+
+   La guía de corte va 1,5 mm por fuera del color con outline-offset,
+   igual que en pegatinas.html: al cortar por la línea de puntos queda
+   un filete blanco que perdona el pulso.
+
+   Exportar:  ./carteles/exportar.sh pegatinas
+   ================================================================== */
+:root{
+  --w:210mm; --h:297mm; --margen:12mm;
+
+  --papel:#f6f2ea;
+  --texto:#191820; --apagado:#5e574e; --apagado-2:#8a8177;
+  --cian:#0d6f92; --coral:#bf3f2f;
+  --cian-vivo:#3fc9f0; --coral-vivo:#f4796b;
+  --linea:rgba(74,58,46,.18); --linea-fuerte:rgba(74,58,46,.3);
+  --corte:rgba(74,58,46,.5);
+
+  --display:"Gellix","Helvetica Neue",Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  --mano:"Caveat",cursive;
+}
+
+@page{ size:A4; margin:0 }
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#fff;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+.hoja{
+  width:var(--w);height:var(--h);padding:var(--margen);overflow:hidden;
+  background:#fff;color:var(--texto);font-family:var(--display);
+  display:flex;flex-direction:column;gap:7mm
+}
+
+/* ---------------- cabecera ---------------- */
+.tapa{
+  display:flex;justify-content:space-between;align-items:baseline;gap:6mm;
+  border-bottom:1pt solid var(--linea-fuerte);padding-bottom:2.5mm
+}
+.tapa h1{
+  font-weight:500;font-size:14pt;line-height:1;letter-spacing:-.03em;text-transform:uppercase;
+  margin:0
+}
+.tapa h1 em{font-style:normal;color:var(--cian)}
+.tapa p{
+  font-family:var(--mono);font-size:6pt;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--apagado);margin:0;text-align:right;line-height:1.6
+}
+
+/* ---------------- base de la pegatina ---------------- */
+.peg{
+  background:var(--papel);border-radius:4mm;overflow:hidden;
+  outline:.5pt dashed var(--corte);outline-offset:1.5mm;
+  display:flex;flex-direction:column;justify-content:center;padding:5mm 7mm
+}
+.peg b{
+  display:block;font-weight:500;line-height:1;letter-spacing:-.035em;text-transform:uppercase
+}
+.peg b i{font-style:normal;color:var(--cian)}
+.peg em{
+  font-style:normal;display:block;font-family:var(--mono);font-size:5.4pt;font-weight:500;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--apagado-2);margin-top:2.6mm
+}
+/* negativo: el color va al fondo y la letra al crema */
+.peg--inv{background:var(--coral)}
+.peg--inv b,.peg--inv b i{color:var(--papel)}
+.peg--inv em{color:rgba(246,242,234,.72)}
+.peg--cian{background:var(--cian)}
+.peg--cian b,.peg--cian b i{color:var(--papel)}
+.peg--cian em{color:rgba(246,242,234,.72)}
+/* la frase de la asamblea va de puño, no en caja alta */
+.peg--mano b{
+  font-family:var(--mano);font-weight:600;text-transform:none;letter-spacing:0;line-height:1.1
+}
+
+/* ---------------- dos de ancho completo ---------------- */
+.banda{height:32mm}
+.banda b{font-size:23pt}
+.banda--larga b{font-size:15pt;line-height:1.12;letter-spacing:-.02em;text-transform:none}
+
+/* ---------------- cuatro medianas ---------------- */
+.medianas{display:grid;grid-template-columns:repeat(2,1fr);gap:6mm}
+.mediana{height:30mm}
+.mediana b{font-size:15pt;line-height:1.06}
+.mediana b i{display:block}
+.mediana--mano b{font-size:19pt}
+
+/* ---------------- ocho cuadradas ---------------- */
+.cuadradas{display:grid;grid-template-columns:repeat(4,1fr);gap:6mm}
+.cuad{aspect-ratio:1;align-items:center;text-align:center;padding:4mm}
+.cuad b{font-size:13pt;line-height:1.02}
+.cuad--grande b{font-size:29pt;letter-spacing:-.05em}
+.cuad--url b{
+  font-family:var(--mono);font-size:7pt;font-weight:500;letter-spacing:.02em;
+  text-transform:none;color:var(--cian)
+}
+.cuad--mano b{font-size:16pt}
+.cuad--ancho b{font-size:15pt;letter-spacing:-.045em}
+
+/* ---------------- pie ---------------- */
+.pie{
+  margin-top:auto;border-top:1pt solid var(--linea);padding-top:2.5mm;
+  display:flex;justify-content:space-between;align-items:baseline;gap:6mm
+}
+.pie p{
+  font-family:var(--mono);font-size:5.4pt;letter-spacing:.06em;color:var(--apagado-2);
+  margin:0;line-height:1.6;max-width:130mm
+}
+.pie b{font-family:var(--mano);font-size:11pt;color:var(--texto);font-weight:600;flex:0 0 auto}
+</style>
+</head>
+<body>
+<div class="hoja">
+
+  <div class="tapa">
+    <h1>Solo la frase.<em> Sin muñeco.</em></h1>
+    <p>Imprime en A4 adhesivo, al 100 % · corta por la línea de puntos</p>
+  </div>
+
+  <!-- dos de ancho completo: la marca y el cierre de la asamblea -->
+  <div class="peg peg--inv banda">
+    <b>Sin siglas. Solo compañerxs.</b>
+    <em>Elecciones al Comité de Empresa · Nazaríes · 29-S</em>
+  </div>
+
+  <div class="peg banda banda--larga">
+    <b>Representación de la plantilla,<i> hecha desde dentro.</i></b>
+    <em>Candidatura independiente · sin-siglas.info</em>
+  </div>
+
+  <!-- cuatro medianas: los titulares de los carteles -->
+  <div class="medianas">
+    <div class="peg mediana">
+      <b>La conciliación<i> no es un favor.</i></b>
+      <em>art. 34.8 ET</em>
+    </div>
+    <div class="peg peg--inv mediana">
+      <b>Que te lo cuenten<i> antes. No después.</i></b>
+      <em>art. 64.5 ET</em>
+    </div>
+    <div class="peg mediana">
+      <b>Lo que no se mide,<i> no se negocia.</i></b>
+      <em>Registro de jornada · art. 34.9 ET</em>
+    </div>
+    <div class="peg peg--mano mediana mediana--mano">
+      <b>Trabajamos por y para nosotros.<br>Unidos por nuestro futuro.</b>
+    </div>
+  </div>
+
+  <!-- ocho cuadradas -->
+  <div class="cuadradas">
+    <div class="peg peg--inv cuad cuad--grande"><b>Vota</b></div>
+    <div class="peg peg--cian cuad cuad--grande"><b>29-S</b></div>
+    <div class="peg cuad"><b>Once.<br><i>Cero siglas.</i></b></div>
+    <div class="peg cuad"><b>Hecho<br>desde<br><i>dentro</i></b></div>
+    <div class="peg peg--cian cuad cuad--ancho"><b>Pregúntame</b></div>
+    <div class="peg cuad cuad--url"><b>sin-siglas.info</b></div>
+    <div class="peg cuad"><b>El buzón<br><i>está abierto</i></b></div>
+    <div class="peg peg--mano cuad cuad--mano"><b>Sin siglas,<br>solo<br>compañerxs</b></div>
+  </div>
+
+  <div class="pie">
+    <p>Candidatura registrada conforme a la normativa de elecciones sindicales. La hacemos los
+      once candidatos: no es una comunicación de la empresa.</p>
+    <b>29 de septiembre</b>
+  </div>
+
+</div>
+</body>
+</html>

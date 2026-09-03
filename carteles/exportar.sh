@@ -3,7 +3,7 @@
 #
 #   ./carteles/exportar.sh            todos los carteles
 #   ./carteles/exportar.sh 2 6        solo esos dos
-#   ./carteles/exportar.sh pegatinas  la hoja A4 de pegatinas, a PDF y PNG
+#   ./carteles/exportar.sh pegatinas  las dos hojas A4 de pegatinas, a PDF y PNG
 #
 # Los números son identificadores del fuente (el ?n= de carteles.html),
 # no el orden de envío: los carteles no llevan numeración impresa para
@@ -33,18 +33,20 @@ declare -A NOMBRE=(
 # el PDF para llevarlo a imprimir, y un PNG solo para poder mirarlo
 if [ "${1:-}" = "pegatinas" ]; then
   mkdir -p "$SALIDA"
-  google-chrome --headless --disable-gpu --user-data-dir="$PERFIL" \
-    --allow-file-access-from-files --virtual-time-budget=5000 \
-    --no-pdf-header-footer --print-to-pdf="$AQUI/pegatinas.pdf" \
-    "file://$AQUI/pegatinas.html" 2>/dev/null
-  google-chrome --headless --disable-gpu --hide-scrollbars \
-    --force-device-scale-factor=1 --window-size=794,1123 \
-    --user-data-dir="$PERFIL" --allow-file-access-from-files \
-    --virtual-time-budget=5000 --screenshot="$SALIDA/pegatinas.png" \
-    "file://$AQUI/pegatinas.html" 2>/dev/null
-  printf 'pegatinas · %s · %s\n' \
-    "$(file -b "$AQUI/pegatinas.pdf" | cut -d, -f1)" \
-    "$(file -b "$SALIDA/pegatinas.png" | cut -d, -f2 | tr -d ' ')"
+  for hoja in pegatinas pegatinas-frases; do
+    google-chrome --headless --disable-gpu --user-data-dir="$PERFIL" \
+      --allow-file-access-from-files --virtual-time-budget=5000 \
+      --no-pdf-header-footer --print-to-pdf="$AQUI/$hoja.pdf" \
+      "file://$AQUI/$hoja.html" 2>/dev/null
+    google-chrome --headless --disable-gpu --hide-scrollbars \
+      --force-device-scale-factor=1 --window-size=794,1123 \
+      --user-data-dir="$PERFIL" --allow-file-access-from-files \
+      --virtual-time-budget=5000 --screenshot="$SALIDA/$hoja.png" \
+      "file://$AQUI/$hoja.html" 2>/dev/null
+    printf '%s · %s · %s\n' "$hoja" \
+      "$(file -b "$AQUI/$hoja.pdf" | cut -d, -f1)" \
+      "$(file -b "$SALIDA/$hoja.png" | cut -d, -f2 | tr -d ' ')"
+  done
   exit 0
 fi
 

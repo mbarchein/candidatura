@@ -96,11 +96,16 @@ La mascota ya existe, ya cae bien y es lo que hace que una pieza se reenvíe. Ap
 los carteles con una pose y una frase distintas, y hace de firma reconocible sin necesidad de
 logotipo. Es la parte barata y la que más va a circular.
 
-**La hoja de pegatinas** (`carteles/pegatinas.html`, sale a `pegatinas.pdf`) es la extensión
-física de esto: un A4 con catorce pegatinas —seis anchas con frase para el portátil y ocho
-cuadradas— que se imprime en papel adhesivo de impresora y se corta con tijeras por la línea de
-puntos. Coste: un folio adhesivo. Se reparten en la hora de comité y a mano, nunca dejándolas
-por las mesas de nadie.
+**Las hojas de pegatinas** son la extensión física de esto. Dos A4 para papel adhesivo de
+impresora, catorce pegatinas cada uno, que se cortan con tijeras por la línea de puntos:
+
+- `pegatinas.html` — con Compi: seis anchas con frase y ocho cuadradas.
+- `pegatinas-frases.html` — solo tipografía, para quien no quiere un muñeco en el portátil: dos
+  bandas de ancho completo, cuatro medianas con los titulares de los carteles y ocho cuadradas
+  cortas (`Vota`, `29-S`, `Pregúntame`, `Once. Cero siglas.`).
+
+Coste: dos folios adhesivos. Se reparten a mano y en la hora de comité, nunca dejándolas por las
+mesas de nadie.
 
     ./carteles/exportar.sh pegatinas
 
