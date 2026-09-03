@@ -1,0 +1,878 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Carteles temáticos · Sin siglas, solo compañerxs</title>
+<link rel="stylesheet" href="tipos.css">
+<style>
+/* ==================================================================
+   CARTELES TEMÁTICOS · 1080 × 1350, tema claro
+   ------------------------------------------------------------------
+   Nueve piezas para enviar de aquí al 29 de septiembre. El plan de
+   qué se manda cada día está en ESTRATEGIA.md; aquí solo está el
+   diseño y el texto.
+
+   Sin ?n en la URL salen los nueve seguidos, para revisarlos de una
+   pasada. Con ?n=3 sale solo el tercero, a tamaño exacto y pegado a
+   la esquina: es así como los captura exportar.sh.
+
+   Todo lo editable está en el bloque :root y en los nodos de texto.
+   Los colores vivos (--cian-vivo, --coral-vivo) son para los trazos
+   y los gráficos; los apagados (--cian, --coral) para el texto, que
+   sobre papel claro necesita más contraste.
+   ================================================================== */
+:root{
+  /* lienzo */
+  --w:1080px; --h:1350px; --margen:72px;
+
+  /* color · la paleta clara del A3 */
+  --papel:#f6f2ea; --papel-2:#efe9df; --panel:#fffdf9;
+  --texto:#191820; --texto-2:#3a3742; --apagado:#5e574e; --apagado-2:#8a8177;
+  --cian:#0d6f92; --coral:#bf3f2f;
+  --cian-vivo:#3fc9f0; --coral-vivo:#f4796b;
+  --linea:rgba(74,58,46,.18); --linea-fuerte:rgba(74,58,46,.32);
+
+  /* tipos */
+  --display:"Gellix","Helvetica Neue",Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  --mano:"Caveat",cursive;
+
+  /* escala: saltos grandes a propósito, que esto se ve en un móvil
+     de otro y a la mitad de tamaño */
+  --t-titular:84px; --t-bajada:28px; --t-accion:27px; --t-cuerpo:20px;
+  --t-numero:40px; --t-rotulo:17px; --t-mini:15px;
+
+  /* el acento manda en el rail, el rótulo y los números; se cambia
+     por cartel para que la serie no sean nueve tarjetas iguales */
+  --acento:var(--cian); --acento-vivo:var(--cian-vivo);
+}
+
+*{box-sizing:border-box}
+html{color-scheme:light}
+body{
+  margin:0;background:#e4ded3;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact;
+  display:flex;flex-direction:column;align-items:center;gap:40px;padding:40px 0;
+}
+/* modo captura: un solo cartel, sin nada alrededor */
+body.solo{gap:0;padding:0;background:var(--papel);display:block}
+body.solo .cartel{display:none}
+body.solo .cartel.elegido{display:flex}
+
+/* ---------------- el lienzo ---------------- */
+.cartel{
+  width:var(--w);height:var(--h);flex:0 0 auto;overflow:hidden;position:relative;
+  padding:var(--margen);
+  display:flex;flex-direction:column;
+  font-family:var(--display);color:var(--texto);
+  background:
+    radial-gradient(46% 30% at 14% 2%,rgba(150,120,170,.20),transparent 70%),
+    radial-gradient(40% 26% at 88% 10%,rgba(244,121,107,.18),transparent 72%),
+    var(--papel);
+}
+.cartel--coral{--acento:var(--coral);--acento-vivo:var(--coral-vivo)}
+
+/* ---------------- cabecera de serie ---------------- */
+.tapa{
+  display:flex;justify-content:space-between;align-items:baseline;
+  font-family:var(--mono);font-size:var(--t-rotulo);letter-spacing:.2em;text-transform:uppercase;
+  color:var(--cian);
+  border-bottom:2px solid var(--linea-fuerte);padding-bottom:13px;margin-bottom:28px
+}
+.tapa b{color:var(--acento);font-weight:500;letter-spacing:.14em}
+
+/* ---------------- titular y bajada ---------------- */
+.titular{
+  font-weight:500;font-size:var(--t-titular);line-height:.92;letter-spacing:-.045em;
+  text-transform:uppercase;margin:0
+}
+.titular em{font-style:normal;color:var(--acento);display:block}
+.titular--corto{font-size:112px;line-height:.88}
+.titular--largo{font-size:71px}
+.bajada{
+  font-size:var(--t-bajada);line-height:1.38;color:var(--texto-2);
+  margin:22px 0 0;max-width:36ch
+}
+.bajada b{color:var(--texto);font-weight:500}
+.bajada--ancha{max-width:none}
+
+/* ---------------- rótulo de sección ---------------- */
+.rotulo{
+  font-family:var(--mono);font-size:var(--t-rotulo);letter-spacing:.2em;text-transform:uppercase;
+  color:var(--acento);margin:28px 0 18px;display:flex;align-items:center;gap:18px
+}
+.rotulo::after{content:"";flex:1;height:2px;background:var(--linea)}
+
+/* ---------------- las acciones numeradas ----------------
+   el número vive en el margen izquierdo, fuera de la columna de
+   texto, con un filete del color del acento: es el rail que hace que
+   los nueve carteles se reconozcan como una serie */
+.acciones{list-style:none;margin:0;padding:0;display:grid;gap:20px}
+.accion{display:grid;grid-template-columns:76px 1fr;gap:0}
+.accion__n{
+  font-family:var(--mono);font-weight:500;font-size:var(--t-numero);line-height:1;
+  color:var(--acento);padding-top:2px
+}
+.accion__cuerpo{border-left:3px solid var(--acento-vivo);padding-left:26px}
+.accion h3{
+  font-weight:500;font-size:var(--t-accion);line-height:1.15;letter-spacing:-.02em;
+  margin:0 0 8px
+}
+.accion p{font-size:var(--t-cuerpo);line-height:1.42;color:var(--texto-2);margin:0}
+.accion p b{color:var(--texto);font-weight:500}
+.ley{
+  display:inline-block;margin-top:8px;
+  font-family:var(--mono);font-size:var(--t-mini);letter-spacing:.06em;
+  color:var(--cian);border:1.5px solid rgba(13,111,146,.4);border-radius:999px;
+  padding:3px 11px
+}
+
+/* ---------------- panel de "lo que no podemos" ---------------- */
+.limite{
+  margin-top:24px;background:var(--panel);border:1px solid var(--linea);
+  border-left:5px solid var(--coral-vivo);border-radius:6px;padding:20px 26px
+}
+.limite h4{
+  font-family:var(--mono);font-weight:500;font-size:var(--t-mini);letter-spacing:.16em;
+  text-transform:uppercase;color:var(--coral);margin:0 0 8px
+}
+.limite p{font-size:var(--t-cuerpo);line-height:1.42;color:var(--texto-2);margin:0}
+.limite p b{color:var(--texto);font-weight:500}
+
+/* ---------------- pie común ---------------- */
+.pie{
+  margin-top:auto;padding-top:24px;border-top:2px solid var(--linea-fuerte);
+  display:flex;align-items:flex-end;gap:28px
+}
+/* Compi y su bocadillo. El canvas lo pinta compi.js con una pose
+   congelada; el globo va encima, no al lado, que si no roba ancho */
+.compi{flex:0 0 auto;position:relative;padding-top:44px}
+.compi canvas{display:block;image-rendering:pixelated}
+.compi__globo{
+  position:absolute;top:0;left:26px;white-space:nowrap;
+  font-family:var(--mano);font-size:24px;line-height:1;color:var(--texto);
+  background:var(--panel);border:2px solid var(--linea-fuerte);border-radius:14px;
+  padding:7px 14px 9px;margin:0
+}
+.compi__globo::after{
+  content:"";position:absolute;left:20px;bottom:-9px;width:12px;height:12px;
+  background:var(--panel);border-right:2px solid var(--linea-fuerte);
+  border-bottom:2px solid var(--linea-fuerte);transform:rotate(45deg)
+}
+.pie__medio{flex:1 1 auto;min-width:0}
+.pie__quien{
+  font-family:var(--mono);font-size:var(--t-mini);letter-spacing:.14em;text-transform:uppercase;
+  color:var(--apagado-2);margin:0 0 8px
+}
+.pie__nombres{font-size:22px;line-height:1.3;font-weight:500;margin:0;letter-spacing:-.01em}
+.pie__nombres span{color:var(--apagado);font-weight:400}
+.pie__voto{flex:0 0 auto;text-align:right}
+.pie__fecha{
+  font-weight:500;font-size:31px;letter-spacing:-.02em;margin:0;
+  border-bottom:3px solid var(--coral-vivo);padding-bottom:5px;display:inline-block
+}
+.pie__url{
+  font-weight:500;font-size:24px;letter-spacing:-.01em;color:var(--cian);margin:12px 0 0
+}
+.pie__legal{
+  font-family:var(--mono);font-size:12px;letter-spacing:.05em;line-height:1.5;
+  color:var(--apagado-2);margin:16px 0 0;text-align:right;max-width:34ch;margin-left:auto
+}
+
+/* ================= piezas propias de cada cartel ================= */
+
+/* 01 · el buzón: el QR es el elemento dominante */
+.buzon{display:grid;grid-template-columns:1fr 336px;gap:44px;align-items:start;margin-top:38px}
+.qr{background:var(--papel);padding:0}
+.qr img{display:block;width:336px;height:336px}
+.qr figcaption{
+  font-family:var(--mono);font-size:var(--t-mini);letter-spacing:.1em;text-transform:uppercase;
+  color:var(--apagado);margin-top:16px;text-align:center;line-height:1.5
+}
+.qr figcaption b{display:block;color:var(--cian);letter-spacing:.02em;text-transform:none;
+  font-family:var(--display);font-size:22px;margin-top:6px}
+.pactos{list-style:none;margin:0;padding:0;display:grid;gap:20px}
+.pactos li{display:grid;grid-template-columns:44px 1fr;font-size:var(--t-cuerpo);line-height:1.45;
+  color:var(--texto-2)}
+.pactos i{font-style:normal;font-family:var(--mono);font-weight:500;font-size:var(--t-mini);
+  letter-spacing:.1em;color:var(--acento);padding-top:4px}
+.pactos b{color:var(--texto);font-weight:500}
+
+/* 01 · la pregunta del formulario, tal cual, llenando el bajo del cartel */
+.pregunta{margin-top:36px;display:grid;grid-template-columns:1fr auto;gap:36px;align-items:end;
+  border-top:2px solid var(--linea);padding-top:30px}
+.pregunta__q{
+  font-weight:500;font-size:58px;line-height:1;letter-spacing:-.04em;margin:0;
+  color:var(--coral)
+}
+.pregunta__pie{
+  font-family:var(--mono);font-size:14px;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--apagado);margin:0;line-height:1.7;text-align:right
+}
+
+/* 05 · dos columnas enfrentadas: lo que no / lo que sí */
+.balanza{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:34px;
+  border-top:2px solid var(--linea-fuerte)}
+.balanza > div{padding:26px 30px 26px 0}
+.balanza > div + div{padding:26px 0 26px 30px;border-left:2px solid var(--linea-fuerte)}
+.balanza h4{
+  font-family:var(--mono);font-weight:500;font-size:var(--t-rotulo);letter-spacing:.16em;
+  text-transform:uppercase;margin:0 0 20px
+}
+.balanza--no h4{color:var(--coral)}
+.balanza--si h4{color:var(--cian)}
+.balanza ul{list-style:none;margin:0;padding:0;display:grid;gap:17px}
+.balanza li{font-size:var(--t-cuerpo);line-height:1.4;color:var(--texto-2);
+  padding-left:26px;position:relative}
+.balanza li b{color:var(--texto);font-weight:500;display:block}
+.balanza--no li::before{content:"—";position:absolute;left:0;color:var(--coral-vivo);font-weight:500}
+.balanza--si li::before{content:"✓";position:absolute;left:0;color:var(--cian);font-weight:500}
+.balanza .ley{display:block;width:fit-content;margin-top:7px;font-size:13px;padding:2px 9px}
+
+/* 06 · las voces del buzón */
+.voces{list-style:none;margin:30px 0 0;padding:0;display:grid;gap:18px}
+.voces li{background:var(--panel);border:1px solid var(--linea);
+  border-left:5px solid var(--acento-vivo);border-radius:6px;padding:18px 24px}
+.voces q{display:block;font-size:24px;line-height:1.34;letter-spacing:-.01em;quotes:"«" "»"}
+.voces q::before{content:open-quote}.voces q::after{content:close-quote}
+.estado{
+  display:inline-block;margin-top:11px;
+  font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.12em;
+  text-transform:uppercase;border-radius:999px;padding:5px 13px
+}
+.estado--pedido{color:#0a5c47;background:rgba(79,169,162,.22)}
+.estado--programa{color:var(--cian);background:rgba(63,201,240,.18)}
+.estado--no{color:var(--coral);background:rgba(244,121,107,.2)}
+/* lo que hay que sustituir el día 18 se marca en el fuente y se ve */
+.pendiente{background:rgba(244,121,107,.22);outline:2px dashed var(--coral);padding:0 4px}
+
+/* 07 · el tablero del mandato y las firmas */
+.tablero{margin-top:22px;border-top:2px solid var(--linea-fuerte)}
+.fila{
+  display:grid;grid-template-columns:1fr repeat(3,110px);align-items:center;gap:0;
+  border-bottom:1px solid var(--linea);padding:7px 0
+}
+.fila--cabeza{border-bottom:2px solid var(--linea-fuerte);padding:10px 0}
+.fila--cabeza span{
+  font-family:var(--mono);font-size:10.5px;font-weight:500;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--apagado);text-align:center;line-height:1.3
+}
+.fila--cabeza span:first-child{text-align:left;color:var(--acento);letter-spacing:.16em}
+.fila b{font-size:17px;font-weight:400;color:var(--texto-2);letter-spacing:-.005em}
+.fila i{
+  font-style:normal;justify-self:center;width:20px;height:20px;border-radius:50%;
+  border:2.5px solid var(--linea-fuerte);background:var(--papel-2)
+}
+.leyenda{
+  font-family:var(--mono);font-size:13px;letter-spacing:.04em;color:var(--apagado);
+  margin:12px 0 0;line-height:1.5
+}
+.firmas{
+  margin-top:18px;background:var(--panel);border:1px solid var(--linea);border-radius:6px;
+  padding:16px 22px 18px
+}
+.firmas h4{
+  font-family:var(--mono);font-weight:500;font-size:13px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--apagado);margin:0 0 10px
+}
+.firmas p{
+  font-family:var(--mano);font-size:26px;line-height:1.35;color:var(--texto);margin:0;
+  letter-spacing:.01em
+}
+.firmas p span{color:var(--cian)}
+
+/* 08 · los once, para elegir a quién se lo cuentas */
+.once{list-style:none;margin:30px 0 0;padding:0;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:14px 24px}
+.once li{border-top:2px solid var(--linea);padding-top:11px}
+.once b{display:block;font-size:20px;font-weight:500;letter-spacing:-.015em;line-height:1.2}
+.once span{display:block;font-family:var(--mono);font-size:12px;letter-spacing:.05em;
+  color:var(--apagado);margin-top:5px;line-height:1.35}
+.puertas{list-style:none;margin:32px 0 0;padding:0;display:grid;gap:18px}
+.puertas li{display:grid;grid-template-columns:200px 1fr;gap:24px;align-items:baseline;
+  border-top:1px solid var(--linea);padding-top:16px}
+.puertas strong{
+  font-family:var(--mono);font-weight:500;font-size:var(--t-mini);letter-spacing:.14em;
+  text-transform:uppercase;color:var(--acento)
+}
+.puertas p{margin:0;font-size:var(--t-cuerpo);line-height:1.42;color:var(--texto-2)}
+.puertas p b{color:var(--texto);font-weight:500}
+
+/* 09 · la víspera: el sello manda */
+.vispera{display:grid;grid-template-columns:1fr 300px;gap:40px;align-items:center;margin-top:30px}
+.sello{width:300px;height:300px;transform:rotate(-5deg)}
+.sello__aro{fill:none;stroke:var(--coral-vivo);stroke-width:2.4}
+.sello__pica{fill:none;stroke:rgba(13,111,146,.5);stroke-width:5.5;stroke-dasharray:1.6 10.4}
+.sello__aro2{fill:none;stroke:rgba(13,111,146,.28);stroke-width:1}
+.sello__vuelta{font-family:var(--display);font-weight:500;font-size:11px;fill:var(--cian)}
+.sello__urna{fill:none;stroke:var(--cian);stroke-width:2}
+.sello__x{fill:none;stroke:var(--coral);stroke-width:3;stroke-linecap:round}
+.sello__t1{font-family:var(--display);font-weight:500;font-size:20px;fill:var(--texto);text-anchor:middle}
+.sello__t2{font-family:var(--mono);font-size:9.5px;fill:var(--texto-2);text-anchor:middle;letter-spacing:.16em}
+.sello__t3{font-family:var(--mono);font-size:9.5px;fill:var(--coral);text-anchor:middle}
+.datos{list-style:none;margin:0;padding:0;display:grid;gap:20px}
+.datos li{border-top:1px solid var(--linea);padding-top:14px}
+.datos strong{
+  display:block;font-family:var(--mono);font-weight:500;font-size:var(--t-mini);
+  letter-spacing:.14em;text-transform:uppercase;color:var(--acento);margin-bottom:7px
+}
+.datos p{margin:0;font-size:var(--t-cuerpo);line-height:1.42;color:var(--texto-2)}
+.datos p b{color:var(--texto);font-weight:500}
+.remate{
+  margin-top:30px;background:var(--panel);border:1px solid var(--linea);
+  border-left:5px solid var(--cian-vivo);border-radius:6px;padding:22px 28px;
+  font-size:26px;line-height:1.35;letter-spacing:-.01em
+}
+.remate b{color:var(--cian);font-weight:500}
+</style>
+</head>
+<body>
+
+<!-- ==================================================================
+     01 · EL BUZÓN · viernes 4 de septiembre · lo manda Rocío Galindo
+     Abre la campaña preguntando. El QR es lo dominante.
+     ================================================================== -->
+<section class="cartel cartel--coral" id="c1">
+  <div class="tapa"><span>Elecciones al Comité · Nazaríes</span><b>01/09</b></div>
+
+  <h1 class="titular">Primero tú.<em>Luego el programa.</em></h1>
+  <p class="bajada bajada--ancha">
+    Somos once compañerxs y no traemos un programa escrito de fuera. Antes de prometerte nada,
+    queremos saber <b>qué cambiarías tú</b>. Una pregunta, y es anónima.
+  </p>
+
+  <div class="buzon">
+    <ul class="pactos">
+      <li><i>01</i><span>No pedimos nombre, ni área, ni correo. <b>No hay ningún campo que te
+        identifique</b>, porque no lo hemos puesto.</span></li>
+      <li><i>02</i><span>Nada de lo que escribas se publica con un dato que permita saber quién
+        eres. Ni aunque tenga gracia.</span></li>
+      <li><i>03</i><span>El <b>18 de septiembre</b> publicamos lo más repetido, sin retocar, y qué
+        haremos con cada cosa: ya está pedido, entra en el programa, o no podemos y por qué.</span></li>
+    </ul>
+    <figure class="qr">
+      <img src="qr-buzon.svg" alt="Código QR al buzón anónimo de la candidatura.">
+      <figcaption>Apunta con la cámara<b>sin-siglas.info/buzon</b></figcaption>
+    </figure>
+  </div>
+
+  <div class="pregunta">
+    <p class="pregunta__q">«¿Qué cambiarías<br>de tu día a día?»</p>
+    <p class="pregunta__pie">Es la única pregunta<br>del formulario.<br>Una frase vale.</p>
+  </div>
+
+  <footer class="pie">
+    <div class="compi"><p class="compi__globo">Cuéntamelo tú.</p><canvas data-pose="saluda" data-tt="620"></canvas></div>
+    <div class="pie__medio">
+      <p class="pie__quien">El buzón sigue abierto después del 29</p>
+      <p class="pie__nombres">Once personas, seis áreas<span> · cero siglas</span></p>
+    </div>
+    <div class="pie__voto">
+      <p class="pie__fecha">29 de septiembre</p>
+      <p class="pie__url">sin-siglas.info</p>
+    </div>
+  </footer>
+</section>
+
+<!-- ==================================================================
+     02 · CONCILIACIÓN · martes 8 de septiembre · lo manda Leticia Algarra
+     ================================================================== -->
+<section class="cartel" id="c2">
+  <div class="tapa"><span>Compromiso · Conciliación</span><b>02/09</b></div>
+
+  <h1 class="titular">La conciliación<em>no es un favor.</em></h1>
+  <p class="bajada">
+    Hoy depende de quién sea tu responsable y de cómo le pille el día.
+    <b>Eso es lo que queremos que deje de pasar.</b>
+  </p>
+
+  <p class="rotulo">Tres cosas que vamos a pedir por escrito</p>
+  <ul class="acciones">
+    <li class="accion">
+      <div class="accion__n">01</div>
+      <div class="accion__cuerpo">
+        <h3>Un protocolo de flexibilidad y trabajo a distancia, escrito</h3>
+        <p>Qué se puede pedir, a quién, <b>en cuántos días te tienen que contestar</b> y qué
+          motivos valen para decir no. Igual para todas las áreas.</p>
+        <span class="ley">art. 34.8 ET</span>
+      </div>
+    </li>
+    <li class="accion">
+      <div class="accion__n">02</div>
+      <div class="accion__cuerpo">
+        <h3>Las horas, contadas y publicadas</h3>
+        <p>Cada trimestre pediremos el registro de jornada y os pasaremos el resumen de horas de
+          más por área. <b>Lo que no se mide, no se negocia.</b></p>
+        <span class="ley">art. 34.9 ET</span>
+      </div>
+    </li>
+    <li class="accion">
+      <div class="accion__n">03</div>
+      <div class="accion__cuerpo">
+        <h3>Desconexión digital que se pueda señalar</h3>
+        <p>La política escrita es obligatoria y se elabora oída la representación. Pediremos que
+          fije <b>una ventana horaria en la que nadie tiene que contestar</b>.</p>
+        <span class="ley">art. 20 bis ET · art. 88 LOPDGDD</span>
+      </div>
+    </li>
+  </ul>
+
+  <div class="limite">
+    <h4>Lo que no podemos</h4>
+    <p>Un comité no aprueba tu reducción de jornada ni te cambia el horario. Lo que sí puede es
+      que <b>exista una norma igual para todos y que te contesten por escrito</b>.</p>
+  </div>
+
+  <footer class="pie">
+    <div class="compi"><p class="compi__globo">Yo a las 19:00 ya no leo.</p><canvas data-pose="cansado" data-tt="1500"></canvas></div>
+    <div class="pie__medio">
+      <p class="pie__quien">Habla con</p>
+      <p class="pie__nombres">Leticia Algarra <span>·</span> Rocío Galindo</p>
+    </div>
+    <div class="pie__voto">
+      <p class="pie__fecha">29 de septiembre</p>
+      <p class="pie__url">sin-siglas.info</p>
+    </div>
+  </footer>
+</section>
+
+<!-- ==================================================================
+     03 · AMBIENTE Y SALUD · viernes 11 de septiembre · lo manda Raúl Navarro
+     ================================================================== -->
+<section class="cartel" id="c3">
+  <div class="tapa"><span>Compromiso · Ambiente</span><b>03/09</b></div>
+
+  <h1 class="titular">Un sitio donde<em>dé gusto trabajar.</em>Y se puede medir.</h1>
+  <p class="bajada">
+    Cuatro de nosotros ya estamos en el Comité de Seguridad y Salud.
+    <b>No partimos de cero: sabemos qué se puede exigir y con qué papel.</b>
+  </p>
+
+  <p class="rotulo">Tres cosas que vamos a pedir por escrito</p>
+  <ul class="acciones">
+    <li class="accion">
+      <div class="accion__n">01</div>
+      <div class="accion__cuerpo">
+        <h3>Evaluación de riesgos psicosociales, con método y con resultados</h3>
+        <p>Es obligatoria y casi nunca se hace bien. La pediremos con <b>método validado</b>
+          —FPSICO del INSST o CoPsoQ-istas21—, resultados por área y plan de medidas con fechas.</p>
+        <span class="ley">art. 16 LPRL · RD 39/1997</span>
+      </div>
+    </li>
+    <li class="accion">
+      <div class="accion__n">02</div>
+      <div class="accion__cuerpo">
+        <h3>Los puestos con pantalla, revisados uno a uno</h3>
+        <p>Silla, monitor, luz, ruido y temperatura. Y un <b>calendario de sustitución</b>, no un
+          «cuando haya presupuesto».</p>
+        <span class="ley">RD 488/1997 · RD 486/1997</span>
+      </div>
+    </li>
+    <li class="accion">
+      <div class="accion__n">03</div>
+      <div class="accion__cuerpo">
+        <h3>Espacios de descanso que sirvan para descansar</h3>
+        <p>Un sitio para comer y otro para no hacer nada, separados del puesto. Lo llevaremos a la
+          primera reunión con la dirección <b>con inventario y coste encima de la mesa</b>.</p>
+      </div>
+    </li>
+  </ul>
+
+  <div class="limite">
+    <h4>Lo que no podemos</h4>
+    <p>No decidimos nosotros la reforma ni el presupuesto. Podemos obligar a que <b>se evalúe, a
+      que conste por escrito y a que haya un plazo</b>, y a que se explique si no se cumple.</p>
+  </div>
+
+  <footer class="pie">
+    <div class="compi"><p class="compi__globo">Y la silla también cuenta.</p><canvas data-pose="quieto" data-tt="200"></canvas></div>
+    <div class="pie__medio">
+      <p class="pie__quien">Habla con · Comité de Seguridad y Salud</p>
+      <p class="pie__nombres">Raúl Navarro <span>·</span> Mario Aranda <span>·</span> Fran Bolívar</p>
+    </div>
+    <div class="pie__voto">
+      <p class="pie__fecha">29 de septiembre</p>
+      <p class="pie__url">sin-siglas.info</p>
+    </div>
+  </footer>
+</section>
+
+<!-- ==================================================================
+     04 · COMUNICACIÓN · martes 15 de septiembre · lo manda José Pablo Fernández
+     ================================================================== -->
+<section class="cartel" id="c4">
+  <div class="tapa"><span>Compromiso · Comunicación</span><b>04/09</b></div>
+
+  <h1 class="titular">Que te lo cuenten<em>antes.</em>No después.</h1>
+  <p class="bajada">
+    Casi todo lo que te cambia el día a día tiene que pasar por el comité <b>antes</b> de
+    aplicarse. Eso hoy no se está usando.
+  </p>
+
+  <p class="rotulo">Tres cosas que vamos a pedir por escrito</p>
+  <ul class="acciones">
+    <li class="accion">
+      <div class="accion__n">01</div>
+      <div class="accion__cuerpo">
+        <h3>Informe previo, en cada cambio</h3>
+        <p>Horarios, sistemas de trabajo, funciones, organización: <b>el comité tiene que informar
+          antes</b>. Lo pediremos por escrito caso a caso y publicaremos qué contestamos.</p>
+        <span class="ley">art. 64.5 ET</span>
+      </div>
+    </li>
+    <li class="accion">
+      <div class="accion__n">02</div>
+      <div class="accion__cuerpo">
+        <h3>Un acta de cada reunión, en el tablón</h3>
+        <p>Reunión ordinaria con la dirección <b>cada dos meses</b>, con orden del día enviado
+          antes y acta publicada después: qué se pidió, qué contestaron, en qué quedó.</p>
+        <span class="ley">art. 81 ET</span>
+      </div>
+    </li>
+    <li class="accion">
+      <div class="accion__n">03</div>
+      <div class="accion__cuerpo">
+        <h3>Los datos de la casa, a la vista</h3>
+        <p>Cada trimestre pediremos y publicaremos lo que la ley nos deja: <b>evolución de
+          plantilla, tipos de contrato, subcontratación y siniestralidad</b>.</p>
+        <span class="ley">art. 64 ET</span>
+      </div>
+    </li>
+  </ul>
+
+  <div class="limite">
+    <h4>Lo que no podemos</h4>
+    <p>Parte de la información llega marcada como confidencial y estamos obligados a guardar
+      sigilo. Cuando no podamos contar algo, <b>diremos que no podemos</b>; no cambiaremos de tema.</p>
+  </div>
+
+  <footer class="pie">
+    <div class="compi"><p class="compi__globo">Sin sorpresas por la espalda.</p><canvas data-pose="chuleo" data-tt="60"></canvas></div>
+    <div class="pie__medio">
+      <p class="pie__quien">Habla con</p>
+      <p class="pie__nombres">José Pablo Fernández <span>·</span> Rafael López</p>
+    </div>
+    <div class="pie__voto">
+      <p class="pie__fecha">29 de septiembre</p>
+      <p class="pie__url">sin-siglas.info</p>
+    </div>
+  </footer>
+</section>
+
+<!-- ==================================================================
+     05 · LO QUE NO PODEMOS · jueves 17 de septiembre · lo manda Mario Barchéin
+     El cartel que ninguna lista con aparato detrás manda.
+     ================================================================== -->
+<section class="cartel cartel--coral" id="c5">
+  <div class="tapa"><span>Sin letra pequeña</span><b>05/09</b></div>
+
+  <h1 class="titular titular--largo">Lo que un comité<em>no te va a conseguir.</em></h1>
+  <p class="bajada bajada--ancha">
+    Lo ponemos nosotros antes de que te lo pregunte nadie. <b>Preferimos que lo sepas el día 17
+    que el día 30.</b>
+  </p>
+
+  <div class="balanza">
+    <div class="balanza--no">
+      <h4>No puede</h4>
+      <ul>
+        <li><b>Subirte el sueldo.</b> Eso es convenio y negociación, no una firma en un acta.</li>
+        <li><b>Decidir ascensos</b> ni repartir proyectos ni elegir a tu responsable.</li>
+        <li><b>Anular una decisión</b> de la empresa por el hecho de estar en desacuerdo.</li>
+        <li><b>Contarte todo.</b> Lo que llega marcado como confidencial no sale de ahí.
+          <span class="ley">art. 65.2 ET</span></li>
+      </ul>
+    </div>
+    <div class="balanza--si">
+      <h4>Sí puede</h4>
+      <ul>
+        <li><b>Obligar a que se explique</b> y se informe antes de aplicar un cambio.
+          <span class="ley">art. 64.5 ET</span></li>
+        <li><b>Ver el registro retributivo entero</b> y la auditoría retributiva. Y contaros si
+          hay brecha. <span class="ley">art. 28.2 ET · RD 902/2020</span></li>
+        <li><b>Vigilar que se cumpla</b> lo que ya está firmado, y llevarlo a Inspección si no.</li>
+        <li><b>Convocar asamblea</b> de plantilla cuando haga falta.
+          <span class="ley">arts. 77–80 ET</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="limite">
+    <h4>Nuestro compromiso, entonces</h4>
+    <p>Cuando algo no se pueda, <b>lo diremos claro en vez de dejarlo en el aire</b>. Y cuando sí
+      se pueda, os enseñaremos la respuesta de la empresa, no nuestro resumen de la respuesta.</p>
+  </div>
+
+  <footer class="pie">
+    <div class="compi"><p class="compi__globo">Mejor te lo decimos hoy.</p><canvas data-pose="serio" data-tt="0"></canvas></div>
+    <div class="pie__medio">
+      <p class="pie__quien">Habla con</p>
+      <p class="pie__nombres">Mario Barchéin <span>·</span> Laura Muñoz</p>
+    </div>
+    <div class="pie__voto">
+      <p class="pie__fecha">29 de septiembre</p>
+      <p class="pie__url">sin-siglas.info</p>
+    </div>
+  </footer>
+</section>
+
+<!-- ==================================================================
+     06 · LAS VOCES DEL BUZÓN · viernes 18 de septiembre · lo manda Rocío Galindo
+     ------------------------------------------------------------------
+     PLANTILLA. No se puede enviar hasta el día 18: las cuatro citas se
+     sustituyen por lo que de verdad haya llegado al buzón, y la cifra
+     del rótulo por el número real de respuestas. Lo que hay que
+     cambiar va marcado con class="pendiente" y se ve en el cartel a
+     propósito, para que no se escape sin rellenar.
+     ================================================================== -->
+<section class="cartel cartel--coral" id="c6">
+  <div class="tapa"><span>El buzón · lo que nos habéis escrito</span><b>06/09</b></div>
+
+  <h1 class="titular">Esto no lo<em>decimos nosotros.</em></h1>
+  <p class="bajada bajada--ancha">
+    Son <span class="pendiente">NN</span> respuestas anónimas del buzón, sin retocar. Al lado de
+    cada una, <b>qué vamos a hacer con ella</b>.
+  </p>
+
+  <ul class="voces">
+    <li>
+      <q class="pendiente">Cita del buzón, tal cual llegó, sin corregir ni resumir. Hay sitio para
+        dos líneas como esta: si la respuesta es más larga, se corta por donde no cambie el sentido.</q>
+      <span class="estado estado--pedido">Ya está pedido</span>
+    </li>
+    <li>
+      <q class="pendiente">Segunda cita del buzón. Aquí va una de las que entran en el programa,
+        para que se vea que lo que se pide acaba en una acción con artículo y plazo.</q>
+      <span class="estado estado--programa">Entra en el programa</span>
+    </li>
+    <li>
+      <q class="pendiente">Tercera cita del buzón: la que no podemos, que es la que hay que poner
+        igual. Debajo, en una frase, por qué no se puede y qué sí se puede hacer con eso.</q>
+      <span class="estado estado--no">No podemos · y te decimos por qué</span>
+    </li>
+  </ul>
+
+  <div class="limite">
+    <h4>Lo que no vamos a hacer con esto</h4>
+    <p>No publicamos ninguna respuesta con un dato que permita saber quién la escribió, ni la
+      llevamos a la empresa con nombres. <b>Va como cuestión general o no va.</b></p>
+  </div>
+
+  <footer class="pie">
+    <div class="compi"><p class="compi__globo">¡Lo escribisteis vosotros!</p><canvas data-pose="celebra" data-tt="330"></canvas></div>
+    <div class="pie__medio">
+      <p class="pie__quien">El buzón sigue abierto</p>
+      <p class="pie__nombres">sin-siglas.info/buzon <span>· anónimo</span></p>
+    </div>
+    <div class="pie__voto">
+      <p class="pie__fecha">29 de septiembre</p>
+      <p class="pie__url">sin-siglas.info</p>
+    </div>
+  </footer>
+</section>
+
+<!-- ==================================================================
+     07 · EL SEMÁFORO DEL MANDATO · martes 22 de septiembre · lo manda Rafael López
+     El tablero sale con todo en gris a propósito: así está el día 22.
+     ================================================================== -->
+<section class="cartel" id="c7">
+  <div class="tapa"><span>El semáforo del mandato</span><b>07/09</b></div>
+
+  <h1 class="titular titular--largo">Cuatro años dan<em>para que se te olvide</em>lo que prometiste.</h1>
+  <p class="bajada bajada--ancha">
+    Por eso lo dejamos por escrito. <b>Este tablero se publica cada trimestre</b>: guarda el
+    cartel y compáralo con el de enero.
+  </p>
+
+  <div class="tablero">
+    <div class="fila fila--cabeza">
+      <span>Las nueve acciones</span><span>Pedido</span><span>En negociación</span><span>Conseguido</span>
+    </div>
+    <div class="fila"><b>Protocolo escrito de flexibilidad</b><i></i><i></i><i></i></div>
+    <div class="fila"><b>Registro de jornada, publicado cada trimestre</b><i></i><i></i><i></i></div>
+    <div class="fila"><b>Política de desconexión con ventana horaria</b><i></i><i></i><i></i></div>
+    <div class="fila"><b>Evaluación de riesgos psicosociales</b><i></i><i></i><i></i></div>
+    <div class="fila"><b>Revisión de los puestos con pantalla</b><i></i><i></i><i></i></div>
+    <div class="fila"><b>Espacios de descanso</b><i></i><i></i><i></i></div>
+    <div class="fila"><b>Informe previo del comité en cada cambio</b><i></i><i></i><i></i></div>
+    <div class="fila"><b>Acta de cada reunión en el tablón</b><i></i><i></i><i></i></div>
+    <div class="fila"><b>Registro retributivo y datos de plantilla</b><i></i><i></i><i></i></div>
+  </div>
+  <p class="leyenda">Así está el 22 de septiembre: nueve casillas y ninguna marcada. El primer
+    tablero con marcas se publica en <b>enero de 2027</b>.</p>
+
+  <div class="firmas">
+    <h4>Lo firmamos los once</h4>
+    <p>Laura Muñoz <span>·</span> Raúl Navarro <span>·</span> Rocío Galindo <span>·</span>
+      José Pablo Fernández <span>·</span> Rafael López <span>·</span> Fran Bolívar <span>·</span>
+      Leticia Algarra <span>·</span> Mario Barchéin <span>·</span> Mario Aranda <span>·</span>
+      Violeta López <span>·</span> María Emilia Castillo</p>
+  </div>
+
+  <footer class="pie">
+    <div class="compi"><p class="compi__globo">Guárdalo hasta enero.</p><canvas data-pose="quieto" data-tt="900"></canvas></div>
+    <div class="pie__medio">
+      <p class="pie__quien">Mandato</p>
+      <p class="pie__nombres">Cuatro años <span>· art. 67.3 ET</span></p>
+    </div>
+    <div class="pie__voto">
+      <p class="pie__fecha">29 de septiembre</p>
+      <p class="pie__url">sin-siglas.info</p>
+    </div>
+  </footer>
+</section>
+
+<!-- ==================================================================
+     08 · DÓNDE ENCONTRARNOS · jueves 24 de septiembre · lo manda María Emilia Castillo
+     Confirmar entre los once el día y el sitio de la hora de comité
+     antes de mandar este.
+     ================================================================== -->
+<section class="cartel cartel--coral" id="c8">
+  <div class="tapa"><span>Cómo llegar a nosotros</span><b>08/09</b></div>
+
+  <h1 class="titular">No hace falta<em>que pidas cita.</em></h1>
+  <p class="bajada bajada--ancha">
+    Once personas en seis áreas. <b>Eliges tú a quién se lo cuentas</b>, y a algunos nos conoces
+    de la cocina antes que de una reunión.
+  </p>
+
+  <ul class="once">
+    <li><b>Laura Muñoz</b><span>Finance &amp; Accounting</span></li>
+    <li><b>Raúl Navarro</b><span>People &amp; Values</span></li>
+    <li><b>Rocío Galindo</b><span>Customer Success</span></li>
+    <li><b>José Pablo Fernández</b><span>Engineering</span></li>
+    <li><b>Rafael López</b><span>Engineering</span></li>
+    <li><b>Fran Bolívar</b><span>Engineering</span></li>
+    <li><b>Leticia Algarra</b><span>Project Management</span></li>
+    <li><b>Mario Barchéin</b><span>Engineering</span></li>
+    <li><b>Mario Aranda</b><span>People &amp; Values</span></li>
+    <li><b>Violeta López</b><span>Professional Services</span></li>
+    <li><b>María Emilia Castillo</b><span>Professional Services</span></li>
+  </ul>
+
+  <ul class="puertas">
+    <li>
+      <strong>Hora de comité</strong>
+      <p>El <b>primer jueves de cada mes, de 13:30 a 14:30, en la cocina</b>. Dos de nosotros,
+        sin cita y sin orden del día. Empieza en octubre.</p>
+    </li>
+    <li>
+      <strong>El buzón</strong>
+      <p>Anónimo y abierto también después del 29, en <b>sin-siglas.info/buzon</b>. Es la vía si
+        prefieres no ponerle cara a lo que cuentas.</p>
+    </li>
+    <li>
+      <strong>Confidencial</strong>
+      <p>Lo que nos cuentes no sale de la representación sin tu permiso. Si hay que llevarlo a la
+        empresa, <b>va como cuestión general y sin tu nombre</b>.</p>
+    </li>
+    <li>
+      <strong>Asamblea</strong>
+      <p>Una al semestre, en horario de trabajo. <b>Podemos convocarla nosotros</b>: no hay que
+        pedir permiso para que la plantilla se reúna. <span class="ley">arts. 77–80 ET</span></p>
+    </li>
+  </ul>
+
+  <footer class="pie">
+    <div class="compi"><p class="compi__globo">Yo estoy en la cocina.</p><canvas data-pose="risa" data-tt="240"></canvas></div>
+    <div class="pie__medio">
+      <p class="pie__quien">Recuérdalo el 29</p>
+      <p class="pie__nombres">El voto es secreto. <span>Nadie sabe qué votaste</span></p>
+    </div>
+    <div class="pie__voto">
+      <p class="pie__fecha">29 de septiembre</p>
+      <p class="pie__url">sin-siglas.info</p>
+    </div>
+  </footer>
+</section>
+
+<!-- ==================================================================
+     09 · LA VÍSPERA · lunes 28 de septiembre · lo manda Violeta López
+     ================================================================== -->
+<section class="cartel cartel--coral" id="c9">
+  <div class="tapa"><span>Elecciones al Comité · Nazaríes</span><b>09/09</b></div>
+
+  <h1 class="titular titular--corto">Mañana<em>se vota.</em></h1>
+
+  <div class="vispera">
+    <ul class="datos">
+      <li>
+        <strong>Quién vota</strong>
+        <p><b>Toda la plantilla que figure en el censo</b>, sin importar tu contrato, tu área o si
+          estás afiliado a algún sindicato. Si crees que no apareces, díselo a la mesa: se reclama.</p>
+      </li>
+      <li>
+        <strong>Cómo</strong>
+        <p>En urna, con voto <b>personal, libre, directo y secreto</b>. Cuentan los miembros de la
+          mesa delante de quien quiera mirar. Nadie —ni la empresa, ni nosotros— sabe qué votaste.</p>
+      </li>
+      <li>
+        <strong>Cuándo y dónde</strong>
+        <p>Mañana, <b>29 de septiembre</b>. El horario y el sitio de la urna los publica la mesa
+          electoral, no las candidaturas: míralo en el tablón.</p>
+      </li>
+      <li>
+        <strong>Cuánto se tarda</strong>
+        <p>Lo que tardas en bajar, meter la papeleta en el sobre y echarlo a la urna.
+          <b>Cinco minutos</b>, una vez cada cuatro años.</p>
+      </li>
+    </ul>
+
+    <svg class="sello" viewBox="0 0 178 178" role="img"
+         aria-label="Sello: vota lista independiente. Sin siglas, solo compañerxs. Comité de Empresa.">
+      <defs><path id="aro9" d="M89 25 A64 64 0 1 1 89 153 A64 64 0 1 1 89 25"/></defs>
+      <circle class="sello__aro" cx="89" cy="89" r="85"/>
+      <circle class="sello__pica" cx="89" cy="89" r="78"/>
+      <circle class="sello__aro2" cx="89" cy="89" r="51"/>
+      <text class="sello__vuelta"><textPath href="#aro9" startOffset="0" textLength="400"
+        lengthAdjust="spacing">&middot; SIN SIGLAS &middot; SOLO COMPA&Ntilde;ERXS &middot; COMIT&Eacute; DE EMPRESA</textPath></text>
+      <rect class="sello__urna" x="76" y="46" width="26" height="21" rx="2.5"/>
+      <path class="sello__x" d="M82 52 96 61M96 52 82 61"/>
+      <text class="sello__t1" x="89" y="95">VOTA</text>
+      <text class="sello__t2" x="89" y="108">LISTA</text>
+      <text class="sello__t3" x="89" y="118" textLength="78" lengthAdjust="spacing">INDEPENDIENTE</text>
+    </svg>
+  </div>
+
+  <p class="remate">
+    Y si no nos votas a nosotros, <b>vota</b>. Un comité elegido por poca gente se sienta a
+    negociar sin peso, y eso lo pagamos todos durante cuatro años.
+  </p>
+
+  <footer class="pie">
+    <div class="compi"><p class="compi__globo">¡Mañana!</p><canvas data-pose="baile" data-tt="500"></canvas></div>
+    <div class="pie__medio">
+      <p class="pie__quien">Representación de compañerxs, hecha por compañerxs</p>
+      <p class="pie__nombres">Once personas <span>· cero siglas</span></p>
+    </div>
+    <div class="pie__voto">
+      <p class="pie__fecha">29 de septiembre</p>
+      <p class="pie__url">sin-siglas.info</p>
+      <p class="pie__legal">Candidatura registrada conforme a la normativa de elecciones
+        sindicales. La firmamos los once candidatos: no es una comunicación de la empresa.</p>
+    </div>
+  </footer>
+</section>
+
+<script src="compi.js"></script>
+<script>
+/* ==================================================================
+   ?n=3 deja solo el tercer cartel, pegado a la esquina y sin fondo
+   alrededor: es lo que captura exportar.sh. Sin ?n salen los nueve
+   para revisarlos de un vistazo.
+   ================================================================== */
+const pedido = new URLSearchParams(location.search).get("n");
+if(pedido){
+  const uno = document.getElementById("c" + pedido);
+  if(uno){ document.body.classList.add("solo"); uno.classList.add("elegido"); }
+}
+
+/* Compi, una pose congelada por cartel. data-tt elige el fotograma
+   dentro del ciclo de la pose: la mitad de las poses son cíclicas y
+   sin esto saldría siempre el primer cuadro. */
+document.querySelectorAll(".compi canvas").forEach(c => {
+  pintaCompi(c, c.dataset.pose, +c.dataset.tt, 3);
+});
+</script>
+</body>
+</html>
