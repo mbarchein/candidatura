@@ -241,23 +241,8 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
 .crew__item a:hover .crew__name{color:var(--text)}
 
 /* cintas entrelazadas (eco del cartel) */
-.ribbons{display:block;width:100%;height:auto;margin-top:-2rem;pointer-events:none;
-  position:relative;z-index:2}
+.ribbons{display:block;width:100%;height:auto;margin-top:-2rem;pointer-events:none}
 
-/* ---------- banda de la foto de grupo, entre la portada y las cifras ----------
-   Va a sangre y sin marco a propósito: con borde y esquinas redondeadas
-   se lee como una tarjeta flotando, no como una banda por la que pasa
-   la página. Las cintas de la portada le cruzan el borde de arriba con
-   un margen negativo, que es lo que cose las dos piezas. */
-/* margin:0 es obligatorio: figure trae 1em 40px del navegador y esos
-   40 px rompen el sangrado a los lados */
-.banda{position:relative;margin:-4.5rem 0 0;line-height:0;overflow:hidden;
-  border-bottom:1px solid var(--line)}
-.banda img{display:block;width:100%;height:clamp(15rem,34vw,25rem);object-fit:cover;
-  object-position:center 34%}
-/* velo suave arriba, para que las cintas se lean sobre la foto */
-.banda::before{content:"";position:absolute;inset:0 0 auto;height:7rem;
-  background:linear-gradient(var(--ink),transparent);opacity:.85;pointer-events:none}
 
 /* ---------- tira de cifras ---------- */
 .facts{border-block:1px solid var(--line);background:var(--ink-2)}
@@ -530,6 +515,9 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
   margin-top:1.4rem;letter-spacing:-.01em
 }
 .close__claim span{color:var(--cian-txt)}
+.close__foto{margin:2.4rem auto 0;max-width:46rem;border-radius:.9rem;overflow:hidden;
+  border:1px solid var(--line)}
+.close__foto img{display:block;width:100%;height:auto}
 .close__buzon{margin:1.9rem 0 0}
 .close__buzon a{
   display:inline-block;font-family:var(--display);font-weight:500;font-size:1.05rem;
@@ -843,10 +831,6 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
           fill="none" stroke="#9ce2f6" stroke-width="1" opacity=".35"/>
   </svg>
 </header>
-
-<figure class="banda">
-  <img id="foto-manos" alt="La candidatura juntando las manos en la terraza de Nazaríes.">
-</figure>
 
 <!-- ===================== CIFRAS ===================== -->
 <section class="facts" aria-label="La candidatura en cifras">
@@ -1296,6 +1280,9 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
   <div class="wrap close__in">
     <p class="close__hand">Representación de <b>compañerxs</b>,<br>hecha por <b>compañerxs</b>.</p>
     <p class="close__claim">Trabajamos por y para <span>nosotros</span>. Unidos por nuestro futuro.</p>
+    <figure class="close__foto">
+      <img id="foto-manos" alt="La candidatura juntando las manos en la terraza.">
+    </figure>
     <p class="close__buzon">
       <a href="/buzon">Escríbenos al buzón</a>
       <span>Anónimo &middot; sin nombre, sin área, sin correo</span>
