@@ -1,0 +1,22 @@
+# Configuración del despliegue en Netlify.
+#
+# Lo que hace este fichero, y por qué existe: pisa lo que esté puesto en
+# el panel, así que fija el directorio publicado sin depender de quién
+# tenga el acceso.
+#
+# El motivo de crearlo: Netlify servía la raíz del repo, y eso dejaba
+# ESTRATEGIA.md, los diez carteles y los PDF accesibles en
+# sin-siglas.info/carteles/... El repo es público en GitHub, así que la
+# ruta se adivinaba sola. Ahora solo se publica web/, y el material de
+# campaña se queda versionado pero fuera del servidor.
+
+[build]
+  publish = "web"
+  functions = "netlify/functions"
+
+# El ranking se llama igual en local y en producción: /api/ranking.
+# Así el mismo código de cliente vale para las dos cosas.
+[[redirects]]
+  from = "/api/ranking"
+  to = "/.netlify/functions/ranking"
+  status = 200

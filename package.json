@@ -1,0 +1,8 @@
+{
+  "name": "candidatura-sin-siglas",
+  "private": true,
+  "description": "Web de la candidatura. Solo hay dependencias para la función del ranking; la web es HTML plano.",
+  "dependencies": {
+    "@netlify/blobs": "^8.1.0"
+  }
+}

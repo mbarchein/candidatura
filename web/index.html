@@ -535,6 +535,63 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
 .board__alias{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .board__pts{font-family:var(--cifras);font-variant-numeric:tabular-nums;color:var(--text-2)}
 .board__empty{color:var(--muted-2);font-size:.92rem;padding:.6rem .3rem}
+
+/* Los tres primeros llevan medalla de píxeles, y va dentro de la columna
+   del puesto para que todas las filas midan igual: con alturas distintas
+   la caja daría saltos al cambiar de página. Compi es pixel art, así que
+   las medallas también. Oro, plata y bronce son la única excepción a la
+   paleta, y se la gana que una medalla se entiende sin leer nada. */
+/* Todas las filas con la misma altura de columna, incluidas las que solo
+   llevan número: si el podio midiera más, la caja cambiaría de tamaño al
+   pasar de página. La altura la fija la medalla con cordón, 11x15. */
+.board__pos{display:grid;place-items:center;height:2.05rem}
+.board__pos--moneda{position:relative;width:1.5rem}
+.board__moneda{
+  position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated
+}
+/* el número va sobre el disco, que no está centrado en la caja: el
+   cordón ocupa las cuatro primeras filas de las quince */
+.board__cifra{
+  position:absolute;left:0;right:0;top:63%;transform:translateY(-50%);z-index:1;
+  font-style:normal;font-family:var(--cifras);font-weight:500;font-size:.78rem;
+  line-height:1;text-align:center
+}
+.board__moneda .cordon{fill:var(--cian-txt)}
+.board__row--1 .borde{fill:#a9741c} .board__row--1 .cara{fill:#e9ae3a}
+.board__row--2 .borde{fill:#7e8590} .board__row--2 .cara{fill:#b8bec9}
+.board__row--3 .borde{fill:#8a4f28} .board__row--3 .cara{fill:#bd7b45}
+.board__row--1 .board__cifra,
+.board__row--2 .board__cifra{color:#2b1c06}
+.board__row--3 .board__cifra{color:#fdf4e8}
+.board__row--1 .board__alias,
+.board__row--2 .board__alias,
+.board__row--3 .board__alias{font-weight:500;color:var(--text)}
+.board__row--1 .board__alias{font-size:1.1rem;color:var(--coral-txt)}
+.board__row--2 .board__alias{font-size:1.05rem}
+.board__row--3 .board__alias{font-size:1rem}
+.board__row--1 .board__pts{font-size:1.06rem;color:var(--text)}
+.board__row--2 .board__pts,
+.board__row--3 .board__pts{font-size:1.02rem;color:var(--text)}
+
+/* pie del tablero: en qué puesto vas y el paso de página */
+.board__pies{
+  margin-top:.9rem;padding-top:.7rem;border-top:1px solid var(--line);
+  display:flex;flex-wrap:wrap;align-items:center;gap:.5rem .7rem
+}
+.board__yo{
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--cian-txt);margin:0 auto 0 0
+}
+.board__yo b{color:var(--text);font-weight:500}
+.board__paso{
+  appearance:none;font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--text-2);background:none;
+  border:1px solid var(--line-strong);border-radius:999px;padding:.3rem .7rem;cursor:pointer
+}
+.board__paso:hover:not(:disabled){color:var(--text);border-color:var(--cian-txt)}
+.board__paso:disabled{opacity:.38;cursor:default}
+.board__paso--yo{color:var(--cian-txt);border-color:var(--cian-txt)}
+.board__cuenta{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;color:var(--muted-2)}
 .prize{
   margin-top:1.2rem;padding-top:1.1rem;border-top:1px solid var(--line);
   font-size:.9rem;color:var(--muted)
@@ -647,6 +704,58 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
 }
 @media (min-width:521px){ #q-block{padding-right:64px} }
 @media (max-width:520px){ .mascota--quiz{display:none} }
+
+/* Compi subido al podio, en la esquina de la tarjeta del ranking.
+   Va en absoluto y asomando por arriba para no sumar altura a la
+   tarjeta, que era justo el hueco que sobraba. Se le crea sin pasarle
+   carril, así que `juega` queda en false y baila en el sitio en vez de
+   corretear por la caja. */
+/* La escena del podio: tres muñecos sobre tres cajas, asomando por
+   encima de la tarjeta para no sumarle altura. Cada muñeco lleva su
+   propia paleta (ver `op.tinta` en crearMascota) para que se distingan;
+   si no, serían el mismo tres veces.
+
+   Las cajas son un grid de tres columnas del ancho de un sprite, y cada
+   figura se apoya en la suya con align-items:end. */
+.podio-escena{
+  position:absolute;right:1.6rem;top:-6.1rem;z-index:3;pointer-events:none;
+  display:grid;grid-template-columns:repeat(3,3.4rem);gap:.12rem;
+  align-items:end;justify-items:center
+}
+.podio-hueco{display:flex;flex-direction:column;align-items:center;width:100%}
+.podio-hueco canvas{position:static;margin:0 0 -2px}
+.podio-caja{
+  width:100%;background:var(--line-strong);border-top:2px solid var(--panel)
+}
+.podio-hueco--1 .podio-caja{height:2.5rem;background:var(--cian-txt)}
+.podio-hueco--2 .podio-caja{height:1.7rem}
+.podio-hueco--3 .podio-caja{height:1.1rem}
+.podio-caja b{
+  display:block;text-align:center;font-family:var(--cifras);font-size:.7rem;
+  line-height:1.9;color:var(--panel);font-weight:500
+}
+.podio-hueco--2 .podio-caja b,
+.podio-hueco--3 .podio-caja b{color:var(--muted-2)}
+/* el champán del tercero, que es el que celebra como si hubiera ganado */
+.podio-champan{
+  position:absolute;left:-.55rem;bottom:1.15rem;width:1.5rem;height:auto;
+  image-rendering:pixelated
+}
+.podio-champan .vidrio{fill:#2f6b4a}
+.podio-champan .tapa{fill:#d9b64a}
+.podio-champan .chorro{fill:#f3f7fb}
+.podio-hueco--3{position:relative}
+/* En móvil la tarjeta baja debajo del panel del reto, así que el podio
+   no puede ir asomando por encima: se metería en el panel de arriba.
+   Pasa a formar parte del flujo, centrado y dentro de la tarjeta. Suma
+   altura, pero en móvil hay sitio de sobra y es la parte que apetece
+   ver. */
+@media (max-width:900px){
+  .podio-escena{
+    position:static;right:auto;top:auto;
+    margin:.2rem auto 1.2rem;width:max-content
+  }
+}
 
 /* bocadillo: se coloca sobre la cabeza y sigue a la mascota */
 .compi__globo{
@@ -1226,8 +1335,8 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
       <h2>¿Cuánto nos conoces?</h2>
       <p class="lede muted">
         Doce preguntas, quince segundos cada una. Aciertas y sumas; contestas rápido y sumas más;
-        encadenas aciertos y se te dispara la puntuación. El ranking lo ve todo el mundo,
-        así que ándate con ojo.
+        encadenas aciertos y se te dispara la puntuación. El ranking lo ve todo el mundo, pero el
+        premio se sortea entre quienes jueguen: con jugar una vez ya entras.
       </p>
     </div>
 
@@ -1247,7 +1356,7 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
             <li><b style="color:var(--coral-soft)">Racha:</b> dos o más aciertos seguidos suman hasta 100 puntos más cada uno. Un fallo la rompe.</li>
             <li>Quince segundos por pregunta: si se agota, esa se queda a cero.</li>
             <li>Puedes responder con el ratón o con las teclas <b>1</b>–<b>4</b>.</li>
-            <li>Al terminar eliges alias y se guarda tu mejor marca.</li>
+            <li>Al terminar eliges alias, se guarda tu mejor marca y entras en el sorteo.</li>
             <li>Suena música mientras juegas. Si molesta, la quitas con el botón <b style="color:var(--cian)">Música</b>.</li>
           </ul>
           <div class="opts">
@@ -1300,14 +1409,35 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
       </div>
 
       <!-- ---- ranking ---- -->
-      <aside class="card">
+      <aside class="card" style="position:relative">
+        <div class="podio-escena" aria-hidden="true">
+          <div class="podio-hueco podio-hueco--2">
+            <canvas class="mascota" id="podio-2"></canvas>
+            <div class="podio-caja"><b>2</b></div>
+          </div>
+          <div class="podio-hueco podio-hueco--1">
+            <canvas class="mascota" id="podio-1"></canvas>
+            <div class="podio-caja"><b>1</b></div>
+          </div>
+          <div class="podio-hueco podio-hueco--3">
+            <canvas class="mascota" id="podio-3"></canvas>
+            <svg class="podio-champan" viewBox="0 0 9 14">
+              <path class="chorro" d="M0 0h1v1H0zM2 1h1v1H2zM1 2h1v1H1zM3 0h1v1H3zM0 3h1v1H0z"/>
+              <path class="tapa" d="M4 3h2v1H4z"/>
+              <path class="vidrio" d="M4 4h2v3H4zM3 7h4v6H3zM3 13h4v1H3z"/>
+            </svg>
+            <div class="podio-caja"><b>3</b></div>
+          </div>
+        </div>
         <div class="quiz__bar"><span>Ranking <b id="board-live">en vivo</b></span></div>
         <div class="board" id="board" style="margin-top:1.1rem">
           <p class="board__empty">Cargando marcas…</p>
         </div>
         <p class="prize">
-          <b>El premio:</b> <span class="pend">por definir</span>, y simbólico. Se lo lleva quien
-          lidere el ranking cuando cerremos el juego. Empate a puntos: gana quien lo consiguió antes.
+          <b>El premio:</b> <span class="pend">por definir</span>, y simbólico. Se
+          <b>sortea entre todos los que jueguen</b> cuando cerremos el juego: no se lo lleva quien
+          más puntos tenga, así que el ranking es solo por el honor. Con jugar una vez y dejar tu
+          alias ya entras en el sorteo.
           <b>No está condicionado a tu voto</b>, ni a que votes: es solo para animar a jugar.
         </p>
       </aside>
@@ -2044,6 +2174,11 @@ function crearMascota(canvas, esc, op){
   ctx.setTransform(dpr,0,0,dpr,0,0);
   ctx.imageSmoothingEnabled = false;
 
+  /* Paleta propia para esta instancia. Sin esto todos los muñecos salen
+     idénticos, porque TINTA es del módulo. Solo hay que sobreescribir
+     las claves que cambian: pelo, camiseta, pantalón. */
+  const paleta = op.tinta ? Object.assign({}, TINTA, op.tinta) : TINTA;
+
   const pista = op.pista || null;
   const globo = op.globo || null;
   const juega = !!pista && !QUIETO;
@@ -2125,7 +2260,7 @@ function crearMascota(canvas, esc, op){
         if(!k){ x++; continue; }
         let n = 1;
         while(x+n < REJ_W && B[y*REJ_W+x+n] === k) n++;
-        ctx.fillStyle = TINTA[k];
+        ctx.fillStyle = paleta[k];
         const dx = M.izq ? (REJ_W - x - n) : x;
         ctx.fillRect(dx*esc, y*esc, n*esc, esc);
         x += n;
@@ -2440,6 +2575,18 @@ if(!QUIETO) requestAnimationFrame(bucle);
 MASCOTAS.hero  = crearMascota($("#mascota-hero"), 6,
                   { pista:$("#compi-hero"), globo:$("#globo-hero"), casa:"der" });
 MASCOTAS.quiz  = crearMascota($("#mascota-quiz"), 3);
+/* Tres muñecos distintos en el podio. El primero y el segundo quietos y
+   con otra pinta; el tercero es Compi celebrando con champán, que es el
+   chiste del podio. */
+MASCOTAS.podio1 = crearMascota($("#podio-1"), 2, {
+  tinta:{ H:"#4a2b12", h:"#7a4a20", C:"#e8b83c", c:"#b98a20", L:"#f6d98a", P:"#3a3f4c", p:"#25292f" }
+});
+MASCOTAS.podio2 = crearMascota($("#podio-2"), 2, {
+  tinta:{ H:"#1d1d24", h:"#3a3a45", C:"#a3a9b4", c:"#7e8590", L:"#cfd4dc", P:"#4a3a52", p:"#33263a" }
+});
+MASCOTAS.podio3 = crearMascota($("#podio-3"), 2);
+if(MASCOTAS.podio1) MASCOTAS.podio1.reaccion("serio", 1e9);
+if(MASCOTAS.podio2) MASCOTAS.podio2.reaccion("quieto", 1e9);
 MASCOTAS.close = crearMascota($("#mascota-close"), 5,
                   { pista:$("#compi-pie"), globo:$("#globo-pie"), casa:"centro" });
 
@@ -2877,11 +3024,13 @@ function pintarRacha(){
 function empezar(){
   preguntas = montarQuiz();
   idx = 0; puntos = 0; aciertos = 0; racha = 0; rachaMax = 0;
+  arranque = Date.now();
   trozos = [];
   $("#q-score").textContent = "0";
   $("#end-note").textContent = "";
   $("#end-form").hidden = false;
   $("#end-send").disabled = false;
+  $("#end-send").textContent = "Entrar al ranking";
   pintarRacha();
   montarPips();
   mostrar("play");
@@ -3069,7 +3218,7 @@ document.addEventListener("visibilitychange", ()=>{
 });
 
 /* ---- ranking común (capacidad db del artifact) ---- */
-let store = null, miSlug = null;
+let store = null, miSlug = null, arranque = 0;
 const boardEl = $("#board");
 
 function slug(alias){
@@ -3084,22 +3233,140 @@ function guardarLocal(datos){
   try{ localStorage.setItem("candidatura-quiz", JSON.stringify(datos)); }catch(e){}
 }
 
+/* La identidad es el navegador, no el alias. Guardando por alias, una
+   sola persona metiendo veinte alias serían veinte filas; con esto es
+   una fila que se renombra.
+
+   No es infalible: quien borre los datos del sitio o abra otro navegador
+   vuelve a ser nuevo. Eso no se evita sin cuentas, y no hace falta: el
+   premio se sortea, así que duplicarse no da nada. */
+function miId(){
+  const g = leerLocal();
+  if(g.id) return g.id;
+  const id = (crypto.randomUUID ? crypto.randomUUID()
+              : String(Date.now()) + "-" + Math.random().toString(36).slice(2, 10))
+             .replace(/[^a-z0-9-]/gi, "").toLowerCase().slice(0, 48);
+  guardarLocal({ ...g, id });
+  return id;
+}
+
 let destacar = false;
+/* Moneda de píxeles de 11x11, con reborde y el número encima en texto
+   normal. Dos intentos antes: con cinta y disco a 7 px de ancho no se
+   leía como una medalla, se leía como un bicho. A este tamaño no cabe
+   detalle, así que la forma es un círculo gordo y la información la da
+   el número, que va en tipografía de verdad y se lee siempre. */
+/* El cordón cuelga de arriba y la moneda va debajo: 11x15 en total. Las
+   dos cintas se juntan en el nudo y de ahí sale el disco. */
+const MEDALLA_CORDON =
+  "M3 0h1v1H3zM7 0h1v1H7zM3 1h1v1H3zM7 1h1v1H7z" +
+  "M4 2h1v1H4zM6 2h1v1H6zM4 3h3v1H4z";
+const MONEDA_BORDE =
+  "M4 4h3v1H4zM2 5h7v1H2zM1 6h9v1H1zM1 7h9v1H1zM0 8h11v1H0z" +
+  "M0 9h11v1H0zM0 10h11v1H0zM1 11h9v1H1zM1 12h9v1H1zM2 13h7v1H2zM4 14h3v1H4z";
+const MONEDA_CARA =
+  "M4 6h3v1H4zM3 7h5v1H3zM2 8h7v1H2zM2 9h7v1H2zM2 10h7v1H2zM3 11h5v1H3zM4 12h3v1H4z";
+
+function svgPix(clase, viewBox, dibujos){
+  const NS = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(NS, "svg");
+  svg.setAttribute("viewBox", viewBox);
+  svg.setAttribute("class", clase);
+  svg.setAttribute("aria-hidden", "true");
+  for(const [d, cls] of dibujos){
+    const path = document.createElementNS(NS, "path");
+    path.setAttribute("d", d);
+    if(cls) path.setAttribute("class", cls);
+    svg.appendChild(path);
+  }
+  return svg;
+}
+
+/* ------------------------------------------------------------------
+   El tablero se pagina de diez en diez. Con ciento y pico personas
+   jugando, quien va en el puesto 47 no se veía en ninguna parte, y la
+   gracia de participar es verse. Además del paso de página hay un
+   atajo que salta a tu puesto y lo resalta.
+   ------------------------------------------------------------------ */
+const POR_PAGINA = 10;
+let filasBoard = [], pagina = 0;
+
+const miIndice = () => filasBoard.findIndex(f => f.slug && f.slug === miSlug);
+const paginas  = () => Math.max(1, Math.ceil(filasBoard.length / POR_PAGINA));
+
 function pintarBoard(filas){
+  filasBoard = Array.isArray(filas) ? filas : [];
+  const yo = miIndice();
+  if(destacar && yo >= 0) pagina = Math.floor(yo / POR_PAGINA);
+  pagina = Math.min(Math.max(0, pagina), paginas() - 1);
+  dibujarPagina();
+}
+
+function dibujarPagina(){
   boardEl.innerHTML = "";
-  if(!filas.length){
+  if(!filasBoard.length){
     boardEl.appendChild(el("p","board__empty","Todavía no hay marcas. Puedes ser el primero."));
     return;
   }
-  filas.forEach((f,i)=>{
+
+  const desde = pagina * POR_PAGINA, yo = miIndice();
+
+  filasBoard.slice(desde, desde + POR_PAGINA).forEach((f, n)=>{
+    const puesto = desde + n + 1;
     const mia = f.slug && f.slug === miSlug;
-    const row = el("div","board__row" + (i===0?" board__row--top1":"") + (mia?" board__row--me":"") + (mia && destacar ? " board__row--flash":""));
-    if(mia && destacar) destacar = false;
-    row.appendChild(el("span","board__pos", String(i+1)));
+    const nueva = mia && destacar;
+    if(nueva) destacar = false;
+
+    const row = el("div", "board__row"
+      + (puesto <= 3 ? " board__row--" + puesto : "")
+      + (mia ? " board__row--me" : "")
+      + (nueva ? " board__row--flash" : ""));
+
+    const pos = el("span","board__pos");
+    if(puesto <= 3){
+      pos.classList.add("board__pos--moneda");
+      pos.appendChild(svgPix("board__moneda","0 0 11 15",
+        [[MEDALLA_CORDON,"cordon"],[MONEDA_BORDE,"borde"],[MONEDA_CARA,"cara"]]));
+      pos.appendChild(el("i","board__cifra", String(puesto)));
+    } else {
+      pos.textContent = String(puesto);
+    }
+    row.appendChild(pos);
     row.appendChild(el("span","board__alias", f.alias));
     row.appendChild(el("span","board__pts", String(f.puntos)));
     boardEl.appendChild(row);
   });
+
+  const pies = el("div","board__pies");
+  if(yo >= 0){
+    const mio = el("p","board__yo");
+    mio.innerHTML = "Vas <b>" + (yo + 1) + ".\u00ba</b> de " + filasBoard.length;
+    pies.appendChild(mio);
+  } else {
+    pies.appendChild(el("p","board__yo","Juega y sal en la lista"));
+  }
+
+  if(paginas() > 1){
+    if(yo >= 0 && Math.floor(yo / POR_PAGINA) !== pagina){
+      const salto = el("button","board__paso board__paso--yo","Ver mi puesto");
+      salto.type = "button";
+      salto.addEventListener("click", ()=>{
+        pagina = Math.floor(miIndice() / POR_PAGINA);
+        destacar = true; dibujarPagina();
+      });
+      pies.appendChild(salto);
+    }
+    const antes = el("button","board__paso","\u2039 Antes");
+    antes.type = "button"; antes.disabled = pagina === 0;
+    antes.addEventListener("click", ()=>{ pagina--; dibujarPagina(); });
+    pies.appendChild(antes);
+    pies.appendChild(el("span","board__cuenta", (pagina + 1) + " / " + paginas()));
+    const luego = el("button","board__paso","Despu\u00e9s \u203a");
+    luego.type = "button"; luego.disabled = pagina >= paginas() - 1;
+    luego.addEventListener("click", ()=>{ pagina++; dibujarPagina(); });
+    pies.appendChild(luego);
+  }
+  boardEl.appendChild(pies);
 }
 
 /* Sin marcador compartido el premio no se puede resolver, así que en vez de
@@ -3107,8 +3374,12 @@ function pintarBoard(filas){
    Un solo mensaje, y en el sitio donde el lector lo espera. */
 function boardLocal(nota){
   const pr = $(".prize");
-  if(pr) pr.innerHTML = "<b>El premio</b> se juega en el ranking común, y ese va por otro canal: " +
-    "pídenos el enlace interno y compites. Aquí guardamos tu mejor marca para que puedas superarla.";
+  /* Para entrar en el sorteo la marca tiene que llegar al marcador
+     común, así que si no se alcanza hay que decirlo: guardarla aquí no
+     te mete en el sorteo. */
+  if(pr) pr.innerHTML = "<b>El premio</b> se sortea entre quienes jueguen, y para entrar hace " +
+    "falta que tu marca llegue al marcador común. Ahora mismo no se puede alcanzar: guardamos " +
+    "tu mejor marca en este navegador y podrás mandarla cuando vuelva.";
   const g = leerLocal();
   $("#board-live").textContent = "solo en este navegador";
   boardEl.innerHTML = "";
@@ -3122,28 +3393,59 @@ function boardLocal(nota){
   }
 }
 
-function suscribir(){
-  store.collection("ranking").orderBy("puntos","desc").limit(50).onSnapshot(
-    snap=>{
-      const filas = snap.docs.map(d=>{
-        const v = d.data() || {};
-        return { slug:d.id, alias:String(v.alias||d.id).slice(0,24), puntos:Number(v.puntos)||0, ts:Number(v.ts)||0 };
-      }).sort((a,b)=> b.puntos-a.puntos || a.ts-b.ts).slice(0,10);
-      $("#board-live").textContent = "en vivo";
-      pintarBoard(filas);
-    },
-    err=>{ boardLocal("No se pudo cargar el marcador común (" + err.code + "). Tu mejor marca sigue guardada."); }
-  );
+/* ------------------------------------------------------------------
+   Marcador compartido. Antes se apoyaba en window.claude.use("db"),
+   que solo existe cuando la página corre como artefacto de Claude: en
+   Netlify no estaba y el ranking era de cada navegador.
+
+   Ahora habla con /api/ranking, una función de Netlify que guarda en
+   Blobs. No hay tiempo real, así que se consulta al cargar, al enviar
+   una marca y cada 20 s mientras el ranking está a la vista. Si la
+   función no responde, se cae a la marca local igual que antes.
+   ------------------------------------------------------------------ */
+const RANKING = "/api/ranking";
+let vivo = false, latido = null;
+
+async function traerTop(){
+  const r = await fetch(RANKING, { headers: { accept: "application/json" } });
+  if(!r.ok) throw new Error("HTTP " + r.status);
+  const d = await r.json();
+  return Array.isArray(d.top) ? d.top : [];
+}
+
+function pintarVivo(filas){
+  vivo = true;
+  $("#board-live").textContent = "compartido";
+  pintarBoard(filas);
+}
+
+async function refrescar(){
+  let filas;
+  /* el try envuelve solo la petición: si lo que falla es el pintado, que
+     salte y se vea, en vez de disfrazarse de fallo de red */
+  try { filas = await traerTop(); }
+  catch(e){
+    if(!vivo) boardLocal("No se puede alcanzar el marcador común. Tu mejor marca queda aquí.");
+    return;
+  }
+  pintarVivo(filas);
+}
+
+/* solo se consulta mientras el bloque del reto está en pantalla: sin esto
+   la página pediría el marcador cada 20 s en segundo plano */
+function vigilarRanking(dentro){
+  if(dentro && !latido) latido = setInterval(refrescar, 20000);
+  else if(!dentro && latido){ clearInterval(latido); latido = null; }
 }
 
 (function conectar(){
-  const p = (window.claude && typeof window.claude.use === "function")
-    ? window.claude.use("db") : Promise.resolve(null);
-  p.then(dbx=>{
-    if(!dbx){ boardLocal("Aquí no hay marcador compartido: se guarda tu mejor marca."); return; }
-    store = dbx; miSlug = leerLocal().slug || null;
-    suscribir();
-  }).catch(()=>{ boardLocal("Marcador común no disponible ahora mismo. Se guarda tu mejor marca."); });
+  miSlug = leerLocal().slug || null;
+  refrescar();
+  const bloque = $("#quiz");
+  if(bloque && window.IntersectionObserver){
+    new IntersectionObserver(e => vigilarRanking(e[0].isIntersecting), { rootMargin: "200px" })
+      .observe(bloque);
+  }
 })();
 
 $("#end-form").addEventListener("submit", async ev=>{
@@ -3155,31 +3457,38 @@ $("#end-form").addEventListener("submit", async ev=>{
   const pts = Math.max(0, Math.min(MAX_POSIBLE(), Math.round(puntos)));
   const s = slug(alias);
   const previo = leerLocal();
-  guardarLocal({ alias, slug:s, puntos: Math.max(pts, Number(previo.puntos)||0) });
+  guardarLocal({ ...previo, id: miId(), alias, slug:s,
+                 puntos: Math.max(pts, Number(previo.puntos)||0) });
   miSlug = s;
-
-  if(!store){
-    boardLocal("Aquí no hay marcador compartido: se guarda tu mejor marca.");
-    nota.textContent = "Marca guardada en este navegador.";
-    return;
-  }
 
   $("#end-send").disabled = true;
   nota.textContent = "Guardando…";
   try{
-    const ref = store.doc("ranking/" + s);
-    const snap = await ref.get();
-    const anterior = snap.exists ? (Number(snap.data().puntos)||0) : 0;
-    if(pts <= anterior){
-      nota.textContent = "Ya tenías " + anterior + " puntos con ese alias: mantenemos tu mejor marca.";
+    const r = await fetch(RANKING, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        id: miId(), alias, puntos: pts, aciertos, racha: rachaMax,
+        total: TOTAL(), ms: arranque ? Date.now() - arranque : 0
+      })
+    });
+    const d = await r.json().catch(()=>({}));
+    if(!r.ok) throw new Error(d.error || ("HTTP " + r.status));
+
+    destacar = true;
+    if(Array.isArray(d.top)) pintarVivo(d.top);
+    if(d.guardada){
+      nota.innerHTML = "<b>Dentro.</b> " + pts + " puntos en el marcador.";
+    } else if(d.renombrada){
+      nota.innerHTML = "<b>Alias cambiado.</b> Mantienes tus " + d.anterior + " puntos.";
     } else {
-      await ref.set({ alias, puntos: pts, aciertos, racha: rachaMax, total: TOTAL(), ts: Date.now() });
-      destacar = true;
-      nota.innerHTML = "<b>Dentro.</b> " + pts + " puntos en el ranking.";
+      nota.textContent = "Ya tenías " + d.anterior + " puntos: mantenemos tu mejor marca.";
     }
-    $("#end-form").hidden = true;
+    /* el formulario no se esconde: así se corrige el alias sin volver a jugar */
+    $("#end-send").disabled = false;
+    $("#end-send").textContent = "Cambiar alias";
   }catch(e){
-    nota.innerHTML = "<b class='no'>No se pudo guardar</b> (" + (e && e.code ? e.code : "error") + "). Inténtalo otra vez.";
+    nota.innerHTML = "<b class='no'>No se pudo guardar</b> (" + (e.message || "error") + "). Tu marca queda en este navegador.";
     $("#end-send").disabled = false;
   }
 });

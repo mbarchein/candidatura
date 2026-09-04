@@ -8,3 +8,6 @@ a3-candidatura/vista.png
 
 # extracciones temporales para validar sintaxis
 /[a-z][0-9].js
+
+# el marcador de pruebas del servidor local
+ranking-local.json
