@@ -364,6 +364,56 @@ body.solo .cartel.elegido{display:flex}
   line-height:1.5;color:var(--apagado)
 }
 .ultimo b{color:var(--coral);font-weight:500}
+
+/* 11 · el reto: el cartel es el propio tablero del juego. La pregunta
+   que sale es de verdad, y es la única del banco cuya respuesta está
+   en el mismo cartel: la esquina de arriba la regala */
+.hud{
+  margin-top:22px;background:var(--panel);border:1px solid var(--linea);
+  border-radius:8px;overflow:hidden
+}
+.hud__barra{
+  display:flex;align-items:center;gap:26px;padding:11px 26px;
+  background:var(--papel-2);border-bottom:1px solid var(--linea);
+  font-family:var(--mono);font-size:14px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--apagado)
+}
+.hud__barra b{font-weight:500;letter-spacing:.02em;color:var(--texto)}
+.hud__barra .racha{color:var(--coral)}
+.hud__reloj{margin-left:auto;display:flex;align-items:center;gap:12px}
+.hud__pista{width:120px;height:9px;border-radius:999px;background:var(--linea);overflow:hidden}
+.hud__pista i{display:block;height:100%;width:58%;background:var(--coral-vivo)}
+.hud__cuerpo{padding:20px 26px 22px}
+.hud__tipo{
+  font-family:var(--mono);font-size:var(--t-mini);letter-spacing:.16em;text-transform:uppercase;
+  color:var(--acento);margin:0 0 11px
+}
+.hud__q{font-weight:500;font-size:42px;line-height:1.04;letter-spacing:-.035em;margin:0 0 18px}
+.hud__opts{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.hud__opts li{
+  display:grid;grid-template-columns:28px 1fr;align-items:center;
+  border:2px solid var(--linea-fuerte);border-radius:8px;padding:11px 18px;
+  font-size:21px;line-height:1.25;color:var(--texto-2)
+}
+.hud__opts i{
+  font-style:normal;font-family:var(--mono);font-weight:500;font-size:14px;color:var(--acento)
+}
+.hud__nota{
+  margin:16px 0 0;font-family:var(--mano);font-size:26px;line-height:1.15;color:var(--texto)
+}
+.hud__nota b{color:var(--coral);font-weight:600}
+
+/* 11 · las reglas a la izquierda y el QR que lleva al juego */
+.reto{display:grid;grid-template-columns:1fr 156px;gap:40px;align-items:start;margin-top:22px}
+.reto .datos{gap:12px}
+/* el margen que el navegador le pone a <figure> se come 80 px de la
+   columna: aquí se quita, y solo aquí, que el cartel del buzón ya está
+   enviado con su QR grande y no se toca */
+.reto .qr{margin:0}
+.reto .qr img{width:156px;height:156px}
+.reto .qr figcaption{margin-top:11px;font-size:12px;letter-spacing:.08em}
+.reto .qr figcaption i{font-size:16px;margin-bottom:4px}
+.reto .qr figcaption b{font-size:18px;margin-top:4px}
 </style>
 </head>
 <body>
@@ -406,6 +456,86 @@ body.solo .cartel.elegido{display:flex}
     <div class="pie__medio">
       <p class="pie__quien">El buzón sigue abierto después del 29</p>
       <p class="pie__nombres">Once personas, seis áreas<span> · cero siglas</span></p>
+    </div>
+    <div class="pie__voto">
+      <p class="pie__fecha">29 de septiembre</p>
+      <p class="pie__url">sin-siglas.info</p>
+    </div>
+  </footer>
+</section>
+
+<!-- ==================================================================
+     EL RETO · lunes 7 de septiembre · lo manda Mario Aranda
+     ------------------------------------------------------------------
+     La pieza para que la gente entre en la web y se quede: el cartel
+     es el tablero del juego, con una pregunta de verdad. La única del
+     banco que se puede contestar mirando el propio cartel, porque el
+     29-S va en la esquina de todos.
+
+     Antes de enviarlo hay que comprobar que sin-siglas.info responde y
+     que el reto y el ranking funcionan: un cartel que invita a jugar y
+     lleva a una página caída se lo carga igual que un QR roto.
+     ================================================================== -->
+<section class="cartel cartel--coral" id="c11">
+  <div class="tapa"><span>El reto &middot; ¿cuánto nos conoces?</span><b>29-S</b></div>
+
+  <h1 class="titular">A que no<em>nos conoces.</em></h1>
+  <p class="bajada bajada--ancha">
+    Doce preguntas, quince segundos cada una. <b>Se juega en tres minutos desde el móvil</b>
+    y te enteras de más que leyendo un programa.
+  </p>
+
+  <div class="hud">
+    <div class="hud__barra">
+      <span>Pregunta <b>7/12</b></span>
+      <span class="racha">Racha <b>&times;3</b></span>
+      <span>Puntos <b>1.140</b></span>
+      <span class="hud__reloj"><b>9</b><span class="hud__pista"><i></i></span></span>
+    </div>
+    <div class="hud__cuerpo">
+      <p class="hud__tipo">La votación</p>
+      <p class="hud__q">¿Qué día se vota?</p>
+      <ul class="hud__opts">
+        <li><i>1</i><span>El 15 de septiembre</span></li>
+        <li><i>2</i><span>El 29 de septiembre</span></li>
+        <li><i>3</i><span>Aún no hay fecha</span></li>
+        <li><i>4</i><span>El 29 de octubre</span></li>
+      </ul>
+      <p class="hud__nota">Esta te la regalamos, que la respuesta está en la esquina.
+        <b>Las otras once, no.</b></p>
+    </div>
+  </div>
+
+  <div class="reto">
+    <ul class="datos">
+      <li>
+        <strong>Se sube rápido</strong>
+        <p>100 por acierto, <b>+50 por rapidez y +100 por racha</b>.</p>
+      </li>
+      <li>
+        <strong>El ranking es público</strong>
+        <p>Dejas un alias y tu mejor marca sale en el tablero, en vivo.</p>
+      </li>
+      <li>
+        <strong>Y hay premio</strong>
+        <p>Pequeño, y <b>se sortea entre todos los que jueguen</b>: con jugar
+          una vez ya entras.</p>
+      </li>
+    </ul>
+    <figure class="qr">
+      <img src="qr-reto.svg" alt="Código QR al reto de la web de la candidatura.">
+      <figcaption><i>Al reto</i>Apunta la cámara<b>sin-siglas.info</b></figcaption>
+    </figure>
+  </div>
+
+  <p class="ultimo"><b>El premio no está condicionado a tu voto</b>, ni a que votes: el reto
+    es solo para que nos pongáis cara. Lo serio, en el buzón, y sigue siendo anónimo.</p>
+
+  <footer class="pie">
+    <div class="compi"><p class="compi__globo">¿Me ganas?</p><canvas data-pose="chuleo" data-tt="200"></canvas></div>
+    <div class="pie__medio">
+      <p class="pie__quien">Dónde está el reto</p>
+      <p class="pie__nombres">En la portada de la web <span>&middot; el botón coral</span></p>
     </div>
     <div class="pie__voto">
       <p class="pie__fecha">29 de septiembre</p>

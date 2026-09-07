@@ -1,7 +1,7 @@
 # Estrategia de campaña · Sin siglas, solo compañerxs
 
 Elecciones al Comité de Empresa de Nazaríes · **martes 29 de septiembre de 2026**
-Documento escrito el 3 de septiembre. Quedan 26 días.
+Documento escrito el 3 de septiembre y actualizado el 7 con el reto. Quedan 22 días.
 
 ---
 
@@ -55,6 +55,7 @@ el giro de la campaña.
 | Temas | Tres acciones concretas por compromiso | `conciliacion`, `ambiente`, `comunicacion` |
 | Prueba | Que somos comprobables y honestos | `buzon`, `lo-que-no-podemos`, `voces-del-buzon`, `semaforo` |
 | Conversión | Cómo, cuándo y por qué votar | `donde-encontrarnos`, `por-que-votar`, `ultima-llamada` |
+| Enganche | Entra en la web y quédate tres minutos | `reto` |
 
 Los carteles nuevos son **1080 × 1350 px, tema claro**, pensados para enviar por el canal
 donde ya se habla. **Ninguno lleva número de orden**: en la esquina va la fecha, `29-S`, que es
@@ -64,7 +65,7 @@ fuente son identificadores para poder capturarlos, no el orden de envío.
 
 ---
 
-## 4. Los tres golpes de efecto
+## 4. Los cuatro golpes de efecto
 
 ### 4.1 El buzón anónimo → «Nos lo dijisteis vosotros»
 
@@ -121,6 +122,32 @@ mesas de nadie.
 
     ./carteles/exportar.sh pegatinas
 
+### 4.4 El reto · «¿cuánto nos conoces?»
+
+**`reto` (7 de septiembre).** El juego ya está en la web: doce preguntas de quince segundos sobre
+nosotros, sobre el comité y sobre cómo se vota, con ranking común y un premio pequeño que se
+sortea entre quienes jueguen. El cartel existe para que entren a jugarlo.
+
+Por qué está en el plan y no es un adorno: es la única pieza que **pide tres minutos en vez de
+una lectura**, y quien juega sale sabiendo qué dura un mandato, quién cuenta los votos y con qué
+antigüedad se vota. Es la vía más blanda que tenemos contra *«esto no sirve para nada»*, que es
+el rival de verdad.
+
+El cartel es el propio tablero del juego, con una pregunta de verdad del banco: **¿qué día se
+vota?**. Es la única que se puede contestar mirando el cartel, porque el `29-S` va en la esquina
+de todos, y eso es exactamente el chiste.
+
+Dos reglas que no son de diseño:
+
+1. **El sorteo no se condiciona al voto**, ni a votar, ni se pregunta a quién se vota. Va escrito
+   en el cartel y en la web, no en la letra pequeña.
+2. **Antes de enviarlo hay que comprobar que la web responde y que el reto y el ranking
+   funcionan.** Un cartel que invita a jugar y lleva a una página caída hace el mismo daño que un
+   QR roto.
+
+El QR del cartel decodifica impreso y en pantalla de ordenador, pero **no a tamaño de miniatura
+en el móvil**: quien lo mande pega también el enlace en el mensaje.
+
 ---
 
 ## 5. Calendario
@@ -128,6 +155,7 @@ mesas de nadie.
 | Día | Pieza | Rol | Quién la manda |
 |---|---|---|---|
 | vie 4 sep | **Primero tú** · el buzón + QR | Apertura: pedimos antes de prometer | Rocío Galindo |
+| lun 7 sep | **A que no nos conoces** · el reto | Enganche: entrar en la web y jugar | Mario Aranda |
 | mar 8 sep | **La conciliación no es un favor** | Tema | Leticia Algarra |
 | vie 11 sep | **Se puede medir** · ambiente y salud | Tema | Raúl Navarro |
 | mar 15 sep | **Que te lo cuenten antes** · comunicación | Tema | José Pablo Fernández |
@@ -139,8 +167,12 @@ mesas de nadie.
 | vie 25 sep | **El martes se vota** · última llamada | Conversión · cómo y dónde se vota | Violeta López |
 | lun 28 sep | — nada — | **Prohibido por el art. 8.4 del RD 1844/1994** | — |
 
-Diez piezas, y la última el **viernes 25**. El buzón se cierra y se publica el 22, no el 18, para
+Once piezas, y la última el **viernes 25**. El buzón se cierra y se publica el 22, no el 18, para
 dar más margen a que llegue gente.
+
+**El reto es la excepción al ritmo de martes y viernes**, y va suelto un lunes a propósito: el
+juego y el ranking ya están publicados, y cuanto antes se mande, más margen tiene el tablero para
+llenarse antes de cerrar el sorteo. No sustituye a ninguna pieza de tema.
 
 **El lunes 28 no se manda nada, y no es una decisión de estilo:** el art. 8.4 del RD 1844/1994
 corta la propaganda electoral a las cero horas del día anterior al de la votación. Ver el
@@ -178,6 +210,7 @@ apartado 10.
 |---|---|
 | Respuestas en el buzón | ≥ 25 (basta para que `voces-del-buzon` tenga contenido real) |
 | Temas distintos en el buzón | ≥ 6 (si sale uno solo, el programa se reordena) |
+| Partidas jugadas en el reto | ≥ 30 (se lee en `/api/ranking`, campo `jugadas`) |
 | Gente que pregunta a alguien de la lista sin que la abordemos | ≥ 15 |
 | Participación el 29-S | por encima de la de las elecciones anteriores |
 
@@ -224,6 +257,9 @@ Cosas que no dependen del diseño y que hay que confirmar entre los once:
 3. **`voces-del-buzon`.** Es una plantilla: las citas se rellenan el día 22 con lo que haya llegado al
    buzón. No se puede enviar antes.
 4. **Horario y lugar de la urna** para `ultima-llamada`: los publica la mesa electoral, no nosotros.
+5. **Qué es el premio del reto y cuándo se cierra el sorteo.** El cartel y la web dicen «pequeño»
+   y «cuando cerremos el juego», que es honesto pero no mueve a nadie a jugar hoy. En cuanto haya
+   objeto y fecha, se pone en la web y se puede mandar como recordatorio.
 
 ---
 

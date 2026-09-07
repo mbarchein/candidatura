@@ -27,6 +27,7 @@ declare -A NOMBRE=(
   [1]=buzon [2]=conciliacion [3]=ambiente [4]=comunicacion
   [5]=lo-que-no-podemos [6]=voces-del-buzon [7]=semaforo
   [8]=donde-encontrarnos [9]=ultima-llamada [10]=por-que-votar
+  [11]=reto
 )
 
 # la hoja de pegatinas es A4 y va por otro sitio: lo que hace falta es
@@ -51,7 +52,7 @@ if [ "${1:-}" = "pegatinas" ]; then
 fi
 
 CUALES=("$@")
-[ ${#CUALES[@]} -eq 0 ] && CUALES=(1 2 3 4 5 6 7 8 9 10)
+[ ${#CUALES[@]} -eq 0 ] && CUALES=(1 2 3 4 5 6 7 8 9 10 11)
 
 mkdir -p "$SALIDA"
 for n in "${CUALES[@]}"; do
