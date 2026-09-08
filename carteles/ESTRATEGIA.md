@@ -167,7 +167,7 @@ final—, pero **no a tamaño de miniatura en el móvil**, y menos ahora que van
 |---|---|---|---|
 | vie 4 sep | **Primero tú** · el buzón + QR | Apertura: pedimos antes de prometer | Rocío Galindo |
 | lun 7 sep | **A que no nos conoces** · el reto | Enganche: jugar, y de paso escribir al buzón | Mario Aranda |
-| mar 8 sep | **La conciliación no es un favor** | Tema | Leticia Algarra |
+| mar 8 sep | **La conciliación no es un favor** | Tema · abre diciendo que no prometemos lo imposible | Leticia Algarra |
 | jue 10 sep | **No te prometemos lo que no podemos** | Lo que pide el buzón, con artículo y límite | Laura Muñoz |
 | vie 11 sep | **Se puede medir** · ambiente y salud | Tema | Raúl Navarro |
 | mar 15 sep | **Que te lo cuenten antes** · comunicación | Tema | José Pablo Fernández |
@@ -181,6 +181,11 @@ final—, pero **no a tamaño de miniatura en el móvil**, y menos ahora que van
 
 Once piezas, y la última el **viernes 25**. El buzón se cierra y se publica el 22, no el 18, para
 dar más margen a que llegue gente.
+
+`conciliacion`, que va primero, lleva las dos líneas que antes solo estaban en `propuestas`: el
+panel del final se titula **«no prometemos lo que no se puede»** y debajo va una línea con que el
+buzón sigue abierto y seguirá abierto después del 29. Así la primera pieza de tema ya trae el tono
+de toda la campaña, y no hay que esperar al día 10 para que alguien lo lea.
 
 **El reto es la excepción al ritmo de martes y viernes**, y va suelto un lunes a propósito: el
 juego y el ranking ya están publicados, y cuanto antes se mande, más margen tiene el tablero para
@@ -263,6 +268,11 @@ respuestas.
 
 Ojo con las etiquetas: *ya está pedido* es del cartel del día 22 y significa pedido **a la
 empresa**. Todavía no hay comité, así que aquí no se usa: se dice en qué cartel está la acción.
+
+La tira son dos columnas con cabecera —*lo demás que nos habéis pedido* / *y qué vamos a hacer*—,
+la izquierda en tipografía de texto y la derecha en mono cian, las dos alineadas a la misma
+izquierda. La primera versión iba todo en mono, con la respuesta pegada al margen derecho y sin
+cabeceras: se leía como una tabla sin encabezados y había que adivinar qué era cada lado.
 
 Y la tira cierra con **«el buzón sigue abierto, y seguirá abierto después del 29»**, en tipografía
 de cuerpo y no en mono pequeño. Sin esa línea, cinco temas resueltos en letra chica con la

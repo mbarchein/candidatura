@@ -369,11 +369,13 @@ body.solo .cartel.elegido{display:flex}
    dentro y el margen de serie no cabe */
 /* 02 · con la cuarta acción dentro, el cartel va al ras: el rótulo, los
    huecos y los sellos de artículo ceden lo justo para que quepa */
-#c2 .rotulo{margin:18px 0 14px}
-#c2 .acciones{gap:12px}
+#c2 .rotulo{margin:14px 0 10px}
+#c2 .acciones{gap:9px}
 #c2 .accion h3{margin-bottom:6px}
-#c2 .ley{margin-top:5px}
-#c2 .limite{margin-top:18px;padding:16px 26px}
+#c2 .ley{margin-top:4px}
+#c2 .limite{margin-top:14px;padding:13px 26px}
+#c2 .ultimo{margin-top:8px}
+#c2 .accion p{line-height:1.34}
 
 #c12 .tapa{padding-bottom:11px;margin-bottom:16px}
 #c12 .rotulo{margin:10px 0 8px}
@@ -382,25 +384,35 @@ body.solo .cartel.elegido{display:flex}
 #c12 .ley{margin-top:5px}
 #c12 .limite{margin-top:10px;padding:12px 26px}
 #c12 .resto{margin-top:6px}
-#c12 .resto ul{gap:3px}
-#c12 .resto li{gap:16px;padding-bottom:3px}
+#c12 .resto ul{gap:1px}
+#c12 .resto li{padding-bottom:3px}
 
 /* 12 · el resto de lo que ha llegado al buzón, una línea por tema con lo
    que se puede hacer con él. Va en tipografía pequeña a propósito: no es
    la propuesta, es la prueba de que no hemos tirado nada */
+/* dos columnas de verdad, con cabecera y las dos alineadas a la misma
+   izquierda: lo que pedisteis en tipografía de texto, lo que haremos en
+   mono y en cian. Sin la cabecera se leía como una tabla sin encabezados
+   y había que adivinar qué era cada lado */
 .resto{margin:16px 0 0}
-.resto__t{
-  font-family:var(--mono);font-weight:500;font-size:13px;letter-spacing:.16em;
-  text-transform:uppercase;color:var(--acento);margin:0 0 9px
+.resto__cab,.resto li{display:grid;grid-template-columns:1fr 352px;gap:24px;align-items:baseline}
+.resto__cab{
+  font-family:var(--mono);font-weight:500;font-size:12px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--apagado-2);margin:0 0 5px;
+  border-bottom:2px solid var(--linea-fuerte);padding-bottom:4px
 }
-.resto ul{list-style:none;margin:0;padding:0;display:grid;gap:5px}
+.resto__cab span:last-child{color:var(--cian)}
+.resto ul{list-style:none;margin:0;padding:0;display:grid;gap:3px}
 .resto li{
-  display:grid;grid-template-columns:1fr auto;gap:20px;align-items:baseline;
-  font-family:var(--mono);font-size:13.5px;line-height:1.3;letter-spacing:.02em;
-  color:var(--apagado);border-bottom:1px solid var(--linea);padding-bottom:5px
+  font-size:15px;line-height:1.25;letter-spacing:-.01em;color:var(--texto-2);
+  border-bottom:1px solid var(--linea);padding-bottom:4px
 }
-.resto b{color:var(--texto-2);font-weight:500}
-.resto i{font-style:normal;color:var(--cian);text-align:right}
+.resto li b{color:var(--texto);font-weight:500}
+.resto i{
+  font-style:normal;font-family:var(--mono);font-size:12.5px;line-height:1.3;
+  letter-spacing:.02em;color:var(--cian)
+}
+.resto i em{font-style:normal;color:var(--apagado-2)}
 .resto__abierto{
   margin:11px 0 0;font-size:18px;line-height:1.35;letter-spacing:-.01em;color:var(--texto-2)
 }
@@ -653,10 +665,12 @@ body.solo .cartel.elegido{display:flex}
   </ul>
 
   <div class="limite">
-    <h4>Lo que no podemos</h4>
+    <h4>No prometemos lo que no se puede</h4>
     <p>Un comité no aprueba tu reducción de jornada ni te cambia el horario. Lo que sí puede es
       que <b>exista una norma igual para todos y que te contesten por escrito</b>.</p>
   </div>
+  <p class="ultimo"><b>El buzón sigue abierto</b>, y seguirá abierto después del 29
+    &middot; sin-siglas.info/buzon</p>
 
   <footer class="pie">
     <div class="compi"><p class="compi__globo">Yo a las 19:00 ya no leo.</p><canvas data-pose="cansado" data-tt="1500"></canvas></div>
@@ -733,13 +747,13 @@ body.solo .cartel.elegido{display:flex}
   </div>
 
   <div class="resto">
-    <p class="resto__t">Lo demás que nos habéis escrito, y qué se puede hacer con cada cosa</p>
+    <p class="resto__cab"><span>Lo demás que nos habéis pedido</span><span>Y qué vamos a hacer</span></p>
     <ul>
-      <li><span><b>Jornada intensiva en julio</b>, no solo en agosto</span><i>lo pedimos en el calendario &middot; art. 34.2 ET</i></li>
-      <li><span><b>Que el cliente no marque el día a día</b> de quien programa</span><i>pedimos informe previo &middot; art. 64.5 ET</i></li>
-      <li><span><b>Preguntar al equipo al cerrar cada proyecto</b></span><i>lo pedimos en la evaluación &middot; art. 16 LPRL</i></li>
-      <li><span><b>Más responsabilidad</b> —varios proyectos a la vez— <b>con su subida</b></span><i>a la mesa salarial &middot; art. 87.1 ET</i></li>
-      <li><span><b>Herramientas</b>: WSL y Windows</span><i>no es de comité: lo trasladamos</i></li>
+      <li><span><b>Jornada intensiva en julio</b>, no solo en agosto</span><i>Pedirla en el calendario <em>&middot; art. 34.2 ET</em></i></li>
+      <li><span><b>Que el cliente no marque el día a día</b> de quien programa</span><i>Pedir informe previo <em>&middot; art. 64.5 ET</em></i></li>
+      <li><span><b>Preguntar al equipo al cerrar cada proyecto</b></span><i>Pedirlo en la evaluación <em>&middot; art. 16 LPRL</em></i></li>
+      <li><span><b>Más responsabilidad</b>, varios proyectos a la vez, <b>con su subida</b></span><i>Llevarlo a la mesa salarial <em>&middot; art. 87.1 ET</em></i></li>
+      <li><span><b>Herramientas</b>: WSL y Windows</span><i>Trasladarlo: no es de comité</i></li>
     </ul>
     <p class="resto__abierto"><b>El buzón sigue abierto, y seguirá abierto después del 29.</b>
       Lo que no entre hoy, entra luego.</p>
