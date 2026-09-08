@@ -60,6 +60,11 @@ p i{font-style:normal;color:var(--coral);font-weight:500}
   padding:.75rem 1.4rem;text-decoration:none
 }
 .otra:hover{background:#a93526}
+.otra--ghost{
+  color:var(--cian);background:transparent;border:1.5px solid rgba(13,111,146,.4);
+  margin-left:.6rem
+}
+.otra--ghost:hover{background:rgba(13,111,146,.08);color:var(--cian)}
 .otra:focus-visible,a:focus-visible{outline:2px solid var(--cian);outline-offset:3px}
 .cierre{margin-top:2.5rem;border-top:1px solid var(--linea);padding-top:1.5rem}
 .mano{font-family:var(--mano);font-size:1.5rem;line-height:1.2;margin:0;color:var(--texto)}
@@ -73,9 +78,52 @@ p i{font-style:normal;color:var(--coral);font-weight:500}
   color:var(--apagado);margin:1.5rem 0 0
 }
 .legal a{color:var(--cian)}
+
+/* ---- salidas: por el cartel se llega aquí directo, y sin esto el
+   buzón es un callejón sin salida. Arriba la marca lleva a la portada,
+   y abajo están las cuatro puertas de la web ---- */
+.barra{
+  width:100%;max-width:38rem;display:flex;align-items:center;gap:1rem;
+  justify-content:space-between;margin:0 0 clamp(1.25rem,4vw,2rem)
+}
+.barra__marca{
+  font-weight:500;font-size:1rem;letter-spacing:-.01em;color:var(--texto);text-decoration:none
+}
+.barra__marca span{color:var(--cian)}
+.barra__marca:hover{color:var(--cian)}
+.barra__cta{
+  font-family:var(--mono);font-weight:500;font-size:.7rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--cian);text-decoration:none;white-space:nowrap;
+  border:1.5px solid rgba(13,111,146,.4);border-radius:999px;padding:.4rem .8rem
+}
+.barra__cta:hover{background:rgba(13,111,146,.08)}
+.salidas__t{
+  font-family:var(--mono);font-weight:500;font-size:.7rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--apagado);margin:0 0 .8rem
+}
+.salidas{display:flex;flex-wrap:wrap;gap:.55rem .9rem;margin:0}
+.salidas a{
+  font-weight:500;font-size:.98rem;letter-spacing:-.01em;color:var(--cian);
+  text-decoration:none;border-bottom:1.5px solid rgba(13,111,146,.35);padding-bottom:.1rem
+}
+.salidas a:hover{color:var(--texto);border-bottom-color:var(--texto)}
+.salidas a:focus-visible,.barra a:focus-visible{outline:2px solid var(--cian);outline-offset:3px}
+/* el bloque de salidas ya trae su filete: el cierre que va detrás no
+   repite otro a dos dedos */
+.salidas-caja + .cierre{border-top:0;margin-top:1.75rem;padding-top:0}
+@media (max-width:26rem){
+  .barra{gap:.6rem}
+  .barra__marca{font-size:.88rem}
+  .barra__cta{font-size:.62rem;padding:.35rem .6rem;letter-spacing:.08em}
+}
 </style>
 </head>
 <body>
+<nav class="barra">
+  <a class="barra__marca" href="/">Sin siglas. Solo <span>compa&ntilde;erxs</span>.</a>
+  <a class="barra__cta" href="/#quiz">&iquest;Nos conoces? Juega</a>
+</nav>
+
 <main class="hoja">
 
   <p class="marca">El buzón · candidatura independiente</p>
@@ -95,7 +143,23 @@ p i{font-style:normal;color:var(--coral);font-weight:500}
       de lo más repetido. Se queda igual en la lista de lo que hay que llevar.</span></li>
   </ul>
 
-  <a class="otra" href="/buzon">Mandar otra cosa</a>
+  <p><b>Ya que estás por aquí:</b> el reto son doce preguntas y tres minutos, y con jugar una
+    vez entras en el sorteo. También puedes mandar otra cosa al buzón, las veces que quieras.</p>
+
+  <p>
+    <a class="otra" href="/#quiz">Juega al reto</a>
+    <a class="otra otra--ghost" href="/buzon">Mandar otra cosa</a>
+  </p>
+
+  <div class="cierre salidas-caja">
+    <p class="salidas__t">Y esto es lo demás que hay en la web</p>
+    <nav class="salidas">
+      <a href="/">La portada</a>
+      <a href="/#equipo">Quiénes somos</a>
+      <a href="/#compromisos">Qué proponemos</a>
+      <a href="/#faq">Dudas</a>
+    </nav>
+  </div>
 
   <div class="cierre">
     <p class="mano">Trabajamos por y para <b>nosotros</b>.<br>Unidos por nuestro futuro.</p>
@@ -103,7 +167,6 @@ p i{font-style:normal;color:var(--coral);font-weight:500}
     <p class="legal">
       Candidatura registrada conforme a la normativa de elecciones sindicales. Esta página la
       hacemos los once candidatos: no es una comunicación de la empresa.
-      Vuelve a <a href="/">sin-siglas.info</a>.
     </p>
   </div>
 
