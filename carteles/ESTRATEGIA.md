@@ -167,7 +167,7 @@ final—, pero **no a tamaño de miniatura en el móvil**, y menos ahora que van
 |---|---|---|---|
 | vie 4 sep | **Primero tú** · el buzón + QR | Apertura: pedimos antes de prometer | Rocío Galindo |
 | lun 7 sep | **A que no nos conoces** · el reto | Enganche: jugar, y de paso escribir al buzón | Mario Aranda |
-| mar 8 sep | **La conciliación no es un favor** | Tema | Leticia Algarra |
+| mar 8 sep | **La flexibilidad, por escrito** | Tema | Leticia Algarra |
 | jue 10 sep | **No te prometemos lo que no podemos** | Lo que pide el buzón, con artículo y límite | Laura Muñoz |
 | vie 11 sep | **Se puede medir** · ambiente y salud | Tema | Raúl Navarro |
 | mar 15 sep | **Que te lo cuenten antes** · comunicación | Tema | José Pablo Fernández |
@@ -207,6 +207,11 @@ apartado 10.
 
 - No prometer subidas de sueldo ni nada que dependa del convenio.
 - No atacar a otras candidaturas. Nuestro argumento se sostiene sin eso.
+- **No atacar a la empresa, y menos a responsables concretos.** Ni «depende de cómo le pille el
+  día a tu responsable», ni «casi nunca se hace bien», ni poner en su boca un «cuando haya
+  presupuesto». Hoy hay flexibilidad y funciona: lo que pedimos es que esté escrita, porque lo
+  escrito no cambia con las personas. El agravio nos quita la razón y encima es falso; el
+  procedimiento se sostiene solo.
 - No usar el correo de empresa, ni las listas, ni el horario de nadie para repartir material.
 - No pedirle a nadie que diga a quién vota, ni preguntarlo, ni insinuarlo.
 - No publicar nada del buzón que permita identificar a quien lo escribió, ni aunque sea
