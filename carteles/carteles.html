@@ -365,6 +365,43 @@ body.solo .cartel.elegido{display:flex}
 }
 .ultimo b{color:var(--coral);font-weight:500}
 
+/* 12 · el rótulo con menos aire: son tres acciones con su límite
+   dentro y el margen de serie no cabe */
+/* 02 · con la cuarta acción dentro, el cartel va al ras: el rótulo, los
+   huecos y los sellos de artículo ceden lo justo para que quepa */
+#c2 .rotulo{margin:18px 0 14px}
+#c2 .acciones{gap:12px}
+#c2 .accion h3{margin-bottom:6px}
+#c2 .ley{margin-top:5px}
+#c2 .limite{margin-top:18px;padding:16px 26px}
+
+#c12 .tapa{padding-bottom:11px;margin-bottom:20px}
+#c12 .rotulo{margin:12px 0 10px}
+#c12 .acciones{gap:12px}
+#c12 .accion h3{margin-bottom:6px}
+#c12 .ley{margin-top:5px}
+#c12 .limite{margin-top:12px;padding:15px 26px}
+#c12 .resto{margin-top:8px}
+#c12 .resto ul{gap:4px}
+#c12 .resto li{gap:16px;padding-bottom:4px}
+
+/* 12 · el resto de lo que ha llegado al buzón, una línea por tema con lo
+   que se puede hacer con él. Va en tipografía pequeña a propósito: no es
+   la propuesta, es la prueba de que no hemos tirado nada */
+.resto{margin:16px 0 0}
+.resto__t{
+  font-family:var(--mono);font-weight:500;font-size:13px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--acento);margin:0 0 9px
+}
+.resto ul{list-style:none;margin:0;padding:0;display:grid;gap:5px}
+.resto li{
+  display:grid;grid-template-columns:1fr auto;gap:20px;align-items:baseline;
+  font-family:var(--mono);font-size:13.5px;line-height:1.3;letter-spacing:.02em;
+  color:var(--apagado);border-bottom:1px solid var(--linea);padding-bottom:5px
+}
+.resto b{color:var(--texto-2);font-weight:500}
+.resto i{font-style:normal;color:var(--cian);text-align:right}
+
 /* 11 · el reto: el cartel es el propio tablero del juego. La pregunta
    que sale es de verdad, y es la única del banco cuya respuesta está
    en el mismo cartel: la esquina de arriba la regala */
@@ -403,17 +440,31 @@ body.solo .cartel.elegido{display:flex}
 }
 .hud__nota b{color:var(--coral);font-weight:600}
 
-/* 11 · las reglas a la izquierda y el QR que lleva al juego */
-.reto{display:grid;grid-template-columns:1fr 156px;gap:40px;align-items:start;margin-top:22px}
-.reto .datos{gap:12px}
-/* el margen que el navegador le pone a <figure> se come 80 px de la
-   columna: aquí se quita, y solo aquí, que el cartel del buzón ya está
-   enviado con su QR grande y no se toca */
-.reto .qr{margin:0}
-.reto .qr img{width:156px;height:156px}
-.reto .qr figcaption{margin-top:11px;font-size:12px;letter-spacing:.08em}
-.reto .qr figcaption i{font-size:16px;margin-bottom:4px}
-.reto .qr figcaption b{font-size:18px;margin-top:4px}
+/* 11 · las dos vías, cada una con su QR: jugar y escribir al buzón.
+   El buzón entra en el cartel del reto porque este se lee con el fin de
+   semana por medio y el buzón cierra el 22; es la única pieza que lleva
+   los dos códigos, y por eso cada uno va de su color: coral el reto,
+   cian el buzón, como en la web */
+.vias{display:grid;grid-template-columns:1fr 1fr;gap:34px;margin-top:24px}
+.via{
+  display:grid;grid-template-columns:132px 1fr;gap:20px;align-items:start;
+  background:var(--panel);border:1px solid var(--linea);
+  border-left:5px solid var(--coral-vivo);border-radius:6px;padding:18px 22px
+}
+.via--buzon{border-left-color:var(--cian-vivo)}
+.via img{display:block;width:132px;height:132px}
+.via__rotulo{
+  font-family:var(--mono);font-weight:500;font-size:13px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--coral);margin:0 0 7px
+}
+.via--buzon .via__rotulo{color:var(--cian)}
+.via__q{font-weight:500;font-size:22px;line-height:1.15;letter-spacing:-.02em;margin:0 0 9px}
+.via__p{font-size:17px;line-height:1.36;color:var(--texto-2);margin:0}
+.via__p b{color:var(--texto);font-weight:500}
+.via__url{
+  font-family:var(--mono);font-size:12.5px;letter-spacing:.04em;color:var(--cian);
+  margin:9px 0 0
+}
 </style>
 </head>
 <body>
@@ -506,36 +557,37 @@ body.solo .cartel.elegido{display:flex}
     </div>
   </div>
 
-  <div class="reto">
-    <ul class="datos">
-      <li>
-        <strong>Se sube rápido</strong>
-        <p>100 por acierto, <b>+50 por rapidez y +100 por racha</b>.</p>
-      </li>
-      <li>
-        <strong>El ranking es público</strong>
-        <p>Dejas un alias y tu mejor marca sale en el tablero, en vivo.</p>
-      </li>
-      <li>
-        <strong>Y hay premio</strong>
-        <p>Pequeño, y <b>se sortea entre todos los que jueguen</b>: con jugar
-          una vez ya entras.</p>
-      </li>
-    </ul>
-    <figure class="qr">
+  <div class="vias">
+    <div class="via">
       <img src="qr-reto.svg" alt="Código QR al reto de la web de la candidatura.">
-      <figcaption><i>Al reto</i>Apunta la cámara<b>sin-siglas.info</b></figcaption>
-    </figure>
+      <div>
+        <p class="via__rotulo">Apunta y juega</p>
+        <p class="via__q">¿Cuánto nos conoces?</p>
+        <p class="via__p">Doce preguntas y <b>el ranking a la vista de todos</b>.</p>
+        <p class="via__url">sin-siglas.info</p>
+      </div>
+    </div>
+    <div class="via via--buzon">
+      <img src="qr-buzon.svg" alt="Código QR al buzón anónimo de la candidatura.">
+      <div>
+        <p class="via__rotulo">Y de paso, escríbenos</p>
+        <p class="via__q">¿Qué cambiarías de tu día a día?</p>
+        <p class="via__p"><b>Anónimo</b>: sin nombre, sin área ni correo. El 22 publicamos lo
+          más repetido.</p>
+        <p class="via__url">sin-siglas.info/buzon</p>
+      </div>
+    </div>
   </div>
 
-  <p class="ultimo"><b>El premio no está condicionado a tu voto</b>, ni a que votes: el reto
-    es solo para que nos pongáis cara. Lo serio, en el buzón, y sigue siendo anónimo.</p>
+  <p class="ultimo"><b>El premio del reto se sortea entre todos los que jueguen</b> y no está
+    condicionado a tu voto, ni a que votes. Del buzón no publicamos nada que permita saber quién
+    lo escribió.</p>
 
   <footer class="pie">
     <div class="compi"><p class="compi__globo">¿Me ganas?</p><canvas data-pose="chuleo" data-tt="200"></canvas></div>
     <div class="pie__medio">
-      <p class="pie__quien">Dónde está el reto</p>
-      <p class="pie__nombres">En la portada de la web <span>&middot; el botón coral</span></p>
+      <p class="pie__quien">Las dos cosas, desde el móvil y en tres minutos</p>
+      <p class="pie__nombres">Once personas, seis áreas<span> &middot; cero siglas</span></p>
     </div>
     <div class="pie__voto">
       <p class="pie__fecha">29 de septiembre</p>
@@ -550,13 +602,13 @@ body.solo .cartel.elegido{display:flex}
 <section class="cartel" id="c2">
   <div class="tapa"><span>Compromiso · Conciliación</span><b>29-S</b></div>
 
-  <h1 class="titular">La conciliación<em>no es un favor.</em></h1>
-  <p class="bajada">
+  <h1 class="titular titular--largo">La conciliación<em>no es un favor.</em></h1>
+  <p class="bajada bajada--ancha">
     Hoy depende de quién sea tu responsable y de cómo le pille el día.
     <b>Eso es lo que queremos que deje de pasar.</b>
   </p>
 
-  <p class="rotulo">Tres cosas que vamos a pedir por escrito</p>
+  <p class="rotulo">Cuatro cosas que vamos a pedir por escrito</p>
   <ul class="acciones">
     <li class="accion">
       <div class="accion__n">01</div>
@@ -585,6 +637,15 @@ body.solo .cartel.elegido{display:flex}
         <span class="ley">art. 20 bis ET · art. 88 LOPDGDD</span>
       </div>
     </li>
+    <li class="accion">
+      <div class="accion__n">04</div>
+      <div class="accion__cuerpo">
+        <h3>Jornada intensiva en julio, no solo en agosto</h3>
+        <p><b>No son menos horas: son las mismas, movidas</b>, y esa distribución la pacta la
+          empresa con la representación. Al calendario del año que viene.</p>
+        <span class="ley">art. 34.2 ET · art. 34.6 ET</span>
+      </div>
+    </li>
   </ul>
 
   <div class="limite">
@@ -598,6 +659,91 @@ body.solo .cartel.elegido{display:flex}
     <div class="pie__medio">
       <p class="pie__quien">Habla con</p>
       <p class="pie__nombres">Leticia Algarra <span>·</span> Rocío Galindo</p>
+    </div>
+    <div class="pie__voto">
+      <p class="pie__fecha">29 de septiembre</p>
+      <p class="pie__url">sin-siglas.info</p>
+    </div>
+  </footer>
+</section>
+
+<!-- ==================================================================
+     PROPUESTAS SIN FALSAS EXPECTATIVAS · jueves 10 de septiembre
+     lo manda Laura Muñoz
+     ------------------------------------------------------------------
+     La pieza que contesta a lo que más se repite en el buzón, que es
+     justo lo que un comité no puede decretar: sueldo, trienios y las
+     diferencias que dejó la fusión. Cada acción lleva el artículo que
+     la sostiene y el límite dicho en la misma línea.
+
+     No menciona a ninguna otra candidatura, y no hace falta: el
+     argumento se sostiene solo, que es la regla del apartado 6 de
+     ESTRATEGIA.md. Las cifras del rótulo son las respuestas reales del
+     buzón a día 8 -- once, cinco de ellas sobre sueldo -- y hay que
+     actualizarlas si se envía más tarde.
+     ================================================================== -->
+<section class="cartel" id="c12">
+  <div class="tapa"><span>Sin falsas expectativas</span><b>29-S</b></div>
+
+  <h1 class="titular titular--largo">No te prometemos<em>lo que no podemos.</em></h1>
+  <p class="bajada bajada--ancha">
+    <b>No queremos crearte falsas expectativas</b>: un comité no firma tu nómina. Esto es lo que
+    sí podemos hacer, con artículo y con plazo.
+  </p>
+
+  <p class="rotulo">De las once respuestas del buzón, cinco hablan de dinero</p>
+  <ul class="acciones">
+    <li class="accion">
+      <div class="accion__n">01</div>
+      <div class="accion__cuerpo">
+        <h3>El poder adquisitivo, lo más repetido</h3>
+        <p>Pediremos <b>abrir por escrito una negociación de empresa sobre la revisión
+          salarial</b> y publicaremos la respuesta. El primer mes.</p>
+        <span class="ley">art. 87.1 ET</span>
+      </div>
+    </li>
+    <li class="accion">
+      <div class="accion__n">02</div>
+      <div class="accion__cuerpo">
+        <h3>Los trienios que se come el complemento</h3>
+        <p>Pediremos <b>qué regla de absorción se aplica y en qué se apoya</b>, y la
+          contrastaremos con el convenio. Si está mal aplicada, se reclama.</p>
+        <span class="ley">art. 26.5 ET &middot; art. 64.7.a ET</span>
+      </div>
+    </li>
+    <li class="accion">
+      <div class="accion__n">03</div>
+      <div class="accion__cuerpo">
+        <h3>Las diferencias que dejó la fusión</h3>
+        <p>El registro retributivo lo incluye todo y la representación puede verlo <b>entero</b>:
+          os diremos qué diferencias hay de verdad, sin nombres.</p>
+        <span class="ley">art. 28.2 ET &middot; RD 902/2020</span>
+      </div>
+    </li>
+  </ul>
+
+  <div class="limite">
+    <h4>Lo que no podemos</h4>
+    <p>El IPC o igualar por arriba <b>los decide la empresa</b>, no el comité. <b>Y por abajo no
+      se iguala sin informe nuestro.</b> <span class="ley">art. 64.5 ET</span></p>
+  </div>
+
+  <div class="resto">
+    <p class="resto__t">Y lo demás que nos habéis escrito, sin descartar nada</p>
+    <ul>
+      <li><span><b>Jornada intensiva en julio</b>, no solo en agosto</span><i>acción 04 de conciliación</i></li>
+      <li><span><b>Que el cliente no marque el día a día</b> de quien programa</span><i>informe previo &middot; art. 64.5 ET</i></li>
+      <li><span><b>Preguntar al equipo al cerrar cada proyecto</b>: carga, agobios y lo que salió mal</span><i>a la evaluación psicosocial</i></li>
+      <li><span><b>Más responsabilidad</b> —varios proyectos a la vez— <b>con la subida que le toca</b></span><i>va con la 01</i></li>
+      <li><span><b>Herramientas</b>: WSL y Windows</span><i>no es de comité: lo trasladamos</i></li>
+    </ul>
+  </div>
+
+  <footer class="pie">
+    <div class="compi"><p class="compi__globo">Sin humo.</p><canvas data-pose="quieto" data-tt="900"></canvas></div>
+    <div class="pie__medio">
+      <p class="pie__quien">Habla con</p>
+      <p class="pie__nombres">Laura Muñoz <span>&middot;</span> Raúl Navarro</p>
     </div>
     <div class="pie__voto">
       <p class="pie__fecha">29 de septiembre</p>

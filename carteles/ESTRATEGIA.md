@@ -53,7 +53,7 @@ el giro de la campaña.
 |---|---|---|
 | Marca | Sin siglas. Solo compañerxs. | Web + A3 (ya hechos) |
 | Temas | Tres acciones concretas por compromiso | `conciliacion`, `ambiente`, `comunicacion` |
-| Prueba | Que somos comprobables y honestos | `buzon`, `lo-que-no-podemos`, `voces-del-buzon`, `semaforo` |
+| Prueba | Que somos comprobables y honestos | `buzon`, `lo-que-no-podemos`, `voces-del-buzon`, `semaforo`, `propuestas` |
 | Conversión | Cómo, cuándo y por qué votar | `donde-encontrarnos`, `por-que-votar`, `ultima-llamada` |
 | Enganche | Entra en la web y quédate tres minutos | `reto` |
 
@@ -145,8 +145,19 @@ Dos reglas que no son de diseño:
    funcionan.** Un cartel que invita a jugar y lleva a una página caída hace el mismo daño que un
    QR roto.
 
-El QR del cartel decodifica impreso y en pantalla de ordenador, pero **no a tamaño de miniatura
-en el móvil**: quien lo mande pega también el enlace en el mensaje.
+**El cartel lleva los dos QR: el del reto y el del buzón.** Es la única pieza de la serie con
+dos códigos, y no es un descuido. El buzón se abrió el día 4 y el pago llega el 22; en medio hay
+un fin de semana y ninguna pieza que lo recuerde, así que el envío que sí va a abrir la gente
+—porque trae un juego— lleva también la petición de que escriban. El reto manda en el titular y
+en el tablero; el buzón es la segunda puerta, con su color cian y su pregunta, la misma del
+formulario.
+
+Ojo con lo que dice de cada uno: el buzón **no cierra el 22**, sigue abierto después del 29. Lo
+del 22 es que publicamos lo más repetido, y así está escrito en el cartel.
+
+Los dos QR decodifican impresos y en pantalla de ordenador —comprobado leyéndolos del PNG
+final—, pero **no a tamaño de miniatura en el móvil**, y menos ahora que van a 132 px en vez de
+156. Quien lo mande pega también los dos enlaces en el mensaje.
 
 ---
 
@@ -155,8 +166,9 @@ en el móvil**: quien lo mande pega también el enlace en el mensaje.
 | Día | Pieza | Rol | Quién la manda |
 |---|---|---|---|
 | vie 4 sep | **Primero tú** · el buzón + QR | Apertura: pedimos antes de prometer | Rocío Galindo |
-| lun 7 sep | **A que no nos conoces** · el reto | Enganche: entrar en la web y jugar | Mario Aranda |
+| lun 7 sep | **A que no nos conoces** · el reto | Enganche: jugar, y de paso escribir al buzón | Mario Aranda |
 | mar 8 sep | **La conciliación no es un favor** | Tema | Leticia Algarra |
+| jue 10 sep | **No te prometemos lo que no podemos** | Lo que pide el buzón, con artículo y límite | Laura Muñoz |
 | vie 11 sep | **Se puede medir** · ambiente y salud | Tema | Raúl Navarro |
 | mar 15 sep | **Que te lo cuenten antes** · comunicación | Tema | José Pablo Fernández |
 | jue 17 sep | **Lo que un comité no te va a conseguir** | Diferenciación por honestidad | Mario Barchéin |
@@ -218,6 +230,33 @@ La respuesta del buzón es la única métrica que se puede leer en tiempo real y
 cambia el material: si el día 12 la conciliación se lleva la mitad de las respuestas, el cartel
 06 abre con eso y el 07 lo pone primero en el tablero.
 
+**Lo que hay a 8 de septiembre: once respuestas en cuatro días.** Cinco hablan de dinero —IPC y
+pérdida de poder adquisitivo, y dos de ellas de que los trienios se absorben con el complemento
+de empresa—, tres de jornada de verano y calor por las tardes, y las otras tres de carga de
+trabajo, de preguntar al equipo al cerrar un proyecto y de herramientas. Van seis temas
+distintos, que era el objetivo, y el ritmo llega a las 25 si no se para.
+
+Eso ha cambiado dos cosas del plan. Una: **el tema más pedido es justo el que un comité no puede
+decretar**, y de ahí sale la pieza del día 10. Dos: `conciliacion` pasa de tres acciones a cuatro
+y entra la **jornada intensiva en julio, no solo en agosto**, que es lo más pedido del buzón en
+horarios y no estaba.
+
+La cuarta acción se apoya en que la intensiva **no es reducir jornada, es redistribuirla**: son
+las mismas horas del año movidas, y esa distribución se pacta entre la empresa y la representación
+(art. 34.2 ET), con el calendario laboral anual como sitio donde ponerlo (art. 34.6 ET). Por eso
+se puede pedir sin prometer nada que cueste dinero, y por eso no se mezcla con «jornada más
+corta», que sí es convenio.
+
+Y tres: `propuestas` cierra con **una línea por cada tema que ha llegado y no es de dinero**, con
+lo que se puede hacer con él —dónde está pedido, con qué artículo se lleva, o que no es materia de
+comité y aun así se traslada—. Son cinco líneas en tipografía pequeña y no son la propuesta: son
+la prueba de que no se ha tirado nada. Quien escribió del calor, del cliente que marca el día a
+día o de las herramientas se tiene que reconocer en el cartel, o el buzón deja de recibir
+respuestas.
+
+Ojo con las etiquetas: *ya está pedido* es del cartel del día 22 y significa pedido **a la
+empresa**. Todavía no hay comité, así que aquí no se usa: se dice en qué cartel está la acción.
+
 ---
 
 ## 8. Base legal de las propuestas
@@ -241,6 +280,9 @@ lista completa, para que cualquiera de los once la pueda defender si le pregunta
 | Sigilo sobre la información confidencial | art. 65.2 ET |
 | Duración del mandato: cuatro años | art. 67.3 ET |
 | Permiso de 20 horas anuales de formación | art. 23 ET |
+| Pedir la apertura de una negociación de empresa | art. 87.1 ET (el comité está legitimado para negociar) |
+| Comprobar la absorción de los trienios | art. 26.5 ET (compensación y absorción) |
+| Vigilar el cumplimiento y reclamar si no se cumple | art. 64.7.a ET (vigilancia y acciones legales) |
 
 ---
 
