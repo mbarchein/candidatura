@@ -248,8 +248,10 @@ se puede pedir sin prometer nada que cueste dinero, y por eso no se mezcla con �
 corta», que sí es convenio.
 
 Y tres: `propuestas` cierra con **una línea por cada tema que ha llegado y no es de dinero**, con
-lo que se puede hacer con él —dónde está pedido, con qué artículo se lleva, o que no es materia de
-comité y aun así se traslada—. Son cinco líneas en tipografía pequeña y no son la propuesta: son
+lo que se puede hacer con él —qué se pide, con qué artículo, o que no es materia de comité y aun
+así se traslada—. **Ninguna respuesta remite a otro cartel ni a otra acción**: cada línea dice el
+acto concreto y su artículo, porque «acción 04 de conciliación» obliga a buscar y se lee como un
+índice, no como un compromiso. Son cinco líneas en tipografía pequeña y no son la propuesta: son
 la prueba de que no se ha tirado nada. Quien escribió del calor, del cliente que marca el día a
 día o de las herramientas se tiene que reconocer en el cartel, o el buzón deja de recibir
 respuestas.
