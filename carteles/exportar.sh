@@ -68,6 +68,18 @@ if [ "${1:-}" = "diptico" ]; then
     --virtual-time-budget=5000 --screenshot="$destino" \
     "file://$FUENTE?d=$IZQ,$DER" 2>/dev/null
   printf '%s · %s\n' "$(basename "$destino")" "$(file -b "$destino" | cut -d, -f2 | tr -d ' ')"
+
+  # el PDF va en vector y a tamaño nativo (571,5 x 357,2 mm): la imprenta lo
+  # ajusta a A3 apaisado sin perder nitidez. Solo se saca una vez, no por
+  # escala, porque el vector no tiene resolución
+  if [ "$ESCALA" = "1" ]; then
+    pdf="$AQUI/diptico-${NOMBRE[$IZQ]}-${NOMBRE[$DER]}.pdf"
+    google-chrome --headless --disable-gpu --user-data-dir="$PERFIL" \
+      --allow-file-access-from-files --virtual-time-budget=5000 \
+      --no-pdf-header-footer --print-to-pdf="$pdf" \
+      "file://$FUENTE?d=$IZQ,$DER" 2>/dev/null
+    printf '%s · %s\n' "$(basename "$pdf")" "$(file -b "$pdf" | cut -d, -f1)"
+  fi
   exit 0
 fi
 

@@ -72,6 +72,16 @@ body.diptico .cartel{display:none}
 body.diptico .cartel.elegido{display:flex}
 body.diptico .cartel.elegido + .cartel.elegido{box-shadow:inset 2px 0 0 var(--linea-fuerte)}
 
+/* el díptico en PDF: la página se pide del tamaño exacto del lienzo
+   -- 2160x1350 px a 96 ppp son 571,5 x 357,2 mm -- para que no haya que
+   escalar ni recortar nada. El texto va en vector, así que la imprenta lo
+   ajusta a A3 o a A2 sin perder nitidez */
+@media print{
+  @page{size:571.5mm 357.2mm;margin:0}
+  html,body{width:2160px;height:1350px}
+  body.diptico{overflow:hidden}
+}
+
 /* ---------------- el lienzo ---------------- */
 .cartel{
   width:var(--w);height:var(--h);flex:0 0 auto;overflow:hidden;position:relative;
