@@ -167,7 +167,7 @@ final—, pero **no a tamaño de miniatura en el móvil**, y menos ahora que van
 |---|---|---|---|
 | vie 4 sep | **Primero tú** · el buzón + QR | Apertura: pedimos antes de prometer | Rocío Galindo |
 | lun 7 sep | **A que no nos conoces** · el reto | Enganche: jugar, y de paso escribir al buzón | Mario Aranda |
-| mar 8 sep | **La flexibilidad, por escrito** | Tema | Leticia Algarra |
+| mar 8 sep | **La conciliación no es un favor** | Tema | Leticia Algarra |
 | jue 10 sep | **No te prometemos lo que no podemos** | Lo que pide el buzón, con artículo y límite | Laura Muñoz |
 | vie 11 sep | **Se puede medir** · ambiente y salud | Tema | Raúl Navarro |
 | mar 15 sep | **Que te lo cuenten antes** · comunicación | Tema | José Pablo Fernández |
