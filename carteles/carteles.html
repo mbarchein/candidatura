@@ -365,6 +365,27 @@ body.solo .cartel.elegido{display:flex}
 }
 .ultimo b{color:var(--coral);font-weight:500}
 
+/* 13 · el programa entero en un cartel: cada petición en una línea con su
+   artículo debajo, en dos columnas y un bloque ancho al final. Es la pieza
+   para ir con cosas concretas cuando llevas días sin mandar nada, y por eso
+   dice lo que no vamos a prometer en el mismo sitio */
+.programa{display:grid;grid-template-columns:1fr 1fr;gap:15px 34px;margin-top:18px}
+.grupo--ancho{grid-column:1/-1}
+.grupo h3{
+  font-family:var(--mono);font-weight:500;font-size:13.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--acento);margin:0 0 11px;
+  border-bottom:2px solid var(--linea-fuerte);padding-bottom:6px
+}
+.grupo--coral h3{color:var(--coral);border-bottom-color:rgba(191,63,47,.32)}
+.grupo ul{list-style:none;margin:0;padding:0;display:grid;gap:9px}
+.grupo--ancho ul{grid-template-columns:1fr 1fr;gap:10px 34px}
+.grupo li{font-size:17.5px;line-height:1.26;letter-spacing:-.01em;color:var(--texto-2)}
+.grupo li b{color:var(--texto);font-weight:500}
+.grupo li i{
+  font-style:normal;display:block;margin-top:2px;
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.05em;color:var(--cian)
+}
+
 /* 12 · el rótulo con menos aire: son tres acciones con su límite
    dentro y el margen de serie no cabe */
 /* 02 · con la cuarta acción dentro, el cartel va al ras: el rótulo, los
@@ -764,6 +785,88 @@ body.solo .cartel.elegido{display:flex}
     <div class="pie__medio">
       <p class="pie__quien">Habla con</p>
       <p class="pie__nombres">Laura Muñoz <span>&middot;</span> Raúl Navarro</p>
+    </div>
+    <div class="pie__voto">
+      <p class="pie__fecha">29 de septiembre</p>
+      <p class="pie__url">sin-siglas.info</p>
+    </div>
+  </footer>
+</section>
+
+<!-- ==================================================================
+     EL PROGRAMA EN UN CARTEL · lo firman los once
+     ------------------------------------------------------------------
+     La pieza para ir con cosas concretas: doce peticiones de una línea
+     con su artículo, en vez de dos carteles de tema pegados, que no
+     caben. Tres de ellas no las lleva nadie más -- el acuerdo de
+     trabajo a distancia con gastos, las 20 horas de formación y el
+     registro de jornada publicado.
+
+     No sustituye a los carteles de tema: los resume. Si se manda este
+     primero, los de tema siguen valiendo después, porque cada uno
+     desarrolla tres o cuatro de estas líneas.
+     ================================================================== -->
+<section class="cartel" id="c13">
+  <div class="tapa"><span>El programa, en un cartel</span><b>29-S</b></div>
+
+  <h1 class="titular">Esto es lo que<em>vamos a pedir.</em></h1>
+  <p class="bajada bajada--ancha">
+    <b>No prometemos lo que no se puede cumplir.</b> Esto es lo que sí se puede pedir, y con qué
+    artículo se pide.
+  </p>
+
+  <div class="programa">
+    <div class="grupo">
+      <h3>Tu día a día</h3>
+      <ul>
+        <li><b>Un protocolo de flexibilidad y trabajo a distancia, escrito</b>: qué se pide, a
+          quién, y en cuántos días te contestan.<i>art. 34.8 ET</i></li>
+        <li><b>Jornada intensiva en julio</b>, no solo en agosto: son las mismas horas,
+          movidas.<i>art. 34.2 ET · art. 34.6 ET</i></li>
+        <li><b>Una ventana horaria</b> en la que nadie tiene que contestar.<i>art. 20 bis ET</i></li>
+        <li><b>El acuerdo de trabajo a distancia firmado, con los gastos compensados</b> y con
+          copia al comité.<i>Ley 10/2021, arts. 7, 12 y 6.2</i></li>
+      </ul>
+    </div>
+
+    <div class="grupo grupo--coral">
+      <h3>Tu dinero y tu carrera</h3>
+      <ul>
+        <li><b>Abrir una negociación de empresa sobre la revisión salarial</b>, y publicar la
+          respuesta.<i>art. 87.1 ET</i></li>
+        <li><b>Qué regla de absorción se aplica a los trienios</b>, por escrito. Si está mal
+          aplicada, se reclama.<i>art. 26.5 ET · art. 64.7.a ET</i></li>
+        <li><b>El registro retributivo entero</b>: qué diferencias dejó la fusión, sin
+          nombres.<i>art. 28.2 ET · RD 902/2020</i></li>
+        <li><b>Las 20 horas de formación al año</b>, que ya son un permiso retribuido y casi nadie
+          usa.<i>art. 23.3 ET</i></li>
+      </ul>
+    </div>
+
+    <div class="grupo grupo--ancho">
+      <h3>Y que se pueda comprobar</h3>
+      <ul>
+        <li><b>Informe previo del comité</b> antes de aplicar cualquier cambio.<i>art. 64.5 ET</i></li>
+        <li><b>El registro de jornada cada trimestre</b>, con el resumen por área.<i>art. 34.9 ET</i></li>
+        <li><b>Acta de cada reunión en el tablón</b>, y los datos de la casa cada trimestre.<i>art. 81 ET · art. 64 ET</i></li>
+        <li><b>Evaluación de riesgos psicosociales con método validado</b>, y plan con fechas.<i>art. 16 LPRL · RD 39/1997</i></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="limite">
+    <h4>Lo que no vamos a prometer</h4>
+    <p>No subimos sueldos ni firmamos cláusulas de IPC, y <b>una condición que otro tenga en su
+      contrato no se pasa por acta</b>. Nadie puede eso sin la firma de la empresa.</p>
+  </div>
+  <p class="ultimo"><b>El buzón sigue abierto</b>, y seguirá abierto después del 29
+    &middot; sin-siglas.info/buzon</p>
+
+  <footer class="pie">
+    <div class="compi"><p class="compi__globo">Todo con su artículo.</p><canvas data-pose="quieto" data-tt="900"></canvas></div>
+    <div class="pie__medio">
+      <p class="pie__quien">Lo firmamos los once</p>
+      <p class="pie__nombres">Once personas, seis áreas<span> &middot; cero siglas</span></p>
     </div>
     <div class="pie__voto">
       <p class="pie__fecha">29 de septiembre</p>

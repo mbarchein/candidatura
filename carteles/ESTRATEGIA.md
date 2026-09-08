@@ -53,6 +53,7 @@ el giro de la campaña.
 |---|---|---|
 | Marca | Sin siglas. Solo compañerxs. | Web + A3 (ya hechos) |
 | Temas | Tres acciones concretas por compromiso | `conciliacion`, `ambiente`, `comunicacion` |
+| Programa | Las doce peticiones juntas, con su artículo | `lo-que-pedimos` |
 | Prueba | Que somos comprobables y honestos | `buzon`, `lo-que-no-podemos`, `voces-del-buzon`, `semaforo`, `propuestas` |
 | Conversión | Cómo, cuándo y por qué votar | `donde-encontrarnos`, `por-que-votar`, `ultima-llamada` |
 | Enganche | Entra en la web y quédate tres minutos | `reto` |
@@ -187,6 +188,25 @@ panel del final se titula **«no prometemos lo que no se puede»** y debajo va u
 buzón sigue abierto y seguirá abierto después del 29. Así la primera pieza de tema ya trae el tono
 de toda la campaña, y no hay que esperar al día 10 para que alguien lo lea.
 
+### El atasco del 8 de septiembre
+
+**A día 8 no se ha enviado nada desde la presentación de la lista.** El buzón salió el día 4 y
+recogió once respuestas; después, nada. Eso deja el calendario de este apartado como una
+intención y no como un registro, y crea un problema que no se arregla mandando más rápido: de
+aquí al 25 quedan **nueve huecos de envío** y hay **doce piezas hechas**. No caben, y meterlas a
+tres por semana convierte la campaña en publicidad, que es justo lo que no somos.
+
+De ahí sale `lo-que-pedimos`: las doce peticiones en un cartel, cada una en una línea con su
+artículo. **Resume los tres carteles de tema**, así que permite no enviar alguno de ellos y dejar
+los huecos para lo que nadie más puede mandar —el pago del buzón, el semáforo, la honestidad y la
+movilización final—. Tres de sus líneas no las lleva ninguna otra candidatura: el acuerdo escrito
+de trabajo a distancia con los gastos compensados, las veinte horas de formación que ya son un
+permiso retribuido, y el registro de jornada publicado por área.
+
+Queda fuera, y a propósito: el **protocolo de acoso y el canal interno de denuncias**. Los dos son
+obligatorios y se negocian con la representación, así que son buena propuesta, pero no material de
+cartel: van al programa escrito y se hablan en la asamblea.
+
 **El reto es la excepción al ritmo de martes y viernes**, y va suelto un lunes a propósito: el
 juego y el ranking ya están publicados, y cuanto antes se mande, más margen tiene el tablero para
 llenarse antes de cerrar el sorteo. No sustituye a ninguna pieza de tema.
@@ -299,10 +319,12 @@ lista completa, para que cualquiera de los once la pueda defender si le pregunta
 | Información periódica de plantilla, contratos y siniestralidad | art. 64 ET |
 | Tablón de anuncios de la representación | art. 81 ET |
 | Acceso al registro retributivo y a la auditoría retributiva | art. 28.2 ET · RD 902/2020 |
+| Acuerdo escrito de trabajo a distancia, con gastos compensados | Ley 10/2021, arts. 7, 11 y 12 |
+| Copia al comité de todos los acuerdos de trabajo a distancia | Ley 10/2021, art. 6.2 (diez días) |
 | Convocar asamblea de plantilla | arts. 77–80 ET |
 | Sigilo sobre la información confidencial | art. 65.2 ET |
 | Duración del mandato: cuatro años | art. 67.3 ET |
-| Permiso de 20 horas anuales de formación | art. 23 ET |
+| Permiso retribuido de 20 horas anuales de formación | art. 23.3 ET |
 | Pedir la apertura de una negociación de empresa | art. 87.1 ET (el comité está legitimado para negociar) |
 | Comprobar la absorción de los trienios | art. 26.5 ET (compensación y absorción) |
 | Vigilar el cumplimiento y reclamar si no se cumple | art. 64.7.a ET (vigilancia y acciones legales) |
