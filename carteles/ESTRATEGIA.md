@@ -257,6 +257,12 @@ respuestas.
 Ojo con las etiquetas: *ya está pedido* es del cartel del día 22 y significa pedido **a la
 empresa**. Todavía no hay comité, así que aquí no se usa: se dice en qué cartel está la acción.
 
+Y la tira cierra con **«el buzón sigue abierto, y seguirá abierto después del 29»**, en tipografía
+de cuerpo y no en mono pequeño. Sin esa línea, cinco temas resueltos en letra chica con la
+respuesta a la derecha se leen como un cajón donde va lo que no interesa; con ella, se leen como
+un acuse de recibo de algo que sigue en marcha. Es la diferencia entre cerrar la conversación y
+mantenerla abierta, que es de lo que vive el buzón.
+
 ---
 
 ## 8. Base legal de las propuestas

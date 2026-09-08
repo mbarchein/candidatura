@@ -375,15 +375,15 @@ body.solo .cartel.elegido{display:flex}
 #c2 .ley{margin-top:5px}
 #c2 .limite{margin-top:18px;padding:16px 26px}
 
-#c12 .tapa{padding-bottom:11px;margin-bottom:20px}
-#c12 .rotulo{margin:12px 0 10px}
-#c12 .acciones{gap:12px}
+#c12 .tapa{padding-bottom:11px;margin-bottom:16px}
+#c12 .rotulo{margin:10px 0 8px}
+#c12 .acciones{gap:9px}
 #c12 .accion h3{margin-bottom:6px}
 #c12 .ley{margin-top:5px}
-#c12 .limite{margin-top:12px;padding:15px 26px}
-#c12 .resto{margin-top:8px}
-#c12 .resto ul{gap:4px}
-#c12 .resto li{gap:16px;padding-bottom:4px}
+#c12 .limite{margin-top:10px;padding:12px 26px}
+#c12 .resto{margin-top:6px}
+#c12 .resto ul{gap:3px}
+#c12 .resto li{gap:16px;padding-bottom:3px}
 
 /* 12 · el resto de lo que ha llegado al buzón, una línea por tema con lo
    que se puede hacer con él. Va en tipografía pequeña a propósito: no es
@@ -401,6 +401,10 @@ body.solo .cartel.elegido{display:flex}
 }
 .resto b{color:var(--texto-2);font-weight:500}
 .resto i{font-style:normal;color:var(--cian);text-align:right}
+.resto__abierto{
+  margin:11px 0 0;font-size:18px;line-height:1.35;letter-spacing:-.01em;color:var(--texto-2)
+}
+.resto__abierto b{color:var(--cian);font-weight:500}
 
 /* 11 · el reto: el cartel es el propio tablero del juego. La pregunta
    que sale es de verdad, y es la única del banco cuya respuesta está
@@ -729,7 +733,7 @@ body.solo .cartel.elegido{display:flex}
   </div>
 
   <div class="resto">
-    <p class="resto__t">Y lo demás que nos habéis escrito, sin descartar nada</p>
+    <p class="resto__t">Lo demás que nos habéis escrito, y qué se puede hacer con cada cosa</p>
     <ul>
       <li><span><b>Jornada intensiva en julio</b>, no solo en agosto</span><i>acción 04 de conciliación</i></li>
       <li><span><b>Que el cliente no marque el día a día</b> de quien programa</span><i>informe previo &middot; art. 64.5 ET</i></li>
@@ -737,6 +741,8 @@ body.solo .cartel.elegido{display:flex}
       <li><span><b>Más responsabilidad</b> —varios proyectos a la vez— <b>con la subida que le toca</b></span><i>va con la 01</i></li>
       <li><span><b>Herramientas</b>: WSL y Windows</span><i>no es de comité: lo trasladamos</i></li>
     </ul>
+    <p class="resto__abierto"><b>El buzón sigue abierto, y seguirá abierto después del 29.</b>
+      Lo que no entre hoy, entra luego.</p>
   </div>
 
   <footer class="pie">
