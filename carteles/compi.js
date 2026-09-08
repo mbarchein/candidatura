@@ -368,6 +368,19 @@ function pintaCompi(canvas, modo, tt, esc, op){
   brazo(1, ty, inc, E.bD);
   if(E.nota)   glifo("nota",   CX+8, hy-4, "C");
   if(E.admira) glifo("admira", CX+7, hy-5, "R");
+
+  /* detalles flotantes -- corazón, chispas, gotón de sudor, lágrimas,
+     estrellas, polvo -- solo si se piden con op.extras. Los carteles no los
+     piden, así que su render no cambia ni un píxel; los GIF sí, que ahí el
+     corazón del saludo y la gota del cansancio son media gracia */
+  if(op.extras){
+    if(E.corazon)  glifo("corazon", CX+7, hy-3, "R");
+    if(E.chispa){  glifo("chispa",  CX+7, hy-5, "C"); glifo("chispa", CX-10, hy-2, "C"); }
+    if(E.gota)     glifo("gota",    CX+6, hy+2, "C");
+    if(E.estrellas){ glifo("estrella", CX+6, hy-4, "R"); glifo("estrella", CX-10, hy-3, "C"); }
+    if(E.llanto){  glifo("gota",    CX-7, hy+8, "C");  glifo("gota", CX+6, hy+8, "C"); }
+    if(E.polvo){   glifo("polvo",   CX-9, PISO-2, "V"); glifo("polvo", CX+7, PISO-2, "V"); }
+  }
   contorno();
 
   /* la sombra del suelo, igual que en la web pero sin el aire del salto */

@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>GIF de Compi</title>
+<link rel="stylesheet" href="tipos.css">
+<style>
+/* ==================================================================
+   LOS GIF DE COMPI · una tira de fotogramas por GIF
+   ------------------------------------------------------------------
+   Esta página no se manda a nadie: es el fotolito. Con ?g=2 pinta
+   todos los fotogramas de ese GIF seguidos en horizontal, y gifs.py
+   captura la tira de una sola pasada y la corta.
+
+   Cada pose de compi.js es cíclica: el fotograma i se pinta en
+   tt = i * paso, donde paso es lo que dura un cuadro dentro de la pose.
+   El tiempo que se ve cada cuadro en el GIF es otra cosa (dur), porque
+   una pose de dos cuadros a su velocidad natural parpadea.
+
+   Sin ?g sale todo junto, para revisarlo de una pasada.
+   ================================================================== */
+:root{
+  --papel:#f6f2ea; --panel:#fffdf9;
+  --texto:#191820; --apagado:#5e574e; --apagado-2:#8a8177;
+  --cian:#0d6f92; --coral:#bf3f2f;
+  --linea-fuerte:rgba(74,58,46,.32);
+  --display:"Gellix","Helvetica Neue",Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  --mano:"Caveat",cursive;
+}
+*{box-sizing:border-box}
+html{color-scheme:light}
+body{margin:0;background:#e4ded3;font-family:var(--display);
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+body.tira{background:var(--papel)}
+
+.tira{display:flex;align-items:flex-start}
+.cuadro{
+  width:400px;height:380px;flex:0 0 auto;background:var(--papel);
+  display:flex;flex-direction:column;align-items:center;justify-content:space-between;
+  padding:20px 16px 14px;overflow:hidden
+}
+/* el globo, el mismo de los carteles pero centrado y con el rabito abajo */
+.globo{
+  position:relative;max-width:340px;margin:0;text-align:center;
+  font-family:var(--mano);font-size:30px;line-height:1.1;color:var(--texto);
+  background:var(--panel);border:2px solid var(--linea-fuerte);border-radius:16px;
+  padding:10px 18px 12px
+}
+.globo::after{
+  content:"";position:absolute;left:50%;bottom:-9px;width:12px;height:12px;
+  margin-left:-6px;background:var(--panel);
+  border-right:2px solid var(--linea-fuerte);border-bottom:2px solid var(--linea-fuerte);
+  transform:rotate(45deg)
+}
+.cuadro canvas{display:block;image-rendering:pixelated}
+.marca{
+  font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--apagado-2);
+  margin:0
+}
+.marca b{color:var(--coral);font-weight:500;letter-spacing:.14em}
+
+/* revisión: los GIF uno debajo de otro con su nombre */
+.todos{display:grid;gap:26px;padding:26px}
+.fila{background:var(--papel);border:1px solid var(--linea-fuerte);border-radius:8px;overflow:hidden}
+.fila h2{
+  font-family:var(--mono);font-size:13px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--cian);margin:0;padding:12px 18px;border-bottom:1px solid var(--linea-fuerte)
+}
+.fila .tira{overflow-x:auto}
+</style>
+</head>
+<body>
+<script src="compi.js"></script>
+<script>
+/* ------------------------------------------------------------------
+   Los siete GIF. paso = lo que dura un cuadro dentro de la pose (de
+   compi.js), n = cuántos cuadros tiene el ciclo, dur = lo que se ve
+   cada cuadro en el GIF.
+   ------------------------------------------------------------------ */
+const GIFS = [
+  { nombre:"hola",        pose:"saluda",  n:2,  paso:150, dur:320, frase:"¡Hola, compi!" },
+  { nombre:"29-s",        pose:"baile",   n:4,  paso:165, dur:165, frase:"El 29 se vota." },
+  { nombre:"me-ganas",    pose:"chuleo",  n:2,  paso:190, dur:380, frase:"¿A que no me ganas?" },
+  { nombre:"toma-ya",     pose:"celebra", n:2,  paso:115, dur:140, frase:"¡Toma ya!" },
+  { nombre:"casi",        pose:"chasco",  n:4,  paso:150, dur:190, frase:"Otra vez casi." },
+  { nombre:"ya-no-leo",   pose:"cansado", n:4,  paso:1100, dur:420, frase:"Yo a las 19:00 ya no leo." },
+  { nombre:"voy-a-votar", pose:"anda",    n:4,  paso:155, dur:155, frase:"Voy a votar." }
+];
+
+function cuadro(g, i){
+  const d = document.createElement("div");
+  d.className = "cuadro";
+  const globo = document.createElement("p");
+  globo.className = "globo";
+  globo.textContent = g.frase;
+  const c = document.createElement("canvas");
+  const marca = document.createElement("p");
+  marca.className = "marca";
+  marca.innerHTML = "sin-siglas.info &middot; <b>29-S</b>";
+  d.appendChild(globo); d.appendChild(c); d.appendChild(marca);
+  pintaCompi(c, g.pose, i * g.paso, 7, { extras:true });
+  return d;
+}
+
+const params = new URLSearchParams(location.search);
+
+if(params.get("info")){
+  /* gifs.py lee la lista de aquí, para no tenerla escrita en dos sitios */
+  document.title = "SPEC::" + JSON.stringify(GIFS.map(g =>
+    ({ nombre:g.nombre, n:g.n, dur:g.dur, w:400, h:380 })));
+
+} else if(params.get("g") !== null){
+  const g = GIFS[+params.get("g")];
+  document.body.classList.add("tira");
+  const t = document.createElement("div");
+  t.className = "tira";
+  for(let i=0;i<g.n;i++) t.appendChild(cuadro(g, i));
+  document.body.appendChild(t);
+
+} else {
+  const todos = document.createElement("div");
+  todos.className = "todos";
+  GIFS.forEach(g => {
+    const f = document.createElement("div");
+    f.className = "fila";
+    const h = document.createElement("h2");
+    h.textContent = g.nombre + " · " + g.pose + " · " + g.n + " cuadros a " + g.dur + " ms";
+    const t = document.createElement("div");
+    t.className = "tira";
+    for(let i=0;i<g.n;i++) t.appendChild(cuadro(g, i));
+    f.appendChild(h); f.appendChild(t); todos.appendChild(f);
+  });
+  document.body.appendChild(todos);
+}
+</script>
+</body>
+</html>

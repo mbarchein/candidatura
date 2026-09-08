@@ -133,6 +133,32 @@ versión no valiera:
 Coste: dos folios adhesivos. Se reparten a mano y en la hora de comité, nunca dejándolas por las
 mesas de nadie.
 
+**Los siete GIF** son la versión de Compi para el chat, que es donde de verdad se reenvía algo.
+Están en `carteles/gif/`, miden 400 × 380 y pesan entre 10 y 21 KB:
+
+| GIF | Para qué |
+|---|---|
+| `compi-hola` | abrir conversación · saluda y le sale un corazón |
+| `compi-29-s` | recordar la fecha · baila |
+| `compi-me-ganas` | picar a que jueguen al reto · guiño |
+| `compi-toma-ya` | celebrar una buena marca |
+| `compi-casi` | cuando alguien falla el reto · llora |
+| `compi-ya-no-leo` | la desconexión, a las 19:00 · le sale el gotón |
+| `compi-voy-a-votar` | el día 29 · anda |
+
+Se regeneran con `pip install pillow && python3 carteles/gifs.py`. Las frases y los tiempos viven
+en `compi-gifs.html` y no en el script, para no tenerlos escritos en dos sitios: Chrome pinta de
+una pasada la tira con todos los fotogramas de cada GIF y el script la corta y la monta.
+
+Para que los detalles flotantes —corazón, chispas, gota, lágrimas— salieran en los GIF hubo que
+añadirlos a `pintaCompi`, pero **van detrás de `op.extras`**: los carteles no los piden, así que su
+render no cambia ni un píxel. Comprobado reexportando los trece.
+
+Dos cosas al usarlos: llevan `sin-siglas.info` y `29-S` impresos, así que **son propaganda** y les
+aplica igual el cierre del art. 8.4 —nada el lunes 28—. Y WhatsApp convierte los GIF en vídeo en
+bucle al mandarlos desde la galería: se ven igual, pero si alguien los quiere como pegatina hay
+que sacarlos en otro formato.
+
     ./carteles/exportar.sh pegatinas
 
 ### 4.4 El reto · «¿cuánto nos conoces?»
