@@ -63,6 +63,15 @@ body.solo{gap:0;padding:0;background:var(--papel);display:block}
 body.solo .cartel{display:none}
 body.solo .cartel.elegido{display:flex}
 
+/* modo díptico: dos carteles a tamaño completo, uno al lado del otro, en un
+   lienzo de 2160 x 1350. Ninguno pierde protagonismo porque ninguno se
+   recorta: lo que crece es el lienzo. El filete del medio es lo que hace
+   que se lea como dos piezas y no como una imagen partida */
+body.diptico{gap:0;padding:0;background:var(--papel);display:flex;flex-direction:row;align-items:flex-start}
+body.diptico .cartel{display:none}
+body.diptico .cartel.elegido{display:flex}
+body.diptico .cartel.elegido + .cartel.elegido{box-shadow:inset 2px 0 0 var(--linea-fuerte)}
+
 /* ---------------- el lienzo ---------------- */
 .cartel{
   width:var(--w);height:var(--h);flex:0 0 auto;overflow:hidden;position:relative;
@@ -1364,10 +1373,23 @@ body.solo .cartel.elegido{display:flex}
    alrededor: es lo que captura exportar.sh. Sin ?n salen todos
    para revisarlos de un vistazo.
    ================================================================== */
-const pedido = new URLSearchParams(location.search).get("n");
+const params = new URLSearchParams(location.search);
+const pedido = params.get("n");
 if(pedido){
   const uno = document.getElementById("c" + pedido);
   if(uno){ document.body.classList.add("solo"); uno.classList.add("elegido"); }
+}
+
+/* ?d=2,12 saca los dos seguidos, en ese orden y a tamaño completo: es el
+   díptico. El orden lo manda el ?d= y no el fuente, así que las secciones
+   se mueven al final del body en el orden pedido. */
+const dos = params.get("d");
+if(dos){
+  const cuales = dos.split(",").map(n => document.getElementById("c" + n.trim())).filter(Boolean);
+  if(cuales.length === 2){
+    document.body.classList.add("diptico");
+    cuales.forEach(c => { c.classList.add("elegido"); document.body.appendChild(c); });
+  }
 }
 
 /* Compi, una pose congelada por cartel. data-tt elige el fotograma

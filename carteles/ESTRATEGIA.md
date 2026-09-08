@@ -59,7 +59,19 @@ el giro de la campaña.
 | Enganche | Entra en la web y quédate tres minutos | `reto` |
 
 Los carteles nuevos son **1080 × 1350 px, tema claro**, pensados para enviar por el canal
-donde ya se habla. **Ninguno lleva número de orden**: en la esquina va la fecha, `29-S`, que es
+donde ya se habla.
+
+Dos piezas se pueden mandar juntas como **díptico de 2160 × 1350**, las dos a tamaño completo y
+sin recortar nada:
+
+    ./carteles/exportar.sh diptico 2 12        # el de la izquierda, el de la derecha
+    ./carteles/exportar.sh diptico 2 12 2x     # 4320 x 2700, para imprimir
+
+Lo que hay que saber antes de usarlo: en la burbuja de un chat, 2160 px se ven a unos 400 y el
+cuerpo de texto queda en menos de 4 px, o sea que **el díptico obliga a tocar y ampliar**. Sirve
+para correo, para ordenador y para imprimir —en A3 apaisado cada mitad queda casi en A4, a 130
+ppp con la versión normal y a 260 con la `2x`—. Para que se lea de un vistazo en el móvil, el
+formato sigue siendo el vertical de uno en uno. **Ninguno lleva número de orden**: en la esquina va la fecha, `29-S`, que es
 lo único que no cambia y lo que se ve en la miniatura del móvil antes de leer nada. Así se pueden
 reordenar, quitar o añadir piezas sin que las ya enviadas queden mal. Los números del `?n=` del
 fuente son identificadores para poder capturarlos, no el orden de envío.

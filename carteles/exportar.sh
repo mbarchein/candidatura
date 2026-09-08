@@ -51,6 +51,26 @@ if [ "${1:-}" = "pegatinas" ]; then
   exit 0
 fi
 
+# el díptico: dos carteles a tamaño completo, uno al lado del otro, en un
+# lienzo de 2160x1350. Se manda como una sola imagen y se imprime en A3
+# apaisado, donde cada mitad queda casi en A4
+if [ "${1:-}" = "diptico" ]; then
+  IZQ="${2:-2}"; DER="${3:-12}"
+  # el cuarto argumento, 2x, saca 4320x2700: a 2160 px el A3 apaisado sale a
+  # 130 ppp, que se ve blando impreso; al doble va a 260
+  ESCALA=1; SUFIJO=""
+  if [ "${4:-}" = "2x" ]; then ESCALA=2; SUFIJO="-2x"; fi
+  mkdir -p "$SALIDA"
+  destino="$SALIDA/diptico-${NOMBRE[$IZQ]}-${NOMBRE[$DER]}$SUFIJO.png"
+  google-chrome --headless --disable-gpu --hide-scrollbars \
+    --force-device-scale-factor=$ESCALA --window-size=2160,1350 \
+    --user-data-dir="$PERFIL" --allow-file-access-from-files \
+    --virtual-time-budget=5000 --screenshot="$destino" \
+    "file://$FUENTE?d=$IZQ,$DER" 2>/dev/null
+  printf '%s · %s\n' "$(basename "$destino")" "$(file -b "$destino" | cut -d, -f2 | tr -d ' ')"
+  exit 0
+fi
+
 CUALES=("$@")
 [ ${#CUALES[@]} -eq 0 ] && CUALES=(1 2 3 4 5 6 7 8 9 10 11 12 13)
 
