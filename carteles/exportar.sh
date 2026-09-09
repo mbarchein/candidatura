@@ -31,6 +31,7 @@ declare -A NOMBRE=(
   [15]=bici-y-patinete [16]=cuatro-preguntas [17]=salarios-ipc
   [19]=condiciones-minimas [20]=carga-de-trabajo
   [21]=voto-por-correo [22]=a-que-hora-bajas [23]=tablas-2026
+  [24]=julio-intensiva
 )
 
 # la hoja de pegatinas es A4 y va por otro sitio: lo que hace falta es
@@ -124,7 +125,7 @@ if [ "${1:-}" = "diptico" ]; then
 fi
 
 CUALES=("$@")
-[ ${#CUALES[@]} -eq 0 ] && CUALES=(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 19 20 21 22 23)
+[ ${#CUALES[@]} -eq 0 ] && CUALES=(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 19 20 21 22 23 24)
 
 mkdir -p "$SALIDA"
 for n in "${CUALES[@]}"; do
