@@ -27,7 +27,10 @@ declare -A NOMBRE=(
   [1]=buzon [2]=conciliacion [3]=ambiente [4]=comunicacion
   [5]=lo-que-no-podemos [6]=voces-del-buzon [7]=semaforo
   [8]=donde-encontrarnos [9]=ultima-llamada [10]=por-que-votar
-  [11]=reto [12]=propuestas [13]=lo-que-pedimos
+  [11]=reto [12]=propuestas [13]=lo-que-pedimos [14]=convenio
+  [15]=bici-y-patinete [16]=cuatro-preguntas [17]=salarios-ipc
+  [19]=condiciones-minimas [20]=carga-de-trabajo
+  [21]=voto-por-correo [22]=a-que-hora-bajas
 )
 
 # la hoja de pegatinas es A4 y va por otro sitio: lo que hace falta es
@@ -48,6 +51,43 @@ if [ "${1:-}" = "pegatinas" ]; then
       "$(file -b "$AQUI/$hoja.pdf" | cut -d, -f1)" \
       "$(file -b "$SALIDA/$hoja.png" | cut -d, -f2 | tr -d ' ')"
   done
+  exit 0
+fi
+
+# el pie de correo: 1200x380, que en el correo se pone con width="600"
+# para que quede nítido en retina. Solo PNG: un pie de firma no se imprime
+if [ "${1:-}" = "pie-correo" ]; then
+  mkdir -p "$SALIDA"
+  google-chrome --headless --disable-gpu --hide-scrollbars \
+    --force-device-scale-factor=1 --window-size=1400,400 \
+    --user-data-dir="$PERFIL" --allow-file-access-from-files \
+    --virtual-time-budget=5000 --screenshot="$SALIDA/pie-correo.png" \
+    "file://$AQUI/pie-correo.html" 2>/dev/null
+  printf 'pie-correo · %s\n' "$(file -b "$SALIDA/pie-correo.png" | cut -d, -f2 | tr -d ' ')"
+
+  # y los tres trozos enlazables: en Outlook cada enlace necesita su propia
+  # imagen dentro de un <a>, porque los mapas de imagen no los pinta. Los
+  # cortes salen de medir el render, y caen en x=400 / y=200 porque son los
+  # únicos que dividen exacto entre 2 -- el pie se ve a la mitad -- y que no
+  # parten nada: entre el final del buzón (183) y el corte solo hay fondo.
+  # Se copian a web/pie/ para que suban con el sitio: una firma de Outlook
+  # necesita las imágenes en una URL pública
+  python3 - "$SALIDA" "$AQUI/../web/pie" <<'PY'
+import sys, pathlib
+from PIL import Image
+salida, web = pathlib.Path(sys.argv[1]), pathlib.Path(sys.argv[2])
+web.mkdir(parents=True, exist_ok=True)
+src = Image.open(salida / "pie-correo.png")
+if src.size != (1400, 400):
+    raise SystemExit(f"el pie mide {src.size} y los cortes son para 1400x400")
+for nombre, caja in {"pie-marca": (0, 0, 400, 400),
+                     "pie-buzon": (400, 0, 1400, 200),
+                     "pie-reto":  (400, 200, 1400, 400)}.items():
+    trozo = src.crop(caja)
+    trozo.save(salida / f"{nombre}.png", optimize=True)
+    trozo.save(web / f"{nombre}.png", optimize=True)
+    print(f"{nombre} · {trozo.width}x{trozo.height} · se ve a {trozo.width//2}x{trozo.height//2}")
+PY
   exit 0
 fi
 
@@ -84,7 +124,7 @@ if [ "${1:-}" = "diptico" ]; then
 fi
 
 CUALES=("$@")
-[ ${#CUALES[@]} -eq 0 ] && CUALES=(1 2 3 4 5 6 7 8 9 10 11 12 13)
+[ ${#CUALES[@]} -eq 0 ] && CUALES=(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 19 20 21 22)
 
 mkdir -p "$SALIDA"
 for n in "${CUALES[@]}"; do

@@ -11,3 +11,7 @@ a3-candidatura/vista.png
 
 # el marcador de pruebas del servidor local
 ranking-local.json
+
+# borradores que no se publican. El repo es público, así que lo delicado
+# se queda en disco y no entra en git
+carteles/borradores/
