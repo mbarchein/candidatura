@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Pie de correo · Sin siglas, solo compañerxs</title>
+<link rel="stylesheet" href="tipos.css">
+<style>
+/* ==================================================================
+   PIE DE CORREO · 1400 × 400
+   ------------------------------------------------------------------
+   Se exporta al doble del tamaño al que se ve: en el correo va con
+   width="700" y así queda nítido en retina. Regla que manda sobre el
+   diseño: nada por debajo de 22 px nativos, que son 11 al verse.
+
+   Los dos códigos van en DOS FILAS y no en una. En una sola fila, con
+   la marca a la izquierda, a cada bloque de texto le quedaban 160 px
+   reales y la pregunta salía a cuatro líneas. En dos filas cada texto
+   tiene 400 px reales y los QR se quedan a 78 px, que es tamaño de
+   escaneo cómodo: 29 módulos a 2,7 px por módulo, y con corrección de
+   errores en Q (25 %) como los de los carteles.
+
+   El QR del buzón lleva «con tu móvil, no desde aquí» a propósito:
+   quien lee esto en el portátil del trabajo no tiene que pinchar un
+   enlace de campaña desde ahí para escribir algo anónimo.
+   ================================================================== */
+:root{
+  --papel:#f6f2ea;
+  --texto:#191820; --texto-2:#3a3742; --apagado-2:#8a8177;
+  --cian:#0d6f92; --coral:#bf3f2f; --coral-vivo:#f4796b;
+  --linea:rgba(74,58,46,.18); --linea-fuerte:rgba(74,58,46,.32);
+  --display:"Gellix","Helvetica Neue",Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  --mano:"Caveat",cursive;
+}
+*{box-sizing:border-box}
+html{color-scheme:light}
+body{margin:0;background:var(--papel);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+.pie{
+  width:1400px;height:400px;overflow:hidden;
+  padding:28px 32px;display:flex;align-items:stretch;
+  font-family:var(--display);color:var(--texto);
+  background:
+    radial-gradient(38% 74% at 6% 0%,rgba(150,120,170,.18),transparent 70%),
+    radial-gradient(32% 70% at 95% 6%,rgba(244,121,107,.16),transparent 72%),
+    var(--papel);
+  border-top:6px solid var(--coral-vivo)
+}
+
+/* --- marca --- */
+.marca{flex:0 0 320px;display:flex;flex-direction:column;justify-content:space-between}
+.marca__compi{display:flex;align-items:flex-end;gap:12px}
+.marca__compi canvas{display:block;image-rendering:pixelated}
+.marca__globo{margin:0 0 8px;font-family:var(--mano);font-size:36px;line-height:1}
+.marca__lema p{
+  margin:0;font-weight:500;font-size:37px;line-height:.96;letter-spacing:-.038em;
+  text-transform:uppercase;white-space:nowrap
+}
+.marca__lema p.ultima{color:var(--coral)}
+.marca__pie{
+  margin:11px 0 0;font-family:var(--mono);font-size:23px;letter-spacing:.05em;color:var(--cian)
+}
+.marca__pie b{color:var(--coral);font-weight:500;letter-spacing:.12em;margin-left:16px}
+
+/* --- las dos puertas, una por fila, cada una con su código --- */
+.puertas{
+  flex:1 1 auto;min-width:0;display:flex;flex-direction:column;justify-content:center;
+  padding-left:34px;margin-left:34px;border-left:2px solid var(--linea-fuerte)
+}
+.puerta{display:flex;align-items:center;gap:22px}
+.puerta + .puerta{margin-top:20px;padding-top:20px;border-top:1px solid var(--linea)}
+.puerta img{display:block;width:156px;height:156px;flex:0 0 auto}
+.puerta__txt{min-width:0}
+.puerta__rot{
+  margin:0 0 6px;font-family:var(--mono);font-weight:500;font-size:22px;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--cian)
+}
+.puerta--reto .puerta__rot{color:var(--coral)}
+.puerta__q{
+  margin:0 0 6px;font-weight:500;font-size:34px;line-height:1.04;letter-spacing:-.028em
+}
+.puerta__p{margin:0;font-size:24px;line-height:1.25;color:var(--texto-2)}
+.puerta__p b{color:var(--texto);font-weight:500}
+.puerta__url{
+  margin:8px 0 0;font-family:var(--mono);font-size:22px;letter-spacing:.02em;color:var(--cian);
+  white-space:nowrap
+}
+.puerta--reto .puerta__url{color:var(--coral)}
+.puerta__url i{font-style:normal;color:var(--apagado-2);margin-left:14px}
+</style>
+</head>
+<body>
+
+<div class="pie">
+  <div class="marca">
+    <div class="marca__compi">
+      <p class="marca__globo">Sin humo.</p>
+      <canvas data-pose="saluda" data-tt="150"></canvas>
+    </div>
+    <div>
+      <div class="marca__lema">
+        <p>Sin siglas.</p>
+        <p class="ultima">Solo compañerxs.</p>
+      </div>
+      <p class="marca__pie">sin-siglas.info<b>29-S</b></p>
+    </div>
+  </div>
+
+  <div class="puertas">
+    <div class="puerta puerta--buzon">
+      <img src="qr-buzon.svg" alt="Código QR al buzón anónimo de la candidatura.">
+      <div class="puerta__txt">
+        <p class="puerta__rot">El buzón · anónimo</p>
+        <p class="puerta__q">¿Qué cambiarías de tu día a día?</p>
+        <p class="puerta__p">Sin nombre, sin área, sin correo. <b>Una sola pregunta.</b></p>
+        <p class="puerta__url">sin-siglas.info/buzon<i>con tu móvil, no desde aquí</i></p>
+      </div>
+    </div>
+    <div class="puerta puerta--reto">
+      <img src="qr-reto.svg" alt="Código QR al reto de la web de la candidatura.">
+      <div class="puerta__txt">
+        <p class="puerta__rot">El reto</p>
+        <p class="puerta__q">¿Cuánto nos conoces?</p>
+        <p class="puerta__p">Doce preguntas de quince segundos, con ranking. <b>Tres minutos.</b></p>
+        <p class="puerta__url">sin-siglas.info<i>hay premio pequeño</i></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="compi.js"></script>
+<script>
+document.querySelectorAll(".marca__compi canvas").forEach(c => {
+  pintaCompi(c, c.dataset.pose, +c.dataset.tt, 3);
+});
+</script>
+</body>
+</html>

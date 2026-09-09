@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Firma de correo · cómo instalarla en Outlook</title>
+<style>
+  body{font:15px/1.55 -apple-system,Segoe UI,system-ui,sans-serif;color:#191820;
+       background:#f6f2ea;margin:0;padding:40px;max-width:860px}
+  h1{font-size:24px;margin:0 0 6px} h2{font-size:17px;margin:34px 0 10px}
+  code{background:#efe9df;padding:2px 6px;border-radius:4px;font-size:13px}
+  pre{background:#fffdf9;border:1px solid rgba(74,58,46,.2);border-radius:6px;
+      padding:16px;overflow:auto;font-size:12px;line-height:1.5}
+  .marco{background:#fff;border:1px dashed rgba(74,58,46,.35);border-radius:6px;padding:20px;margin:14px 0}
+  ol{padding-left:22px} li{margin-bottom:7px}
+  .aviso{border-left:4px solid #bf3f2f;background:#fffdf9;padding:12px 16px;margin:16px 0}
+</style>
+</head>
+<body>
+
+<h1>Firma de correo · buzón y reto</h1>
+<p>Tres imágenes, cada una con su enlace. Va en tabla y no en <code>flex</code> porque Outlook de
+Windows pinta con el motor de Word y no entiende el CSS moderno.</p>
+
+<h2>1 · Subir las tres imágenes</h2>
+<p>Ya están copiadas en <code>web/pie/</code>, así que suben con el sitio en el próximo despliegue
+de Netlify y quedan en:</p>
+<pre>https://sin-siglas.info/pie/pie-marca.png
+https://sin-siglas.info/pie/pie-buzon.png
+https://sin-siglas.info/pie/pie-reto.png</pre>
+<div class="aviso"><b>Esto va primero.</b> Si la firma se instala antes de desplegar, Outlook se
+guarda tres huecos roros y hay que volver a pegarla.</div>
+
+<h2>2 · Así se ve</h2>
+<div class="marco">
+
+<table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
+  <tr>
+    <td width="200" valign="top" style="padding:0;">
+      <a href="https://sin-siglas.info" style="text-decoration:none;"><img
+        src="https://sin-siglas.info/pie/pie-marca.png"
+        alt="Sin siglas, solo compañerxs · 29-S · sin-siglas.info"
+        width="200" height="200" border="0"
+        style="display:block;width:200px;height:200px;border:0;outline:none;"></a>
+    </td>
+    <td width="500" valign="top" style="padding:0;">
+      <table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
+        <tr><td style="padding:0;">
+          <a href="https://sin-siglas.info/buzon" style="text-decoration:none;"><img
+            src="https://sin-siglas.info/pie/pie-buzon.png"
+            alt="El buzón anónimo · ¿Qué cambiarías de tu día a día? · sin-siglas.info/buzon"
+            width="500" height="100" border="0"
+            style="display:block;width:500px;height:100px;border:0;outline:none;"></a>
+        </td></tr>
+        <tr><td style="padding:0;">
+          <a href="https://sin-siglas.info/#quiz" style="text-decoration:none;"><img
+            src="https://sin-siglas.info/pie/pie-reto.png"
+            alt="El reto · ¿Cuánto nos conoces? Doce preguntas · sin-siglas.info"
+            width="500" height="100" border="0"
+            style="display:block;width:500px;height:100px;border:0;outline:none;"></a>
+        </td></tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" style="padding:8px 0 0;font:12px/1.5 Segoe UI,Arial,sans-serif;color:#5e574e;">
+      Buzón anónimo: <a href="https://sin-siglas.info/buzon" style="color:#0d6f92;">sin-siglas.info/buzon</a>
+      &nbsp;·&nbsp;
+      El reto: <a href="https://sin-siglas.info/#quiz" style="color:#bf3f2f;">sin-siglas.info</a>
+    </td>
+  </tr>
+</table>
+
+</div>
+<p><b>La última fila es texto de verdad, y no es decoración.</b> Outlook bloquea las imágenes
+externas por defecto en muchas configuraciones: si eso pasa, la firma se queda en blanco y esa
+línea es lo único que sobrevive. No la quites.</p>
+
+<h2>3 · Instalarla</h2>
+<ol>
+  <li>Abre <b>este mismo fichero</b> en Chrome o Edge.</li>
+  <li>Selecciona el bloque de arriba —el del marco de puntos—, entero, y cópialo con
+    <code>Ctrl+C</code>.</li>
+  <li>En Outlook: <b>Archivo → Opciones → Correo → Firmas</b>. En el Outlook nuevo o en el web:
+    <b>Configuración → Correo → Redactar y responder</b>.</li>
+  <li>Crea la firma, pega con <code>Ctrl+V</code> y guarda.</li>
+  <li><b>Manda una prueba a tu propio correo y pincha los tres enlaces.</b> Es el único paso que
+    de verdad comprueba algo.</li>
+</ol>
+<p>Si prefieres pegar el código en vez de la imagen, el HTML de la tabla está en el fuente de este
+fichero: es el bloque que hay dentro de <code>&lt;div class="marco"&gt;</code>.</p>
+
+<h2>4 · Lo que hay que saber</h2>
+<ul>
+  <li><b>Las imágenes van al doble de resolución</b> y se muestran a la mitad —200×200 y 500×100—,
+    así que quedan nítidas en pantallas retina. El <code>width</code> y el <code>height</code> van
+    como atributos <i>y</i> en el <code>style</code>: Outlook con escalado de DPI ignora uno de los
+    dos según la versión.</li>
+  <li><b>Los dos QR se leen a 78 px reales</b> —29 módulos a 2,7 px cada uno— y llevan corrección
+    de errores en Q, la misma que los carteles. Aun así, compruébalo con un móvil antes de darlo
+    por bueno.</li>
+  <li><b>Es propaganda electoral.</b> Lleva <code>29-S</code> y la web impresos, así que le aplica
+    el art. 8.4 del RD 1844/1994: <b>hay que quitar la firma el domingo 27 por la noche</b>, porque
+    el lunes 28 no puede circular propaganda. Ponedlo en el calendario, que se olvida.</li>
+</ul>
+
+</body>
+</html>
