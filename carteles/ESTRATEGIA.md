@@ -605,6 +605,54 @@ llenarse antes de cerrar el sorteo. No sustituye a ninguna pieza de tema.
 corta la propaganda electoral a las cero horas del día anterior al de la votación. Ver el
 apartado 10.
 
+### El calendario que sale de la auditoría del 9 de septiembre
+
+Cuatro asesores externos —movilización, creatividad, relaciones laborales y oposición— revisaron la
+serie el 9 de septiembre. De ahí salieron seis errores legales verificados en fuente primaria, dos
+piezas nuevas de participación, una de dinero, y este calendario. Va con miércoles y jueves, o sea
+que **relaja la regla de martes y viernes a sabiendas** (ver la cuenta de huecos, arriba).
+
+| Día | Pieza | Por qué ahí |
+|---|---|---|
+| jue 10 | `conciliacion` | Iba el 8 y ya va tarde. Trae el tono, y ahora con la cláusula de los 23 días |
+| vie 11 | `tablas-2026` | **Dinero comprobable y ya vencido.** No propone nada: es una obligación de abril |
+| mar 15 | `voto-por-correo` | Quita una barrera en vez de dar una razón. Y el plazo se agota el 24 |
+| jue 17 | `convenio` | El terreno que abrió la otra lista. Tiene que ir antes de cualquier pieza que diga «convenio» |
+| vie 18 | `condiciones-minimas` | La credibilidad más barata: se comprueba mirando tu propia silla |
+| mar 22 | `voces-del-buzon` | Fecha no negociable. Solo existe si el buzón sigue recibiendo |
+| mié 23 | `semaforo` | Justo después del pago, para que el tablero contenga lo que la gente pidió |
+| jue 24 | `a-que-hora-bajas` | El compromiso de hora, a cuatro días. Y es el último día del voto por correo |
+| vie 25 | `ultima-llamada` | Conversión, con hora y sitio de la urna |
+
+**Fuera de los nueve, y no por fallo:** `ambiente`, `carga-de-trabajo`, `comunicacion`,
+`bici-y-patinete`, `propuestas`, `lo-que-pedimos`, `lo-que-no-podemos`, `cuatro-preguntas`,
+`salarios-ipc`, `por-que-votar`, `donde-encontrarnos`, `buzon` y `reto`. Valen para el programa
+escrito, la asamblea, la web, el A3 en pared y la conversación de pasillo. **Un cartel que no se
+envía no es un cartel perdido**; un envío de más sí convierte la campaña en publicidad.
+
+Dos de esas trece están bloqueadas por una razón concreta: `donde-encontrarnos` sigue con la hora de
+comité sin confirmar (apartado 9.2) y `cuatro-preguntas` apuesta a que nuestras citas son perfectas,
+lo que solo es cierto desde hoy.
+
+### Lo que hay que cerrar antes del jueves 10
+
+1. **La hora y el sitio de la urna**, a la mesa. Bloquea `ultima-llamada` del día 25.
+2. **La participación de las elecciones anteriores**, a la mesa. Si es baja, es el mejor cartel que
+   podríamos mandar y nadie la ha pedido.
+3. **La fecha del acta de proclamación definitiva.** El art. 8.4 abre la ventana ese día: si el
+   buzón salió el 4 y la proclamación fue posterior, esa pieza quedó fuera de ventana.
+4. **El plazo exacto del voto por correo**, confirmado con la mesa. El art. 10.1 dice «cinco días
+   antes»; el jueves 24 es nuestro cálculo, no su publicación.
+5. **La plantilla del centro.** Decide si el comité tiene cinco o nueve asientos (art. 66.1 ET) y
+   si el crédito horario es de 15 o 20 horas (art. 68.e).
+6. **`semaforo` no se puede enviar como está.** Dice «nueve casillas» y son veintisiete; tiene tres
+   columnas cuando el apartado 4.2 especifica cuatro —falta «se cayó», que es la que sostiene la
+   tesis—; titula «las nueve acciones» y `lo-que-pedimos` lleva doce; y no tiene **ni una fila de
+   dinero**, que es el tema de cinco de las once respuestas del buzón.
+7. **El reto tiene tres partidas jugadas** (`/api/ranking`, campo `jugadas`) contra un objetivo de
+   30. El enlace funciona —está en `/#quiz`, no en `/reto`—, así que el problema no es técnico: es
+   que no se ha mandado.
+
 ### Reglas de envío
 
 - **Dos por semana, martes y viernes.** Nada un lunes a primera hora ni un viernes a última.
