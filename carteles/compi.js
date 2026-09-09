@@ -274,6 +274,20 @@ function sudorFrente(hy, dx){
   px(X+1, y+7, "C");                     /* y una más abajo, en la sien */
 }
 
+/* la gota gorda: la de manual, en el costado de la cabeza. Punta arriba,
+   panza abajo, brillo dentro y sombra en el culo. Es el único detalle de
+   Compi que se sale de la silueta a propósito, porque el chiste del
+   cartel es literal -- «sudar la gota gorda» -- y tiene que verse a
+   tamaño de miniatura */
+function gotaGorda(hy, dx){
+  const X = CX - 9 + dx, y = hy + 4;
+  px(X+1, y, "C");                        /* la punta */
+  caja(X,   y+1, 3, 1, "C");
+  caja(X,   y+2, 4, 2, "C");              /* la panza */
+  caja(X+1, y+4, 2, 1, "c");              /* sombra del culo */
+  px(X, y+2, "L");                        /* brillo */
+}
+
 /* glifos de un puñado de píxeles para los detalles */
 const GLIFO = {
   punto:    [[0,0]],
@@ -367,7 +381,7 @@ const POSES = {
        lee y mover el resto lo ensucia */
     const f = Math.floor(tt/220) % 2;
     return { fase:f, dy: f ? 0 : 1, cabY:1, cara:"cansado",
-      sudor:true, abanico:true,
+      sudor:true, gotaGorda:true, abanico:true,
       bI:{ang:96,len:5}, bD:{ang: f ? 320 : 304, len:6},
       pI:{ang:95,len:4}, pD:{ang:85,len:4} };
   },
@@ -480,6 +494,7 @@ function pintaCompi(canvas, modo, tt, esc, op){
   if(E.sillon) sillonDelante(ty, cy);
   if(E.abanico) abanico(hy, inc + Math.round(E.cabX || 0));
   if(E.sudor)   sudorFrente(hy, inc + Math.round(E.cabX || 0));
+  if(E.gotaGorda) gotaGorda(hy, inc + Math.round(E.cabX || 0));
   if(E.nota)   glifo("nota",   CX+8, hy-4, "C");
   if(E.admira) glifo("admira", CX+7, hy-5, "R");
 
