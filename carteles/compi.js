@@ -236,20 +236,26 @@ function sillonDelante(ty, cy){
   caja(CX+7, ty+8, 3, 1, "v");
 }
 
-/* el abanico: una cuña que se abre hacia arriba, con el mango pegado a
-   la mano derecha. Va DELANTE del brazo, que es lo que hace que se lea
-   como agarrado y no como pegado detrás */
+/* el abanico. Va DELANTE del brazo, que es lo que hace que se lea como
+   agarrado y no como pegado detrás.
+
+   Silueta plana y no un sector barrido: a siete píxeles de radio la
+   geometría sale como una mancha redonda, y lo que hace que se lea un
+   abanico a este tamaño es el contraste de anchura -- ancho arriba,
+   cuello estrecho abajo -- más dos varillas rectas y una empuñadura que
+   asoma por debajo del puño. */
 function abanico(hy, dx){
-  const X = CX + 6 + dx, y = hy + 7;
-  caja(X-1, y+1, 2, 2, "v");            /* mango, pegado a la mano */
-  caja(X,   y-2, 2, 5, "R");            /* la varilla estrecha */
-  caja(X+2, y-4, 2, 8, "R");
-  caja(X+4, y-6, 2, 11, "r");           /* se abre y aclara al alejarse */
-  px(X+1, y-3, "R"); px(X+3, y-5, "r");
-  /* dos varillas oscuras dentro de la cuña: sin ellas se lee como una
-     banderita y no como un abanico plegable */
-  px(X+1, y-1, "v"); px(X+1, y+1, "v");
-  px(X+3, y-2, "v"); px(X+3, y+1, "v");
+  const X = CX + 6 + dx, y0 = hy + 2;   /* separado del pelo, o se lee como parte de la cabeza */
+  /* [desplazamiento desde la izquierda, ancho] de arriba abajo */
+  const TELA = [[0,7],[0,7],[1,6],[1,5],[2,4],[2,3],[3,2]];
+  for(let i=0;i<TELA.length;i++){
+    caja(X + TELA[i][0], y0 + i, TELA[i][1], 1, i < 2 ? "r" : "R");
+  }
+  /* dos varillas, abriéndose desde el cuello */
+  const IZQ = [[1,0],[1,1],[2,2],[2,3],[3,4],[3,5]];
+  for(const p of IZQ) px(X + p[0], y0 + p[1], "v");
+  for(let i=0;i<6;i++) px(X + 4, y0 + i, "v");
+  caja(X + 3, y0 + 7, 2, 2, "v");          /* empuñadura, bajo la mano */
 }
 
 /* glifos de un puñado de píxeles para los detalles */
