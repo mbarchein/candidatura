@@ -214,6 +214,28 @@ function pierna(lado, cy, a){
   caja(zx, Math.round(ey)+2, 3, 1, lado<0 ? "v" : "b");
 }
 
+/* el sillón, en dos mitades: el respaldo y el asiento van DETRÁS del
+   muñeco y los brazos DELANTE, que es lo único que hace que se lea como
+   estar sentado en algo y no de pie contra una pared. Coral, que es el
+   otro color de la casa y separa el mueble de la camiseta cian */
+function sillonDetras(ty, cy){
+  caja(CX-7, ty-6, 15, 13, "R");          /* respaldo, por encima del hombro */
+  caja(CX-7, ty-6, 15, 1,  "r");          /* filo de arriba, más claro */
+  px(CX-7, ty-5, "r"); px(CX-7, ty-4, "r");
+  caja(CX-9, cy+1, 19, 4, "r");           /* asiento, más ancho que el respaldo */
+  caja(CX-9, cy+5, 19, 1, "v");           /* sombra del asiento */
+  caja(CX-8, cy+6, 2, 2, "v");            /* patas */
+  caja(CX+7, cy+6, 2, 2, "v");
+}
+function sillonDelante(ty, cy){
+  caja(CX-9, ty+4, 3, 5, "R");            /* brazo izquierdo */
+  caja(CX-9, ty+4, 3, 1, "r");
+  caja(CX+7, ty+4, 3, 5, "R");            /* brazo derecho */
+  caja(CX+7, ty+4, 3, 1, "r");
+  caja(CX-9, ty+8, 3, 1, "v");
+  caja(CX+7, ty+8, 3, 1, "v");
+}
+
 /* glifos de un puñado de píxeles para los detalles */
 const GLIFO = {
   punto:    [[0,0]],
@@ -223,7 +245,11 @@ const GLIFO = {
   chispa:   [[1,0],[0,1],[2,1],[1,2]],
   corazon:  [[0,0],[2,0],[0,1],[1,1],[2,1],[1,2]],
   gota:     [[1,0],[0,1],[1,1],[0,2],[1,2]],
-  admira:   [[0,0],[0,1],[0,3]]
+  admira:   [[0,0],[0,1],[0,3]],
+  /* el pitido del detector: un arquito que abre a cada lado de la cabeza.
+     Van en dos glifos y no en uno espejado porque px() no sabe voltear */
+  ondaD:    [[0,0],[1,1],[0,2]],
+  ondaI:    [[1,0],[0,1],[1,2]]
 };
 function glifo(tipo, x, y, k){
   const g = GLIFO[tipo] || GLIFO.punto;
@@ -270,6 +296,41 @@ const POSES = {
   alerta(){
     return { fase:0, dy:-2, lean:-1, cara:"sorpresa", admira:true,
       bI:{ang:172,len:4}, bD:{ang:8,len:4}, pI:{ang:106,len:4}, pD:{ang:74,len:4} };
+  },
+  detector(tt){
+    /* EL DETECTOR DE HUMO · nueve cuadros en tres tiempos: tres
+       escuchando, dos de caerle la ficha y cuatro de alarma. Los dos del
+       medio son los que hacen falta -- con uno solo, 185 ms no dan para
+       leer «promesa imposible» y la reacción se veía como un parpadeo.
+
+       Es la única pose que repinta la camiseta, porque la gracia entera
+       es que el rojo se lea en la burbuja de un chat a 60 px de alto,
+       donde la cara ya no se distingue. */
+    const f = Math.floor(tt/185) % 9;
+    if(f < 3){
+      return { fase:0, dy:0, lean: f===1 ? -1 : 0, cara:"normal",
+        bI:{ang:100,len:5}, bD:{ang:80,len:5}, pI:{ang:96,len:4}, pD:{ang:84,len:4} };
+    }
+    if(f < 5){
+      return { fase:0, dy: f===3 ? -1 : -2, cara:"sorpresa", admira:true,
+        bI:{ang: f===3 ? 150 : 164, len:5}, bD:{ang: f===3 ? 30 : 16, len:5},
+        pI:{ang:100,len:4}, pD:{ang:80,len:4} };
+    }
+    const ancho = f % 2 === 1;
+    return { fase:0, dy: ancho ? -1 : -2, cara:"asustado",
+      alarma:true, pitido: ancho ? 2 : 1,
+      bI:{ang:238,len:6}, bD:{ang:302,len:6},
+      pI:{ang:106,len:4}, pD:{ang:74,len:4} };
+  },
+  sillon(tt){
+    /* sentado en la butaca, descansando de verdad: no hay ciclo de
+       animación, solo un pestañeo lento -- lo que se quiere transmitir es
+       que no está haciendo nada, así que moverlo lo estropea */
+    const s = Math.sin(tt/1200);
+    return { fase:0, dy:3, sillon:true,
+      cara: s > 0.94 ? "parpadeo" : "feliz",
+      bI:{ang:150,len:5}, bD:{ang:30,len:5},
+      pI:{dx:-2, dy:3, kx:-3, ky:1}, pD:{dx:2, dy:3, kx:3, ky:1} };
   },
   pillado(tt){
     const w = Math.sin(tt/90);
@@ -359,6 +420,7 @@ function pintaCompi(canvas, modo, tt, esc, op){
   const cy  = CADERA + dy;
 
   limpiar();
+  if(E.sillon) sillonDetras(ty, cy);
   pierna(-1, cy, E.pI);
   pierna(1,  cy, E.pD);
   brazo(-1, ty, inc, E.bI);
@@ -366,6 +428,7 @@ function pintaCompi(canvas, modo, tt, esc, op){
   tronco(ty, inc);
   cabeza(hy, inc + Math.round(E.cabX || 0), E.cara || "normal", E.mira || M.mira);
   brazo(1, ty, inc, E.bD);
+  if(E.sillon) sillonDelante(ty, cy);
   if(E.nota)   glifo("nota",   CX+8, hy-4, "C");
   if(E.admira) glifo("admira", CX+7, hy-5, "R");
 
@@ -380,6 +443,12 @@ function pintaCompi(canvas, modo, tt, esc, op){
     if(E.estrellas){ glifo("estrella", CX+6, hy-4, "R"); glifo("estrella", CX-10, hy-3, "C"); }
     if(E.llanto){  glifo("gota",    CX-7, hy+8, "C");  glifo("gota", CX+6, hy+8, "C"); }
     if(E.polvo){   glifo("polvo",   CX-9, PISO-2, "V"); glifo("polvo", CX+7, PISO-2, "V"); }
+    if(E.pitido){
+      for(let i=0;i<E.pitido;i++){
+        glifo("ondaD", CX+7+i*2, hy+1, "v");
+        glifo("ondaI", CX-9-i*2, hy+1, "v");
+      }
+    }
   }
   contorno();
 
@@ -392,6 +461,13 @@ function pintaCompi(canvas, modo, tt, esc, op){
   ctx.fillStyle = "rgba(4,10,26,"+(alfa*0.55).toFixed(2)+")";
   ctx.fillRect(x0, y0, an*esc, esc);
 
+  /* la camiseta en alarma: el detector de humo es la única pose que
+     recolorea, y solo ella pone E.alarma, así que ningún cartel cambia.
+     El galón coral del pecho se queda coral sobre coral -- o sea, se
+     pierde -- y está bien: en alarma la camiseta es una mancha roja */
+  const ALARMA = { C:"R", c:"v", L:"r" };
+  const alarma = !!E.alarma;
+
   /* volcado por tramos de color, como en index.html */
   for(let y=0;y<REJ_H;y++){
     let x = 0;
@@ -400,7 +476,7 @@ function pintaCompi(canvas, modo, tt, esc, op){
       if(!k){ x++; continue; }
       let n = 1;
       while(x+n < REJ_W && B[y*REJ_W+x+n] === k) n++;
-      ctx.fillStyle = TINTA[k];
+      ctx.fillStyle = TINTA[(alarma && ALARMA[k]) ? ALARMA[k] : k];
       ctx.fillRect((M.izq ? (REJ_W - x - n) : x)*esc, y*esc, n*esc, esc);
       x += n;
     }

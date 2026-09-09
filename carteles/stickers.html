@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Pegatinas de WhatsApp · Compi</title>
+<link rel="stylesheet" href="tipos.css">
+<style>
+/* ==================================================================
+   PEGATINAS DE WHATSAPP · 512 × 512, fondo transparente
+   ------------------------------------------------------------------
+   Con ?s=N sale una sola, a tamaño exacto y sin fondo. Así las captura
+   stickers.py, que luego las pasa a WEBP.
+
+   La regla que manda sobre el diseño: NINGUNA lleva `29-S` ni
+   `sin-siglas.info`. Sin esas dos marcas no son propaganda electoral,
+   así que no les aplica el cierre del art. 8.4 y pueden seguir en el
+   teclado de la gente el lunes 28 y el propio martes 29, que es
+   justamente cuando todo lo demás tiene que estar callado.
+
+   Y por eso tampoco se reparten «de campaña»: las instala quien quiere
+   y las usa en sus conversaciones, hablando de sus cosas.
+   ================================================================== */
+:root{
+  --texto:#191820; --panel:#fffdf9; --coral:#bf3f2f;
+  --linea-fuerte:rgba(74,58,46,.32);
+  --mano:"Caveat",cursive;
+}
+*{box-sizing:border-box}
+html{color-scheme:light}
+body{margin:0;background:transparent}
+body.una{width:512px;height:512px;overflow:hidden}
+
+.st{
+  width:512px;height:512px;position:relative;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+  padding:14px 10px 8px
+}
+.st canvas{display:block;image-rendering:pixelated}
+/* el globo va arriba y con borde gordo: a 60 px en una burbuja de chat
+   un filete de 2 px desaparece */
+.st__globo{
+  position:absolute;top:10px;left:50%;transform:translateX(-50%);
+  max-width:470px;margin:0;text-align:center;white-space:nowrap;
+  font-family:var(--mano);font-size:52px;line-height:1;color:var(--texto);
+  background:var(--panel);border:5px solid var(--linea-fuerte);border-radius:22px;
+  padding:12px 26px 16px
+}
+.st--sinfrase{justify-content:center}
+/* revisión: todas juntas sobre un tablero, para verlas de una pasada */
+.todas{display:grid;grid-template-columns:repeat(4,512px);background:#e4ded3}
+.todas .st{outline:1px dashed rgba(74,58,46,.4)}
+</style>
+</head>
+<body>
+<script src="compi.js"></script>
+<script>
+/* esc 13 -> 27*13 = 351 px de ancho, 36*13 = 468 de alto: entra en 512
+   con sitio para el globo */
+const ST = [
+  { nombre:"articulo",  pose:"detector", tt:1300, frase:"¿En qué artículo?" },
+  { nombre:"humo",      pose:"detector", tt:1300, frase:"Detecto humo." },
+  { nombre:"escucho",   pose:"quieto",   tt:900,  frase:"Te escucho." },
+  { nombre:"no-leo",    pose:"cansado",  tt:1500, frase:"A las 19:00 ya no leo." },
+  { nombre:"gratis",    pose:"chuleo",   tt:700,  frase:"Preguntar es gratis." },
+  { nombre:"cuentas",   pose:"serio",    tt:900,  frase:"Con las cuentas delante." },
+  { nombre:"cuentamelo",pose:"saluda",   tt:150,  frase:"Cuéntamelo tú." },
+  { nombre:"ganas",     pose:"chuleo",   tt:190,  frase:"¿A que no me ganas?" }
+];
+
+function pega(st){
+  const d = document.createElement("div");
+  d.className = "st" + (st.frase ? "" : " st--sinfrase");
+  if(st.frase){
+    const g = document.createElement("p");
+    g.className = "st__globo";
+    g.textContent = st.frase;
+    d.appendChild(g);
+  }
+  const c = document.createElement("canvas");
+  d.appendChild(c);
+  pintaCompi(c, st.pose, st.tt, 13, { extras:true });
+  return d;
+}
+
+const params = new URLSearchParams(location.search);
+if(params.get("info")){
+  document.title = "SPEC::" + JSON.stringify(ST.map(s => ({ nombre:s.nombre })));
+} else if(params.get("s") !== null){
+  document.body.classList.add("una");
+  document.body.appendChild(pega(ST[+params.get("s")]));
+} else {
+  const t = document.createElement("div");
+  t.className = "todas";
+  ST.forEach(s => t.appendChild(pega(s)));
+  document.body.appendChild(t);
+}
+</script>
+</body>
+</html>

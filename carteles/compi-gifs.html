@@ -58,6 +58,15 @@ body.tira{background:var(--papel)}
   font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--apagado-2);
   margin:0
 }
+/* la regla del detector: va en el propio GIF y no en el mensaje que lo
+   acompaña, porque un GIF se reenvía solo y el mensaje se queda atrás.
+   Es la mitad que hace que la broma no sea a costa de nadie */
+.regla{
+  max-width:352px;margin:0;text-align:center;
+  font-family:var(--mono);font-size:13px;line-height:1.45;letter-spacing:.02em;
+  color:var(--apagado)
+}
+.regla b{color:var(--coral);font-weight:500}
 .marca b{color:var(--coral);font-weight:500;letter-spacing:.14em}
 
 /* revisión: los GIF uno debajo de otro con su nombre */
@@ -85,20 +94,42 @@ const GIFS = [
   { nombre:"toma-ya",     pose:"celebra", n:2,  paso:115, dur:140, frase:"¡Toma ya!" },
   { nombre:"casi",        pose:"chasco",  n:4,  paso:150, dur:190, frase:"Otra vez casi." },
   { nombre:"ya-no-leo",   pose:"cansado", n:4,  paso:1100, dur:420, frase:"Yo a las 19:00 ya no leo." },
-  { nombre:"voy-a-votar", pose:"anda",    n:4,  paso:155, dur:155, frase:"Voy a votar." }
+  { nombre:"voy-a-votar", pose:"anda",    n:4,  paso:155, dur:155, frase:"Voy a votar." },
+  /* el detector de humo. Va más alto que los demás porque lleva la regla
+     impresa debajo, y la regla es la pieza: sin ella el GIF se lee como
+     cachondeo del cartel de otro, y con ella se lee como un criterio que
+     también nos aplica */
+  /* la frase va por cuadro: con una sola, el globo ya decía «¡pi, pi, pi!»
+     mientras Compi seguía tranquilo y el chiste se destripaba antes de
+     saltar. Los tres primeros escuchan, el cuarto cae y los cuatro
+     últimos pitan */
+  { nombre:"detector", pose:"detector", n:9, paso:185, dur:185, alto:432,
+    frase:["Te escucho.","Te escucho.","Te escucho.",
+           "¡Uy! Promesa imposible.","¡Uy! Promesa imposible.",
+           "Detecto humo. ¡Pipipí!","Detecto humo. ¡Pipipí!",
+           "Detecto humo. ¡Pipipí!","Detecto humo. ¡Pipipí!"],
+    regla:"salta con cualquier promesa <b>sin artículo y sin fecha</b>.<br>también con las nuestras" }
 ];
 
 function cuadro(g, i){
   const d = document.createElement("div");
   d.className = "cuadro";
+  if(g.alto) d.style.height = g.alto + "px";
   const globo = document.createElement("p");
   globo.className = "globo";
-  globo.textContent = g.frase;
+  globo.textContent = Array.isArray(g.frase) ? g.frase[i] : g.frase;
   const c = document.createElement("canvas");
   const marca = document.createElement("p");
   marca.className = "marca";
   marca.innerHTML = "sin-siglas.info &middot; <b>29-S</b>";
-  d.appendChild(globo); d.appendChild(c); d.appendChild(marca);
+  d.appendChild(globo); d.appendChild(c);
+  if(g.regla){
+    const r = document.createElement("p");
+    r.className = "regla";
+    r.innerHTML = g.regla;
+    d.appendChild(r);
+  }
+  d.appendChild(marca);
   pintaCompi(c, g.pose, i * g.paso, 7, { extras:true });
   return d;
 }
@@ -108,7 +139,7 @@ const params = new URLSearchParams(location.search);
 if(params.get("info")){
   /* gifs.py lee la lista de aquí, para no tenerla escrita en dos sitios */
   document.title = "SPEC::" + JSON.stringify(GIFS.map(g =>
-    ({ nombre:g.nombre, n:g.n, dur:g.dur, w:400, h:380 })));
+    ({ nombre:g.nombre, n:g.n, dur:g.dur, w:400, h:g.alto || 380 })));
 
 } else if(params.get("g") !== null){
   const g = GIFS[+params.get("g")];
