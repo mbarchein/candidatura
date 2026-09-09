@@ -774,10 +774,18 @@ body.diptico .cartel.elegido + .cartel.elegido{box-shadow:inset 2px 0 0 var(--li
 #c23 .pie{margin-top:auto}
 
 #c24 .bajada{margin-top:20px}
-#c24 .puertas{margin-top:58px;gap:42px}
-#c24 .puertas li{padding-top:36px}
-#c24 .limite{margin-top:52px}
-#c24 .recibo{margin-top:34px}
+/* 24 · el titular comparte fila con Compi abanicándose. Va abajo del
+   todo de la fila (align-items:flex-end) para que la base del muñeco
+   quede a la altura de la última línea y no flotando */
+.cabeza{display:flex;align-items:flex-end;gap:26px}
+.cabeza .titular{flex:1 1 auto;min-width:0}
+.cabeza__compi{flex:0 0 auto;padding-bottom:4px}
+.cabeza__compi canvas{display:block;image-rendering:pixelated}
+
+#c24 .puertas{margin-top:44px;gap:30px}
+#c24 .puertas li{padding-top:26px}
+#c24 .limite{margin-top:38px}
+#c24 .recibo{margin-top:26px}
 #c24 .pie{margin-top:auto}
 </style>
 </head>
@@ -1986,6 +1994,19 @@ body.diptico .cartel.elegido + .cartel.elegido{box-shadow:inset 2px 0 0 var(--li
      Lo que se quiere negociar es intensiva en JULIO Y AGOSTO, los dos,
      Y SIN PERDER UN DÍA DE VACACIONES.
 
+     PERO EL CARTEL NO NOMBRA LOS 23 DÍAS, por decisión de la candidatura:
+     dar el número anuncia un riesgo que no se piensa aceptar, y planta la
+     idea de la pérdida en la cabeza de quien lee. Lo que sí dice es que
+     hay contrapartidas escondidas, que nos las hemos leído y que la
+     petición va redactada para que no se aplique ninguna. Se sostiene sin
+     el número y no esconde que existe.
+
+     OJO PARA LOS ONCE: el número sí hay que saberlo. Quien pregunte en un
+     pasillo se va a encontrar con el art. 21.1 —23 días, y 22 con dos o
+     más meses de intensiva—, y la respuesta tiene que ser «lo sabemos, y
+     por eso la petición lleva la condición delante», no una cara de
+     sorpresa.
+
      Eso no es aplicar el convenio: es mejorarlo. El art. 21.1 baja de 23
      a 22 días a quien tenga dos o más meses de jornada intensiva, así que
      quedarse con los dos meses Y los 23 días hay que pedirlo expresamente
@@ -2032,10 +2053,13 @@ body.diptico .cartel.elegido + .cartel.elegido{box-shadow:inset 2px 0 0 var(--li
 <section class="cartel" id="c24">
   <div class="tapa"><span>Jornada &middot; el verano entero</span><b>29-S</b></div>
 
-  <h1 class="titular titular--largo">Dos meses de verano<em>sin perder vacaciones.</em></h1>
+  <div class="cabeza">
+    <h1 class="titular titular--largo">En julio<em>también hace 40.</em></h1>
+    <div class="cabeza__compi"><canvas data-pose="calor" data-tt="220" data-esc="6" data-extras="1"></canvas></div>
+  </div>
   <p class="bajada bajada--ancha">
-    Intensiva en julio <b>y</b> en agosto: las mismas horas del año, movidas. <b>Y los 23 días
-    intactos</b> — que es la parte que hay que pedir expresamente, porque no viene sola.
+    El convenio da intensiva en agosto y punto. Pedimos <b>los dos meses</b>: las mismas horas del
+    año, movidas. <b>Y sin perder nada por el camino</b>, que es la parte que hay que pedir escrita.
   </p>
 
   <ul class="puertas">
@@ -2045,9 +2069,9 @@ body.diptico .cartel.elegido + .cartel.elegido{box-shadow:inset 2px 0 0 var(--li
         convenio dice que <b>esa distribución se pacta con nosotros</b>.</p>
     </li>
     <li>
-      <strong>Dónde está la trampa</strong>
-      <p>El convenio <b>quita un día de vacaciones</b> a quien tiene dos meses de intensiva. Por eso
-        se pide con la condición delante: <b>los dos meses y los 23 días.</b></p>
+      <strong>Con condiciones</strong>
+      <p>El convenio tiene <b>contrapartidas escondidas</b> para quien amplía la intensiva. Nos las
+        hemos leído, y <b>la petición va redactada para que no se aplique ninguna.</b></p>
     </li>
     <li>
       <strong>Y qué haremos</strong>
@@ -2058,15 +2082,14 @@ body.diptico .cartel.elegido + .cartel.elegido{box-shadow:inset 2px 0 0 var(--li
 
   <div class="limite">
     <h4>Lo que no depende de nosotros</h4>
-    <p>Quedarse con los <b>23 días y los dos meses</b> sería <b>mejorar el convenio</b>, y eso lo
-      firma la empresa. Lo pediremos, y os diremos qué contestan — <b>gane o pierda</b>.</p>
+    <p>Ampliar la intensiva <b>sin contrapartidas</b> es <b>mejorar el convenio</b>, no aplicarlo, y
+      eso lo firma la empresa. Lo pediremos, y os diremos qué contestan — <b>gane o pierda</b>.</p>
   </div>
 
   <p class="recibo"><b>Esto es lo que vamos a pedir.</b> Si tu verano es otro, dilo antes de que lo
     llevemos &middot; sin-siglas.info/buzon</p>
 
   <footer class="pie">
-    <div class="compi"><p class="compi__globo">Yo hago la cuenta.</p><canvas data-pose="serio" data-tt="900"></canvas></div>
     <div class="pie__medio pie__medio--cara">
       <div class="pie__caras">
         <img class="pie__cara" src="../a3-candidatura/img/algarra.jpg" alt="">
@@ -2537,8 +2560,9 @@ if(dos){
 /* Compi, una pose congelada por cartel. data-tt elige el fotograma
    dentro del ciclo de la pose: la mitad de las poses son cíclicas y
    sin esto saldría siempre el primer cuadro. */
-document.querySelectorAll(".compi canvas").forEach(c => {
-  pintaCompi(c, c.dataset.pose, +c.dataset.tt, 3);
+document.querySelectorAll(".compi canvas, .cabeza__compi canvas").forEach(c => {
+  pintaCompi(c, c.dataset.pose, +c.dataset.tt, +(c.dataset.esc || 3),
+    c.dataset.extras ? { extras:true } : undefined);
 });
 </script>
 </body>

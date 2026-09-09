@@ -236,6 +236,22 @@ function sillonDelante(ty, cy){
   caja(CX+7, ty+8, 3, 1, "v");
 }
 
+/* el abanico: una cuña que se abre hacia arriba, con el mango pegado a
+   la mano derecha. Va DELANTE del brazo, que es lo que hace que se lea
+   como agarrado y no como pegado detrás */
+function abanico(hy, dx){
+  const X = CX + 6 + dx, y = hy + 7;
+  caja(X-1, y+1, 2, 2, "v");            /* mango, pegado a la mano */
+  caja(X,   y-2, 2, 5, "R");            /* la varilla estrecha */
+  caja(X+2, y-4, 2, 8, "R");
+  caja(X+4, y-6, 2, 11, "r");           /* se abre y aclara al alejarse */
+  px(X+1, y-3, "R"); px(X+3, y-5, "r");
+  /* dos varillas oscuras dentro de la cuña: sin ellas se lee como una
+     banderita y no como un abanico plegable */
+  px(X+1, y-1, "v"); px(X+1, y+1, "v");
+  px(X+3, y-2, "v"); px(X+3, y+1, "v");
+}
+
 /* glifos de un puñado de píxeles para los detalles */
 const GLIFO = {
   punto:    [[0,0]],
@@ -321,6 +337,17 @@ const POSES = {
       alarma:true, pitido: ancho ? 2 : 1,
       bI:{ang:238,len:6}, bD:{ang:302,len:6},
       pI:{ang:106,len:4}, pD:{ang:74,len:4} };
+  },
+  calor(tt){
+    /* pasando calor y abanicándose: la cara cansada de siempre, el gotón
+       y el abanico en la mano derecha, que se mueve dos posiciones. No
+       hay más ciclo porque a este tamaño el movimiento del abanico ya se
+       lee y mover el resto lo ensucia */
+    const f = Math.floor(tt/220) % 2;
+    return { fase:f, dy: f ? 0 : 1, cabY:1, cara:"cansado",
+      gotaIzq:true, abanico:true,
+      bI:{ang:96,len:5}, bD:{ang: f ? 320 : 304, len:6},
+      pI:{ang:95,len:4}, pD:{ang:85,len:4} };
   },
   sillon(tt){
     /* sentado en la butaca, descansando de verdad: no hay ciclo de
@@ -429,6 +456,7 @@ function pintaCompi(canvas, modo, tt, esc, op){
   cabeza(hy, inc + Math.round(E.cabX || 0), E.cara || "normal", E.mira || M.mira);
   brazo(1, ty, inc, E.bD);
   if(E.sillon) sillonDelante(ty, cy);
+  if(E.abanico) abanico(hy, inc + Math.round(E.cabX || 0));
   if(E.nota)   glifo("nota",   CX+8, hy-4, "C");
   if(E.admira) glifo("admira", CX+7, hy-5, "R");
 
@@ -440,6 +468,9 @@ function pintaCompi(canvas, modo, tt, esc, op){
     if(E.corazon)  glifo("corazon", CX+7, hy-3, "R");
     if(E.chispa){  glifo("chispa",  CX+7, hy-5, "C"); glifo("chispa", CX-10, hy-2, "C"); }
     if(E.gota)     glifo("gota",    CX+6, hy+2, "C");
+    /* el gotón por la izquierda: con el abanico en la mano derecha, el de
+       siempre quedaba debajo de las varillas y no se veía */
+    if(E.gotaIzq)  glifo("gota",    CX-9, hy+2, "C");
     if(E.estrellas){ glifo("estrella", CX+6, hy-4, "R"); glifo("estrella", CX-10, hy-3, "C"); }
     if(E.llanto){  glifo("gota",    CX-7, hy+8, "C");  glifo("gota", CX+6, hy+8, "C"); }
     if(E.polvo){   glifo("polvo",   CX-9, PISO-2, "V"); glifo("polvo", CX+7, PISO-2, "V"); }
