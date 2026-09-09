@@ -104,6 +104,29 @@ publicaremos cada trimestre durante los cuatro años: cada acción de los tres c
 El cartel muestra el tablero **con todo en gris**, tal y como está el día 23: nada pedido
 todavía. Convierte *«os iremos contando»* en un objeto que se puede comparar con el de enero.
 
+**Y estuvo mal contado y mal montado hasta el 9 de septiembre.** Cuatro cosas, y las cuatro
+importan en la única pieza que es un contrato:
+
+1. Decía «**nueve casillas** y ninguna marcada». Eran nueve filas por tres columnas: **veintisiete
+   casillas**. Contar mal en el cartel-contrato es lo último que nos podemos permitir.
+2. Tenía **tres columnas** —pedido, en negociación, conseguido— cuando este apartado especifica
+   cuatro estados. **Faltaba «se cayó», que es justamente la que sostiene toda la tesis**: un
+   tablero sin columna para el fracaso es un folleto.
+3. Titulaba «**las nueve acciones**» y `lo-que-pedimos` lleva doce. Ahora la cabecera no lleva
+   número —«lo que vamos a pedir»— y el número duro va en la leyenda, que es donde se puede
+   comprobar.
+4. **No tenía ni una fila de dinero**, que es el tema de cinco de las once respuestas del buzón. En
+   enero el tablero no se habría podido comprobar en lo único que la gente pidió.
+
+Como queda: **cuatro columnas, doce filas, 48 casillas** y ninguna marcada. Con tres filas nuevas
+—las tablas de 2026 y sus atrasos, la compensación de teletrabajo en nómina y sin absorber, y la
+intensiva de julio con los días de vacaciones intactos— y la bajada diciendo en voz alta que **hay
+una columna para lo que se caiga**.
+
+Y una elegancia que sale de las cuatro columnas: **nada marcado significa que está todo por
+pedir**, así que el cuarto estado del apartado —«todavía por pedir»— no necesita columna. Es la
+ausencia de marca.
+
 ### 4.3 Compi
 
 La mascota ya existe, ya cae bien y es lo que hace que una pieza se reenvíe. Aparece en todos

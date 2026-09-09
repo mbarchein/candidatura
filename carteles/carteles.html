@@ -303,8 +303,8 @@ body.diptico .cartel.elegido + .cartel.elegido{box-shadow:inset 2px 0 0 var(--li
 /* 07 · el tablero del mandato y las firmas */
 .tablero{margin-top:22px;border-top:2px solid var(--linea-fuerte)}
 .fila{
-  display:grid;grid-template-columns:1fr repeat(3,110px);align-items:center;gap:0;
-  border-bottom:1px solid var(--linea);padding:7px 0
+  display:grid;grid-template-columns:1fr repeat(4,92px);align-items:center;gap:0;
+  border-bottom:1px solid var(--linea);padding:6px 0
 }
 .fila--cabeza{border-bottom:2px solid var(--linea-fuerte);padding:10px 0}
 .fila--cabeza span{
@@ -787,6 +787,18 @@ body.diptico .cartel.elegido + .cartel.elegido{box-shadow:inset 2px 0 0 var(--li
 #c24 .limite{margin-top:48px}
 #c24 .recibo{margin-top:32px}
 #c24 .pie{margin-top:auto}
+
+/* 07 · con la cuarta columna y las tres filas nuevas el tablero va al
+   ras. Lo que cede son los huecos, no el cuerpo: este cartel se guarda
+   para compararlo en enero, así que tiene que poder leerse en papel */
+#c7 .bajada{margin-top:16px}
+#c7 .tablero{margin-top:16px}
+#c7 .fila{padding:4px 0}
+#c7 .fila--cabeza{padding:8px 0}
+#c7 .fila i{width:18px;height:18px}
+#c7 .leyenda{margin-top:10px}
+#c7 .firmas{margin-top:14px}
+#c7 .pie{margin-top:auto}
 </style>
 </head>
 <body>
@@ -2292,26 +2304,30 @@ body.diptico .cartel.elegido + .cartel.elegido{box-shadow:inset 2px 0 0 var(--li
 
   <h1 class="titular titular--largo">Cuatro años dan<em>para que se te olvide</em>lo que prometiste.</h1>
   <p class="bajada bajada--ancha">
-    Por eso lo dejamos por escrito. <b>Este tablero se publica cada trimestre</b>: guarda el
-    cartel y compáralo con el de enero.
+    Por eso lo dejamos por escrito. <b>Este tablero se publica cada trimestre</b>: guarda el cartel
+    y compáralo con el de enero. Y sí, <b>hay una columna para lo que se caiga</b>.
   </p>
 
   <div class="tablero">
     <div class="fila fila--cabeza">
-      <span>Las nueve acciones</span><span>Pedido</span><span>En negociación</span><span>Conseguido</span>
+      <span>Lo que vamos a pedir</span><span>Pedido</span><span>En negociación</span><span>Se cayó</span><span>Conseguido</span>
     </div>
-    <div class="fila"><b>Protocolo escrito de flexibilidad</b><i></i><i></i><i></i></div>
-    <div class="fila"><b>Registro de jornada, publicado cada trimestre</b><i></i><i></i><i></i></div>
-    <div class="fila"><b>Política de desconexión con ventana horaria</b><i></i><i></i><i></i></div>
-    <div class="fila"><b>Evaluación de riesgos psicosociales</b><i></i><i></i><i></i></div>
-    <div class="fila"><b>Revisión de los puestos con pantalla</b><i></i><i></i><i></i></div>
-    <div class="fila"><b>Espacios de descanso</b><i></i><i></i><i></i></div>
-    <div class="fila"><b>Informe previo del comité en cada cambio</b><i></i><i></i><i></i></div>
-    <div class="fila"><b>Acta de cada reunión en el tablón</b><i></i><i></i><i></i></div>
-    <div class="fila"><b>Registro retributivo y datos de plantilla</b><i></i><i></i><i></i></div>
+    <div class="fila"><b>Protocolo escrito de flexibilidad</b><i></i><i></i><i></i><i></i></div>
+    <div class="fila"><b>Registro de jornada, publicado cada trimestre</b><i></i><i></i><i></i><i></i></div>
+    <div class="fila"><b>Política de desconexión con ventana horaria</b><i></i><i></i><i></i><i></i></div>
+    <div class="fila"><b>Intensiva en julio, con los días de vacaciones intactos</b><i></i><i></i><i></i><i></i></div>
+    <div class="fila"><b>Tablas de 2026 aplicadas, y los atrasos pagados</b><i></i><i></i><i></i><i></i></div>
+    <div class="fila"><b>El teletrabajo en nómina, y sin absorber</b><i></i><i></i><i></i><i></i></div>
+    <div class="fila"><b>Evaluación de riesgos psicosociales</b><i></i><i></i><i></i><i></i></div>
+    <div class="fila"><b>Revisión de los puestos con pantalla</b><i></i><i></i><i></i><i></i></div>
+    <div class="fila"><b>Zona de comida y zona de descanso, separadas</b><i></i><i></i><i></i><i></i></div>
+    <div class="fila"><b>Informe previo del comité en cada cambio</b><i></i><i></i><i></i><i></i></div>
+    <div class="fila"><b>Acta de cada reunión en el tablón</b><i></i><i></i><i></i><i></i></div>
+    <div class="fila"><b>Registro retributivo y datos de plantilla</b><i></i><i></i><i></i><i></i></div>
   </div>
-  <p class="leyenda">Así está el 23 de septiembre: nueve casillas y ninguna marcada. El primer
-    tablero con marcas se publica en <b>enero de 2027</b>.</p>
+  <p class="leyenda">Así está el 23 de septiembre: <b>48 casillas y ninguna marcada.</b> Nada
+    marcado significa que está todo por pedir. El primer tablero con marcas se publica en
+    <b>enero de 2027</b>.</p>
 
   <div class="firmas">
     <h4>Lo firmamos los once</h4>
