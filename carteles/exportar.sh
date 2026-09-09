@@ -31,7 +31,7 @@ declare -A NOMBRE=(
   [15]=bici-y-patinete [16]=cuatro-preguntas [17]=salarios-ipc
   [19]=condiciones-minimas [20]=carga-de-trabajo
   [21]=voto-por-correo [22]=a-que-hora-bajas [23]=tablas-2026
-  [24]=julio-intensiva
+  [24]=verano-intensiva
 )
 
 # la hoja de pegatinas es A4 y va por otro sitio: lo que hace falta es
