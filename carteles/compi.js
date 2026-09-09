@@ -242,36 +242,39 @@ function sillonDelante(ty, cy){
    Silueta plana y no un sector barrido: a siete píxeles de radio la
    geometría sale como una mancha redonda, y lo que hace que se lea un
    abanico a este tamaño es el contraste de anchura -- ancho arriba,
-   cuello estrecho abajo -- más dos varillas rectas y una empuñadura que
-   asoma por debajo del puño. */
-function abanico(hy, dx){
-  const X = CX + 6 + dx, y0 = hy + 2;   /* separado del pelo, o se lee como parte de la cabeza */
-  /* [desplazamiento desde la izquierda, ancho] de arriba abajo */
-  /* ancho máximo 7 y no 8: a 8 el contorno cae fuera de la rejilla y el
-     borde derecho sale cortado. Lo que se alarga es la parte ancha, que
-     pasa de dos filas a tres */
-  const TELA = [[0,7],[0,7],[0,7],[1,6],[1,5],[2,4],[2,3],[3,2]];
+   cuello estrecho abajo -- más las varillas y la empuñadura asomando.
+
+   Y DEPENDE DEL FOTOGRAMA. La primera versión solo movía el brazo y el
+   abanico se quedaba clavado, o sea que en el GIF no se abanicaba: movía
+   la mano debajo de un abanico quieto. Ahora tiene dos posiciones,
+   abierto y medio cerrado, y baja un píxel al cerrarse. */
+function abanico(hy, dx, f){
+  const X = CX + 6 + dx, y0 = hy + 2 + (f ? 1 : 0);
+  const TELA = f
+    ? [[1,6],[1,6],[1,6],[1,6],[2,5],[2,4],[3,3],[3,2]]     /* medio cerrado */
+    : [[0,7],[0,7],[0,7],[1,6],[1,5],[2,4],[2,3],[3,2]];    /* abierto */
   for(let i=0;i<TELA.length;i++){
     caja(X + TELA[i][0], y0 + i, TELA[i][1], 1, i < 3 ? "r" : "R");
   }
-  /* dos varillas, abriéndose desde el cuello */
-  const IZQ = [[1,0],[1,1],[1,2],[2,3],[2,4],[3,5],[3,6]];
-  for(const p of IZQ) px(X + p[0], y0 + p[1], "v");
-  for(let i=0;i<7;i++) px(X + 4, y0 + i, "v");
+  /* las varillas se calculan de la propia silueta, así siguen a las dos
+     posiciones sin tener que escribirlas dos veces */
+  for(let i=0;i<TELA.length-1;i++){
+    const off = TELA[i][0], an = TELA[i][1];
+    px(X + off + 1, y0 + i, "v");
+    if(an > 3) px(X + off + an - 2, y0 + i, "v");
+  }
   caja(X + 3, y0 + 8, 2, 2, "v");          /* empuñadura, bajo la mano */
 }
 
-/* el sudor en la frente: dos gotas pequeñas sobre la piel y una grande
-   resbalando por la sien. Un glifo flotando al lado de la cabeza se lee
-   como el sudor de dibujo animado, que es otra cosa: esto es que estás
-   sudando. Va DESPUÉS de la cabeza, encima de la piel */
+/* el sudor en la frente: tres píxeles sueltos sobre la piel, dos en la
+   frente y uno en la sien. Sin brillo encima de cada gota: dos píxeles
+   en vertical pegados al pelo se leen como un mechón azul, no como
+   sudor. Va DESPUÉS de la cabeza, encima de la piel */
 function sudorFrente(hy, dx){
   const X = CX - 5 + dx, y = hy;
-  /* pixeles suELTOS y nada de brillo encima: un par de píxeles en
-     vertical pegados al pelo se leen como un mechón azul, no como sudor */
-  px(X+3, y+6, "C");                     /* dos gotas sobre la frente */
+  px(X+3, y+6, "C");
   px(X+7, y+6, "C");
-  px(X+1, y+7, "C");                     /* y una más abajo, en la sien */
+  px(X+1, y+7, "C");
 }
 
 /* la gota gorda: la de manual, en el costado de la cabeza. Punta arriba,
@@ -492,7 +495,7 @@ function pintaCompi(canvas, modo, tt, esc, op){
   cabeza(hy, inc + Math.round(E.cabX || 0), E.cara || "normal", E.mira || M.mira);
   brazo(1, ty, inc, E.bD);
   if(E.sillon) sillonDelante(ty, cy);
-  if(E.abanico) abanico(hy, inc + Math.round(E.cabX || 0));
+  if(E.abanico) abanico(hy, inc + Math.round(E.cabX || 0), E.fase);
   if(E.sudor)   sudorFrente(hy, inc + Math.round(E.cabX || 0));
   if(E.gotaGorda) gotaGorda(hy, inc + Math.round(E.cabX || 0));
   if(E.nota)   glifo("nota",   CX+8, hy-4, "C");
