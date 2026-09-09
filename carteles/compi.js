@@ -247,15 +247,31 @@ function sillonDelante(ty, cy){
 function abanico(hy, dx){
   const X = CX + 6 + dx, y0 = hy + 2;   /* separado del pelo, o se lee como parte de la cabeza */
   /* [desplazamiento desde la izquierda, ancho] de arriba abajo */
-  const TELA = [[0,7],[0,7],[1,6],[1,5],[2,4],[2,3],[3,2]];
+  /* ancho máximo 7 y no 8: a 8 el contorno cae fuera de la rejilla y el
+     borde derecho sale cortado. Lo que se alarga es la parte ancha, que
+     pasa de dos filas a tres */
+  const TELA = [[0,7],[0,7],[0,7],[1,6],[1,5],[2,4],[2,3],[3,2]];
   for(let i=0;i<TELA.length;i++){
-    caja(X + TELA[i][0], y0 + i, TELA[i][1], 1, i < 2 ? "r" : "R");
+    caja(X + TELA[i][0], y0 + i, TELA[i][1], 1, i < 3 ? "r" : "R");
   }
   /* dos varillas, abriéndose desde el cuello */
-  const IZQ = [[1,0],[1,1],[2,2],[2,3],[3,4],[3,5]];
+  const IZQ = [[1,0],[1,1],[1,2],[2,3],[2,4],[3,5],[3,6]];
   for(const p of IZQ) px(X + p[0], y0 + p[1], "v");
-  for(let i=0;i<6;i++) px(X + 4, y0 + i, "v");
-  caja(X + 3, y0 + 7, 2, 2, "v");          /* empuñadura, bajo la mano */
+  for(let i=0;i<7;i++) px(X + 4, y0 + i, "v");
+  caja(X + 3, y0 + 8, 2, 2, "v");          /* empuñadura, bajo la mano */
+}
+
+/* el sudor en la frente: dos gotas pequeñas sobre la piel y una grande
+   resbalando por la sien. Un glifo flotando al lado de la cabeza se lee
+   como el sudor de dibujo animado, que es otra cosa: esto es que estás
+   sudando. Va DESPUÉS de la cabeza, encima de la piel */
+function sudorFrente(hy, dx){
+  const X = CX - 5 + dx, y = hy;
+  /* pixeles suELTOS y nada de brillo encima: un par de píxeles en
+     vertical pegados al pelo se leen como un mechón azul, no como sudor */
+  px(X+3, y+6, "C");                     /* dos gotas sobre la frente */
+  px(X+7, y+6, "C");
+  px(X+1, y+7, "C");                     /* y una más abajo, en la sien */
 }
 
 /* glifos de un puñado de píxeles para los detalles */
@@ -351,7 +367,7 @@ const POSES = {
        lee y mover el resto lo ensucia */
     const f = Math.floor(tt/220) % 2;
     return { fase:f, dy: f ? 0 : 1, cabY:1, cara:"cansado",
-      gotaIzq:true, abanico:true,
+      sudor:true, abanico:true,
       bI:{ang:96,len:5}, bD:{ang: f ? 320 : 304, len:6},
       pI:{ang:95,len:4}, pD:{ang:85,len:4} };
   },
@@ -463,6 +479,7 @@ function pintaCompi(canvas, modo, tt, esc, op){
   brazo(1, ty, inc, E.bD);
   if(E.sillon) sillonDelante(ty, cy);
   if(E.abanico) abanico(hy, inc + Math.round(E.cabX || 0));
+  if(E.sudor)   sudorFrente(hy, inc + Math.round(E.cabX || 0));
   if(E.nota)   glifo("nota",   CX+8, hy-4, "C");
   if(E.admira) glifo("admira", CX+7, hy-5, "R");
 
