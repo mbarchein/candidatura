@@ -295,6 +295,57 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
 .axis h3{font-size:var(--step-1);font-weight:500;margin-bottom:.55rem}
 .axis p{font-size:.96rem;color:var(--muted)}
 
+/* ---------- propuestas enviadas ---------- */
+/* el aviso va primero y con filo coral porque es la regla de toda la
+   serie: nada de esto está pedido todavía. Si se lee después de las
+   tarjetas, llega tarde */
+.props__aviso{
+  border-left:3px solid var(--coral);padding:.2rem 0 .2rem 1.1rem;
+  margin:0 0 2.4rem;max-width:var(--measure);font-size:.97rem;color:var(--text-2)
+}
+.props{
+  list-style:none;margin:0;padding:0;display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,235px),1fr));gap:2rem 1.5rem
+}
+/* seis piezas en tres columnas: a cuatro queda una fila huérfana de dos */
+@media (min-width:900px){ .props{grid-template-columns:repeat(3,1fr);gap:2.4rem 1.8rem} }
+.prop{display:flex;flex-direction:column}
+.prop__cartel{
+  position:relative;display:block;border-radius:10px;overflow:hidden;
+  border:1px solid var(--line);background:var(--panel);
+  transition:border-color .16s ease,transform .16s ease
+}
+.prop__cartel img{display:block;width:100%;height:auto}
+.prop__cartel:hover{border-color:var(--cian-txt);transform:translateY(-2px)}
+.prop__lupa{
+  position:absolute;right:.5rem;bottom:.5rem;
+  font-family:var(--mono);font-size:.64rem;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--text);background:rgba(var(--barra-rgb),.84);backdrop-filter:blur(4px);
+  padding:.34rem .62rem;border-radius:999px
+}
+.prop__kicker{
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--cian-txt);margin:1rem 0 0
+}
+.prop h3{font-size:var(--step-1);font-weight:500;line-height:1.2;margin:.3rem 0 .5rem}
+.prop p{font-size:.93rem;color:var(--muted);line-height:1.55;margin:0}
+.prop__ley{
+  font-family:var(--mono);font-size:.71rem;letter-spacing:.04em;
+  color:var(--coral-txt);margin-top:auto;padding-top:.8rem
+}
+.prop__ley--sin{color:var(--muted-2)}
+/* el díptico va aparte y a dos columnas: son los dos carteles de tema,
+   no dos peticiones más, y mezclarlos descuadraría la cuenta de seis */
+.props__par{margin-top:3.2rem;border-top:1px solid var(--line);padding-top:2rem}
+.props__par .eyebrow{margin-bottom:1.4rem}
+.props--par{grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));max-width:760px}
+@media (max-width:560px){
+  .props{grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:1.6rem 1rem}
+  .prop h3{font-size:var(--step-0)}
+  /* a este tamaño la chapa tapaba medio cartel */
+  .prop__lupa{font-size:.56rem;padding:.26rem .45rem;right:.35rem;bottom:.35rem}
+}
+
 /* ---------- equipo ---------- */
 /* foto de grupo: se funde con el fondo por abajo para que no sea un
    rectángulo pegado, y recupera el color al pasar por encima */
@@ -920,6 +971,7 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
     <a class="nav__mark" href="#inicio">Sin siglas. Solo <span>compañerxs</span>.</a>
     <div class="nav__links">
       <a href="#compromisos">Compromisos</a>
+      <a href="#propuestas">Propuestas</a>
       <a href="#equipo">Quiénes somos</a>
       <a href="#asamblea">Lo que dijimos</a>
       <a href="#faq">Dudas</a>
@@ -1080,8 +1132,124 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
   </div>
 </section>
 
+<!-- ===================== PROPUESTAS ===================== -->
+<section class="sec sec--alt" id="propuestas">
+  <div class="wrap">
+    <div class="sec__head">
+      <p class="eyebrow eyebrow--coral">Lo que ya hemos mandado</p>
+      <h2>Seis propuestas, una por cartel</h2>
+      <p class="lede muted">
+        No son adjetivos: son seis peticiones concretas, cada una con lo que se pide, con qué
+        artículo y quién la lleva. Están tal y como salieron por el chat, sin retocar.
+      </p>
+    </div>
+
+    <p class="props__aviso">
+      <b>Ninguna está pedida todavía</b>, y no vamos a decir que sí. Se piden en la primera reunión
+      del comité, por escrito, y os enseñamos lo que contesten — <b>sea lo que sea</b>.
+    </p>
+
+    <ul class="props">
+      <li class="prop">
+        <a class="prop__cartel" href="img/propuestas/verano-intensiva.webp" target="_blank" rel="noopener">
+          <img src="img/propuestas/verano-intensiva-sm.webp" width="540" height="675" loading="lazy" decoding="async"
+               alt="Cartel «¿Dejamos de sudar la gota gorda?»: la jornada intensiva en julio y en agosto.">
+          <span class="prop__lupa">Ver entero</span>
+        </a>
+        <p class="prop__kicker">Jornada</p>
+        <h3>La intensiva, julio también</h3>
+        <p>El convenio solo da intensiva en agosto. Pedimos los dos meses: las mismas horas del año, movidas de sitio, y <b>sin perder un día de vacaciones</b> por el camino.</p>
+        <p class="prop__ley prop__ley--sin">Esa distribución se pacta con la representación</p>
+      </li>
+      <li class="prop">
+        <a class="prop__cartel" href="img/propuestas/cumpleanos.webp" target="_blank" rel="noopener">
+          <img src="img/propuestas/cumpleanos-sm.webp" width="540" height="675" loading="lazy" decoding="async"
+               alt="Cartel «Un año más. Un día menos de oficina.»: el día libre por tu cumpleaños.">
+          <span class="prop__lupa">Ver entero</span>
+        </a>
+        <p class="prop__kicker">Permisos</p>
+        <h3>El día que cumples</h3>
+        <p>Un día de permiso retribuido el día de tu cumpleaños. <b>Uno más, no uno de tus vacaciones</b>. Y si cae en fin de semana o dentro de tus vacaciones, se traslada.</p>
+        <p class="prop__ley">art. 87.1 ET · la única sin ley detrás</p>
+      </li>
+      <li class="prop">
+        <a class="prop__cartel" href="img/propuestas/bici-y-patinete.webp" target="_blank" rel="noopener">
+          <img src="img/propuestas/bici-y-patinete-sm.webp" width="540" height="675" loading="lazy" decoding="async"
+               alt="Cartel «Movilidad sostenible de forma segura»: el aparcamiento cerrado para bicis y patinetes.">
+          <span class="prop__lupa">Ver entero</span>
+        </a>
+        <p class="prop__kicker">Movilidad</p>
+        <h3>Dónde dejar la bici</h3>
+        <p>Hoy no hay ni plaza señalada ni punto cerrado. Pedimos <b>una jaula en una plaza de la cochera</b> —de las peores de sitio— o una zona con llave en el patio.</p>
+        <p class="prop__ley">art. 85.1 ET · art. 26 Ley 9/2025</p>
+      </li>
+      <li class="prop">
+        <a class="prop__cartel" href="img/propuestas/medico.webp" target="_blank" rel="noopener">
+          <img src="img/propuestas/medico-sm.webp" width="540" height="675" loading="lazy" decoding="async"
+               alt="Cartel «La cita es la misma. El permiso, no.»: el permiso de médico privado igual que el público.">
+          <span class="prop__lupa">Ver entero</span>
+        </a>
+        <p class="prop__kicker">Permisos</p>
+        <h3>Que dé igual el membrete</h3>
+        <p>Por lo público, la hora del médico está cubierta; por lo privado, la pones tú. No pedimos una hora más: <b>pedimos que sea la misma</b>. Y también para acompañar.</p>
+        <p class="prop__ley">art. 22 del convenio · art. 34.8 ET</p>
+      </li>
+      <li class="prop">
+        <a class="prop__cartel" href="img/propuestas/dietas.webp" target="_blank" rel="noopener">
+          <img src="img/propuestas/dietas-sm.webp" width="540" height="675" loading="lazy" decoding="async"
+               alt="Cartel «Que no lo adelantes tú»: el anticipo de las dietas en los viajes de trabajo.">
+          <span class="prop__lupa">Ver entero</span>
+        </a>
+        <p class="prop__kicker">Viajes</p>
+        <h3>Que no lo adelantes tú</h3>
+        <p>El tren, el vuelo y el hotel ya los paga la empresa; la comida y moverte por la ciudad, no. Pedimos <b>anticipo o tarjeta antes de salir</b>. No es más dinero: es no ponerlo tú.</p>
+        <p class="prop__ley prop__ley--sin">Lo firma la empresa · cuánto se paga es otra conversación</p>
+      </li>
+      <li class="prop">
+        <a class="prop__cartel" href="img/propuestas/parking.webp" target="_blank" rel="noopener">
+          <img src="img/propuestas/parking-sm.webp" width="540" height="675" loading="lazy" decoding="async"
+               alt="Cartel «Que venir a la oficina no te cueste tiempo extra»: la plaza de aparcamiento sin coste.">
+          <span class="prop__lupa">Ver entero</span>
+        </a>
+        <p class="prop__kicker">Movilidad</p>
+        <h3>Aparcar sin pagarlo con tu tiempo</h3>
+        <p>Hoy la plaza la paga quien la usa, y quien no pasa por caja da vueltas por la calle. Pedimos <b>plaza sin coste</b> para quien tiene que venir, con el reparto ya pensado por si se llena.</p>
+        <p class="prop__ley prop__ley--sin">Complementario al plan de movilidad · lo firma la empresa</p>
+      </li>
+    </ul>
+
+    <div class="props__par">
+      <p class="eyebrow">Y los dos carteles que abrieron la serie</p>
+      <ul class="props props--par">
+      <li class="prop">
+        <a class="prop__cartel" href="img/propuestas/conciliacion.webp" target="_blank" rel="noopener">
+          <img src="img/propuestas/conciliacion-sm.webp" width="540" height="675" loading="lazy" decoding="async"
+               alt="Cartel «La conciliación no es un favor»: las cuatro peticiones de conciliación por escrito.">
+          <span class="prop__lupa">Ver entero</span>
+        </a>
+        <p class="prop__kicker">Compromiso</p>
+        <h3>La conciliación no es un favor</h3>
+        <p>Hoy funciona por buena voluntad. Cuatro peticiones para que funcione por escrito: protocolo de flexibilidad y trabajo a distancia, el registro de jornada publicado por área, desconexión digital con ventana horaria, y la intensiva de julio.</p>
+        <p class="prop__ley">art. 34.8 · 34.9 · 20 bis ET · art. 88 LOPDGDD</p>
+      </li>
+      <li class="prop">
+        <a class="prop__cartel" href="img/propuestas/propuestas.webp" target="_blank" rel="noopener">
+          <img src="img/propuestas/propuestas-sm.webp" width="540" height="675" loading="lazy" decoding="async"
+               alt="Cartel «No te prometemos lo que no podemos»: lo que un comité sí puede hacer con el dinero.">
+          <span class="prop__lupa">Ver entero</span>
+        </a>
+        <p class="prop__kicker">Sin falsas expectativas</p>
+        <h3>No te prometemos lo que no podemos</h3>
+        <p>Cinco de las once respuestas del buzón hablaban de dinero, y <b>un comité no firma tu nómina</b>. Así que este cartel dice lo que sí se puede hacer con cada una, con artículo y con plazo.</p>
+        <p class="prop__ley">art. 87.1 · 26.5 · 28.2 · 64.5 ET</p>
+      </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
 <!-- ===================== EQUIPO ===================== -->
-<section class="sec sec--alt" id="equipo">
+<section class="sec" id="equipo">
   <div class="wrap">
     <div class="sec__head">
       <p class="eyebrow eyebrow--coral">Quiénes somos</p>
@@ -1109,7 +1277,7 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
 </section>
 
 <!-- ===================== DISCURSO ===================== -->
-<section class="sec" id="asamblea">
+<section class="sec sec--alt" id="asamblea">
   <div class="wrap">
     <div class="sec__head">
       <p class="eyebrow">En nuestras palabras</p>
@@ -1167,7 +1335,7 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
 </section>
 
 <!-- ===================== FAQ ===================== -->
-<section class="sec sec--alt" id="faq">
+<section class="sec" id="faq">
   <div class="wrap">
     <div class="sec__head">
       <p class="eyebrow eyebrow--coral">Dudas razonables</p>
@@ -1331,7 +1499,7 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
 </section>
 
 <!-- ===================== QUIZ ===================== -->
-<section class="sec" id="quiz">
+<section class="sec sec--alt" id="quiz">
   <div class="wrap">
     <div class="sec__head">
       <p class="eyebrow">El reto</p>
