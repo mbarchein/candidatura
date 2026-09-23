@@ -14,6 +14,15 @@
   publish = "web"
   functions = "netlify/functions"
 
+# Los carteles imprimen sin-siglas.info/propuestas, que en papel se lee
+# mucho mejor que un ancla con almohadilla. El apartado vive en la
+# portada, así que la ruta limpia redirige ahí. 302 y no 301: si algún
+# día las propuestas pasan a página propia, un 301 cacheado estorba.
+[[redirects]]
+  from = "/propuestas"
+  to = "/#propuestas"
+  status = 302
+
 # El ranking se llama igual en local y en producción: /api/ranking.
 # Así el mismo código de cliente vale para las dos cosas.
 [[redirects]]

@@ -307,8 +307,8 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
   list-style:none;margin:0;padding:0;display:grid;
   grid-template-columns:repeat(auto-fit,minmax(min(100%,235px),1fr));gap:2rem 1.5rem
 }
-/* seis piezas en tres columnas: a cuatro queda una fila huérfana de dos */
-@media (min-width:900px){ .props{grid-template-columns:repeat(3,1fr);gap:2.4rem 1.8rem} }
+/* ocho piezas: dos filas de cuatro. A tres quedaba una fila huérfana de dos */
+@media (min-width:900px){ .props{grid-template-columns:repeat(4,1fr);gap:2.4rem 1.6rem} }
 .prop{display:flex;flex-direction:column}
 .prop__cartel{
   position:relative;display:block;border-radius:10px;overflow:hidden;
@@ -335,7 +335,7 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
 }
 .prop__ley--sin{color:var(--muted-2)}
 /* el díptico va aparte y a dos columnas: son los dos carteles de tema,
-   no dos peticiones más, y mezclarlos descuadraría la cuenta de seis */
+   no dos peticiones más, y mezclarlos descuadraría la cuenta de ocho */
 .props__par{margin-top:3.2rem;border-top:1px solid var(--line);padding-top:2rem}
 .props__par .eyebrow{margin-bottom:1.4rem}
 .props--par{grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));max-width:760px}
@@ -1137,9 +1137,9 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
   <div class="wrap">
     <div class="sec__head">
       <p class="eyebrow eyebrow--coral">Lo que ya hemos mandado</p>
-      <h2>Seis propuestas, una por cartel</h2>
+      <h2>Ocho propuestas, una por cartel</h2>
       <p class="lede muted">
-        No son adjetivos: son seis peticiones concretas, cada una con lo que se pide, con qué
+        No son adjetivos: son ocho peticiones concretas, cada una con lo que se pide, con qué
         artículo y quién la lleva. Están tal y como salieron por el chat, sin retocar.
       </p>
     </div>
@@ -1197,12 +1197,12 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
       <li class="prop">
         <a class="prop__cartel" href="img/propuestas/dietas.webp" target="_blank" rel="noopener">
           <img src="img/propuestas/dietas-sm.webp" width="540" height="675" loading="lazy" decoding="async"
-               alt="Cartel «Que no lo adelantes tú»: el anticipo de las dietas en los viajes de trabajo.">
+               alt="Cartel «Que las comidas del viaje no las pongas tú»: el anticipo de las dietas en los viajes de trabajo.">
           <span class="prop__lupa">Ver entero</span>
         </a>
         <p class="prop__kicker">Viajes</p>
-        <h3>Que no lo adelantes tú</h3>
-        <p>El tren, el vuelo y el hotel ya los paga la empresa; la comida y moverte por la ciudad, no. Pedimos <b>anticipo o tarjeta antes de salir</b>. No es más dinero: es no ponerlo tú.</p>
+        <h3>Que las comidas del viaje no las pongas tú</h3>
+        <p>El tren, el vuelo y el hotel ya los paga la empresa. Las comidas y los taxis los pagas tú de tu bolsillo y esperas a que te los devuelvan. Pedimos <b>anticipo o tarjeta de empresa antes de salir</b>. No es más dinero: es no ponerlo tú mientras tanto.</p>
         <p class="prop__ley prop__ley--sin">Lo firma la empresa · cuánto se paga es otra conversación</p>
       </li>
       <li class="prop">
@@ -1215,6 +1215,28 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
         <h3>Aparcar sin pagarlo con tu tiempo</h3>
         <p>Hoy la plaza la paga quien la usa, y quien no pasa por caja da vueltas por la calle. Pedimos <b>plaza sin coste</b> para quien tiene que venir, con el reparto ya pensado por si se llena.</p>
         <p class="prop__ley prop__ley--sin">Complementario al plan de movilidad · lo firma la empresa</p>
+      </li>
+      <li class="prop">
+        <a class="prop__cartel" href="img/propuestas/compensacion.webp" target="_blank" rel="noopener">
+          <img src="img/propuestas/compensacion-sm.webp" width="540" height="675" loading="lazy" decoding="async"
+               alt="Cartel «Tu tiempo tiene precio. Aunque no lo hayas mirado.»: lo que ya compensa el convenio y lo que no está escrito en ningún sitio.">
+          <span class="prop__lupa">Ver entero</span>
+        </a>
+        <p class="prop__kicker">Compensaciones</p>
+        <h3>Tu tiempo tiene precio</h3>
+        <p>La mitad ya está en el convenio: la hora de más, la dieta, el kilómetro. Las guardias y las horas de viaje no están en ningún sitio. Pedimos <b>un criterio escrito e igual para todos</b>, para mirarlo antes de decir que sí.</p>
+        <p class="prop__ley prop__ley--sin">Las horas extra y sus causas nos las tienen que dar ya</p>
+      </li>
+      <li class="prop">
+        <a class="prop__cartel" href="img/propuestas/jornada-4-dias.webp" target="_blank" rel="noopener">
+          <img src="img/propuestas/jornada-4-dias-sm.webp" width="540" height="675" loading="lazy" decoding="async"
+               alt="Cartel «Queremos fines de semana de tres días»: abrir la negociación de la semana de cuatro días laborables.">
+          <span class="prop__lupa">Ver entero</span>
+        </a>
+        <p class="prop__kicker">Jornada</p>
+        <h3>Fines de semana de tres días</h3>
+        <p>Abrir la negociación, con un piloto pactado y evaluado. Sin alargar el día: son 32 horas frente a 40, un 20 % menos. <b>Es la más cara de todas y no prometemos que salga</b>; prometemos pedirla y contar en qué queda.</p>
+        <p class="prop__ley">art. 20.1 del convenio</p>
       </li>
     </ul>
 
