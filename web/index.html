@@ -307,8 +307,8 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
   list-style:none;margin:0;padding:0;display:grid;
   grid-template-columns:repeat(auto-fit,minmax(min(100%,235px),1fr));gap:2rem 1.5rem
 }
-/* ocho piezas: dos filas de cuatro. A tres quedaba una fila huérfana de dos */
-@media (min-width:900px){ .props{grid-template-columns:repeat(4,1fr);gap:2.4rem 1.6rem} }
+/* nueve piezas: tres filas de tres. A cuatro quedaba una huérfana */
+@media (min-width:900px){ .props{grid-template-columns:repeat(3,1fr);gap:2.4rem 1.8rem} }
 .prop{display:flex;flex-direction:column}
 .prop__cartel{
   position:relative;display:block;border-radius:10px;overflow:hidden;
@@ -335,7 +335,7 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
 }
 .prop__ley--sin{color:var(--muted-2)}
 /* el díptico va aparte y a dos columnas: son los dos carteles de tema,
-   no dos peticiones más, y mezclarlos descuadraría la cuenta de ocho */
+   no dos peticiones más, y mezclarlos descuadraría la cuenta de nueve */
 .props__par{margin-top:3.2rem;border-top:1px solid var(--line);padding-top:2rem}
 .props__par .eyebrow{margin-bottom:1.4rem}
 .props--par{grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));max-width:760px}
@@ -1137,9 +1137,9 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
   <div class="wrap">
     <div class="sec__head">
       <p class="eyebrow eyebrow--coral">Lo que ya hemos mandado</p>
-      <h2>Ocho propuestas, una por cartel</h2>
+      <h2>Nueve propuestas, una por cartel</h2>
       <p class="lede muted">
-        No son adjetivos: son ocho peticiones concretas, cada una con lo que se pide, con qué
+        No son adjetivos: son nueve peticiones concretas, cada una con lo que se pide, con qué
         artículo y quién la lleva. Están tal y como salieron por el chat, sin retocar.
       </p>
     </div>
@@ -1237,6 +1237,17 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
         <h3>Fines de semana de tres días</h3>
         <p>Abrir la negociación, con un piloto pactado y evaluado. Sin alargar el día: son 32 horas frente a 40, un 20 % menos. <b>Es la más cara de todas y no prometemos que salga</b>; prometemos pedirla y contar en qué queda.</p>
         <p class="prop__ley">art. 20.1 del convenio</p>
+      </li>
+      <li class="prop">
+        <a class="prop__cartel" href="img/propuestas/ambiente.webp" target="_blank" rel="noopener">
+          <img src="img/propuestas/ambiente-sm.webp" width="540" height="675" loading="lazy" decoding="async"
+               alt="Cartel «Un sitio donde desconectar sin salir»: una zona para comer y otra para descansar, separadas del puesto.">
+          <span class="prop__lupa">Ver entero</span>
+        </a>
+        <p class="prop__kicker">Ambiente</p>
+        <h3>Un sitio donde desconectar</h3>
+        <p>Hoy nos vemos de pasillo o de cocina, y comer delante del portátil no es una pausa. Pedimos <b>dos sitios distintos</b>: uno para comer, separado del puesto, y otro para no hacer nada.</p>
+        <p class="prop__ley">RD 486/1997 · en oficina no es obligatoria: se pide</p>
       </li>
     </ul>
 
@@ -2863,6 +2874,41 @@ const FIJAS = [
     opts:["Comité de Seguridad y Salud y Comisión de Igualdad","En el consejo de administración","En ninguno todavía","En el comité de dirección"], right:0 }
 ];
 
+/* ---- las propuestas: una bolsa aparte para que salgan siempre ----
+   Van aparte de FIJAS porque, mezcladas con las 29 de siempre, muchas
+   partidas no tocarían ninguna. Los datos son los de cada cartel y ni
+   uno más; las respuestas falsas no pueden atribuir nada a nadie. */
+const PROPUESTAS = [
+  { kind:"Las propuestas", text:"¿Qué meses pedimos de jornada intensiva?",
+    opts:["Julio y agosto, sin perder días de vacaciones","Solo agosto, como ahora","De junio a septiembre","Julio, a cambio de días de vacaciones"], right:0 },
+  { kind:"Las propuestas", text:"¿Qué pedimos para el día de tu cumpleaños?",
+    opts:["Un día libre retribuido, que se traslada si cae en fin de semana o en vacaciones","Media jornada libre","Un día que se descuenta de tus vacaciones","Salir una hora antes"], right:0 },
+  { kind:"Las propuestas", text:"¿Cuál de estas propuestas es la única que no tiene una norma detrás?",
+    opts:["El día libre por tu cumpleaños","El permiso de médico","El sitio para bicis y patinetes","La sala de descanso"], right:0 },
+  { kind:"Las propuestas", text:"¿Qué pedimos con el permiso de médico?",
+    opts:["Que cuente igual por lo privado que por lo público, también para acompañar","Más horas de médico al año","Pedirlo con un mes de antelación","Que solo valga para urgencias"], right:0 },
+  { kind:"Las propuestas", text:"¿Qué pedimos para las dietas de los viajes?",
+    opts:["Anticipo o tarjeta de empresa antes de salir","Subir el importe de la dieta","Cobrarlas todas a final de año","Quitar los viajes de fin de semana"], right:0 },
+  { kind:"Las propuestas", text:"Con la semana de cuatro días, ¿qué nos comprometemos a hacer?",
+    opts:["Pedir que se negocie con un piloto, sin alargar el día y sin prometer que salga","Que en 2027 se trabajen cuatro días","Cuatro días de diez horas","Nada: no la llevamos"], right:0 },
+  { kind:"Las propuestas", text:"En compensaciones por guardias, viajes y horas de más, ¿qué pedimos?",
+    opts:["Un criterio escrito e igual para todos","Cobrar el doble cada hora extra","Prohibir las guardias","Un plus fijo al mes"], right:0 },
+  { kind:"Las propuestas", text:"¿Qué pedimos para quien viene en bici o en patinete?",
+    opts:["Un sitio cerrado donde dejarlos","Una ayuda para comprarlos","Duchas en cada planta","Un carril bici hasta la puerta"], right:0 },
+  { kind:"Las propuestas", text:"¿Qué pedimos con el aparcamiento?",
+    opts:["Plaza sin coste para quien viene, con el criterio de reparto por escrito","Una plaza fija para cada persona","Pagarlo a medias con la empresa","Nada: no entra en las propuestas"], right:0 },
+  { kind:"Las propuestas", text:"¿Qué pedimos para comer y para descansar?",
+    opts:["Una zona para comer y otra para descansar, separadas del puesto","Poder comer en la mesa de trabajo","Una hora más para comer","Máquinas de vending nuevas"], right:0 },
+  { kind:"Las propuestas", text:"¿Quién firma las propuestas si salen adelante?",
+    opts:["La empresa: nosotros las pedimos por escrito","El comité, él solo","Cada responsable de área","El sindicato mayoritario"], right:0 },
+  { kind:"El semáforo", text:"¿Cuándo sale el primer semáforo con las casillas marcadas?",
+    opts:["En enero de 2027","El día después de votar","Al final del mandato","Cuando lo autorice la empresa"], right:0 },
+  { kind:"El semáforo", text:"Si la empresa dice que no a una petición, ¿qué hacemos?",
+    opts:["Lo publicamos: para eso está la columna de «se cayó»","No decimos nada","La quitamos del programa","La volvemos a pedir sin contarlo"], right:0 },
+  { kind:"El buzón", text:"De las 23 respuestas del buzón, ¿cuántas vamos a llevar?",
+    opts:["Todas, sin elegir","Las cinco más repetidas","Solo las que tienen base legal","Las que decida el comité"], right:0 },
+];
+
 /* ---- preguntas generadas a partir de las fichas rellenas ---- */
 /* La descripción se usa también como pregunta del reto. Si lleva el nombre
    dentro —"Raúl empatiza...", "Con Rocío puedes hablar..."— la respuesta
@@ -2937,6 +2983,7 @@ function preguntasPersonas(){
 }
 
 const PREGUNTAS = 12;
+const DE_PROPUESTAS = 3;   /* cuántas de la bolsa de propuestas en cada partida */
 
 function montarQuiz(){
   /* como máximo tres del mismo tipo, para que no se repita el formato */
@@ -2947,9 +2994,10 @@ function montarQuiz(){
   }).slice(0, Math.ceil(PREGUNTAS/2));
   /* las fijas traen la respuesta escrita en la primera opción: si no se
      mezclan, quien se dé cuenta acierta todas pulsando siempre la A */
-  const fijas = barajar(FIJAS).slice(0, Math.max(0, PREGUNTAS - personas.length)).map(q =>
-    Object.assign({}, q, opciones(q.opts[q.right], q.opts.filter((_,i)=> i !== q.right))));
-  return barajar(personas.concat(fijas)).slice(0, PREGUNTAS);
+  const mezcla = q => Object.assign({}, q, opciones(q.opts[q.right], q.opts.filter((_,i)=> i !== q.right)));
+  const props = barajar(PROPUESTAS).slice(0, DE_PROPUESTAS).map(mezcla);
+  const fijas = barajar(FIJAS).slice(0, Math.max(0, PREGUNTAS - personas.length - props.length)).map(mezcla);
+  return barajar(personas.concat(props, fijas)).slice(0, PREGUNTAS);
 }
 
 /* ==================================================================
