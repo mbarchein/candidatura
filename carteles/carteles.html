@@ -297,6 +297,12 @@ body.diptico .cartel.elegido + .cartel.elegido{box-shadow:inset 2px 0 0 var(--li
 .estado--pedido{color:#0a5c47;background:rgba(79,169,162,.22)}
 .estado--programa{color:var(--cian);background:rgba(63,201,240,.18)}
 .estado--no{color:var(--coral);background:rgba(244,121,107,.2)}
+/* la etiqueta dice el estado, pero no dice qué haremos: eso es esta
+   línea, y es la que convierte el cartel en algo comprobable */
+.voz__hacemos{margin:9px 0 0;font-size:18px;line-height:1.34;color:var(--texto-2)}
+.voz__hacemos b{color:var(--texto);font-weight:500}
+.voz__hacemos em{font-style:normal;font-family:var(--mono);font-size:14px;
+  letter-spacing:.02em;color:var(--apagado-2)}
 /* lo que hay que sustituir el día 22 se marca en el fuente y se ve */
 .pendiente{background:rgba(244,121,107,.22);outline:2px dashed var(--coral);padding:0 4px}
 
@@ -342,6 +348,65 @@ body.diptico .cartel.elegido + .cartel.elegido{box-shadow:inset 2px 0 0 var(--li
 .once b{display:block;font-size:20px;font-weight:500;letter-spacing:-.015em;line-height:1.2}
 .once span{display:block;font-family:var(--mono);font-size:12px;letter-spacing:.05em;
   color:var(--apagado);margin-top:5px;line-height:1.35}
+/* la variante con cara, para `como-votamos`: ahí los once no son una
+   lista de contacto sino la mitad del mensaje -- el cartel dice
+   «compañerxs» y debajo están las caras, que es lo que no hace ningún
+   adjetivo. Las fotos son las mismas 260 x 260 del A3, así que no hay
+   que recortar nada nuevo */
+.once--caras li{display:flex;align-items:center;gap:12px}
+.once--caras img{
+  width:44px;height:44px;border-radius:50%;object-fit:cover;flex:0 0 auto;
+  box-shadow:0 0 0 2px var(--acento-vivo)
+}
+.once--caras b{font-size:18px;line-height:1.15}
+.once--caras span{margin-top:3px}
+
+/* 33 · con Compi arriba, las once caras y el lema, la pieza va al ras.
+   Lo que cede es el aire, no el cuerpo: los nombres de los once y el
+   texto de las puertas se leen en el móvil de otro y a la mitad */
+#c33 .titular{font-size:76px}
+#c34 .titular{font-size:60px}
+#c33 .cabeza{margin-top:2px}
+#c33 .bajada{margin-top:12px}
+#c33 .puertas{margin-top:16px;gap:10px}
+#c33 .puertas li{padding-top:10px}
+#c33 .puertas p{line-height:1.34}
+#c33 .ley{margin-top:5px}
+#c33 .rotulo{margin:16px 0 2px}
+#c33 .once{margin-top:12px;gap:10px 24px}
+#c33 .once li{padding-top:9px}
+#c33 .once--caras img{width:40px;height:40px}
+#c33 .lema--linea{margin-top:16px;padding-top:13px}
+#c33 .lema--linea p{font-size:40px}
+#c33 .pie{margin-top:auto;padding-top:16px}
+
+/* 34 · el titular ya no enumera nada, así que vuelve al tamaño base: a
+   84 px entran «YA TE TOCA MÁS» y «DE LO QUE CREES.» en dos líneas
+   parejas con Compi al lado. El <br> sigue siendo necesario -- sin él
+   corta por «MÁS / DE LO QUE CREES» y deja la primera línea larga y la
+   segunda corta.
+
+   Y el resto de la pieza pide aire, no relleno: al bajar la balanza de
+   tres filas a dos por columna y quitarle los tres sellos de artículo,
+   sobraban unos 180 px por abajo. Se reparten entre los bloques en vez
+   de devolver filas, que es justo lo que había que quitar. */
+#c34 .bajada{margin-top:26px}
+/* El aire de este cartel se recortó el 21: estaba metido cuando la pieza
+   era más corta --dos filas en la balanza, titular de dos líneas y una
+   sola línea de cierre--. Al entrar la fila del sábado, el titular a
+   tres líneas y la línea de la serie, ese aire era justo lo que sacaba
+   el pie del lienzo. Sigue por encima de los valores base, así que el
+   cartel no va apretado: va lleno */
+#c34 .balanza{margin-top:38px}
+#c34 .balanza > div{padding:28px 30px 28px 0}
+#c34 .balanza > div + div{padding:28px 0 28px 30px}
+#c34 .balanza ul{gap:24px}
+#c34 .limite{margin-top:30px}
+#c34 .recibo{margin-top:20px}
+#c34 .pie{margin-top:auto}
+
+
+
 .puertas{list-style:none;margin:32px 0 0;padding:0;display:grid;gap:18px}
 .puertas li{display:grid;grid-template-columns:200px 1fr;gap:24px;align-items:baseline;
   border-top:1px solid var(--linea);padding-top:16px}
@@ -383,6 +448,67 @@ body.diptico .cartel.elegido + .cartel.elegido{box-shadow:inset 2px 0 0 var(--li
   line-height:1.5;color:var(--apagado)
 }
 .ultimo b{color:var(--coral);font-weight:500}
+
+/* 36 · con quién hablas: cuatro casos de a pie, para que la pregunta del
+   titular tenga cara antes de contestarla */
+.casos{list-style:none;margin:0 0 6px;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:12px 16px}
+.casos li{
+  background:var(--panel);border:1px solid var(--linea);border-radius:6px;
+  padding:14px 20px;font-size:var(--t-cuerpo);line-height:1.35;color:var(--texto-2)
+}
+.casos li b{color:var(--texto);font-weight:500}
+
+/* 38 · la campaña en números: seis cifras en rejilla de tres, la cifra
+   manda y la explicación va en mono debajo. Solo datos comprobables */
+.cifras{list-style:none;margin:30px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);
+  border-top:2px solid var(--linea-fuerte)}
+.cifras li{padding:22px 22px 22px 0;border-bottom:1px solid var(--linea)}
+.cifras li:not(:nth-child(3n+1)){padding-left:22px;border-left:1px solid var(--linea)}
+.cifras li > b{display:block;font-weight:500;font-size:72px;line-height:.95;letter-spacing:-.05em;color:var(--acento)}
+.cifras li:nth-child(even) > b{color:var(--texto)}
+.cifras span b{color:var(--texto);font-weight:500}
+.cifras span{display:block;margin-top:12px;font-size:19px;line-height:1.35;color:var(--texto-2)}
+
+/* 39 · después del martes: una línea de tiempo vertical, la fecha en mono
+   a la izquierda y un punto en el rail. Lo que se puede reclamar, con fecha */
+.hitos{list-style:none;margin:26px 0 0;padding:0;display:grid;gap:0}
+.hitos li{display:grid;grid-template-columns:200px 1fr;gap:0}
+.hitos strong{
+  font-family:var(--mono);font-weight:500;font-size:var(--t-rotulo);letter-spacing:.12em;
+  text-transform:uppercase;color:var(--acento);padding-top:5px
+}
+.hitos p{
+  margin:0;position:relative;border-left:3px solid var(--acento-vivo);
+  padding:0 0 36px 28px;font-size:24px;line-height:1.38;color:var(--texto-2)
+}
+.hitos p::before{
+  content:"";position:absolute;left:-10px;top:6px;width:17px;height:17px;border-radius:50%;
+  background:var(--papel);border:3px solid var(--acento)
+}
+.hitos li:last-child p{border-left-color:transparent}
+.hitos p b{color:var(--texto);font-weight:500}
+
+/* 37 · el último: las nueve en rejilla de tres, lo reclamable en cuatro y
+   las once caras. Es el único que lo junta todo, porque después ya no hay */
+.nueve{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:10px 14px}
+.nueve li{
+  display:flex;align-items:baseline;gap:12px;background:var(--panel);border:1px solid var(--linea);
+  border-radius:6px;padding:9px 16px;font-size:21px;line-height:1.2;font-weight:500;letter-spacing:-.01em
+}
+.nueve span{font-family:var(--mono);font-size:var(--t-mini);color:var(--acento);letter-spacing:.06em}
+.pasos4{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.pasos4 li{border-top:3px solid var(--acento-vivo);padding-top:10px}
+.pasos4 strong{display:block;font-weight:500;font-size:21px;letter-spacing:-.02em;margin-bottom:6px;color:var(--acento)}
+.pasos4 p{margin:0;font-size:17px;line-height:1.35;color:var(--texto-2)}
+.pasos4 p b,.voto1 b{color:var(--texto);font-weight:500}
+.voto1{margin:18px 0 0;padding-top:12px;border-top:1px solid var(--linea);font-size:19px;line-height:1.4;color:var(--texto-2)}
+.caras11{list-style:none;margin:16px 0 0;padding:0;display:grid;grid-template-columns:repeat(11,1fr);gap:6px}
+.caras11 li{text-align:center}
+.caras11 img{display:block;margin:0 auto;width:54px;height:54px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 2px var(--panel),0 0 0 3px var(--linea-fuerte)}
+.caras11 span{display:block;margin-top:5px;font-size:14px;line-height:1.1;color:var(--texto-2)}
+#c37 .rotulo{margin:22px 0 14px}
+#c37 .remate{margin-top:16px;padding:16px 24px;font-size:24px}
+#c37 .bajada{margin-top:16px}
 
 /* 13 · el programa entero en un cartel: cada petición en una línea con su
    artículo debajo, en dos columnas y un bloque ancho al final. Es la pieza
@@ -554,6 +680,17 @@ body.diptico .cartel.elegido + .cartel.elegido{box-shadow:inset 2px 0 0 var(--li
 }
 .recibo b{color:var(--acento);font-weight:500}
 
+/* La línea de la serie. NO es de la propuesta de hoy: es de la campaña
+   entera, así que no puede ir pegada al recibo o se lee como parte de lo
+   que se pide en este cartel. Va debajo, con su propio filo de 1 px --el
+   del pie es de 2, así que no compiten-- y medio punto más floja. Se
+   repite igual en todos los carteles que salgan de aquí en adelante */
+.serie{
+  margin:13px 0 0;padding-top:11px;border-top:1px solid var(--linea);
+  font-size:17px;line-height:1.3;letter-spacing:-.01em;color:var(--apagado)
+}
+.serie b{color:var(--acento);font-weight:500}
+
 /* 14 · va al ras, como el 12: tres acciones con sello, el par de vías, el
    panel del límite y el acuse del buzón en el mismo lienzo. Medido: sin
    esto el contenido pide 1511 px y el pie se sale */
@@ -635,6 +772,15 @@ body.diptico .cartel.elegido + .cartel.elegido{box-shadow:inset 2px 0 0 var(--li
   text-transform:uppercase
 }
 .lema p + p{margin-top:2px}
+/* el lema en UNA línea, para `como-votamos`: el bloque de tres versos de
+   `salarios-ipc` no cabe en una pieza que ya lleva las once caras, y aquí
+   el lema no es el remate sino la frase que resume el cartel. Se queda el
+   filete de acento, se va el fondo -- con la rejilla de caras justo
+   encima, el panel crema partía el cartel en dos-- y el margin-top:auto
+   vuelve al pie, que es quien tiene que empujar hasta abajo */
+.lema--linea{margin-top:22px;background:none;padding:16px 0 0}
+.lema--linea p{font-size:46px;line-height:1;letter-spacing:-.035em}
+.lema--linea b{color:var(--acento);font-weight:500}
 .lema .ultima{color:var(--acento)}
 .lema span{
   display:block;margin-top:16px;font-family:var(--mono);font-weight:400;
@@ -677,12 +823,14 @@ body.diptico .cartel.elegido + .cartel.elegido{box-shadow:inset 2px 0 0 var(--li
 #c3 .pie__caras .pie__cara + .pie__cara{margin-left:-18px}
 #c3 .pie__medio--cara{gap:18px}
 #c3 .bajada{margin-top:22px}
-#c3 .puertas{margin-top:58px;gap:40px}
+/* con el sillón en la cabecera el titular baja a tres líneas, así que el
+   aire de las puertas se recorta: 58/40/34 era el de la pieza sin muñeco */
+#c3 .puertas{margin-top:40px;gap:34px}
 /* 03 · aquí el rótulo de la fila manda: son los dos sitios que se piden y
    en mono pequeño no se veían. Va en tipografía de texto, grande y en el
    acento, y por eso la etiqueta se queda en una palabra: «comer, aparte»
    a 34 px se partía en dos líneas y el «aparte» ya lo dice el cuerpo */
-#c3 .puertas li{grid-template-columns:224px 1fr;gap:28px;padding-top:34px}
+#c3 .puertas li{grid-template-columns:224px 1fr;gap:28px;padding-top:28px}
 #c3 .puertas strong{
   font-family:var(--display);font-weight:500;font-size:34px;line-height:1;
   letter-spacing:-.03em;text-transform:none;color:var(--acento)
@@ -788,17 +936,174 @@ body.diptico .cartel.elegido + .cartel.elegido{box-shadow:inset 2px 0 0 var(--li
 #c24 .recibo{margin-top:32px}
 #c24 .pie{margin-top:auto}
 
-/* 07 · con la cuarta columna y las tres filas nuevas el tablero va al
-   ras. Lo que cede son los huecos, no el cuerpo: este cartel se guarda
-   para compararlo en enero, así que tiene que poder leerse en papel */
-#c7 .bajada{margin-top:16px}
-#c7 .tablero{margin-top:16px}
-#c7 .fila{padding:4px 0}
+/* 07 · con la cuarta columna y las dieciséis filas el tablero va al ras.
+   Lo que cede son los huecos y el titular, no el cuerpo de las filas:
+   este cartel se guarda para compararlo en enero, así que tiene que
+   poder leerse en papel. Las cuatro filas de las propuestas del 15
+   pedían 90 px que no había, y salen de bajar el titular a 76 -- sigue
+   siendo la línea más grande de la pieza -- y de dejar las filas en 2 px
+   de aire, que a 16 filas son 64 px */
+#c7 .titular{font-size:66px}
+#c7 .bajada{margin-top:12px;font-size:25px}
+/* tres citas con su acción, la lista de abajo y el bloque de límite no
+   caben con el aire de la plantilla: el titular baja a 64 y todo lo
+   demás se aprieta. El cuerpo de las citas no baja de 20 px, que es lo
+   que se lee en el móvil de otro y a la mitad de tamaño */
+#c6 .titular{font-size:64px}
+#c6 .bajada{margin-top:11px}
+#c6 .voces{margin-top:14px;gap:8px}
+#c6 .voces li{padding:11px 22px}
+#c6 .voces q{font-size:20px}
+#c6 .estado{margin-top:7px}
+#c6 .voz__hacemos{margin-top:6px;font-size:17px}
+#c6 .resto{margin-top:10px}
+#c6 .limite{margin-top:10px;padding:10px 24px}
+#c6 .pie{margin-top:auto}
+
+#c7 .tablero{margin-top:12px}
+#c7 .fila{padding:1px 0}
 #c7 .fila--cabeza{padding:8px 0}
 #c7 .fila i{width:18px;height:18px}
-#c7 .leyenda{margin-top:10px}
-#c7 .firmas{margin-top:14px}
+#c7 .leyenda{margin-top:9px}
+#c7 .firmas{margin-top:12px}
 #c7 .pie{margin-top:auto}
+/* 25, 26, 27 · las tres propuestas de la semana del 15. Misma
+   arquitectura que el 15: titular, tres puertas, límite y recibo, así
+   que comparten el mismo aire. Van juntas a propósito -- se envían tres
+   días seguidos y se leen como una serie, no como tres carteles
+   sueltos */
+/* 25 · el titular comparte fila con Compi soplando la tarta, igual que
+   el 24 con el abanico. Aquí se queda a 84 px y en tres líneas: ninguna
+   pasa de doce caracteres, así que caben de sobra en los 748 px que deja
+   el muñeco, y tres líneas a 84 dan 232 px de alto contra los 216 del
+   canvas -- o sea que el titular manda en la fila y Compi acompaña, que
+   es como tiene que ser */
+#c25 .cabeza__compi{padding-bottom:2px}
+#c25 .bajada,#c26 .bajada,#c27 .bajada,#c30 .bajada{margin-top:20px}
+#c26 .puertas,#c27 .puertas{margin-top:48px;gap:34px}
+#c26 .puertas li,#c27 .puertas li{padding-top:30px}
+#c26 .limite,#c27 .limite{margin-top:42px}
+#c26 .recibo,#c27 .recibo{margin-top:28px}
+
+/* 27 · la pieza pasó de tres filas a dos y sobraban unos 110 px por
+   abajo. Van a los huecos, no a una fila devuelta: la fila que se cayó
+   era el «cómo» -- reserva, tarjeta, anticipo en nómina --, que es
+   fontanería nuestra y no algo que nadie necesite leer en un chat. */
+#c27 .bajada{margin-top:28px}
+#c27 .puertas{margin-top:66px;gap:50px}
+#c27 .puertas li{padding-top:40px}
+#c27 .limite{margin-top:60px}
+#c27 .recibo{margin-top:40px}
+/* el médico lleva CUATRO puertas desde el 14 -- entró la del art. 22 del
+   convenio, que es la que explica por qué existe la petición -- y con el
+   aire de tres se salía del lienzo. Se recorta el AIRE, no el cuerpo:
+   esta pieza se lee en el móvil de otro y a la mitad de tamaño */
+#c26 .puertas{margin-top:28px;gap:22px}
+#c26 .puertas li{padding-top:20px}
+#c26 .limite{margin-top:32px}
+#c26 .recibo{margin-top:22px}
+
+#c25 .pie,#c26 .pie,#c27 .pie,#c29 .pie,#c30 .pie,#c31 .pie{margin-top:auto}
+
+/* 25 y 29 · cuatro puertas en vez de tres, así que van más apretadas.
+   El 25 además tiene el titular en tres líneas con Compi al lado */
+#c25 .puertas,#c30 .puertas{margin-top:34px;gap:22px}
+#c25 .puertas li,#c30 .puertas li{padding-top:20px}
+#c25 .limite,#c30 .limite{margin-top:28px}
+#c25 .recibo,#c30 .recibo{margin-top:20px}
+/* 30 · desde el 17 son CUATRO puertas -- el reparto se salió a la suya --
+   y encima entró Compi en la cabecera, así que la pieza se salía del
+   lienzo por abajo y se comía el pie. Lo que cede es el aire, no el
+   cuerpo: el sistema de reparto es lo que hace la pieza */
+#c30 .bajada{margin-top:16px}
+#c30 .puertas{margin-top:24px;gap:15px}
+#c30 .puertas li{padding-top:14px}
+#c30 .limite{margin-top:22px}
+#c30 .recibo{margin-top:16px}
+/* 29 · cuatro puertas y tres con etiqueta de norma, así que es la más
+   llena de la serie. Y encima lleva dos Compis en la cabecera, que es
+   lo que la deja al ras: por eso el adulto va a esc 5 y no a 6 como el
+   del 24 y el del 25 */
+#c29 .bajada{margin-top:16px}
+#c29 .puertas{margin-top:22px;gap:13px}
+#c29 .puertas li{padding-top:13px}
+#c29 .puertas p{line-height:1.36}
+#c29 .limite{margin-top:18px}
+#c29 .recibo{margin-top:14px}
+
+/* el hijo: un segundo Compi a esc 3 contra el adulto a esc 5, o sea al
+   60 % de su altura, que es la proporción real de un crío frente a un
+   adulto y no la mitad exacta. Van pegados por los pies -- flex-end --
+   porque las dos sombras del suelo tienen que caer en la misma línea o
+   se leen como dos muñecos recortados y pegados */
+.cabeza__compi--dos{display:flex;align-items:flex-end}
+/* y el hijo se mete DENTRO del lienzo del adulto. Cada canvas mide 27
+   píxeles de sprite de ancho pero el muñeco solo ocupa unos once en el
+   centro, así que pegando los dos canvas quedaban 73 px de aire entre
+   los dos y se leían como dos muñecos sueltos. El margen negativo se
+   come ese aire y los deja a un palmo, que es lo que hace que se lean
+   como padre e hijo y no como dos figuras en la misma fila. A -64 px la
+   cabeza del crío se metía en el brazo del adulto y se emborronaban los
+   dos; -54 deja el hueco justo */
+.cabeza__compi--dos canvas + canvas{margin-left:-54px}
+/* 28 · el par de iguales. Aquí los dos muñecos miden LO MISMO, que es
+   media pieza: si uno es más grande, «te acompañamos» se lee como que
+   alguien te lleva de la mano, y eso es justo lo que el cartel promete
+   no hacer. El solape es otro que el de padre e hijo porque los dos
+   lienzos son ya del mismo ancho: -78 px deja tres píxeles de sprite de
+   aire entre los hombros, o sea un palmo, ni pegados ni sueltos */
+/* las dos sillas ocupan el sitio que tenían los dos Compi. Se alinean con
+   la última línea del titular, no con la primera: colgadas arriba flotan */
+
+#c29 .puertas .ley{margin-top:7px}
+
+/* 31 · tres puertas y el panel del límite haciendo de remate: es la
+   pieza donde el límite ES el argumento, así que se le da aire y un
+   titular de cabecera propio */
+#c31 .bajada{margin-top:18px}
+#c31 .puertas{margin-top:40px;gap:24px}
+#c31 .puertas li{padding-top:22px}
+#c31 .limite{margin-top:30px}
+#c31 .recibo{margin-top:20px}
+
+/* 32 · el cartel de cierre. Mismo esqueleto que el 13 pero con diez
+   líneas en vez de doce, así que respira un poco más */
+/* 35 · el buzón entero: cinco grupos y dieciocho líneas, o sea el
+   cartel con más texto de la serie. Cede aire, no cuerpo: las líneas
+   tienen que leerse en el móvil igual que las de los demás */
+#c35 .bajada{margin-top:16px}
+#c35 .programa{margin-top:22px;gap:10px 34px}
+#c35 .grupo h3{margin-bottom:7px;padding-bottom:4px}
+#c35 .grupo ul{gap:6px}
+#c35 .grupo li{font-size:17px;line-height:1.26}
+#c35 .limite{margin-top:16px}
+#c35 .ultimo{margin-top:8px}
+#c35 .pie{margin-top:auto}
+
+#c32 .bajada{margin-top:20px}
+#c32 .programa{margin-top:26px;gap:18px 34px}
+#c32 .grupo li{font-size:18px;line-height:1.3}
+#c32 .limite{margin-top:24px}
+#c32 .ultimo{margin-top:14px}
+#c32 .pie{margin-top:auto}
+
+/* 28 · la de igualdad lleva cuatro puertas y rótulo, así que va más
+   apretada que las otras tres. Y no lleva Compi: el hueco que deja en
+   el pie se lo quedan las dos caras, que aquí son el argumento */
+#c28 .bajada{margin-top:20px}
+#c28 .rotulo{margin:38px 0 6px}
+#c28 .puertas{margin-top:18px;gap:24px}
+#c28 .puertas li{padding-top:20px}
+#c28 .puertas .ley{margin-top:7px}
+#c28 .limite{margin-top:32px}
+#c28 .recibo{margin-top:18px}
+#c28 .pie{margin-top:auto}
+#c28 .pie__caras .pie__cara{width:82px;height:82px}
+#c28 .pie__medio--cara{gap:20px}
+
+/* una URL partida en dos líneas dentro de un recibo se lee como un error
+   de maquetación, y el recibo es justo la línea que manda al buzón */
+.nw{white-space:nowrap}
 </style>
 </head>
 <body>
@@ -1070,7 +1375,7 @@ body.diptico .cartel.elegido + .cartel.elegido{box-shadow:inset 2px 0 0 var(--li
   <div class="resto">
     <p class="resto__cab"><span>Lo demás que nos habéis pedido</span><span>Y qué vamos a hacer</span></p>
     <ul>
-      <li><span><b>Intensiva en julio</b>, con los 23 días intactos</span><i>Pedirla con la cláusula <em>&middot; art. 21.1 conv.</em></i></li>
+      <li><span><b>Intensiva en julio</b>, sin tocar las vacaciones</span><i>Pedirla con la cláusula <em>&middot; art. 21.1 conv.</em></i></li>
       <li><span><b>Que el cliente no marque el día a día</b> de quien programa</span><i>Pedir informe previo <em>&middot; art. 64.5 ET</em></i></li>
       <li><span><b>Preguntar al equipo al cerrar cada proyecto</b></span><i>Pedirlo en la evaluación <em>&middot; art. 16 LPRL</em></i></li>
       <li><span><b>Más responsabilidad</b>, varios proyectos a la vez, <b>con su subida</b></span><i>Llevarlo a la mesa salarial <em>&middot; art. 87.1 ET</em></i></li>
@@ -1121,8 +1426,8 @@ body.diptico .cartel.elegido + .cartel.elegido{box-shadow:inset 2px 0 0 var(--li
       <ul>
         <li><b>Un protocolo de flexibilidad y trabajo a distancia, escrito</b>: qué se pide, a
           quién, y en cuántos días te contestan.<i>art. 34.8 ET</i></li>
-        <li><b>Intensiva en julio</b>, y con los <b>23 días de vacaciones intactos</b>: el convenio
-          baja a 22 a quien tiene dos meses.<i>art. 20.1 · art. 21.1 del convenio</i></li>
+        <li><b>Intensiva en julio</b>, y <b>sin perder días de vacaciones</b>: el convenio le quita
+          uno a quien tiene dos meses.<i>art. 20.1 · art. 21.1 del convenio</i></li>
         <li><b>Una ventana horaria</b> en la que nadie tiene que contestar.<i>art. 20 bis ET</i></li>
         <li><b>El acuerdo de trabajo a distancia firmado, con los gastos compensados</b> y con
           copia al comité.<i>Ley 10/2021, arts. 7, 12 y 6.2</i></li>
@@ -1226,8 +1531,9 @@ body.diptico .cartel.elegido + .cartel.elegido{box-shadow:inset 2px 0 0 var(--li
       <div class="accion__n">01</div>
       <div class="accion__cuerpo">
         <h3>La intensiva en julio, sin perder vacaciones</h3>
-        <p>El convenio <b>solo la da en agosto</b>, y baja a <b>22 días de vacaciones</b> a quien
-          tiene dos meses. Así que se pide con la cláusula delante: <b>julio, y los 23 intactos.</b></p>
+        <p>El convenio <b>solo la da en agosto</b>, y <b>quita un día de vacaciones</b> a quien
+          tiene dos meses. Así que se pide con la cláusula delante: <b>julio, y las vacaciones
+          intactas.</b></p>
         <span class="ley">art. 20.1 &middot; art. 21.1 del convenio</span>
       </div>
     </li>
@@ -1331,7 +1637,10 @@ body.diptico .cartel.elegido + .cartel.elegido{box-shadow:inset 2px 0 0 var(--li
 <section class="cartel" id="c15">
   <div class="tapa"><span>Movilidad &middot; bici y patinete</span><b>29-S</b></div>
 
-  <h1 class="titular titular--largo">Movilidad sostenible<em>de forma segura.</em></h1>
+  <div class="cabeza">
+    <h1 class="titular titular--largo">Movilidad sostenible<em>de forma segura.</em></h1>
+    <div class="cabeza__compi"><canvas data-pose="patinete" data-tt="0" data-esc="6"></canvas></div>
+  </div>
   <p class="bajada bajada--ancha">
     <b>En ningún sitio.</b> No hay plaza señalada ni punto cerrado, y con lo que cuestan una bici o
     un patinete, nadie se arriesga a dejarlo suelto. Así que quien vendría pedaleando, viene en
@@ -1564,7 +1873,10 @@ body.diptico .cartel.elegido + .cartel.elegido{box-shadow:inset 2px 0 0 var(--li
 <section class="cartel" id="c3">
   <div class="tapa"><span>Compromiso &middot; Ambiente</span><b>29-S</b></div>
 
-  <h1 class="titular titular--largo">Un sitio donde<em>desconectar sin salir.</em></h1>
+  <div class="cabeza">
+    <h1 class="titular titular--largo">Un sitio donde<em>desconectar sin salir.</em></h1>
+    <div class="cabeza__compi"><canvas data-pose="sillon" data-tt="700" data-esc="6"></canvas></div>
+  </div>
   <p class="bajada bajada--ancha">
     Ahora mismo nos vemos <b>de pasillo o de cocina</b>, y comer delante del portátil no es una
     pausa. Pedimos dos sitios distintos: uno para comer y otro para no hacer nada.
@@ -1598,17 +1910,16 @@ body.diptico .cartel.elegido + .cartel.elegido{box-shadow:inset 2px 0 0 var(--li
     &middot; sin-siglas.info/buzon</p>
 
   <footer class="pie">
-    <div class="compi"><p class="compi__globo">Esto sí es una pausa.</p><canvas data-pose="sillon" data-tt="700"></canvas></div>
+    <div class="compi"><p class="compi__globo">Esto sí es una pausa.</p><canvas data-pose="quieto" data-tt="900"></canvas></div>
     <div class="pie__medio pie__medio--cara">
       <div class="pie__caras">
         <img class="pie__cara" src="../a3-candidatura/img/navarro.jpg" alt="">
-        <img class="pie__cara" src="../a3-candidatura/img/aranda.jpg" alt="">
         <img class="pie__cara" src="../a3-candidatura/img/bolivar.jpg" alt="">
       </div>
       <div>
         <p class="pie__quien">Habla con</p>
-        <p class="pie__nombres">Raúl Navarro <span>&middot;</span> Mario Aranda <span>&middot;</span> Fran Bolívar</p>
-        <p class="pie__puesto">Los tres, ya en el Comité de Seguridad y Salud</p>
+        <p class="pie__nombres">Raúl Navarro <span>&middot;</span> Fran Bolívar</p>
+        <p class="pie__puesto">Los dos, ya en el Comité de Seguridad y Salud</p>
       </div>
     </div>
     <div class="pie__voto">
@@ -2045,11 +2356,23 @@ body.diptico .cartel.elegido + .cartel.elegido{box-shadow:inset 2px 0 0 var(--li
        · art. 20.3 -- las condiciones de temporada más beneficiosas ya
          existentes SE MANTIENEN
 
+     LOS 23 DÍAS NO SE IMPRIMEN EN NINGÚN CARTEL (decisión del 10 de
+     septiembre). El 21.1 fija veintitrés días laborables, pero eso es un
+     SUELO, no el número de nadie en concreto: con antigüedad o con
+     mejoras propias hay gente que tiene más. Un cartel que imprime «los
+     23 días» le está diciendo a esa gente que no conoce su caso, y es
+     justo la gente que más tiempo lleva. Lo que sí es cierto para todos
+     es EL MECANISMO -- el convenio quita un día a quien tiene dos meses
+     de intensiva -- así que se dice el mecanismo y no la cifra. Tocó
+     `lo-que-pedimos`, `propuestas`, `convenio` y `cumpleanos`; este
+     cartel ya no la nombraba.
+
      POR QUÉ EL CARTEL NO DA LA CUENTA HECHA. La ganancia depende de la
      jornada semanal real de la casa, que no está comprobada: con 1.800
-     horas repartidas en el año la semana ordinaria ronda las 39 h, y el
-     tope de la intensiva son 36, así que un mes más de intensiva son
-     unas doce o trece horas menos y el día de vacaciones son unas ocho.
+     horas repartidas en el año la semana ordinaria sale a 40 h (dato
+     corregido el 22-9; antes se decía 39), y el tope de la intensiva son
+     36, así que un mes más de intensiva son unas dieciséis horas menos y
+     el día de vacaciones son unas ocho.
      Saldría a favor, pero es un cálculo con una semana supuesta y este
      cartel no imprime cuentas sin comprobarlas: promete publicarla.
 
@@ -2120,6 +2443,1462 @@ body.diptico .cartel.elegido + .cartel.elegido{box-shadow:inset 2px 0 0 var(--li
     </div>
   </footer>
 </section>
+
+<!-- ==================================================================
+     EL CUMPLEAÑOS · propuesta 1 · martes 15 de septiembre
+     ------------------------------------------------------------------
+     EL TITULAR VA EN ESPEJO -- «un año más / un día menos» -- y ahí está
+     todo el chiste: la misma cuenta leída en las dos direcciones. Se
+     eligió entre veinticuatro, y los otros dos finalistas eran «un día al
+     año no hace daño» (el refrán ya está en la cabeza antes de leer nada)
+     y «nadie pide permiso para cumplir años».
+
+     Ojo con «de oficina»: quien trabaja en casa no va a la oficina, así
+     que la tercera línea deja fuera a parte de la plantilla justo en la
+     campaña que pide el protocolo de trabajo a distancia. Se mantiene
+     porque el espejo se pierde con «de trabajo» y porque es el titular,
+     no una cláusula; si alguien lo ve mal, la línea a cambiar es esa y
+     solo esa.
+
+     La única pieza de la serie QUE NO LLEVA ARTÍCULO DETRÁS, y eso no
+     es un fallo: es lo que la hace distinta. No hay norma que dé el
+     cumpleaños libre, así que el panel del límite lo dice en voz alta
+     en vez de esconderlo. Una candidatura que cita el artículo en once
+     carteles y en el doce dice «este no tiene» es más creíble, no menos.
+
+     Dos decisiones de redacción, y las dos salen del mismo sitio que la
+     cláusula de los 23 días de `verano-intensiva`: lo que demuestra que
+     nos hemos leído las cosas es la letra pequeña, no la petición.
+
+       1. «UNO MÁS, NO UNO DE TUS DÍAS DE VACACIONES». Sin esa línea, la
+          empresa puede conceder el día descontándolo de vacaciones y
+          decir que sí. Mismo mecanismo que el art. 21.1 en la intensiva.
+          Y va SIN NÚMERO a propósito: ver la nota de los 23 días abajo.
+       2. EL TRASLADO AL VIERNES O AL LUNES. Dos de cada siete días del
+          año caen en fin de semana, así que sin la cláusula la medida
+          se cae para el 28,6 % de la plantilla, y encima de forma
+          aleatoria. La fracción va escrita como «dos de cada siete»
+          porque es exacta y comprobable de cabeza.
+       3. Y EL CUMPLEAÑOS QUE CAE DENTRO DE LAS VACACIONES, que se pasó
+          al redactar la propuesta y se añadió el 10. Es el mismo agujero
+          que el del fin de semana por otra puerta: si tu cumple cae en
+          tu quincena, un día libre que ya estabas libre no es nada. Se
+          resuelve dejando elegir -- un día menos en la solicitud, o uno
+          suelto para otro momento -- y por eso las dos cláusulas van en
+          filas hermanas, «si cae en...» las dos.
+
+     LA BAJADA DICE «UN TERCIO» Y NO SUMA DOS FRACCIONES. Fin de semana
+     son 2/7 (28,6 %) y las vacaciones son unos 23 días laborables sobre
+     unos 250, o sea otro 9 % largo, pero LOS DOS CONJUNTOS NO SE SOLAPAN
+     -- unas vacaciones caen en días laborables, no en sábado -- así que
+     sumar da del orden de un tercio. Va como «un tercio» y no como un
+     porcentaje porque el segundo sumando depende de cuántos días cojas
+     y cuándo, y este cartel no imprime cuentas que no se sostienen.
+
+     Base legal: NO HAY. El art. 37.3 ET enumera los permisos
+     retribuidos y el cumpleaños no está. Lo único que se cita es la
+     legitimación del comité para abrir la negociación:
+       · art. 87.1 ET -- el comité de empresa está legitimado para
+         negociar convenios y acuerdos de ámbito de empresa
+     ================================================================== -->
+<section class="cartel" id="c25">
+  <div class="tapa"><span>Permisos &middot; el día que cumples</span><b>29-S</b></div>
+
+  <div class="cabeza">
+    <h1 class="titular">Un año más.<em>Un día menos<br>de oficina.</em></h1>
+    <div class="cabeza__compi"><canvas data-pose="tarta" data-tt="0" data-esc="6"></canvas></div>
+  </div>
+  <p class="bajada bajada--ancha">
+    <b>Un día libre el día de tu cumpleaños.</b> Y las <i>dos líneas que hacen que sirva</i>: si cae
+    en fin de semana, y si cae dentro de tus vacaciones. <b>Sin ellas, a un tercio de la plantilla
+    no le llega</b> — y le toca por sorteo.
+  </p>
+
+  <ul class="puertas">
+    <li>
+      <strong>Qué pedimos</strong>
+      <p>Un <b>día de permiso retribuido</b> el día que cumples. <b>Uno más, no uno de tus días de
+        vacaciones</b>: si sale de ahí, no es un día, es un cambio de nombre.</p>
+    </li>
+    <li>
+      <strong>Si cae en fin de semana</strong>
+      <p>Se disfruta el <b>viernes anterior o el lunes siguiente</b>, a elección de quien cumple.
+        <b>Dos de cada siete caen ahí.</b></p>
+    </li>
+    <li>
+      <strong>Si cae en tus vacaciones</strong>
+      <p>Tampoco se pierde: <b>un día menos en la solicitud</b>, o uno suelto para cogerlo en otro
+        momento. También a elección de quien cumple.</p>
+    </li>
+    <li>
+      <strong>Cuándo</strong>
+      <p>En la <b>primera reunión del comité</b>, por escrito. Y os enseñaremos lo que contesten,
+        sea lo que sea.</p>
+    </li>
+  </ul>
+
+  <div class="limite">
+    <h4>Y esta no la obliga ninguna norma</h4>
+    <p>Es la <b>única de la serie que no lleva artículo detrás</b>: no hay ley que dé el cumpleaños
+      libre. Se pide, se negocia y <b>lo firma la empresa</b> — o no. Lo que sí tenemos es dónde
+      pedirlo. <span class="ley">art. 87.1 ET</span></p>
+  </div>
+
+  <p class="recibo"><b>Todavía no lo hemos pedido</b>, y no vamos a decir que sí. Se pide con el
+    comité constituido &middot; sin-siglas.info/buzon</p>
+
+  <footer class="pie">
+    <div class="compi"><p class="compi__globo">Hoy no me busques.</p><canvas data-pose="celebra" data-tt="300"></canvas></div>
+    <div class="pie__medio pie__medio--cara">
+      <div class="pie__caras">
+        <img class="pie__cara" src="../a3-candidatura/img/aranda.jpg" alt="">
+        <img class="pie__cara" src="../a3-candidatura/img/castillo.jpg" alt="">
+      </div>
+      <div>
+        <p class="pie__quien">Lo llevan</p>
+        <p class="pie__nombres">Mario Aranda <span>&middot;</span> M.ª Emilia Castillo</p>
+        <p class="pie__puesto">People &amp; Values &middot; Professional Services</p>
+      </div>
+    </div>
+    <div class="pie__voto">
+      <p class="pie__fecha">29 de septiembre</p>
+      <p class="pie__url">sin-siglas.info</p>
+    </div>
+  </footer>
+</section>
+
+<!-- ==================================================================
+     MÉDICO PÚBLICO Y PRIVADO · propuesta 7 · miércoles 16 de septiembre
+     ------------------------------------------------------------------
+     La petición es de equiparación, no de ampliación, y ahí está toda
+     la fuerza: NO PIDE UNA HORA MÁS. Pide que la hora que ya está
+     concedida no dependa del membrete del justificante. Por eso el
+     cartel repite «la misma hora» tres veces y nunca dice «más
+     permiso»: en cuanto se lee como una hora extra, cuesta dinero y se
+     puede decir que no.
+
+     LO QUE EL CARTEL NO HACE, Y ES DELIBERADO:
+       · no dice que la sanidad pública tarde ni la compara con nada.
+         Dice «te dan hora antes», que es el motivo real por el que
+         alguien va por lo privado y no es un juicio sobre nadie
+       · YA SÍ AFIRMA QUÉ DICE EL CONVENIO, porque el 14 de septiembre se
+         leyó el art. 22 en el BOE (BOE-A-2025-7766) y el resultado
+         cambia la pieza a mejor. El artículo lista NUEVE letras --
+         matrimonio, accidente o enfermedad grave, fallecimientos,
+         traslado de domicilio, deber inexcusable de carácter público,
+         funciones sindicales, exámenes prenatales e imposibilidad de
+         acceder al centro -- y NINGUNA es la consulta médica ordinaria.
+         Tampoco la lista el art. 37.3 ET
+
+       · PERO ESO VIVE EN EL PANEL DEL LÍMITE Y EN NINGÚN SITIO MÁS, y
+         esto costó una versión entera. El 14 se probó a sacarlo a una
+         cuarta puerta, «lo que casi nadie sabe», y hubo que quitarla:
+         CONTRADECÍA LA BAJADA DEL PROPIO CARTEL. Arriba dice «si vas por
+         lo público, la hora está cubierta» y tres centímetros más abajo
+         decía «no te la da ni el Estatuto ni el convenio», así que el
+         lector se quedaba sin saber si la tiene o no -- y con un titular
+         en mayúsculas diciéndoselo, sonaba a mala noticia en una pieza
+         que va de una mejora.
+
+         La regla que queda: EL DATO INCÓMODO VA EN LA LETRA PEQUEÑA, que
+         es donde el lector ya lo lee como matiz. Sacarlo a titular lo
+         convierte en el tema del cartel.
+
+       · Y LO QUE NO SE IMPRIME EN NINGÚN SITIO, aunque se pidió: «si
+         presentas justificante no tienes que recuperar esas horas». NO
+         ES CIERTO como afirmación general -- ni el ET ni el art. 22 del
+         convenio lo dicen -- y es la clase de frase que la empresa
+         desmiente con el convenio en la mano. Para quien pregunte: si
+         hoy no te descuentan, es costumbre de la casa; una costumbre
+         consolidada es condición más beneficiosa y no se quita de un día
+         para otro, pero tendrías que probarla tú, y por eso se pide por
+         escrito. Eso se dice de palabra, no en un cartel
+       · no promete el resultado, porque lo firma la empresa
+
+     Verificado:
+       · art. 37.3 ET -- enumera los permisos retribuidos y la consulta
+         médica ordinaria NO está en la lista. De ahí que el permiso
+         salga del convenio o de la costumbre de la casa, que es
+         justamente lo que se quiere poner por escrito
+       · art. 34.8 ET -- derecho individual a solicitar la adaptación de
+         la jornada. Existe hoy y no depende de esta petición: va en el
+         panel del límite como lo que sí hay mientras tanto
+     ================================================================== -->
+<section class="cartel cartel--coral" id="c26">
+  <div class="tapa"><span>Permisos &middot; médico</span><b>29-S</b></div>
+
+  <div class="cabeza">
+    <h1 class="titular titular--largo">La cita es la misma.<em>El permiso, no.</em></h1>
+    <div class="cabeza__compi"><canvas data-pose="medico" data-tt="0" data-esc="6"></canvas></div>
+  </div>
+  <p class="bajada bajada--ancha">
+    Si vas por lo público, la hora del médico está cubierta. Si vas por lo privado —porque te dan
+    hora antes— <b>esa misma hora la pones tú</b>. <i>No pedimos una hora más: pedimos que sea la
+    misma hora.</i>
+  </p>
+
+  <ul class="puertas">
+    <li>
+      <strong>Qué pedimos</strong>
+      <p>Que el permiso <b>no pregunte de quién es la consulta</b>. Mismo tiempo, mismo
+        justificante, mismo permiso. <b>Y también para acompañar</b> a quien tienes a cargo.</p>
+    </li>
+    <li>
+      <strong>Por qué no cuesta más</strong>
+      <p>Porque <b>no es una hora nueva</b>: es la hora que ya está concedida cuando el sello es
+        otro. Lo único que cambia es el membrete del papel.</p>
+    </li>
+    <li>
+      <strong>Cuándo</strong>
+      <p>En la <b>primera reunión del comité</b>, por escrito. Y os enseñaremos lo que contesten,
+        sea lo que sea.</p>
+    </li>
+  </ul>
+
+  <div class="limite">
+    <h4>Lo que no depende de nosotros</h4>
+    <p><b>Ni el Estatuto ni el convenio listan la consulta médica</b> entre los permisos
+      retribuidos, así que esto sale de lo escrito en casa y <b>lo firma la empresa</b>. Lo que sí
+      existe hoy, y no depende de esta petición, es tu derecho a <b>pedir que te adapten la
+      jornada</b> para llegar a la cita.
+      <span class="ley">art. 22 del convenio &middot; art. 34.8 ET</span></p>
+  </div>
+
+  <p class="recibo"><b>Y si tu caso es otro</b> —un tratamiento, acompañar— dilo antes de que lo
+    llevemos <span class="nw">&middot; sin-siglas.info/buzon</span></p>
+
+  <footer class="pie">
+    <div class="compi"><p class="compi__globo">Sala de espera.</p><canvas data-pose="cansado" data-tt="400"></canvas></div>
+    <div class="pie__medio pie__medio--cara">
+      <div class="pie__caras">
+        <img class="pie__cara" src="../a3-candidatura/img/lopeza.jpg" alt="">
+        <img class="pie__cara" src="../a3-candidatura/img/navarro.jpg" alt="">
+      </div>
+      <div>
+        <p class="pie__quien">Lo llevan</p>
+        <p class="pie__nombres">Violeta López <span>&middot;</span> Raúl Navarro</p>
+        <p class="pie__puesto">Professional Services &middot; People &amp; Values</p>
+      </div>
+    </div>
+    <div class="pie__voto">
+      <p class="pie__fecha">29 de septiembre</p>
+      <p class="pie__url">sin-siglas.info</p>
+    </div>
+  </footer>
+</section>
+
+<!-- ==================================================================
+     EL ADELANTO DE LAS DIETAS · propuesta 2 · jueves 17 de septiembre
+     ------------------------------------------------------------------
+     ACLARADA EL 22-9, Y EL FALLO ESTABA EN EL TITULAR. «Que no lo
+     adelantes tú» abre con un pronombre sin antecedente: el titular se
+     lee antes que la bajada, así que «lo» no señala a nada y la pieza
+     obliga a leérsela entera para saber de qué va. Lo avisó quien la
+     lleva, que es la señal más cara de todas: si quien firma el cartel
+     tiene que explicarlo por chat, el cartel no está haciendo su
+     trabajo.
+
+     Tres cambios:
+       · EL TITULAR NOMBRA LA COSA -- «Que las comidas del viaje no las
+         pongas tú» --. Tres líneas, así que va con .titular--largo a
+         71px, igual que `parking`. Y sigue sin ser antitético.
+       · LA BAJADA EMPIEZA POR LO QUE LA EMPRESA YA PAGA, y solo después
+         por lo que pones tú. Con el dolor dicho entero -- «y esperas a
+         que te los devuelvan» --, que es lo que hace obvia la petición
+         y que en la versión anterior se resolvía en un «después».
+       · FUERA EL SUPLIDO TRADUCIDO. «La dieta no es sueldo: es
+         devolverte un gasto del trabajo» seguía siendo el argumento
+         jurídico dicho en corto, y en la cara del cartel costaba un
+         segundo. Lo necesario lo dice ahora una frase que se entiende
+         sola: «lo único que cambia es quién pone el dinero mientras
+         tanto». El 26.2 ET se defiende en persona, como el sello.
+
+     CORREGIDA EL 17-9, Y ERA UN ERROR DE HECHO, NO DE TONO. La primera
+     versión decía que «el tren, el hotel y las comidas los pones tú»
+     y pedía que los billetes y el alojamiento los pagase la empresa.
+     Eso YA LO HACE LA EMPRESA desde hace tiempo: paga trenes, vuelos,
+     autobuses y alojamiento. Lo avisaron quienes llevan la pieza.
+
+     O sea que el cartel pedía algo que ya está concedido, que es
+     exactamente por lo que se cayó `tablas-2026` del calendario: un
+     cartel que reclama lo que ya está hecho es un cartel falso, y con
+     esta lista el coste es doble, porque quien viaja lo sabe y deja de
+     creerse el resto.
+
+     LO QUE DE VERDAD SE ADELANTA es lo que va por dietas: las comidas,
+     los desplazamientos dentro de la ciudad y los gastos extraordinarios
+     que salgan del viaje. Ahí sí pone el dinero la persona y se le
+     devuelve después, y esa es la petición entera: que en los viajes a
+     cliente o de proyecto tampoco eso salga de un bolsillo particular.
+
+     Y DECIR EN EL CARTEL LO QUE LA EMPRESA YA HACE BIEN NO ES RELLENO,
+     es la mitad del argumento. Coloca la petición en lo que falta,
+     demuestra que quien firma sabe cómo funciona la casa, y quita de
+     encima la lectura de «estos piden por pedir». Por eso el panel del
+     límite abre con «lo que ya funciona no lo pedimos» en vez de
+     esconderlo en la letra pequeña.
+
+     LA PETICIÓN SIGUE SIENDO DE CALENDARIO, NO DE CUANTÍA, y esa es la
+     idea única de la pieza: «no pedimos más dinero, pedimos no ponerlo
+     nosotros». En cuanto se lee como «queremos más dietas» pasa a
+     costar dinero y se puede decir que no; leída como está, lo único
+     que se mueve es la fecha del apunte contable.
+
+     REESCRITA EL 16-9 POR EL AVISO DE UN COMPAÑERO -- «dejad de usar
+     la IA y usad un tono más cercano, porque cuesta entender los
+     mensajes». Tres cambios, y valen para toda la serie:
+
+       · EL TITULAR YA NO ES ANTITÉTICO. Los 33 titulares de la campaña
+         usaban la misma estructura de dos tiempos partida por <em>, con
+         el giro en el segundo («Viajar no debería / pasar por tu
+         cuenta»). Uno es bueno; treinta y tres seguidos suenan a
+         máquina aunque se hayan escrito a mano, y eso es lo que estaba
+         oyendo quien avisó. Este es una frase normal y entera, del
+         tamaño base y sin <em>: es el primero de la serie. (El del 16
+         decía «Que el viaje no lo pagues tú», y se cayó con la
+         corrección del 17: el viaje ya lo paga la empresa.)
+       · UNA FILA MENOS. Se cayó «Cómo, sin liarlo» -- reserva, tarjeta
+         de empresa, anticipo en nómina --, que es fontanería nuestra:
+         describe cómo lo haría la empresa, no qué gana quien lo lee.
+         Lo poco que hacía falta («los tiques a la vuelta, igual que
+         ahora») se metió en «Qué pedimos», que es donde tranquiliza.
+       · Y FUERA «SUPLIDO». Era la palabra exacta del art. 26.2 ET y
+         era ilegible: quien viaja no sabe qué es un suplido. Ahora se
+         dice en castellano -- «la dieta no es sueldo: es devolverte un
+         gasto del trabajo» --, que es lo mismo y no hay que traducirlo.
+
+     Por eso el remate manda la cuantía al buzón en vez de meterla
+     aquí: son dos conversaciones y juntarlas debilita la fácil.
+
+     El argumento fuerte es del propio Estatuto y no hay que forzarlo:
+       · art. 26.2 ET -- «No tendrán la consideración de salario las
+         cantidades percibidas por el trabajador en concepto de
+         indemnizaciones o SUPLIDOS por los gastos realizados como
+         consecuencia de su actividad laboral». Un suplido es, por
+         definición, dinero que uno pone por cuenta de otro. La norma
+         llama a la dieta gasto de la empresa, no retribución de quien
+         viaja, y de ahí sale entera la petición
+
+     El artículo de dietas del XIX Convenio NO ESTÁ LEÍDO en fuente
+     primaria, así que tampoco se usa. Ver ESTRATEGIA.md, citas por
+     verificar.
+
+     Y EL SELLO DEL 26.2 ET YA NO SE IMPRIME. No es que sobre el
+     argumento -- sostiene la pieza entera --, es que el artículo era
+     la prueba y no el argumento, y en la cara del cartel solo añadía
+     ruido a un panel que ya decía lo mismo en palabras. Se defiende en
+     persona, igual que en `igualdad`. Si la candidatura prefiere que
+     vuelva, es devolver el <span class="ley"> al final del .limite.
+
+     Y no hay ni una línea sobre cómo se hace hoy en la casa que suene a
+     reproche. Ahora menos que antes: el cartel dice primero lo que la
+     empresa ya paga y solo después lo que falta. El apartado 6 de
+     ESTRATEGIA.md prohíbe el agravio, y aquí además no hace falta.
+     ================================================================== -->
+<section class="cartel" id="c27">
+  <div class="tapa"><span>Dietas &middot; el adelanto</span><b>29-S</b></div>
+
+  <div class="cabeza">
+    <h1 class="titular titular--largo">Que las comidas<br>del viaje no las<br>pongas tú.</h1>
+    <div class="cabeza__compi"><canvas data-pose="maleta" data-tt="0" data-esc="6"></canvas></div>
+  </div>
+  <p class="bajada bajada--ancha">
+    Cuando viajas por trabajo, <b>el tren, el vuelo y el hotel los paga la empresa</b>. Las
+    comidas, los taxis y lo que surja <b>los pagas tú de tu bolsillo</b> y esperas a que te los
+    devuelvan.
+  </p>
+
+  <ul class="puertas">
+    <li>
+      <strong>Qué pedimos</strong>
+      <p>Que ese dinero <b>te lo den antes de salir</b>: un anticipo o una tarjeta de empresa. A la
+        vuelta entregas los tiques, igual que ahora.</p>
+    </li>
+    <li>
+      <strong>Cuándo</strong>
+      <p>En la <b>primera reunión del comité</b>, por escrito. Y os enseñaremos lo que contesten,
+        sea lo que sea.</p>
+    </li>
+  </ul>
+
+  <div class="limite">
+    <h4>Que quede claro</h4>
+    <p><b>No pedimos más dinero:</b> ni un euro más de dieta, los mismos tiques y la misma
+      liquidación. <b>Lo único que cambia es quién pone el dinero mientras tanto.</b> Y lo que ya
+      funciona no lo tocamos: billetes y alojamiento los paga la empresa y así se queda.
+      <b>Lo firma la empresa.</b></p>
+  </div>
+
+  <p class="recibo"><b>Cuánto se paga es otra conversación</b>, y esta no va de eso. Si viajas y
+    ves otro roto, cuéntalo &middot; sin-siglas.info/buzon</p>
+
+  <footer class="pie">
+    <div class="compi"><p class="compi__globo">Y sin poner un euro.</p><canvas data-pose="chuleo" data-tt="520"></canvas></div>
+    <div class="pie__medio pie__medio--cara">
+      <div class="pie__caras">
+        <img class="pie__cara" src="../a3-candidatura/img/aranda.jpg" alt="">
+        <img class="pie__cara" src="../a3-candidatura/img/munoz.jpg" alt="">
+      </div>
+      <div>
+        <p class="pie__quien">Lo llevan</p>
+        <p class="pie__nombres">Mario Aranda <span>&middot;</span> Laura Muñoz</p>
+        <p class="pie__puesto">People &amp; Values &middot; Finance &amp; Accounting</p>
+      </div>
+    </div>
+    <div class="pie__voto">
+      <p class="pie__fecha">29 de septiembre</p>
+      <p class="pie__url">sin-siglas.info</p>
+    </div>
+  </footer>
+</section>
+<!-- ==================================================================
+     VIAJES, GUARDIAS Y HORAS DE MÁS · lo llevan Violeta López y Mario
+     Aranda
+     ------------------------------------------------------------------
+     SALE DE UNA CONVERSACIÓN REAL DE LA LISTA, del 14: dos compañeras
+     se van a trabajar un fin de semana fuera y no saben cómo se les va
+     a compensar. De ahí sale lo demás -- las guardias, las horas de
+     viaje, las horas de más -- y sobre todo la idea que sostiene el
+     cartel: NO HAY UN SITIO DONDE MIRARLO. Se acepta el viaje sin saber
+     la cuenta, y la cuenta se sabe después.
+
+     Y AL VERIFICARLO APARECIÓ LO IMPORTANTE, que es justo lo contrario
+     de lo que creíamos: LA MITAD YA ESTÁ ESCRITA. En la conversación se
+     da por hecho que no hay nada -- «hubo un excel y ya no está» -- y
+     resulta que el convenio del sector lo fija desde enero. Leído en
+     fuente primaria el 15-9-2026 (BOE-A-2025-7766):
+
+       · art. 29.3 -- «Salvo pacto individual en contrario, las horas
+         extraordinarias se compensarán por tiempos equivalentes de
+         descanso INCREMENTADOS, AL MENOS CON EL 75 POR 100». O sea que
+         una hora de más son 1 h 45 min de descanso. En la conversación
+         se recordaba justo lo contrario: que se pagaban a menos valor
+         que una hora normal.
+       · art. 30.1 -- dieta completa, CON EFECTOS DEL 1 DE ENERO DE
+         2026: 58,92 euros. El 30.3 la reduce al 50 % si no se pernocta.
+       · art. 30.2 -- 0,27 euros por kilómetro desde el 1-1-2026.
+       · art. 29.1.d) -- la dirección INFORMARÁ PERIÓDICAMENTE a la
+         representación del número de horas extraordinarias y sus
+         causas. Es información, o sea que no depende de que la empresa
+         quiera: es la familia de peticiones que siempre sale.
+
+     Y LO QUE DE VERDAD NO ESTÁ, comprobado grep a grep sobre el texto
+     del convenio: GUARDIAS, DISPONIBILIDAD Y RETÉN no aparecen ni una
+     vez. Las horas de viaje, tampoco. Ese es el hueco real, y es el que
+     se pide.
+
+     RECORTADA EL 16-9 CON EL MISMO AVISO QUE `dietas` (ver el
+     comentario de c27). El titular enumeraba las tres cosas y luego
+     daba el giro -- «Guardias, viajes, horas de más. / Todo tiene una
+     cuenta.» --, que es el tic de la serie, y encima obligaba a bajar
+     la fuente a 62 px para que cupiera. Ahora es una frase normal al
+     tamaño base, y dice lo que de verdad encontró la pieza: que ya te
+     toca más de lo que crees.
+
+     Y LA BALANZA BAJÓ DE TRES FILAS A DOS POR COLUMNA. Los kilómetros
+     se metieron con la dieta, que son el mismo viaje y la misma
+     nómina; y «dónde mirarlo» se cayó porque el panel de abajo ya lo
+     pide entero. Los tres sellos de artículo tampoco se imprimen: las
+     cifras SON la prueba, y repetir «art. 30 del convenio» dos veces
+     seguidas debajo de dos números no añadía nada. El h4 se lleva ese
+     trabajo con cuatro palabras -- «y está en el convenio» --.
+
+     POR ESO EL CARTEL ES UNA BALANZA Y NO UNA LISTA. «Ya te toca» a la
+     izquierda y «no está escrito» a la derecha es literalmente el
+     hallazgo: media conversación se arregla leyendo, y la otra media
+     hay que negociarla. Un cartel que solo pidiera se habría apuntado
+     un tanto que ya estaba jugado -- la regla que tumbó la fila de las
+     tablas de 2026 en el semáforo.
+
+     LAS DOS CIFRAS LLEVAN SALVEDAD, Y NO ES LA MISMA. Reverificado en
+     el BOE el 22-9-2026:
+
+       · 58,92 € es el art. 30.1.a). El 30.1.b) deja la dieta en
+         41,29 € para el ÁREA 6 EN LOS NIVELES B-II, D-I Y E-II, que es
+         personal de BPO y no de desarrollo.
+       · 0,27 €/km es el art. 30.2 para las ÁREAS 1 A 5. El mismo
+         apartado deja el área 6 en 0,25 €/km, Y AQUÍ NO HAY CORTE POR
+         NIVEL: afecta al área entera, así que la salvedad del kilómetro
+         alcanza a MÁS GENTE que la de la dieta. Hasta el 22-9 esto no
+         estaba escrito en ningún sitio y el cartel da el 0,27 a secas.
+
+     LAS CIFRAS EXACTAS NO CABEN, PERO LA SALVEDAD SÍ, y desde el 22-9
+     está impresa: la fila dice «en BPO las dos cifras son algo
+     menores; pregúntanos». Es el mismo riesgo del error del 17-9 en
+     `dietas` -- un dato que la persona a la que le toca sabe que no es
+     el suyo cuesta la credibilidad de toda la serie --, y aquí se
+     arregla sin dar tres números en una fila de balanza: el cartel
+     avisa de que hay salvedad y la cifra se dice en persona. Quien
+     mande la pieza tiene que saberse las dos.
+
+     Y LA SALVEDAD VA EN EL TEXTO CLARO, NO DENTRO DEL <b>: en .balanza
+     el <b> es display:block, así que meter las dos cifras en negrita
+     parte la frase en dos líneas y deja «si pones tu coche» colgando
+     debajo. La negrita es el titular de la fila y tiene que ser una
+     frase entera; lo que matiza va detrás, como en las otras dos.
+
+     NO SE NOMBRA A NADIE Y NO SE ACUSA. La conversación original cita a
+     un responsable por su nombre y cuenta que lo habla con dirección y
+     lo comunica a la vuelta. Eso NO SALE: el apartado 6 prohíbe atacar
+     a la empresa y, con más razón, a una persona concreta. El cartel
+     dice qué falta, no quién falla. Tampoco salen ni el destino del
+     viaje ni quién iba, que identificarían la conversación.
+     ================================================================== -->
+<!-- ==================================================================
+     TITULAR · diez opciones sobre la mesa, pedidas el 21 de septiembre.
+     LA ELEGIDA ES LA 10. Para cambiarla se toca el <h1> y ya.
+
+     Y va con #c34 .titular a 60px, que no es capricho: a tamaño base
+     ocupaba CUATRO líneas y el pie se salía del lienzo -- los nombres
+     cortados y sin-siglas.info fuera--. A 60 px entra en tres y el
+     cartel cierra. Si se cambia por una más corta, esa regla sobra.
+
+      1. Ya te toca más / de lo que crees.
+      2. Una hora de más. / Hora y tres cuartos / de menos.
+      3. La mitad ya está escrita. / La otra mitad, a ojo.
+      4. Lo que ya te deben / y no has pedido.
+      5. ¿Esa guardia / qué te dejó?
+      6. Una hora extra / no se paga. / Se descansa.
+      7. El sábado que echaste, / ¿dónde está?
+      8. Antes de decir que sí, / mira lo que te toca.
+      9. Lo que pone el convenio. / Y lo que no pone nadie.
+     10. Tu tiempo tiene precio. / Aunque no lo hayas mirado.   ← la actual
+
+     Ojo con la 6: «no se paga, se descansa» es el régimen por defecto
+     del art. 29.3, pero decae con pacto individual. La salvedad ya está
+     impresa en la primera fila de la balanza, así que el titular se
+     sostiene; sin esa fila, no.
+     ================================================================== -->
+<section class="cartel" id="c34">
+  <div class="tapa"><span>Compensaciones &middot; y lo que falta</span><b>29-S</b></div>
+
+  <div class="cabeza">
+    <h1 class="titular titular--largo">Tu tiempo tiene precio.<em>Aunque no lo hayas mirado.</em></h1>
+    <div class="cabeza__compi"><canvas data-pose="reloj" data-tt="0" data-esc="6"></canvas></div>
+  </div>
+  <p class="bajada bajada--ancha">
+    Un finde fuera, una guardia, diez horas para sacar algo. <b>La mitad ya está escrita en el
+    convenio</b> y casi nadie la mira. <b>La otra mitad no está escrita en ningún sitio.</b>
+  </p>
+
+  <div class="balanza">
+    <div class="balanza--si">
+      <h4>Ya te toca, y está en el convenio</h4>
+      <ul>
+        <li><b>Una hora de más son 1 h 45 de descanso.</b> Salvo que hayas firmado otra cosa.</li>
+        <li><b>58,92 € por día con noche fuera.</b> Y 0,27 € por kilómetro si pones tu coche. En
+          BPO, las dos cifras son algo menores; pregúntanos.</li>
+        <li><b>El sábado es inhábil desde las 14 h.</b> Salvo en jornada intensiva.</li>
+      </ul>
+    </div>
+    <div class="balanza--no">
+      <h4>Y esto no está en ningún sitio</h4>
+      <ul>
+        <li><b>Las guardias.</b> El convenio no las nombra ni una vez: ni qué se cobra, ni qué se
+          descansa.</li>
+        <li><b>Las horas de viaje.</b> El convenio solo nombra los viajes <b>una vez, y es para
+          pagarte media dieta</b> si no duermes fuera. De tus horas no dice nada, y menos de las
+          que caen en sábado.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="limite">
+    <h4>Lo que vamos a pedir</h4>
+    <p>Un criterio <b>escrito e igual para todos</b>: qué se compensa por guardia, por viaje y por
+      hora de más. <b>Para poder mirarlo antes de decir que sí</b>, y no a la vuelta.</p>
+  </div>
+
+  <p class="recibo"><b>Y lo primero no hay ni que negociarlo:</b> cuántas horas extra se hacen y
+    por qué <span class="nw">&middot; eso ya nos lo tienen que dar</span></p>
+
+  <p class="serie"><b>Las propuestas que vamos publicando están todas juntas</b>
+    <span class="nw">&middot; sin-siglas.info/propuestas</span></p>
+
+  <footer class="pie">
+    <div class="compi"><p class="compi__globo">Yo lo miro antes.</p><canvas data-pose="chuleo" data-tt="520"></canvas></div>
+    <div class="pie__medio pie__medio--cara">
+      <div class="pie__caras">
+        <img class="pie__cara" src="../a3-candidatura/img/navarro.jpg" alt="">
+        <img class="pie__cara" src="../a3-candidatura/img/algarra.jpg" alt="">
+      </div>
+      <div>
+        <p class="pie__quien">Lo llevan</p>
+        <p class="pie__nombres">Raúl Navarro <span>&middot;</span> Leticia Algarra</p>
+        <p class="pie__puesto">People &amp; Values &middot; Project Management</p>
+      </div>
+    </div>
+    <div class="pie__voto">
+      <p class="pie__fecha">29 de septiembre</p>
+      <p class="pie__url">sin-siglas.info</p>
+    </div>
+  </footer>
+</section>
+
+<!-- ==================================================================
+     IGUALDAD · propuesta 4 · jueves 17 de septiembre
+     ------------------------------------------------------------------
+     ESTA PIEZA HA CAMBIADO DE SUJETO DOS VECES. Primero iba del PLAN DE
+     IGUALDAD -- obligatorio, negociado, inscrito en registro público:
+     el terreno cómodo, comprobable y sin un solo caso detrás --. Luego
+     pasó a QUÉ HACE EL COMITÉ CUANDO ALGUIEN LO CUENTA, que es lo que
+     el borrador privado (fuera de git) tenía escrito y se había quedado
+     sin publicar por delicado.
+
+     Y EL 14 SE LE FUSIONÓ EL PUNTO VIOLETA, que llegó a existir como
+     pieza suelta (`punto-violeta`) y se borró el mismo día. Las dos
+     iban de lo mismo desde dos lados, y partidas obligaban a leer dos
+     carteles para entender uno. La fusión dejó a la vista que a esta
+     pieza le faltaba algo: decía qué hacemos si nos lo cuentas, pero no
+     decía DÓNDE VALE ESO. Ahora la primera fila contesta el dónde y las
+     tres siguientes el cómo.
+
+     NO APARECE LA PALABRA «PROTOCOLO». Ni una vez, y es decisión de
+     lenguaje, no de estilo: es la palabra de la empresa, no la de la
+     gente. Nadie dice «voy a activar el protocolo», dice «no sé a quién
+     contárselo». Cada vez que salía, la frase se volvía un trámite. Eso
+     obligó a reescribir la bajada -- abría con «el protocolo de acoso
+     existe» -- y la fila de la ruta, que decía «cómo se activa el
+     protocolo».
+
+     LA FILA NUEVA NO LLEVA ARTÍCULO, y es la primera de la campaña.
+     Aquí el artículo no añade credibilidad, la resta: quien lee esto
+     está pensando en una cena de empresa, no en el BOE. El andamiaje
+     existe y está verificado -- Convenio 190 OIT art. 3.c) y d), LO
+     3/2007 art. 48.1 desde 2022, Ley 10/2021 art. 4.4 --, está entero
+     en ESTRATEGIA.md 4.14, y se defiende en persona.
+
+     TRES COSAS QUE NO SE TOCAN, Y LAS TRES SON DE PALABRA:
+
+     1. NO SE DICE «VÍCTIMA». Ni una vez. La palabra prejuzga antes de
+        que haya resuelto nada y, sobre todo, frena a quien iba a
+        contarlo: nadie se reconoce en esa etiqueta el primer día. El
+        cartel dice «tú» y «quien lo cuenta».
+     2. NO SE PROMETE ASESORAMIENTO A SECAS. Un comité no es abogado ni
+        instruye el expediente, y el apartado 5 de ESTRATEGIA.md prohíbe
+        prometer lo imposible. Lo que se promete es lo que sí se cumple:
+        qué hacer, qué pasa en cada paso y a quién derivar lo que no
+        sabemos.
+     3. EL PANEL DEL LÍMITE ES LA PIEZA, no el remate. «No mediamos, no
+        negociamos tu caso, no te pedimos que rebajes nada y decides tú
+        hasta dónde» es lo único que distingue acompañar de apropiarse
+        del caso de otra persona. Sin eso, el cartel promete demasiado.
+
+     Y EL SIGILO NO ES UN FAVOR, ES EL ART. 65.2 ET. Es el único
+     artículo que sobrevive en el cartel, y se queda porque ahí sí
+     trabaja: un deber legal se puede exigir y un favor se agradece.
+
+     COMPI ENTRA, Y ESTO CONTRADICE LA DECISIÓN ANTERIOR. Hay que
+     leerlo entero antes de tocarlo. Hasta el 14 esta era LA ÚNICA PIEZA
+     DE LA SERIE SIN MUÑECO, y no por descuido: se probó a Compi en
+     pareja -- dos figuras del mismo tamaño, una al lado de otra, que es
+     el dibujo de la tesis -- y al exportarla se leía como UN MUÑECO DE
+     DOS CABEZAS, porque son el mismo sprite espejado y el solape los
+     fundía. En una pieza sobre acoso, eso es lo último que puede pasar.
+     Se probaron dos sustitutos (dos sillas iguales en SVG; una puerta
+     entreabierta, que se leía como un libro) y los dos quedaron como
+     pictogramas pegados. La conclusión escrita entonces fue: en esta
+     serie el lenguaje visual ES Compi, así que donde no puede ir Compi
+     no va nada. Y remataba con el argumento de fondo: COMPI HACE QUE UN
+     CARTEL SE REENVÍE, Y AQUÍ ESO NO SE BUSCA.
+
+     Lo que entra ahora es OTRO DIBUJO, y por eso se acepta: no es Compi
+     personificando el acompañamiento -- que era el problema, y de ahí
+     las dos cabezas --, es Compi AL LADO DE UN SITIO. El tótem es el
+     objeto y el muñeco solo dice que allí hay alguien. Va con cara
+     normal, sin globo y sin gracia: nada de lo que hace que una pieza
+     se reenvíe por graciosa.
+
+     PERO EL ARGUMENTO DE FONDO SIGUE EN PIE y no lo resuelve el dibujo:
+     si la candidatura prefiere que esta pieza no circule como las
+     demás, se quita el bloque .cabeza__compi y el titular recupera el
+     ancho entero. Es un cambio de dos líneas y la decisión no es de
+     diseño, es de tono.
+
+     LAS CARAS SIGUEN, y ahora pesan más: firmar «qué haremos con tu
+     caso» pide que se vea quién lo firma. Las dos que lo llevan ya
+     están en la Comisión de Igualdad, que es el único aval que no se
+     puede prometer.
+
+     CITAS, TODAS VERIFICADAS EL 14-9-2026 EN FUENTE PRIMARIA. art. 65.2
+     ET (sigilo), y las tres de la fila nueva, que no se imprimen. La LO
+     3/2007 art. 48 DEJÓ DE ESTAR PENDIENTE: se reescribió el 7-10-2022
+     (LO 10/2022) y ahora cubre «los cometidos en el ámbito digital» y
+     dice que las medidas «deberán negociarse con los representantes».
+     El plan de igualdad y el registro retributivo no se pierden: viven
+     en `las-diez` y en `lo-que-pedimos`.
+
+     Y SI SALE ANTES DEL 23, ARRASTRA FILA EN EL SEMÁFORO: ahora
+     contiene una petición a la empresa. Ver ESTRATEGIA.md 4.2.
+     ================================================================== -->
+<section class="cartel cartel--coral" id="c28">
+  <div class="tapa"><span>Igualdad &middot; si algo pasa</span><b>29-S</b></div>
+
+  <div class="cabeza">
+    <h1 class="titular">Tú decides.<em>Vamos contigo.</em></h1>
+    <div class="cabeza__compi"><canvas data-pose="violeta" data-tt="0" data-esc="6"></canvas></div>
+  </div>
+  <p class="bajada bajada--ancha">
+    Pase donde pase —la oficina, un evento o el chat—, <b>lo que hay escrito tiene que valer en
+    los tres</b>. Y mientras dure, <b>eliges tú quién va contigo</b>.
+  </p>
+
+  <p class="rotulo">Dónde vale, y quién va contigo</p>
+  <ul class="puertas">
+    <li>
+      <strong>Donde sea que pase</strong>
+      <p>La oficina, los eventos y el chat. <b>Los tres por escrito</b>, y <b>punto violeta en
+        cada evento</b>. Lo pedimos el primer mes.</p>
+    </li>
+    <li>
+      <strong>Vamos contigo</strong>
+      <p>Desde el primer día y <b>hasta donde tú digas</b>. <b>Eliges tú a quién de los once se
+        lo cuentas</b>, y quién entra contigo a la reunión.</p>
+    </li>
+    <li>
+      <strong>Y no sale de ahí</strong>
+      <p>Lo que nos cuentes no se cuenta: ni al resto del comité si no quieres, ni en campaña, ni
+        después. <b>Y no es un favor nuestro, es nuestra obligación</b>.
+        <span class="ley">art. 65.2 ET</span></p>
+    </li>
+    <li>
+      <strong>Y la ruta</strong>
+      <p>Qué hacer si pasa algo y qué ocurre en cada paso, <b>en una línea y sin tener que
+        buscarla</b>.</p>
+    </li>
+  </ul>
+
+  <div class="limite">
+    <h4>Y lo que no vamos a hacer por ti</h4>
+    <p><b>No mediamos, no negociamos tu caso y no te vamos a pedir que rebajes nada.</b> Tampoco
+      somos quien instruye el expediente. <b>Decides tú qué se hace y hasta dónde</b>, y si quieres
+      parar, se para. Vamos al lado, no por delante.</p>
+  </div>
+
+  <p class="recibo"><b>Dos de los once ya estamos en la Comisión de Igualdad.</b> No es una
+    promesa nueva: es seguir <span class="nw">&middot; sin-siglas.info</span></p>
+
+  <footer class="pie">
+    <div class="pie__medio pie__medio--cara">
+      <div class="pie__caras">
+        <img class="pie__cara" src="../a3-candidatura/img/galindo.jpg" alt="">
+        <img class="pie__cara" src="../a3-candidatura/img/bolivar.jpg" alt="">
+      </div>
+      <div>
+        <p class="pie__quien">Lo llevan</p>
+        <p class="pie__nombres">Rocío Galindo <span>&middot;</span> Fran Bolívar</p>
+        <p class="pie__puesto">Ya en la Comisión de Igualdad &middot; lo firmamos los once</p>
+      </div>
+    </div>
+    <div class="pie__voto">
+      <p class="pie__fecha">29 de septiembre</p>
+      <p class="pie__url">sin-siglas.info</p>
+    </div>
+  </footer>
+</section>
+
+
+
+<!-- ==================================================================
+     CUIDADO DE HIJOS · propuesta 8 · el permiso que YA existe
+     ------------------------------------------------------------------
+     LA PRIMERA VERSIÓN DE ESTE CARTEL PEDÍA ALGO QUE YA ESTÁ EN LA LEY,
+     y estuvo a punto de irse así. Se titulaba «sin sueldo, pero sin
+     pelearlo» y pedía un permiso no retribuido para cuidar. Lo salvó que
+     la lista pasara la fuente: esto NO ES UNA PETICIÓN, ES UNA PIEZA DE
+     DIVULGACIÓN, y es la única de la serie que se puede usar el mismo
+     día que se lee.
+
+     Y LA SEGUNDA VERSIÓN TAMBIÉN ESTABA MAL, y esta es la importante.
+     Decía «dos DE LAS OCHO se pagan» y «las otras SEIS no se cobran».
+     Las dos cosas son falsas, y salían de payfit.com, que era la fuente
+     secundaria que este mismo comentario ya marcaba como pendiente de
+     contrastar. Contrastado en el BOE el 14 de septiembre:
+
+       · EL RDL 9/2025 NO TOCA EL ART. 48 BIS. Modifica el art. 48.4 y
+         48.5 ET -- nacimiento y cuidado -- y la LGSS. El permiso
+         parental de ocho semanas sigue ENTERO SIN RETRIBUIR: son ocho
+         las que no se cobran, no seis
+       · LAS DOS SEMANAS PAGADAS SON UN DERECHO DISTINTO Y ADICIONAL,
+         no un trozo de las ocho. Salen de ampliar el permiso de
+         nacimiento y cuidado de 16 a 19 SEMANAS: 6 obligatorias + 11
+         flexibles + 2 de cuidado hasta los ocho años. Monoparentales,
+         32 semanas: 6 + 22 + 4
+       · SE COBRAN AL 100 % DE LA BASE Y LAS PAGA EL INSS, no la
+         empresa. Es prestación de Seguridad Social, no salario
+       · EL PREAVISO NO ES EL MISMO: diez días para las ocho del 48 bis,
+         QUINCE para las dos del 48.4, y además hay que pedir la
+         prestación en el portal del INSS con certificado de empresa
+       · Hechos causantes DESDE EL 2-08-2024, disfrute DESDE EL
+         1-01-2026. Esa condición VA IMPRESA: sin ella el cartel le
+         promete dos semanas pagadas a gente que no las tiene
+       · RDL 9/2025 (BOE-A-2025-15741, de 30-07-2025), CONVALIDADO por
+         el Congreso el 9-09-2025 (BOE-A-2025-17999). Está en vigor
+       · STS 62/2026, de 26 de enero: el permiso parental se disfruta en
+         SEMANAS COMPLETAS, y el tiempo de permiso COMPUTA como trabajo
+         efectivo a efectos de devengar vacaciones
+
+     Por eso el titular pasa de «ocho semanas, ya son tuyas» a «DIEZ
+     SEMANAS, DOS PAGADAS», que además de ser lo correcto es mejor
+     noticia: no tienes ocho de las que dos se cobran, tienes ocho sin
+     sueldo MÁS dos pagadas.
+
+     Y LA BAJADA DE CIERRE CAMBIA DE FUNCIÓN. Antes decía «esto no hay
+     que pedirlo, ya está en la ley», y de las dos pagadas es
+     justamente al revés: HAY QUE PEDIRLAS AL INSS Y SE PASAN. El INSS
+     lanzó una campaña avisando a 365.747 progenitores que podían
+     pedirlas y no lo habían hecho. Ese dato es la pieza entera.
+
+     El aplazamiento sigue siendo lo que hace nuestra la pieza: la ley
+     ya obliga a contestar por escrito y a ofrecer una alternativa igual
+     de flexible, así que el comité no tiene que pedir el procedimiento,
+     solo EXIGIR EL QUE YA HAY y contar cuántos aplazamientos hubo.
+
+     Y LA TERCERA VERSIÓN TAMBIÉN PEDÍA ALGO QUE YA EXISTE, esta vez por
+     la puerta del convenio y no por la de la ley. El panel del límite
+     decía que pediríamos «un permiso no retribuido propio para lo que la
+     ley no cubre», y EL ART. 23 DEL XIX CONVENIO YA DA UN MES AL AÑO SIN
+     SUELDO -- o dos quincenas, una por semestre -- a quien tenga un año
+     de antigüedad. La empresa solo puede denegarlo si en esas fechas ya
+     lo disfruta más del 3 % de la plantilla, y no del mismo
+     departamento. Contrastado en el BOE el 21 de septiembre contra
+     BOE-A-2025-7766, que es el convenio entero.
+
+     Así que la petición original de la lista no se cae, pero deja de ser
+     OTRO permiso y pasa a ser LO QUE A ESE LE FALTA: que para cuidar no
+     cuente la antigüedad y se pueda partir en más de dos veces. Es la
+     misma jugada que los 23 días de vacaciones en `verano-intensiva` --
+     LO QUE DEMUESTRA QUE NOS HEMOS LEÍDO LAS COSAS NO ES LA PETICIÓN, ES
+     LA CONDICIÓN.
+     ================================================================== -->
+<section class="cartel" id="c29">
+  <div class="tapa"><span>Cuidados &middot; el permiso que ya tienes</span><b>29-S</b></div>
+
+  <div class="cabeza">
+    <h1 class="titular">Diez semanas.<em>Dos, pagadas.</em></h1>
+    <div class="cabeza__compi cabeza__compi--dos">
+      <canvas data-pose="padre" data-tt="900" data-esc="5"></canvas>
+      <canvas data-pose="saluda" data-tt="300" data-esc="3"></canvas>
+    </div>
+  </div>
+  <p class="bajada bajada--ancha">
+    Si tienes un hijo menor de ocho años, ya tienes <b>ocho semanas sin sueldo y dos pagadas</b>. Y
+    <i>no son lo mismo:</i> son dos derechos distintos, y se piden en sitios distintos.
+  </p>
+
+  <ul class="puertas">
+    <li>
+      <strong>Las ocho, desde 2023</strong>
+      <p><b>Ocho semanas por progenitor</b>, individuales e intransferibles, hasta que tu hijo cumpla
+        <b>ocho años</b>. En semanas completas, seguidas o sueltas. <b>Sin sueldo.</b>
+        <span class="ley">art. 48 bis ET &middot; STS 62/2026</span></p>
+    </li>
+    <li>
+      <strong>Y dos más, estas pagadas</strong>
+      <p>Desde el <b>1 de enero de 2026</b>, y son <b>aparte de las ocho</b>: al <b>100 % de la
+        base</b> y <b>las paga el INSS</b>, no la empresa. Cuatro si eres monoparental. Solo si tu
+        hijo nació <b>desde el 2-8-2024</b>. <span class="ley">art. 48.4 ET &middot; RDL 9/2025</span></p>
+    </li>
+    <li>
+      <strong>Ojo, que se piden distinto</strong>
+      <p>Las ocho: avisas a la empresa con <b>diez días</b>, y aplazarlas solo cabe <b>por escrito</b>
+        y ofreciéndote otra fecha. Las dos: <b>quince días</b>, y la prestación <b>se pide al
+        INSS</b>. <span class="ley">art. 48 bis &middot; art. 48.4 ET</span></p>
+    </li>
+    <li>
+      <strong>Y qué haremos nosotros</strong>
+      <p>Publicar <b>la ruta de las dos</b> &mdash;quince días, certificado de empresa, INSS&mdash;
+        y pedir que <b>cada aplazamiento de las ocho llegue por escrito</b>.</p>
+    </li>
+  </ul>
+
+  <div class="limite">
+    <h4>Y las ocho siguen sin cobrarse</h4>
+    <p>Las ocho <b>no las paga nadie</b>, y no vamos a fingir lo contrario. Y sin sueldo ya tienes
+      otro permiso: <b>un mes al año</b> &mdash;o dos quincenas&mdash;, con un año en la casa. Así
+      que no pediremos uno nuevo, sino <b>lo que a ese le falta</b>: que para cuidar <b>no cuente la
+      antigüedad</b> y se pueda <b>partir en más de dos veces</b>. Eso lo firma la empresa.
+      <span class="ley">art. 23 del convenio</span></p>
+  </div>
+
+  <p class="recibo"><b>Las dos pagadas hay que pedirlas, y se pasan.</b> El INSS avisó a 365.747
+    personas <span class="nw">&middot; sin-siglas.info/buzon</span></p>
+
+  <footer class="pie">
+    <div class="compi"><p class="compi__globo">Ya está en la ley.</p><canvas data-pose="chuleo" data-tt="520"></canvas></div>
+    <div class="pie__medio pie__medio--cara">
+      <div class="pie__caras">
+        <img class="pie__cara" src="../a3-candidatura/img/fernandez.jpg" alt="">
+        <img class="pie__cara" src="../a3-candidatura/img/algarra.jpg" alt="">
+      </div>
+      <div>
+        <p class="pie__quien">Lo llevan</p>
+        <p class="pie__nombres">José Pablo Fernández <span>&middot;</span> Leticia Algarra</p>
+        <p class="pie__puesto">Engineering &middot; Project Management</p>
+      </div>
+    </div>
+    <div class="pie__voto">
+      <p class="pie__fecha">29 de septiembre</p>
+      <p class="pie__url">sin-siglas.info</p>
+    </div>
+  </footer>
+</section>
+
+<!-- ==================================================================
+     PARKING · propuesta 9 · viernes 18 de septiembre
+     ------------------------------------------------------------------
+     EL PROBLEMA DE ESTA PIEZA NO ES EL PARKING: ES QUE CHOCA DE FRENTE
+     CON LA JAULA DE BICIS. El 9 de septiembre salió una carta a P&V
+     pidiendo un sitio cerrado para bicis y patinetes, con el argumento
+     de que «cada persona que se pasa a la bici libera una plaza de
+     coche». Nueve días después pedir plaza de coche gratis para todo el
+     que venga se lee, con razón, como que pedimos lo que sea.
+
+     La pieza no lo esquiva: lo pone en una puerta entera. Y LO RESUELVE
+     CON EL MISMO ARGUMENTO DE LA CARTA, que además es el que entiende
+     cualquiera: si cada bici o patinete que llega deja una plaza libre,
+     las dos van juntas. La palabra que lo dice es COMPLEMENTARIO -- del
+     plan de movilidad sostenible --, y es la que pidió la candidatura.
+     Si esa puerta se cae, la pieza no se puede enviar.
+
+     Y LA JAULA NO ESTÁ PEDIDA: ESTÁ EN PROPUESTA. La puerta decía «la
+     jaula para bicis y patinetes ya está pedida» y era un tanto que no
+     se ha jugado -- lo corrigió la candidatura --: la carta del 9 es una
+     propuesta nuestra, y la petición formal se hace con el comité
+     constituido. Es la misma regla que el resto de la serie, la del
+     remate: «todavía no lo hemos pedido». Decirlo bien además no cuesta
+     nada, porque las dos están en el mismo sitio: en propuesta.
+
+     Y LOS ARTÍCULOS YA NO SE IMPRIMEN. Estaban los dos en esa misma
+     puerta -- art. 26 Ley 9/2025 y art. 85.1 ET -- y sostienen la pieza
+     igual que antes: el plan de movilidad al trabajo cubre el coche y la
+     movilidad activa, así que no son dos peticiones contrarias, son las
+     dos mitades del mismo plan. Pero en la cara del cartel eran la
+     prueba y no el argumento, y a quien lo lee en el móvil le llegaba un
+     número de ley donde tenía que llegarle una frase. Se defienden en
+     persona, igual que el 26.2 ET en `dietas`. Siguen verificados en
+     ESTRATEGIA.md, apartado 8:
+       · art. 26 Ley 9/2025 -- plan de movilidad al trabajo; centros de
+         más de 200 personas o 100 por turno, antes del 5-12-2026
+       · art. 85.1 ET, párr. 3.º -- deber de negociar medidas de
+         movilidad sostenible, SIN umbral de plantilla
+
+     LO QUE SE PIDE PRIMERO ES EL REPARTO, NO EL NÚMERO DE PLAZAS. Es la
+     decisión que hace que la pieza sea nuestra y no un buzón de deseos:
+     cuántas plazas hay no lo pone el comité, así que prometer plaza para
+     todo el mundo es prometer un resultado que no firmamos. Lo que sí se
+     puede pedir, sí se puede comprobar y no depende de que haya obra es
+     CÓMO SE REPARTEN.
+
+     Y VA CON UN SISTEMA CONCRETO, EN LA PUERTA DE «Y SI SE LLENA»: plaza
+     fija para
+     quien viene de lunes a viernes, y quien viene días sueltos la pide
+     para ese día, por orden de petición y hasta que se acaben. Es lo que
+     separa esta pieza de pedir «un criterio de reparto por escrito y
+     público» -- que es lo que ponía antes, tres veces, y es lenguaje de
+     circular interna: nadie se imagina nada al leerlo. Un sistema que se
+     puede dibujar en la cabeza se puede discutir, y por eso la puerta
+     dice que SE NEGOCIA: es nuestra propuesta, no el acuerdo.
+
+     Y EL TITULAR VA AL TIEMPO, NO AL DINERO, y ese es el cambio del 17:
+     quien no tiene plaza no paga nada -- paga en vueltas por la calle
+     hasta que sale hueco --, y eso es lo peor de los dos costes. «Que
+     venir a la oficina no te cueste tiempo extra» es la frase, y la
+     bajada remata en lo mismo: «eso no se paga en dinero: se paga con tu
+     tiempo». El dinero sigue en la pieza entera -- la primera puerta
+     pide la plaza sin coste -- pero deja de ser el titular. Sin cifra,
+     porque no tenemos medidas las vueltas.
+
+     DESDE EL 17 SÍ SE DICE CÓMO FUNCIONA HOY, y lo avisó la
+     candidatura: la plaza existe y LA PAGA QUIEN LA USA, y sobra sitio
+     precisamente porque no todo el mundo pasa por caja. Quien no paga
+     aparca en la calle, que es donde están las vueltas. No es un
+     agravio -- no señala a nadie ni compara lo que tiene uno con lo que
+     tiene otro, que es lo que prohíbe el apartado 6 --, es el
+     procedimiento. Y es lo que sostiene la cuarta puerta: si deja de
+     costar dinero PUEDE LLENARSE, y ahí entra el reparto. Sin ese dato,
+     «y si se llena» era un miedo nuestro; con él, es la consecuencia
+     de lo que pedimos.
+
+     Y TAMPOCO ES ANTITÉTICO, igual que en `dietas`. «Si vienes, que
+     aparcar no lo pagues tú» era otra de las de dos tiempos partidas por
+     <em>, y encima abría con un condicional que deja fuera a media
+     plantilla antes de la primera coma. Ahora es una frase entera; sigue
+     en tres líneas con <em>, pero eso es color y no giro. Va con
+     .titular--largo: a tamaño base, «QUE VENIR A LA OFICINA» se come el
+     hueco de Compi.
+
+     En la cabecera, Compi con su coche ya aparcado (pose `plaza`, ver
+     4.3). LA SEÑAL CON LA P FUE EL PRIMER INTENTO Y SE CAYÓ: una señal
+     dice dónde se aparca, y esta pieza va de que ya has aparcado. Y en
+     el pie, «Hoy aparco a la primera», que es el mismo chiste dicho por
+     el otro Compi.
+     ================================================================== -->
+<section class="cartel cartel--coral" id="c30">
+  <div class="tapa"><span>Movilidad &middot; venir en coche</span><b>29-S</b></div>
+
+  <div class="cabeza">
+    <h1 class="titular titular--largo">Que venir a la oficina<em>no te cueste<em>tiempo extra.</em></em></h1>
+    <div class="cabeza__compi"><canvas data-pose="plaza" data-tt="0" data-esc="6"></canvas></div>
+  </div>
+  <p class="bajada bajada--ancha">
+    Hoy la plaza está ahí y <b>la paga quien la usa</b>: sobra sitio porque no todos pasan por
+    caja, y <b>quien no paga da vueltas por la calle</b> hasta que sale hueco. <i>Eso no se paga en
+    dinero: se paga con tu tiempo.</i>
+  </p>
+
+  <ul class="puertas">
+    <li>
+      <strong>Qué pedimos</strong>
+      <p><b>Plaza sin coste</b> para quien tiene que venir a la oficina. <b>Ni pagarla, ni dar
+        vueltas</b> hasta que alguien se vaya.</p>
+    </li>
+    <li>
+      <strong>Y si se llena</strong>
+      <p>Puede pasar el día que deje de costar dinero, así que lo llevamos pensado: <b>plaza fija
+        para quien viene de lunes a viernes</b>, y quien viene días sueltos <b>la pide para ese
+        día</b>, por orden de petición y hasta que se acaben. <b>Se negocia</b>, pero por escrito.</p>
+    </li>
+    <li>
+      <strong>Y esto no va contra la bici</strong>
+      <p>Es <b>complementario al plan de movilidad sostenible</b>: la jaula para bicis y patinetes
+        <b>también está en propuesta</b>, y cada bici o patinete que llega <b>deja una plaza
+        libre</b>. Las dos van juntas.</p>
+    </li>
+    <li>
+      <strong>Cuándo</strong>
+      <p>En la <b>primera reunión del comité</b>, por escrito. Y os enseñaremos lo que contesten,
+        sea lo que sea.</p>
+    </li>
+  </ul>
+
+  <div class="limite">
+    <h4>Lo que no depende de nosotros</h4>
+    <p><b>La plaza cuesta dinero</b>, y si no la paga quien aparca <b>la paga la empresa</b>: eso lo
+      firma ella, no el comité. Lo que sí podemos pedir por escrito —y comprobar— es <b>el
+      reparto</b>: quién tiene plaza fija y cómo se piden las demás.</p>
+  </div>
+
+  <p class="recibo"><b>Todavía no lo hemos pedido</b>, y no vamos a decir que sí. Se pide con el
+    comité constituido <span class="nw">&middot; sin-siglas.info/buzon</span></p>
+
+  <footer class="pie">
+    <div class="compi"><p class="compi__globo">Hoy aparco a la primera.</p><canvas data-pose="anda" data-tt="300"></canvas></div>
+    <div class="pie__medio pie__medio--cara">
+      <div class="pie__caras">
+        <img class="pie__cara" src="../a3-candidatura/img/lopezm.jpg" alt="">
+        <img class="pie__cara" src="../a3-candidatura/img/aranda.jpg" alt="">
+      </div>
+      <div>
+        <p class="pie__quien">Lo llevan</p>
+        <p class="pie__nombres">Rafael López <span>&middot;</span> Mario Aranda</p>
+        <p class="pie__puesto">Engineering &middot; People &amp; Values</p>
+      </div>
+    </div>
+    <div class="pie__voto">
+      <p class="pie__fecha">29 de septiembre</p>
+      <p class="pie__url">sin-siglas.info</p>
+    </div>
+  </footer>
+</section>
+
+<!-- ==================================================================
+     JORNADA DE CUATRO DÍAS · propuesta 10 · lunes 21 de septiembre
+     ------------------------------------------------------------------
+     LA PETICIÓN MÁS GRANDE DE LAS DIEZ Y LA ÚNICA QUE LLEVA UNA CUENTA
+     IMPRESA QUE JUEGA EN CONTRA. Esa es toda la pieza.
+
+     Cualquiera puede poner «semana de cuatro días» en un cartel. Lo que
+     no hace nadie es imprimir el número que dice que no sale moviendo
+     horas, y ese número está en el mismo artículo del convenio que
+     sostiene la intensiva de julio:
+
+       · art. 20.1 del XIX Convenio (BOE-A-2025-7766) -- 1.800 horas
+         anuales, «su distribución semanal podrá pactarse con la
+         Representación Legal de las Personas Trabajadoras», y MÁXIMO
+         NUEVE HORAS ORDINARIAS DIARIAS
+
+     La cuenta, CORREGIDA EL 22-9 Y ERA UN ERROR NUESTRO: 1.800 horas
+     salen a 40 A LA SEMANA, no a 39. Las 39 venían de repartirlas en 46
+     semanas sin descontar los festivos; las semanas efectivas son 45
+     (1.800 / 40 = 45 justas, y los días laborables del año -- 365 menos
+     104 de fin de semana, 14 festivos y 23 de vacaciones -- dan 224, o
+     sea 44,8 semanas a 8 h). Y 40 es además el máximo del art. 34.1 ET,
+     así que el convenio no baja de la ley: la iguala.
+
+     Repartidas en cuatro días son 10 AL DÍA. El tope son 9. NO SALE. La
+     cifra corregida es mejor cartel que la equivocada: 10 contra 9 se
+     lee de un vistazo y 9,75 contra 9 hay que pensarlo. Lo avisó la
+     lista leyendo el cartel, que es exactamente para lo que se manda
+     antes de imprimir.
+
+     De ahí las dos únicas salidas honestas, y las dos están impresas:
+     baja la jornada anual -- que es dinero y por eso es la petición cara
+     -- o se toca el tope diario. Decirlo en el cartel es lo que separa
+     esta pieza de un titular.
+
+     REVISADA EL 22-9 CONTRA EL BOE, LA VÍSPERA DE MANDARLA, Y SALIERON
+     DOS COSAS QUE DECÍAN DE MÁS. En la pieza cuya premisa entera es «con
+     las cuentas delante», decir de más cuesta el doble:
+
+       · «SE PACTA CON NOSOTROS» -> «PUEDE PACTARSE». El art. 20.1 dice
+         «PODRÁ pactarse con la Representación Legal». Es una facultad,
+         no una obligación de la empresa, y la diferencia la ve
+         cualquiera que abra el convenio. Cambiado en la bajada y en la
+         puerta «dónde se agarra».
+       · «O SE PACTA EL TOPE» -> «O SE TOCA EL TOPE DIARIO». El titular
+         del límite daba las dos puertas como equivalentes y la segunda
+         no lo es: el convenio dice «EN NINGÚN CASO, se podrán realizar
+         más de nueve horas ordinarias diarias», y no trae cláusula que
+         permita superarlo por acuerdo. O sea que el tope no se mueve en
+         una reunión de comité, y el cartel ya lo dice así. La cita
+         literal, además, es más dura que la paráfrasis que había
+         («topa la jornada ordinaria en nueve»): se imprime entera.
+
+     Y LA CUENTA VA CON LOS DOS NÚMEROS A LA VISTA -- 10 frente a 9 --
+     en vez de «casi diez». El recibo invita a discutirla, así que la
+     cifra tiene que poder compararse sin hacer la división uno mismo.
+
+     LAS CUATRO LÍNEAS NUEVAS SACARON EL PIE DEL LIENZO. Se recuperan
+     del aire de #c31: puertas 46->40 y gap 30->24, li 26->22, limite
+     34->30, recibo 24->20, y el límite pierde una línea de texto. El
+     cuerpo no se toca.
+
+     Y EL MISMO 22-9, LA PIEZA CAMBIA DE SUJETO PARA LANZARLA. Hasta
+     aquí el titular era «Cuatro días. Con las cuentas delante.», que
+     habla del método. La lista decidió que hable del beneficio:
+     «QUEREMOS FINES DE SEMANA DE TRES DÍAS». Tres cosas se mueven con
+     él, y las tres son de fondo:
+
+       · «QUEREMOS» ES LO QUE SOSTIENE LA HONESTIDAD. El titular pasa a
+         ser un deseo declarado, no un resultado anunciado, así que el
+         apartado 6 aguanta sin tocar el cuerpo. Sin esa palabra, el
+         mismo titular es una promesa y la pieza se cae.
+       · EL FIN Y EL CÓMO, SEPARADOS EN LA BAJADA -- «el fin son cuatro
+         días laborables; el cómo se negocia» --. Es la posición de la
+         candidatura: se pide el objetivo, no el calendario de
+         implantación, que es lo que se pacta con la empresa.
+       · Y «SIN ALARGAR LA JORNADA» ENTRA EN «QUÉ PEDIMOS», porque era
+         la duda real de la lista: cuatro días de 10 h no es lo que se
+         quiere.
+       · Y CON ESO LA CUENTA DEJA DE DECIR «NO» Y PASA A DECIR «CUÁNTO».
+         El rótulo era «y la cuenta que no cuadra» y la bajada remataba
+         con «hay una que no cuadra»: leído seguido, la candidatura
+         pedía algo sabiéndose el no de antemano, que es el peor sitio
+         donde puede estar la pieza estrella. Ahora el rótulo es «y lo
+         que cuesta» y la cifra es el precio, no el obstáculo: sin
+         alargar el día son 32 h frente a 40, o sea BAJAR LA JORNADA UN
+         20 %. La cuenta del 10 contra el 9 se queda, pero detrás y
+         como lo que es -- la razón de que no haya atajo --, no como
+         conclusión. MISMO DATO, SENTIDO CONTRARIO.
+
+     EL RECIBO PASA A LLEVAR LA PRUEBA DE FUERA, y hasta hoy la pieza no
+     citaba a nadie a propósito. Se cita porque lo pidió la lista, y con
+     la limitación impresa en la misma línea: 61 empresas en Reino Unido
+     (4 Day Week Global + Autonomy, Cambridge y Boston College,
+     jun-dic 2022, modelo 100-80-100), bajas -65 %, rotación -57 %,
+     ingresos +1,4 %, y 56 de las 61 siguieron. LA LÍNEA DICE QUE SE
+     APUNTARON VOLUNTARIAS Y QUE POR ESO NO PRUEBA LO NUESTRO: es una
+     muestra autoseleccionada y buena parte del bienestar es
+     autorreportado. Decirlo nosotros primero es lo que convierte el
+     dato en argumento para el piloto en vez de en un flanco.
+
+     «Si te salen otros números, dilos» se va del recibo al final del
+     límite: la invitación a discutir la cuenta no se pierde, y el
+     recibo se queda con la prueba.
+
+     LO QUE NO HACE: no promete resultado, no da fecha de implantación y
+     no dice que otras empresas lo hayan hecho. Pide ABRIR LA NEGOCIACIÓN
+     Y UNA PRUEBA CON EVALUACIÓN, que es lo único que se puede prometer
+     con plazo (apartado 2, regla 2).
+
+     Y una consecuencia de calendario: esta pieza dice «convenio» cuatro
+     veces, así que por la regla del apartado 4.5 tendría que ir DESPUÉS
+     de `convenio`. Va la última de las propuestas justamente por eso.
+     ================================================================== -->
+<section class="cartel" id="c31">
+  <div class="tapa"><span>Jornada &middot; cuatro días</span><b>29-S</b></div>
+
+  <h1 class="titular titular--largo">Queremos<em>fines de semana<em>de tres días.</em></em></h1>
+  <p class="bajada bajada--ancha">
+    <b>El fin son cuatro días laborables. El cómo se negocia</b>, y ese es el trabajo del comité con
+    la empresa. <i>Y lo que cuesta, dicho desde el primer día.</i>
+  </p>
+
+  <ul class="puertas">
+    <li>
+      <strong>Qué pedimos</strong>
+      <p>Abrir la negociación, con <b>un piloto de duración pactada y evaluación al final</b>. Y
+        <b>sin alargar la jornada</b>: el viernes libre no se paga con dos horas más de lunes a
+        jueves.</p>
+    </li>
+    <li>
+      <strong>Dónde se agarra</strong>
+      <p>El convenio dice que la distribución semanal de la jornada <b>puede pactarse con la
+        representación</b>. Es de las pocas cosas que <b>se negocian aquí dentro</b>.
+        <span class="ley">art. 20.1 del convenio</span></p>
+    </li>
+    <li>
+      <strong>Y lo que cuesta</strong>
+      <p>Hoy la jornada son <b>40 horas</b> a la semana. En cuatro días sin alargar el día son
+        <b>32</b>: <b>un 20 % menos</b>. Y alargándolo no cabe — harían falta <b>10 al día</b> y el
+        convenio topa en <b>9</b>. <span class="ley">art. 20.1 del convenio</span></p>
+    </li>
+  </ul>
+
+  <div class="limite">
+    <h4>Así que lo que pedimos es bajar la jornada, y eso es dinero</h4>
+    <p>No hay otra vía, porque alargar el día no cabe en el convenio. Es <b>la petición más cara de
+      las diez</b> y <b>no os prometemos que salga</b>. Lo que prometemos es <b>pedirla, negociar el
+      cómo con la empresa y contar en qué queda</b> — también si es que no. <b>Si te salen otros
+      números, dilos.</b></p>
+  </div>
+
+  <p class="recibo"><b>Donde se ha probado salió bien</b> — 61 empresas en Reino Unido: bajas
+    &minus;65 %, rotación &minus;57 %, ingresos igual. <b>Se apuntaron voluntarias, así que no prueba
+    lo nuestro: por eso pedimos probarlo</b> <span class="nw">&middot; sin-siglas.info/buzon</span></p>
+
+  <footer class="pie">
+    <div class="compi"><p class="compi__globo">Y sin alargar el día.</p><canvas data-pose="serio" data-tt="900"></canvas></div>
+    <div class="pie__medio pie__medio--cara">
+      <div class="pie__caras">
+        <img class="pie__cara" src="../a3-candidatura/img/barchein.jpg" alt="">
+        <img class="pie__cara" src="../a3-candidatura/img/munoz.jpg" alt="">
+      </div>
+      <div>
+        <p class="pie__quien">Lo llevan</p>
+        <p class="pie__nombres">Mario Barchéin <span>&middot;</span> Laura Muñoz</p>
+        <p class="pie__puesto">Engineering &middot; Finance &amp; Accounting</p>
+      </div>
+    </div>
+    <div class="pie__voto">
+      <p class="pie__fecha">29 de septiembre</p>
+      <p class="pie__url">sin-siglas.info</p>
+    </div>
+  </footer>
+</section>
+
+<!-- ==================================================================
+     LAS DIEZ · viernes 25 de septiembre · el cartel de cierre
+     ------------------------------------------------------------------
+     SALE DE UN PROBLEMA DE ARITMÉTICA, NO DE UNA IDEA. Del 11 al 25 hay
+     once días laborables, cuatro están decididos y no se tocan, y en la
+     cola quedaron diez propuestas. No caben una por día ni doblando dos
+     envíos, así que la decisión de la candidatura fue: se dobla donde el
+     par es natural, y AL FINAL VA UNA PIEZA CON TODAS PARA QUE NINGUNA
+     SE QUEDE EN EL TINTERO.
+
+     Es el mismo movimiento que hizo nacer `lo-que-pedimos` el 8 de
+     septiembre, y por la misma razón. La diferencia es el contenido:
+     `lo-que-pedimos` son las doce peticiones de programa, con su
+     artículo; ESTA SON LAS DIEZ PROPUESTAS QUE SACÓ LA LISTA los días 9
+     y 10, que es material propio y no lectura del Estatuto.
+
+     EL TITULAR ES EL RESUMEN DE LA CAMPAÑA ENTERA -- «diez peticiones,
+     ni una promesa» -- y es literal: ninguna de las diez la firma el
+     comité, todas las firma la empresa, y eso va en el panel del límite
+     en vez de en la letra pequeña.
+
+     Y LA DEL CUMPLEAÑOS LLEVA «NO HAY NORMA» EN EL SITIO DEL ARTÍCULO.
+     Es la única de las diez sin base legal, y en un cartel donde las
+     otras nueve enseñan la suya, esconderlo sería lo peor que se puede
+     hacer: se ve al primer vistazo que falta. Dicho, es la línea que
+     demuestra que las otras nueve están comprobadas.
+
+     Va el 25 junto a `ultima-llamada` -- dos envíos ese día, no díptico:
+     la última llamada lleva la hora y el sitio de la urna y tiene que
+     leerse de un vistazo.
+     ================================================================== -->
+<section class="cartel" id="c32">
+  <div class="tapa"><span>Las diez propuestas</span><b>29-S</b></div>
+
+  <h1 class="titular">Diez peticiones.<em>Ni una promesa.</em></h1>
+  <p class="bajada bajada--ancha">
+    Las sacó la candidatura los días <b>9 y 10 de septiembre</b>. Cada una lleva <b>dónde se
+    agarra</b> — y <i>la que no tiene norma detrás, lo dice.</i>
+  </p>
+
+  <div class="programa">
+    <div class="grupo">
+      <h3>Tu tiempo</h3>
+      <ul>
+        <li><b>El día de tu cumpleaños libre</b>, y trasladado si cae en fin de semana o dentro de
+          tus vacaciones.<i>no hay norma &middot; se negocia</i></li>
+        <li><b>Intensiva en julio</b>, además de agosto, y <b>sin perder días de
+          vacaciones</b>.<i>art. 20.1 · 21.1 del convenio</i></li>
+        <li><b>Abrir la negociación de la semana de cuatro días</b>, con prueba y evaluación.<i>art. 20.1 del convenio</i></li>
+        <li><b>Las ocho semanas de permiso parental y las dos pagadas</b>: que se sepan, y el
+          aplazamiento por escrito.<i>art. 48 bis &middot; 48.4 ET</i></li>
+      </ul>
+    </div>
+
+    <div class="grupo grupo--coral">
+      <h3>Tu dinero y tu día a día</h3>
+      <ul>
+        <li><b>Las dietas adelantadas</b>, y no puestas de tu bolsillo.<i>art. 26.2 ET</i></li>
+        <li><b>El permiso de médico</b>, igual por lo público que por lo privado.<i>art. 37.3 · 34.8 ET</i></li>
+        <li><b>El plan de igualdad</b>, su diagnóstico y su fecha de registro.<i>LO 3/2007 · RD 901/2020</i></li>
+        <li><b>Zona de comer y zona de descansar</b>, separadas del puesto.<i>RD 486/1997</i></li>
+      </ul>
+    </div>
+
+    <div class="grupo grupo--ancho">
+      <h3>Cómo llegas</h3>
+      <ul>
+        <li><b>Plaza de aparcamiento sin coste</b>, y el criterio de reparto por escrito.<i>art. 26 Ley 9/2025</i></li>
+        <li><b>Un sitio cerrado para bicis y patinetes</b>, dentro del perímetro.<i>art. 85.1 ET</i></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="limite">
+    <h4>Y ninguna de las diez la firmamos nosotros</h4>
+    <p><b>Todas las firma la empresa.</b> Lo que firmamos nosotros es <b>pedirlas por escrito el
+      primer mes y publicar lo que contesten</b>, cada trimestre y con una columna para lo que se
+      caiga.</p>
+  </div>
+  <p class="ultimo"><b>El buzón sigue abierto</b>, y seguirá abierto después del 29
+    &middot; sin-siglas.info/buzon</p>
+
+  <footer class="pie">
+    <div class="compi"><p class="compi__globo">Las diez, guardadas.</p><canvas data-pose="quieto" data-tt="900"></canvas></div>
+    <div class="pie__medio">
+      <p class="pie__quien">Lo firmamos los once</p>
+      <p class="pie__nombres">Once personas, seis áreas<span> &middot; cero siglas</span></p>
+    </div>
+    <div class="pie__voto">
+      <p class="pie__fecha">29 de septiembre</p>
+      <p class="pie__url">sin-siglas.info</p>
+    </div>
+  </footer>
+</section>
+
+<!-- ==================================================================
+     EL BUZÓN ENTERO · «Os escuchamos» · martes 22 de septiembre
+     ------------------------------------------------------------------
+     LAS 23 RESPUESTAS DEL BUZÓN, TODAS, AGRUPADAS POR TEMA. Una llegó
+     dos veces (la de responsabilidad y salario), así que son 22
+     distintas y el cartel dice 23 porque es lo que ha entrado.
+
+     LA REGLA DE ESTA PIEZA: NO SE ELIGE. El resto de la campaña
+     selecciona -- diez propuestas, doce peticiones, las que tienen
+     artículo detrás --. Esta no: aquí entra todo lo que ha llegado,
+     incluido lo pequeño («WSL y Windows») y lo incómodo (los trienios
+     absorbidos, los sueldos bajos). Quitar una sola línea convierte el
+     cartel en lo contrario de lo que promete.
+
+     Y POR ESO ESTÁ WSL EN EL MISMO LIENZO QUE EL IPC. Parece un chiste
+     al lado de la pérdida de poder adquisitivo y es justo al revés: es
+     la prueba de que se ha leído el buzón entero y no solo lo que
+     encaja con el programa. Quien escribió eso va a ver su frase.
+
+     NADIE ES IDENTIFICABLE. Ni una cita literal, ni un área, ni un
+     puesto, ni un caso concreto: todo va agrupado y reescrito en
+     petición. En una empresa de este tamaño una frase textual tiene
+     dueño, y el buzón se llenó porque era anónimo. Apartado 6.
+
+     LO QUE SE PROMETE, Y ES LO ÚNICO QUE SE PROMETE: llevarlas todas
+     por escrito y contar qué contestan de cada una. No se promete que
+     salga ninguna. El límite lo dice con las tres columnas del semáforo
+     -- lo que avanza, lo que se queda parado y lo que digan que no --,
+     que es el mismo compromiso del apartado 2 y enlaza con `semaforo`.
+
+     EL CONTADOR VA EN LA BAJADA Y NO EN LOS GRUPOS. Los temas se
+     solapan -- quien pide rangos de sueldo por nivel está pidiendo
+     dinero y transparencia a la vez --, así que un número por grupo
+     daría una suma que no cuadra con las 23 y el primero que las sume
+     nos pilla. Una sola cifra, la de verdad, arriba.
+     ================================================================== -->
+<section class="cartel" id="c35">
+  <div class="tapa"><span>El buzón &middot; todo lo que pedís</span><b>29-S</b></div>
+
+  <h1 class="titular">Os escuchamos.<em>Y lo vamos a pelear.</em></h1>
+  <p class="bajada bajada--ancha">
+    <b>23 respuestas en el buzón.</b> Aquí está <b>todo</b>, sin quitar nada. <i>Y de cada una os
+    contamos en qué queda.</i>
+  </p>
+
+  <div class="programa">
+    <div class="grupo grupo--coral">
+      <h3>Lo que más se repite: el sueldo</h3>
+      <ul>
+        <li><b>Subida anual con el IPC.</b> Sin ella, cada año se cobra menos por el mismo
+          trabajo.</li>
+        <li><b>Que los trienios no se los coma el complemento de empresa</b>, o la antigüedad no
+          existe.</li>
+        <li><b>Más responsabilidad, más sueldo.</b> Hay perfiles junior asumiendo funciones que no
+          van en su nómina.</li>
+        <li><b>Rangos de sueldo por nivel y por escrito</b>, no según la tecnología que te
+          toque.</li>
+      </ul>
+    </div>
+
+    <div class="grupo">
+      <h3>Tu tiempo</h3>
+      <ul>
+        <li><b>Intensiva en julio</b>, y no solo en agosto: trabajar de tarde con ese calor.</li>
+        <li><b>Jornada más corta</b>, y el viernes de siete horas a cambio de un rato de lunes a
+          jueves.</li>
+        <li><b>Permiso para acompañar a un familiar</b> a consulta o prueba médica.</li>
+        <li><b>Trabajar unos días desde el país de origen</b> sin gastar vacaciones.</li>
+      </ul>
+    </div>
+
+    <div class="grupo">
+      <h3>La carga y el cliente</h3>
+      <ul>
+        <li><b>Que no se venda dos veces tu tiempo:</b> si un cliente paga tu jornada, que no te
+          repartan en otro proyecto.</li>
+        <li><b>Que el cliente no marque el día a día</b> de quien está programando.</li>
+        <li><b>Una vuelta al acabar cada proyecto:</b> quién ha ido sobrecargado.</li>
+      </ul>
+    </div>
+
+    <div class="grupo">
+      <h3>Crecer aquí</h3>
+      <ul>
+        <li><b>Criterios de ascenso por escrito</b>, y que se parezcan a cómo se asciende de
+          verdad.</li>
+        <li><b>Transparencia salarial</b> y un plan de carrera que no sea una lista de
+          casillas.</li>
+        <li><b>Saber hacia dónde va el trabajo</b> cuando cambia el rumbo de lo que se vende.</li>
+      </ul>
+    </div>
+
+    <div class="grupo grupo--ancho">
+      <h3>Y que se hable, y lo del día a día</h3>
+      <ul>
+        <li><b>Comunicación en los dos sentidos:</b> enterarse de las decisiones y tener dónde
+          responder.</li>
+        <li><b>Medir el bienestar de verdad</b>, no con un botón de ánimo.</li>
+        <li><b>Espacio para proponer ideas</b> y proyectos propios.</li>
+        <li><b>Herramientas que no estorben:</b> WSL y Windows.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="limite">
+    <h4>No elegimos cuáles llevar</h4>
+    <p><b>Van todas, por escrito, desde el primer mes.</b> Y de cada una os diremos qué contestan:
+      <b>lo que avance, lo que se quede parado y lo que digan que no</b>. Sin filtrar y sin
+      adornar.</p>
+  </div>
+  <p class="ultimo"><b>El buzón sigue abierto</b>, y seguirá abierto después del 29
+    &middot; sin-siglas.info/buzon</p>
+
+  <footer class="pie">
+    <div class="compi"><p class="compi__globo">Todo apuntado.</p><canvas data-pose="quieto" data-tt="900"></canvas></div>
+    <div class="pie__medio">
+      <p class="pie__quien">Lo firmamos los once</p>
+      <p class="pie__nombres">Once personas, seis áreas<span> &middot; cero siglas</span></p>
+    </div>
+    <div class="pie__voto">
+      <p class="pie__fecha">29 de septiembre</p>
+      <p class="pie__url">sin-siglas.info</p>
+    </div>
+  </footer>
+</section>
+
 
 <!-- ==================================================================
      COMUNICACIÓN · martes 15 de septiembre · lo manda José Pablo Fernández
@@ -2243,43 +4022,97 @@ body.diptico .cartel.elegido + .cartel.elegido{box-shadow:inset 2px 0 0 var(--li
 <!-- ==================================================================
      LAS VOCES DEL BUZÓN · martes 22 de septiembre · lo manda Rocío Galindo
      ------------------------------------------------------------------
-     PLANTILLA. No se puede enviar hasta el día 22: las cuatro citas se
-     sustituyen por lo que de verdad haya llegado al buzón, y la cifra
-     del rótulo por el número real de respuestas. Lo que hay que
-     cambiar va marcado con class="pendiente" y se ve en el cartel a
-     propósito, para que no se escape sin rellenar.
+     YA NO ES PLANTILLA. El 14 de septiembre el buzón llevaba dieciséis
+     respuestas y las citas son reales, copiadas del volcado sin tocar
+     una coma. Lo único que sigue marcado con class="pendiente" es EL
+     NÚMERO, porque el buzón sigue abierto y el día 22 habrá más: se
+     recuenta el volcado y se cambia. Es el dato que no se puede fallar
+     en el cartel que va precisamente de no inventarse nada.
+
+     LAS TRES CITAS SON LAS TRES ETIQUETAS, y ese es todo el diseño:
+     una que YA está en el programa (la intensiva de julio, que entró
+     el 8 de septiembre y entró por el buzón), una que ENTRA ahora (los
+     ascensos, lo único nuevo con artículo propio) y una que NO se
+     puede, puesta entera y no escondida. La tercera es además de la
+     misma persona que pidió el foro de ideas, así que el «no» va con
+     un «esto otro sí».
+
+     Y LA PRIMERA ETIQUETA NO DICE «YA ESTÁ PEDIDO», aunque la clase
+     CSS se llame así. El anexo del buzón lo deja escrito: «pedido»
+     significa pedido A LA EMPRESA, y a 22 de septiembre no hay comité,
+     así que lo único pedido de verdad es la jaula de bicis de la carta
+     a P&V del 9 -- y eso no lo escribió nadie en el buzón. Decir
+     «pedido» de la intensiva sería apuntarse un tanto que no se ha
+     jugado, que es la misma regla por la que se cayó la fila de las
+     tablas de 2026 del semáforo.
+
+     EL CORTE DE LAS CITAS LARGAS VA CON []. La segunda cita se queda
+     en dos frases de un texto de ocho líneas. Se corta por donde no
+     cambia el sentido y se marca el corte: retocar una cita en el
+     cartel que dice «sin retocar» sería el único error que no se puede
+     cometer aquí.
+
+     Y LA LISTA DE ABAJO NO PROMETE NADA que el comité no pueda hacer
+     por sí solo: son cinco peticiones de INFORMACIÓN, que es la única
+     familia de cosas que no depende de que la empresa quiera. Ninguna
+     dice que se vaya a conseguir.
+
+     PENDIENTE ANTES DE ENVIAR: las letras de los artículos del 64 ET
+     están puestas a nivel de artículo (art. 64.1, art. 64.2, art.
+     64.5) y no de letra, a propósito. Si alguien quiere la letra
+     exacta, se contrasta en el consolidado (BOE-A-2015-11430) y se
+     baja el detalle. El art. 24.1 ET de los ascensos hay que
+     verificarlo igual: es la cita nueva de la campaña y la que más se
+     va a mirar.
      ================================================================== -->
 <section class="cartel cartel--coral" id="c6">
   <div class="tapa"><span>El buzón · lo que nos habéis escrito</span><b>29-S</b></div>
 
-  <h1 class="titular">Esto no lo<em>decimos nosotros.</em></h1>
+  <h1 class="titular titular--largo">Esto no lo<em>decimos nosotros.</em></h1>
   <p class="bajada bajada--ancha">
-    Son <span class="pendiente">NN</span> respuestas anónimas del buzón, sin retocar. Al lado de
+    Son <span class="pendiente">16</span> respuestas anónimas del buzón, sin retocar. Al lado de
     cada una, <b>qué vamos a hacer con ella</b>.
   </p>
 
   <ul class="voces">
     <li>
-      <q class="pendiente">Cita del buzón, tal cual llegó, sin corregir ni resumir. Hay sitio para
-        dos líneas como esta: si la respuesta es más larga, se corta por donde no cambie el sentido.</q>
-      <span class="estado estado--pedido">Ya está pedido</span>
+      <q>Jornada intensiva todo el verano, no solo reducción en agosto. Es criminal trabajar con el
+        calor por las tardes.</q>
+      <span class="estado estado--pedido">Ya está en el programa</span>
+      <p class="voz__hacemos">Entró el 8 de septiembre, por esto: <b>intensiva en julio, y sin
+        perder vacaciones</b>. <em>art. 20.1 del convenio</em></p>
     </li>
     <li>
-      <q class="pendiente">Segunda cita del buzón. Aquí va una de las que entran en el programa,
-        para que se vea que lo que se pide acaba en una acción con artículo y plazo.</q>
+      <q>La gente que asciende es porque toma iniciativa [...]. Además de ascender, no veo que haya
+        transparencia salarial.</q>
       <span class="estado estado--programa">Entra en el programa</span>
+      <p class="voz__hacemos">Los criterios de ascenso <b>se pactan con el comité</b>: pediremos que
+        se escriban y se publiquen. <em>art. 24.1 ET</em></p>
     </li>
     <li>
-      <q class="pendiente">Tercera cita del buzón: la que no podemos, que es la que hay que poner
-        igual. Debajo, en una frase, por qué no se puede y qué sí se puede hacer con eso.</q>
+      <q>La empresa podría dar la posibilidad de hacernos autónomos, además de nuestro contrato
+        indefinido, para sacar adelante otras ideas.</q>
       <span class="estado estado--no">No podemos · y te decimos por qué</span>
+      <p class="voz__hacemos">Eso es un pacto tuyo con la empresa, no de comité. <b>Lo otro que
+        pedías sí</b>: un foro anual para presentar ideas.</p>
     </li>
   </ul>
 
+  <div class="resto">
+    <p class="resto__cab"><span>Lo demás que ha entrado</span><span>Y qué vamos a hacer</span></p>
+    <ul>
+      <li><span><b>Los trienios</b> que se come el complemento</span><i>Pedir la regla por escrito <em>&middot; art. 26.5 ET</em></i></li>
+      <li><span><b>Rangos de sueldo por nivel</b>, no por tecnología</span><i>En el registro retributivo <em>&middot; art. 28.2 ET</em></i></li>
+      <li><span><b>Si la IA o las ventas</b> dejan tu tecnología sin trabajo</span><i>Pedir la previsión de empleo <em>&middot; art. 64.1 ET</em></i></li>
+      <li><span><b>Ligar la subida a nuestra tarifa</b>, en vez de al IPC</span><i>A la mesa, con las cuentas <em>&middot; art. 64.2 ET</em></i></li>
+      <li><span><b>Que un cliente pague tu 100 %</b> y te asignen a otro</span><i>Pedir la asignación <em>&middot; art. 64.5 ET</em></i></li>
+    </ul>
+  </div>
+
   <div class="limite">
     <h4>Lo que no vamos a hacer con esto</h4>
-    <p>No publicamos ninguna respuesta con un dato que permita saber quién la escribió, ni la
-      llevamos a la empresa con nombres. <b>Va como cuestión general o no va.</b></p>
+    <p>Ninguna respuesta se publica con un dato que deje ver quién la escribió, ni se lleva a la
+      empresa con nombres. <b>Va como cuestión general o no va.</b></p>
   </div>
 
   <footer class="pie">
@@ -2297,7 +4130,36 @@ body.diptico .cartel.elegido + .cartel.elegido{box-shadow:inset 2px 0 0 var(--li
 
 <!-- ==================================================================
      EL SEMÁFORO DEL MANDATO · miércoles 23 de septiembre · lo manda Rafael López
+     ------------------------------------------------------------------
      El tablero sale con todo en gris a propósito: así está el día 22.
+
+     Veinte filas por cuatro columnas: 80 casillas. La cuenta se ha movido
+     cuatro veces y las cuatro por la misma regla -- EL TABLERO
+     CONTIENE LO QUE SE VA A PEDIR, ni una fila más ni una menos:
+
+       · 12 filas y 48 casillas el 9 de septiembre
+       · 16 y 64 el 10, al entrar las cuatro propuestas de la semana del
+         15: igualdad, cumpleaños, médico y dietas
+       · 15 y 60 el mismo 10, al confirmarse que LAS TABLAS DE 2026 YA
+         ESTÁN APLICADAS Y LOS ATRASOS PAGADOS. Esa fila se cae, y no es
+         un recorte: pedir en un contrato algo que ya está hecho es
+         apuntarse un tanto que no se ha jugado, y en enero el tablero
+         habría salido con una casilla marcada de gratis
+       · 18 y 72 el mismo 10, con las tres propuestas que se sumaron a la
+         lista: el permiso no retribuido para cuidar, la plaza de
+         aparcamiento y la semana de cuatro días
+       · 20 y 80 el 14, con las dos peticiones nuevas que salen del
+         buzón y que `voces-del-buzon` compromete el día 22: LOS
+         CRITERIOS DE ASCENSO por escrito y LA PREVISIÓN DE EMPLEO con
+         la formación detrás. La fila del registro retributivo no se
+         duplica: se le añade el desglose por nivel, que es lo que
+         pedía el buzón, porque partirla en dos sería contarse dos
+         veces la misma petición
+
+     Si se manda una pieza con petición antes del 23, aquí entra su fila y
+     se recuenta la leyenda. Y si algo se resuelve antes del 23, su fila
+     se cae. El número vive en la leyenda y no en la cabecera para que
+     recontar sea tocar un sitio.
      ================================================================== -->
 <section class="cartel" id="c7">
   <div class="tapa"><span>El semáforo del mandato</span><b>29-S</b></div>
@@ -2316,16 +4178,24 @@ body.diptico .cartel.elegido + .cartel.elegido{box-shadow:inset 2px 0 0 var(--li
     <div class="fila"><b>Registro de jornada, publicado cada trimestre</b><i></i><i></i><i></i><i></i></div>
     <div class="fila"><b>Política de desconexión con ventana horaria</b><i></i><i></i><i></i><i></i></div>
     <div class="fila"><b>Intensiva en julio, con los días de vacaciones intactos</b><i></i><i></i><i></i><i></i></div>
-    <div class="fila"><b>Tablas de 2026 aplicadas, y los atrasos pagados</b><i></i><i></i><i></i><i></i></div>
     <div class="fila"><b>El teletrabajo en nómina, y sin absorber</b><i></i><i></i><i></i><i></i></div>
     <div class="fila"><b>Evaluación de riesgos psicosociales</b><i></i><i></i><i></i><i></i></div>
     <div class="fila"><b>Revisión de los puestos con pantalla</b><i></i><i></i><i></i><i></i></div>
     <div class="fila"><b>Zona de comida y zona de descanso, separadas</b><i></i><i></i><i></i><i></i></div>
     <div class="fila"><b>Informe previo del comité en cada cambio</b><i></i><i></i><i></i><i></i></div>
     <div class="fila"><b>Acta de cada reunión en el tablón</b><i></i><i></i><i></i><i></i></div>
-    <div class="fila"><b>Registro retributivo y datos de plantilla</b><i></i><i></i><i></i><i></i></div>
+    <div class="fila"><b>Registro retributivo entero, con el desglose por nivel</b><i></i><i></i><i></i><i></i></div>
+    <div class="fila"><b>Los criterios de ascenso, escritos y pactados</b><i></i><i></i><i></i><i></i></div>
+    <div class="fila"><b>Hacia dónde va el trabajo, y la formación detrás</b><i></i><i></i><i></i><i></i></div>
+    <div class="fila"><b>El plan de igualdad, y su fecha de registro</b><i></i><i></i><i></i><i></i></div>
+    <div class="fila"><b>El día del cumpleaños, y trasladado si cae en fin de semana</b><i></i><i></i><i></i><i></i></div>
+    <div class="fila"><b>El permiso de médico, igual por lo público que por lo privado</b><i></i><i></i><i></i><i></i></div>
+    <div class="fila"><b>Las dietas adelantadas, y no puestas de tu bolsillo</b><i></i><i></i><i></i><i></i></div>
+    <div class="fila"><b>La ruta de las dos semanas pagadas, y los aplazamientos por escrito</b><i></i><i></i><i></i><i></i></div>
+    <div class="fila"><b>Plaza de aparcamiento sin coste, y el criterio de reparto</b><i></i><i></i><i></i><i></i></div>
+    <div class="fila"><b>Abrir la negociación de la semana de cuatro días</b><i></i><i></i><i></i><i></i></div>
   </div>
-  <p class="leyenda">Así está el 23 de septiembre: <b>48 casillas y ninguna marcada.</b> Nada
+  <p class="leyenda">Así está el 23 de septiembre: <b>80 casillas y ninguna marcada.</b> Nada
     marcado significa que está todo por pedir. El primer tablero con marcas se publica en
     <b>enero de 2027</b>.</p>
 
@@ -2342,6 +4212,115 @@ body.diptico .cartel.elegido + .cartel.elegido{box-shadow:inset 2px 0 0 var(--li
     <div class="pie__medio">
       <p class="pie__quien">Mandato</p>
       <p class="pie__nombres">Cuatro años <span>· art. 67.3 ET</span></p>
+    </div>
+    <div class="pie__voto">
+      <p class="pie__fecha">29 de septiembre</p>
+      <p class="pie__url">sin-siglas.info</p>
+    </div>
+  </footer>
+</section>
+
+<!-- ==================================================================
+     CÓMO SE VOTA · martes 15 de septiembre · lo firman los once
+     ------------------------------------------------------------------
+     La hermana del semáforo. El semáforo publica lo que se PIDE y lo
+     que se consigue; esta publica lo que se VOTA. Era el único hueco
+     del contrato: un tablero trimestral dice qué salió, pero no dice
+     quién levantó la mano.
+
+     TRES IDEAS Y NADA MÁS: somos plantilla, cada voto se publica, y si
+     algo no te cuadra sabes a quién preguntarle. La primera versión
+     llevaba cuatro acciones con su artículo, el reglamento del comité y
+     el panel del sigilo: era correcta y era un tocho. Un cartel que
+     hay que ampliar para leerlo no lo lee nadie en una burbuja de chat.
+     El detalle legal se queda para contarlo en persona y para la web.
+
+     LOS ONCE VAN EN EL CARTEL, y esa es la mitad del mensaje. La lista
+     enseña la cara y el área de cada uno: el cartel dice «compañerxs» y
+     debajo están, con nombre. Once caras hacen el trabajo que no hace
+     ningún adjetivo.
+
+     EL ARTÍCULO QUE SE QUEDA ES EL 81 ET, y solo ese. El tablón de la
+     representación es lo que convierte «lo publicamos» en un sitio
+     concreto. Verificado en fuente primaria el 14-9-2026
+     (BOE-A-2015-11430). Lo que sostiene el resto y NO se imprime por no
+     recargar: el art. 66.2 ET -- el comité redacta su reglamento de
+     procedimiento y remite copia a la autoridad laboral y a la empresa,
+     que es donde entra por escrito lo de publicar el voto-- y el art.
+     65.1 ET, que es el que dice que se decide por mayoría. Si alguien
+     pregunta en un pasillo, esos son los dos.
+
+     Y LA TERCERA PUERTA ES LA QUE NO DEPENDE DE NADIE. El reglamento lo
+     aprueba el comité entero y ahí no tenemos mayoría asegurada, así que
+     el compromiso se escribe en primera persona: publicamos EL NUESTRO.
+     Para contar lo que uno mismo ha votado no hace falta permiso.
+
+     NO LLEVA NÚMERO DE ASIENTOS. El apartado 9 deja pendiente si el
+     comité tiene cinco o nueve (art. 66.1 ET, según la plantilla del
+     centro), así que aquí se dice «un voto por cabeza» y no «once
+     votos». Ponerlo antes de confirmarlo es inventárselo justo en el
+     cartel que va de no inventarse nada.
+     ================================================================== -->
+<section class="cartel" id="c33">
+  <div class="tapa"><span>Cómo se vota</span><b>29-S</b></div>
+
+  <div class="cabeza">
+    <h1 class="titular">Lo que votemos,<em>lo vas a ver.</em></h1>
+    <div class="cabeza__compi"><canvas data-pose="vota" data-tt="0" data-esc="6"></canvas></div>
+  </div>
+  <p class="bajada bajada--ancha">
+    En el comité se vota, y hay <b>un voto por cabeza</b>. Nosotros publicamos el nuestro:
+    <b>qué se votaba y qué votó cada uno</b>, con nombre y fecha.
+  </p>
+
+  <ul class="puertas">
+    <li>
+      <strong>A favor de todxs</strong>
+      <p>El comité representa <b>al conjunto de los trabajadores, para defender sus
+        intereses</b>. Lo dice el Estatuto: ahí no se representa a la empresa ni a una sigla.
+        <span class="ley">art. 63.1 ET</span></p>
+    </li>
+    <li>
+      <strong>Perfiles lead</strong>
+      <p>Once compañerxs de seis áreas, y <b>muchos somos leads</b>. Esa experiencia y esa
+        antigüedad <b>la vamos a usar para cambiar las cosas</b>: sabemos cómo se pide aquí, a
+        quién y en qué plazo.</p>
+    </li>
+    <li>
+      <strong>Y se publica</strong>
+      <p>Cada acuerdo va al tablón con <b>quién votó qué</b>. El acta, no nuestro resumen del
+        acta. <span class="ley">art. 81 ET</span></p>
+    </li>
+    <li>
+      <strong>Y pides cuentas</strong>
+      <p>Si un día votamos algo que no te cuadra, <b>vas a saber quién fue</b> y nos lo puedes
+        decir a la cara. Esa es toda la garantía que se puede dar.</p>
+    </li>
+  </ul>
+
+  <p class="rotulo">Los once que firman esto</p>
+  <ul class="once once--caras">
+    <li><img src="../a3-candidatura/img/munoz.jpg" alt=""><div><b>Laura Muñoz</b><span>Finance &amp; Accounting</span></div></li>
+    <li><img src="../a3-candidatura/img/navarro.jpg" alt=""><div><b>Raúl Navarro</b><span>People &amp; Values</span></div></li>
+    <li><img src="../a3-candidatura/img/galindo.jpg" alt=""><div><b>Rocío Galindo</b><span>Customer Success</span></div></li>
+    <li><img src="../a3-candidatura/img/fernandez.jpg" alt=""><div><b>José Pablo Fernández</b><span>Engineering</span></div></li>
+    <li><img src="../a3-candidatura/img/lopezm.jpg" alt=""><div><b>Rafael López</b><span>Engineering</span></div></li>
+    <li><img src="../a3-candidatura/img/bolivar.jpg" alt=""><div><b>Fran Bolívar</b><span>Engineering</span></div></li>
+    <li><img src="../a3-candidatura/img/algarra.jpg" alt=""><div><b>Leticia Algarra</b><span>Project Management</span></div></li>
+    <li><img src="../a3-candidatura/img/barchein.jpg" alt=""><div><b>Mario Barchéin</b><span>Engineering</span></div></li>
+    <li><img src="../a3-candidatura/img/aranda.jpg" alt=""><div><b>Mario Aranda</b><span>People &amp; Values</span></div></li>
+    <li><img src="../a3-candidatura/img/lopeza.jpg" alt=""><div><b>Violeta López</b><span>Professional Services</span></div></li>
+    <li><img src="../a3-candidatura/img/castillo.jpg" alt=""><div><b>María Emilia Castillo</b><span>Professional Services</span></div></li>
+  </ul>
+
+  <div class="lema lema--linea">
+    <p>Compañerxs ayudando a <b>compañerxs.</b></p>
+  </div>
+
+  <footer class="pie">
+    <div class="pie__medio">
+      <p class="pie__quien">Lo firmamos</p>
+      <p class="pie__nombres">Los once <span>· seis áreas</span></p>
     </div>
     <div class="pie__voto">
       <p class="pie__fecha">29 de septiembre</p>
@@ -2548,6 +4527,239 @@ body.diptico .cartel.elegido + .cartel.elegido{box-shadow:inset 2px 0 0 var(--li
   </footer>
 </section>
 
+<!-- ==================================================================
+     CON QUIÉN HABLAS · sábado 26 de septiembre
+     ------------------------------------------------------------------
+     El mensaje de confianza que pidió el comité el 24: el comité es la
+     representación de la plantilla, no una lucha contra la empresa ni
+     entre compañeros. Es fin de semana, así que poco texto y nada que
+     pida hacer algo hoy. No nombra a la otra lista ni la contesta.
+     ================================================================== -->
+<section class="cartel" id="c36">
+  <div class="tapa"><span>Sábado &middot; para leer sin prisa</span><b>29-S</b></div>
+
+  <h1 class="titular">Cuando tienes un problema,<em>¿con quién hablas?</em></h1>
+  <p class="bajada bajada--ancha">
+    Con alguien que <b>conoces</b>, que <b>te escucha</b> y que te dice lo que se puede hacer.
+    <i>También cuando la respuesta es que no.</i>
+  </p>
+
+  <p class="rotulo">Por ejemplo</p>
+  <ul class="casos">
+    <li>Te cambian el horario <b>sin avisar</b>.</li>
+    <li>No sabes si esa guardia <b>se compensa</b>.</li>
+    <li>Un permiso que <b>no te cuadra</b>.</li>
+    <li>Una duda con la <b>nómina</b> que no sabes a quién preguntar.</li>
+  </ul>
+
+  <p class="rotulo">Lo que hace un comité, y nada más</p>
+  <ul class="razones">
+    <li>
+      <strong>Te escucha</strong>
+      <p>Sin cita y sin formularios: en la cocina, en el pasillo o en el buzón, que es
+        anónimo.</p>
+    </li>
+    <li>
+      <strong>Lo mira contigo</strong>
+      <p>Qué dice el convenio, qué dice la ley y qué se puede pedir. Sin adornarlo.</p>
+    </li>
+    <li>
+      <strong>Te cuenta en qué queda</strong>
+      <p>Lo que avanza, lo que se para y lo que digan que no. Por escrito y sin filtrar.</p>
+    </li>
+  </ul>
+
+  <div class="remate">
+    El comité <b>no es una lucha contra la empresa</b>, y mucho menos entre compañeros. Es la
+    representación de toda la plantilla: <b>votes a quien votes, te representa a ti también.</b>
+  </div>
+  <p class="ultimo"><b>El buzón sigue abierto</b>, y seguirá abierto después del 29
+    &middot; sin-siglas.info/buzon</p>
+
+  <footer class="pie">
+    <div class="compi"><p class="compi__globo">Aquí estamos.</p><canvas data-pose="saluda" data-tt="300"></canvas></div>
+    <div class="pie__medio">
+      <p class="pie__quien">Lo firmamos los once</p>
+      <p class="pie__nombres">Once personas, seis áreas<span> &middot; cero siglas</span></p>
+    </div>
+    <div class="pie__voto">
+      <p class="pie__fecha">29 de septiembre</p>
+      <p class="pie__url">sin-siglas.info</p>
+    </div>
+  </footer>
+</section>
+
+<!-- ==================================================================
+     VOTA SIN SIGLAS · domingo 27 de septiembre · el último
+     ------------------------------------------------------------------
+     Va el domingo porque es el último día de la ventana: el art. 8.4
+     corta la propaganda a las cero horas del lunes 28. Por eso dice
+     "el martes" y no "pasado mañana", y por eso se despide.
+     Pide el voto para la lista con su propio nombre, y cierra con la
+     frase de la precisión del 24: compañeros antes que candidatos.
+     ================================================================== -->
+<section class="cartel cartel--coral" id="c37">
+  <div class="tapa"><span>Domingo &middot; el último</span><b>29-S</b></div>
+
+  <h1 class="titular">El martes 29,<em>vota sin siglas.</em></h1>
+  <p class="bajada bajada--ancha">
+    <b>Once compañeros de la casa</b>, en una lista independiente. Si quieres que las nueve se
+    pidan por escrito el primer mes, <i>vota nuestra lista.</i>
+  </p>
+
+  <p class="rotulo">Lo que votas</p>
+  <ol class="nueve">
+    <li><span>01</span>Intensiva en julio</li>
+    <li><span>02</span>Tu cumpleaños, libre</li>
+    <li><span>03</span>Sitio para bicis</li>
+    <li><span>04</span>Permiso de médico</li>
+    <li><span>05</span>Dietas adelantadas</li>
+    <li><span>06</span>Parking sin coste</li>
+    <li><span>07</span>Compensaciones</li>
+    <li><span>08</span>Semana de 4 días</li>
+    <li><span>09</span>Sala de descanso</li>
+  </ol>
+
+  <p class="rotulo">Y lo que nos puedes reclamar</p>
+  <ul class="pasos4">
+    <li><strong>El primer mes</strong><p>Pedimos las nueve <b>por escrito</b>, y las 23 del buzón.</p></li>
+    <li><strong>Tal cual</strong><p><b>Publicamos</b> lo que contesten, sea lo que sea.</p></li>
+    <li><strong>Cada trimestre</strong><p><b>El semáforo</b>, con columna para lo que se caiga.</p></li>
+    <li><strong>Enero 2027</strong><p>El primer semáforo <b>con marcas</b>.</p></li>
+  </ul>
+
+  <p class="voto1"><b>Vota toda la plantilla del censo</b>, afiliada o no · en urna y en secreto
+    · horario y sitio, los de la mesa</p>
+
+  <ul class="caras11">
+    <li><img src="../a3-candidatura/img/munoz.jpg" alt=""><span>Laura</span></li>
+    <li><img src="../a3-candidatura/img/navarro.jpg" alt=""><span>Raúl</span></li>
+    <li><img src="../a3-candidatura/img/galindo.jpg" alt=""><span>Rocío</span></li>
+    <li><img src="../a3-candidatura/img/fernandez.jpg" alt=""><span>José Pablo</span></li>
+    <li><img src="../a3-candidatura/img/lopezm.jpg" alt=""><span>Rafael</span></li>
+    <li><img src="../a3-candidatura/img/bolivar.jpg" alt=""><span>Fran</span></li>
+    <li><img src="../a3-candidatura/img/algarra.jpg" alt=""><span>Leticia</span></li>
+    <li><img src="../a3-candidatura/img/barchein.jpg" alt=""><span>Mario B.</span></li>
+    <li><img src="../a3-candidatura/img/aranda.jpg" alt=""><span>Mario A.</span></li>
+    <li><img src="../a3-candidatura/img/lopeza.jpg" alt=""><span>Violeta</span></li>
+    <li><img src="../a3-candidatura/img/castillo.jpg" alt=""><span>M.ª Emilia</span></li>
+  </ul>
+
+  <div class="remate">
+    Somos <b>compañeros antes que candidatos</b>, y el día 30 lo vamos a seguir siendo.
+    Gracias por leernos y por escribir al buzón.
+  </div>
+  <p class="ultimo"><b>El último cartel:</b> el lunes la ley corta la propaganda &middot; art. 8.4 RD 1844/1994</p>
+
+  <footer class="pie">
+    <div class="compi"><p class="compi__globo">¡Nos vemos el martes!</p><canvas data-pose="vota" data-tt="500"></canvas></div>
+    <div class="pie__medio">
+      <p class="pie__quien">Representación de compañerxs, hecha por compañerxs</p>
+      <p class="pie__nombres">Once personas <span>· cero siglas</span></p>
+    </div>
+    <div class="pie__voto">
+      <p class="pie__fecha">29 de septiembre</p>
+      <p class="pie__url">sin-siglas.info</p>
+    </div>
+  </footer>
+</section>
+
+<!-- ==================================================================
+     EN NÚMEROS · fin de semana, alternativa al sábado
+     ------------------------------------------------------------------
+     Lo hecho sin ser comité todavía, en seis cifras. Todas salen de
+     piezas ya publicadas y se comprueban en la web: 23 del buzón (c35),
+     nueve peticiones (resumen), once de seis áreas (web), el primer mes
+     y enero de 2027 (resumen). Cierra diciendo que no hay nada
+     conseguido, que es la otra mitad de la campaña.
+     ================================================================== -->
+<section class="cartel" id="c38">
+  <div class="tapa"><span>Cuatro semanas de campaña</span><b>29-S</b></div>
+
+  <h1 class="titular titular--corto">Sin adjetivos.<em>Con números.</em></h1>
+  <p class="bajada bajada--ancha">
+    Lo que hemos hecho <b>sin ser comité todavía</b>. Todo se puede comprobar en
+    sin-siglas.info.
+  </p>
+
+  <ul class="cifras">
+    <li><b>23</b><span>respuestas en el buzón, <b>publicadas todas</b>, sin quitar ninguna</span></li>
+    <li><b>9</b><span>peticiones concretas, cada una con lo que se pide y quién la lleva</span></li>
+    <li><b>11</b><span>personas de seis áreas de la casa</span></li>
+    <li><b>0</b><span>siglas: una lista independiente, hecha desde dentro</span></li>
+    <li><b>Mes 1</b><span>cuando pedimos las nueve por escrito</span></li>
+    <li><b>2027</b><span>en enero, el primer semáforo con marcas</span></li>
+  </ul>
+
+  <div class="limite">
+    <h4>Y un cero que también cuenta</h4>
+    <p><b>Cero promesas.</b> Ninguna de las nueve está conseguida, y no diremos que sí hasta que
+      la firme la empresa. Lo que prometemos es pedirlas y contaros en qué quedan.</p>
+  </div>
+  <p class="ultimo"><b>Las nueve, una por una:</b> sin-siglas.info/propuestas</p>
+
+  <footer class="pie">
+    <div class="compi"><p class="compi__globo">Cuentas claras.</p><canvas data-pose="chuleo" data-tt="400"></canvas></div>
+    <div class="pie__medio">
+      <p class="pie__quien">Lo firmamos los once</p>
+      <p class="pie__nombres">Once personas, seis áreas<span> &middot; cero siglas</span></p>
+    </div>
+    <div class="pie__voto">
+      <p class="pie__fecha">29 de septiembre</p>
+      <p class="pie__url">sin-siglas.info</p>
+    </div>
+  </footer>
+</section>
+
+<!-- ==================================================================
+     DESPUÉS DEL MARTES · fin de semana, alternativa al domingo
+     ------------------------------------------------------------------
+     Las fechas que se nos pueden reclamar, sacadas del resumen y de
+     os-escuchamos: nada que no se haya dicho ya, puesto en orden. El
+     remate cubre el caso de no salir sin atacar a nadie: lo mismo que
+     pedimos para nosotros, pídeselo a quien salga.
+     ================================================================== -->
+<section class="cartel cartel--coral" id="c39">
+  <div class="tapa"><span>Lo que viene después</span><b>29-S</b></div>
+
+  <h1 class="titular titular--corto">¿Y después<em>del martes?</em></h1>
+  <p class="bajada bajada--ancha">
+    Si salimos elegidos, esto es lo que vas a poder comprobar. <b>Con fecha</b>, para que nos lo
+    puedas reclamar.
+  </p>
+
+  <ul class="hitos">
+    <li><strong>Martes 29</strong><p><b>Votas.</b> En urna, en secreto y a quien quieras.</p></li>
+    <li><strong>El primer mes</strong><p><b>Pedimos por escrito</b> las nueve peticiones y las 23
+      respuestas del buzón.</p></li>
+    <li><strong>Cada respuesta</strong><p><b>La publicamos tal cual</b>, sea un sí, un no o un
+      todavía no.</p></li>
+    <li><strong>Cada trimestre</strong><p><b>El semáforo:</b> lo pedido, lo que se negocia, lo que
+      se cayó y lo conseguido.</p></li>
+    <li><strong>Enero de 2027</strong><p><b>El primer semáforo con marcas.</b> Ahí se ve quién
+      cumple.</p></li>
+  </ul>
+
+  <div class="remate">
+    <b>Y si no salimos</b>, seguimos siendo compañeros. Lo mismo que pedimos para nosotros,
+    pídeselo a quien salga: <b>que pregunte, que publique y que rinda cuentas.</b>
+  </div>
+  <p class="ultimo"><b>La ley corta la propaganda el lunes 28.</b> Nos vemos el martes.
+    &middot; art. 8.4 RD 1844/1994</p>
+
+  <footer class="pie">
+    <div class="compi"><p class="compi__globo">Apúntalo.</p><canvas data-pose="reloj" data-tt="300"></canvas></div>
+    <div class="pie__medio">
+      <p class="pie__quien">Lo firmamos los once</p>
+      <p class="pie__nombres">Once personas, seis áreas<span> &middot; cero siglas</span></p>
+    </div>
+    <div class="pie__voto">
+      <p class="pie__fecha">29 de septiembre</p>
+      <p class="pie__url">sin-siglas.info</p>
+    </div>
+  </footer>
+</section>
+
 <script src="compi.js"></script>
 <script>
 /* ==================================================================
@@ -2579,7 +4791,7 @@ if(dos){
    sin esto saldría siempre el primer cuadro. */
 document.querySelectorAll(".compi canvas, .cabeza__compi canvas").forEach(c => {
   pintaCompi(c, c.dataset.pose, +c.dataset.tt, +(c.dataset.esc || 3),
-    c.dataset.extras ? { extras:true } : undefined);
+    { extras: !!c.dataset.extras, izq: !!c.dataset.izq });
 });
 </script>
 </body>

@@ -23,7 +23,8 @@ const TINTA = {
   C:"#3fc9f0", c:"#1b9fc9", L:"#9ce2f6",/* camiseta   */
   P:"#2a4a80", p:"#1b3159",             /* pantalón   */
   B:"#e9f2fc", b:"#f4796b",             /* zapatilla  */
-  V:"#b8c8dd", v:"#c9584c"              /* zapatilla en sombra */
+  V:"#b8c8dd", v:"#c9584c",             /* zapatilla en sombra */
+  U:"#8a4fd0", u:"#6a35a8"              /* violeta · solo el punto violeta */
 };
 
 /* ---- rejilla y anatomía (en píxeles de sprite) ---- */
@@ -150,7 +151,10 @@ const CARAS = {
   },
   mareado(X,y){ OJOS.equis(X,y); boca(X,y,"ondas"); },
   guino(X,y,m){ unOjo(X,y,1,m); caja(X+6,y+8,4,1,"O"); px(X+9,y+7,"O"); boca(X,y,"sonrisa"); rubor(X,y); },
-  cansado(X,y){ OJOS.medios(X,y); boca(X,y,"linea"); }
+  cansado(X,y){ OJOS.medios(X,y); boca(X,y,"linea"); },
+  /* soplar: los arcos de la cara feliz con la boca en O. Con los ojos
+     abiertos parecía sorpresa, que es otra cosa */
+  sopla(X,y){ OJOS.arcos(X,y); boca(X,y,"o"); rubor(X,y); }
 };
 
 /* cabeza: 11x13, pelo con brillo, patillas y sombra al lado derecho */
@@ -171,8 +175,15 @@ function cabeza(y, dx, cara, mira){
   (CARAS[cara] || CARAS.normal)(X, y, mira);
 }
 
-/* tronco: camiseta cian con galón coral, eco de los chevrones del cartel */
-function tronco(y, dx){
+/* tronco: camiseta cian con galón coral, eco de los chevrones del cartel.
+
+   El galón se puede quitar (galon=false) y solo lo quita la pose de la
+   tarta: las llamas son coral y caen justo a la altura del galón, así
+   que con él puesto las tres velas se leen como salpicaduras en la
+   camiseta en vez de como velas. Sin él, tres columnas blancas sobre
+   cian y tres puntas coral encima. Comprobado reexportando los
+   veintisiete carteles: ninguno más lo quita, así que ninguno cambia. */
+function tronco(y, dx, galon){
   const X = CX - 3 + dx;
   caja(X, y, 7, 7, "C");
   caja(X+6, y, 1, 7, "c");
@@ -180,6 +191,7 @@ function tronco(y, dx){
   px(X, y+1, "L"); px(X, y+2, "L");
   caja(X+2, y, 3, 1, "S"); px(X+2, y, "s");
   px(X+1, y, "L"); px(X+5, y, "L");
+  if(galon === false) return;
   px(X+2,y+2,"R"); px(X+3,y+2,"R");
   px(X+3,y+3,"R"); px(X+4,y+3,"R");
   px(X+2,y+4,"R"); px(X+3,y+4,"R");
@@ -264,6 +276,254 @@ function abanico(hy, dx, f){
     if(an > 3) px(X + off + an - 2, y0 + i, "v");
   }
   caja(X + 3, y0 + 8, 2, 2, "v");          /* empuñadura, bajo la mano */
+}
+
+/* la tarta con las velas. Va DELANTE de todo, como el abanico, y por lo
+   mismo: sostenida por las dos manos, que asoman a los lados del plato.
+
+   Y DEPENDE DEL FOTOGRAMA, también por lo mismo. Si las llamas no se
+   mueven, en el GIF Compi pone cara de soplar y no pasa nada: sopla
+   debajo de tres velas clavadas. Las dos posiciones son de pie y
+   tumbadas hacia la izquierda, que es hacia donde sopla.
+
+   Las velas van a x = CX-3, CX y CX+3, o sea tres y no cinco: a nueve
+   píxeles de bizcocho, cinco velas se leen como una cresta. Y miden
+   tres píxeles, no dos: la primera versión las puso de dos y quedaron
+   enterradas en el galón del pecho, que es coral y está a esa altura.
+
+   Y LA LLAMA VA EN CORAL, no en color piel. La segunda versión la puso
+   en "S" y desapareció: a esa altura la llama cae contra la barbilla,
+   que es exactamente ese color. Coral sobre camiseta cian se ve desde
+   la miniatura, que es donde este cartel se juega el chiste.
+
+   Los brazos van abiertos y cortos -- ang 108/72, len 6 -- para que las
+   manos caigan A LOS LADOS del plato y no debajo. Con len 7 las tapaba
+   el plato entero y la tarta parecía flotar. */
+function tarta(dy, f){
+  const yb = 26 + dy;                      /* fila del glaseado */
+  /* las velas primero, que van detrás del bizcocho por abajo */
+  for(let i=-3;i<=3;i+=3){
+    caja(CX+i, yb-3, 1, 3, "W");           /* tres píxeles de vela */
+    px(CX+i, yb-2, "L");                   /* la raya de cera */
+    if(f){                                 /* soplada: la llama se tumba */
+      px(CX+i-1, yb-4, "R"); px(CX+i-2, yb-4, "r");
+    } else {                               /* de pie */
+      px(CX+i, yb-5, "r"); px(CX+i, yb-4, "R");
+    }
+  }
+  caja(CX-4, yb,   9, 1, "r");             /* glaseado */
+  caja(CX-4, yb+1, 9, 2, "R");             /* bizcocho */
+  px(CX-4, yb+1, "r");                     /* luz por la izquierda */
+  caja(CX-5, yb+3, 11, 1, "V");            /* plato */
+  /* y el filo oscuro del plato, que es lo que de verdad separa la tarta
+     del cuerpo: dentro de la silueta no hay contorno, así que sin esta
+     fila el bizcocho se lee como un cinturón coral */
+  caja(CX-5, yb+4, 11, 1, "O");
+}
+
+
+/* el gorro de cumpleaños: cono de dos bandas, filo abajo y borla arriba.
+   Va LADEADO A LA DERECHA -- el eje del cono cae un píxel fuera del de la
+   cabeza -- que es lo único que lo separa de un sombrero puesto recto.
+
+   Cinco filas y no seis: con seis, la borla se sale del lienzo por arriba
+   cuando la pose no baja el cuerpo, y px() la tira sin avisar. */
+function gorro(hy, dx){
+  const X = CX - 5 + dx, hx = X + 6;
+  const FILAS = [[0,1],[-1,3],[-1,3],[-2,5],[-2,5]];
+  for(let i=0;i<FILAS.length;i++){
+    caja(hx + FILAS[i][0], hy - 6 + i, FILAS[i][1], 1, i % 4 < 2 ? "R" : "r");
+  }
+  caja(hx - 3, hy - 1, 7, 1, "v");         /* el filo, que sobresale */
+  px(hx, hy - 7, "W");                     /* la borla */
+}
+
+/* la maleta de cabina. Va DELANTE del brazo, igual que el abanico y por
+   lo mismo: detrás se lee como un mueble que hay al lado, no como algo
+   que Compi lleva agarrado.
+
+   Y EL ASA TELESCOPA CON EL FOTOGRAMA, que es lo que aquí hace de
+   «el objeto depende del cuadro». La maleta se apoya en el suelo y no
+   puede subir y bajar con el balanceo del cuerpo, así que lo que se
+   estira es el tubo: la empuñadura va pegada al puño y el tubo cubre lo
+   que quede hasta la tapa. Sin eso, al respirar Compi la levantaba en
+   vilo tres píxeles del suelo.
+
+   Cinco píxeles de ancho y no siete: a siete, la maleta y el pie derecho
+   quedan a uno y los dos contornos se tocan, que en la miniatura se lee
+   como que va montado encima de ella.
+
+   Coral, por la misma razón que el sillón: es el otro color de la casa y
+   es lo único que separa el bulto de la camiseta cian y del pantalón. */
+function maleta(dx, dy){
+  const X = CX + 6 + dx;                      /* al costado, fuera de la silueta */
+  const puno = 24 + dy;                       /* la fila del puño, la del brazo derecho */
+  const tapa = 28;                            /* la maleta no se mueve: está en el suelo */
+  caja(X+1, puno-1, 4, 1, "V");               /* la empuñadura, justo encima del puño */
+  caja(X+2, puno+2, 1, tapa-puno-2, "V");     /* el tubo, lo que quede hasta la tapa */
+  caja(X, tapa,   5, 5, "R");                 /* el cuerpo */
+  caja(X, tapa,   5, 1, "r");                 /* la tapa, más clara */
+  caja(X, tapa+2, 5, 1, "v");                 /* la cremallera */
+  px(X, tapa+1, "r"); px(X, tapa+3, "r");     /* la luz por la izquierda, como en la camiseta */
+  px(X, tapa+5, "v"); px(X+4, tapa+5, "v");   /* las dos ruedas, a ras del zapato */
+}
+
+/* el patinete, al costado y agarrado por el manillar. Mismo criterio que
+   la maleta y por lo mismo: va DELANTE del brazo, porque detrás se lee
+   como un trasto que hay apoyado en la pared y no como algo que Compi
+   lleva.
+
+   EL MÁSTIL VA EN LA PUNTA DE LA PLATAFORMA, no en el centro. Centrado
+   parece una fregona: lo que dice «patinete» es el ángulo recto entre la
+   tabla larga y el palo en un extremo.
+
+   Y la plataforma va en coral por la misma razón que la maleta y el
+   sillón: es lo único que la separa del pantalón y de la zapatilla, que
+   a esta altura del sprite son los dos azules oscuros. */
+function patinete(dx, dy){
+  const X = CX + 5 + dx;
+  const puno  = 24 + dy;                       /* la fila del puño derecho */
+  const suelo = 33;                            /* no flota: está en el suelo */
+  caja(X+1, puno, 4, 1, "V");                  /* el manillar, a la altura del puño */
+  caja(X+2, puno+1, 1, suelo-puno-1, "V");     /* el mástil, hasta la tabla */
+  caja(X+1, suelo, 6, 1, "R");                 /* la plataforma */
+  px(X+1, suelo, "r");                         /* luz por la izquierda */
+  px(X+1, suelo+1, "v"); px(X+6, suelo+1, "v");/* las dos ruedas, a ras del zapato */
+}
+
+/* EL COCHE, ya aparcado, al costado. Va DELANTE del brazo, como la
+   maleta y el patinete, y por lo mismo: detrás se lee como un coche que
+   pasa por la calle del fondo y no como el de Compi.
+
+   LA SEÑAL CON LA P FUE EL PRIMER INTENTO Y SE CAYÓ. Una señal dice
+   DÓNDE se aparca; el cartel va de que ya has aparcado, que es otra
+   cosa. Con el coche al lado y la cara a gusto, el muñeco cuenta el
+   final de la historia y no el sitio.
+
+   Y VA A ESCALA DE ICONO, no a la de Compi. En una rejilla de 27
+   píxeles un coche en proporción mediría el doble del lienzo, así que
+   se dibuja como el despertador de `compensacion` o la maleta de
+   `dietas` -- que a tamaño real serían un armatoste y un juguete -- y
+   funciona por lo mismo: lo que se reconoce es la silueta.
+
+   Ocho de ancho y cinco de alto, y de ahí no se pasa: a nueve el
+   contorno del coche toca el del zapato y en la miniatura se lee como
+   que va montado encima. El techo más estrecho que el cuerpo, la luna
+   blanca y las dos ruedas oscuras son lo único que hace falta para que
+   se lea «coche» antes que «bulto».
+
+   No respira con Compi: está aparcado. La carrocería se queda en su
+   fila mientras el cuerpo sube y baja el píxel del balanceo. */
+function coche(dx){
+  const X = CX + 5 + dx, Y = 29;
+  caja(X+2, Y,   4, 1, "R");              /* el techo, más estrecho */
+  caja(X+1, Y+1, 6, 1, "R");              /* la cabina */
+  caja(X+3, Y+1, 2, 1, "W");              /* la luna */
+  caja(X,   Y+2, 8, 1, "R");              /* el cuerpo */
+  px(X,   Y+2, "r");                      /* luz por la izquierda, como en la camiseta */
+  px(X+7, Y+2, "W");                      /* el faro */
+  caja(X,   Y+3, 8, 1, "v");              /* el faldón, en sombra */
+  caja(X+1, Y+4, 2, 1, "p");              /* las dos ruedas, a ras del zapato */
+  caja(X+5, Y+4, 2, 1, "p");
+}
+
+/* EL PUNTO VIOLETA. Un tótem de verdad -- cartel, poste y base-- y no
+   un cartel en la mano, y esa es toda la idea: lo que se pide es un
+   SITIO al que ir, no alguien que pase con una pancarta. Un objeto
+   clavado en el suelo se lee como sitio; sostenido en alto, como
+   manifestación.
+
+   Va DELANTE del brazo, como todo lo demás, porque detrás se lee como
+   un cartel pegado a la pared del fondo.
+
+   El corazón blanco y no unas letras: «PUNTO VIOLETA» en un cartel de
+   siete píxeles de ancho es ruido gris. El corazón es el glifo que ya
+   existe, mide 3 x 3 y se reconoce a tamaño de miniatura, que es donde
+   se juega esto.
+
+   Y el violeta va en la chapa y NO en la camiseta de Compi: si se le
+   pinta el peto, deja de ser Compi atendiendo el punto y pasa a ser
+   Compi disfrazado. El muñeco es el mismo de siempre; lo que cambia es
+   que está al lado. */
+function puntoVioleta(dx, dy){
+  const X = CX + 6 + dx, Y = 12 + dy, SUELO = 34;
+  caja(X,   Y,   7, 8, "U");              /* la chapa */
+  caja(X,   Y,   1, 8, "u");              /* filo oscuro por la izquierda */
+  caja(X+2, Y+3, 3, 3, "U");              /* hueco para que el corazón respire */
+  glifo("corazon", X+2, Y+3, "W");
+  caja(X+3, Y+8, 1, SUELO-Y-8, "V");      /* el poste */
+  caja(X+2, SUELO, 3, 1, "V");            /* la base */
+  px(X+2, SUELO, "v");
+}
+
+/* el justificante del médico: una hoja en la mano derecha con el
+   MEMBRETE EN CORAL arriba. Es el chiste del cartel hecho píxel -- la
+   hoja es la misma y lo único que cambia es la banda de arriba -- así
+   que el membrete ocupa dos filas de las ocho y se ve antes que el
+   papel.
+
+   Va DELANTE del brazo, como la maleta y el abanico: detrás se lee como
+   un folio pegado a la pared.
+
+   Seis de ancho y no cinco: a cinco, las rayas del texto quedan en tres
+   píxeles y a tamaño de miniatura se leen como ruido, no como
+   escritura. Y a seis todavía quedan dos píxeles de margen en la rejilla,
+   que es lo que impide que px() se coma el borde derecho sin avisar. */
+function justificante(dx, dy){
+  const X = CX + 6 + dx, Y = 19 + dy;
+  caja(X,   Y,   6, 2, "R");              /* el membrete, lo único que cambia */
+  caja(X,   Y+2, 6, 6, "W");              /* la hoja */
+  caja(X+1, Y+3, 4, 1, "V");              /* dos rayas de texto */
+  caja(X+1, Y+5, 3, 1, "V");
+  px(X, Y, "r");                          /* luz por la izquierda, como en la camiseta */
+}
+
+/* la papeleta en la mano alzada. Va DELANTE del brazo, como el
+   justificante y la maleta, y por lo mismo: detrás se lee como un papel
+   pegado a la pared.
+
+   LLEVA LA CRUZ MARCADA Y ESO NO ES ADORNO. Una hoja en blanco a este
+   tamaño es un folio cualquiera -- el mismo dibujo que el justificante
+   del cartel del médico--; con la equis dentro se lee «papeleta» en la
+   burbuja de un chat, antes de distinguir la cara.
+
+   Arranca justo encima del puño, que con el brazo a 296 grados y len 9
+   cae en (20,14): la hoja ocupa de y=8 a y=13, o sea que le queda
+   apoyada por abajo y ASOMA POR ENCIMA DE LA CABEZA sin taparle la
+   cara. Se probaron cinco combinaciones de ángulo, largo y posición; es
+   la única en la que el papel sube del todo y la cara sigue entera. */
+function papeleta(dx, dy){
+  const X = CX + 6 + dx, Y = 8 + dy;
+  caja(X,   Y,   5, 6, "W");              /* la hoja */
+  caja(X+1, Y+1, 3, 1, "V");              /* la raya de arriba */
+  px(X+1, Y+2, "R"); px(X+3, Y+2, "R");   /* la equis */
+  px(X+2, Y+3, "R");
+  px(X+1, Y+4, "R"); px(X+3, Y+4, "R");
+  px(X, Y, "r");                          /* luz por la izquierda, como en la camiseta */
+}
+
+/* el despertador de dos campanas. Va DELANTE del brazo, como todo lo
+   que Compi sostiene.
+
+   Dos campanas y patas, y no un reloj redondo: a siete píxeles de ancho
+   una circunferencia se lee como una moneda o como un plato. La
+   silueta del despertador clásico -- dos orejas arriba, dos patas
+   abajo -- se reconoce en miniatura ANTES de que se distinga la esfera,
+   que es donde se juega esto.
+
+   Las agujas van EN V y no en L, que fue el primer intento: tres
+   píxeles en ángulo recto se leen como una letra pegada a la esfera. En
+   V -- las diez y diez de toda la vida, que es como se dibuja un reloj
+   cuando tiene que reconocerse pequeño -- se lee reloj y no letra. */
+function despertador(dx, dy){
+  const X = CX + 6 + dx, Y = 19 + dy;
+  px(X+1, Y, "V"); px(X+5, Y, "V");       /* las campanas */
+  caja(X,   Y+1, 7, 6, "V");              /* el marco */
+  caja(X+1, Y+2, 5, 4, "W");              /* la esfera */
+  px(X+2, Y+3, "R"); px(X+4, Y+3, "R");   /* las dos agujas, en V */
+  px(X+3, Y+4, "R");                      /* y el eje */
+  px(X+1, Y+7, "V"); px(X+5, Y+7, "V");   /* las patas */
+  px(X, Y+1, "v");                        /* luz por la izquierda */
 }
 
 /* el sudor en la frente: tres píxeles sueltos sobre la piel, dos en la
@@ -388,6 +648,156 @@ const POSES = {
       bI:{ang:96,len:5}, bD:{ang: f ? 320 : 304, len:6},
       pI:{ang:95,len:4}, pD:{ang:85,len:4} };
   },
+  maleta(tt){
+    /* de pie y con la maleta de cabina al costado: el viaje que todavía
+       no ha salido, que es justo de lo que va el cartel -- el dinero se
+       pide ANTES de subirse al tren.
+
+       No anda, aunque sería lo suyo. Con la mano pegada al asa, mover
+       las piernas deja la maleta clavada en el sitio: se lee como que la
+       arrastra a peso y no como que rueda. Así que el único movimiento
+       es el balanceo lento de `quieto` y el parpadeo, y de que eso no
+       despegue la mano del asa se encarga el tubo, que telescopa.
+
+       El brazo derecho va a 25 grados y no colgando: es lo que saca el
+       puño fuera de la silueta y lo pone a la altura de la empuñadura.
+       Con el brazo caído, el asa le nacía del muslo. */
+    const s = Math.sin(tt/900);
+    return { fase: s>0?1:0, dy: s>0.6?-1:0, maleta:true,
+      cara: s>0.94 ? "parpadeo" : "normal",
+      bI:{ang:100,len:5}, bD:{ang:25,len:5},
+      pI:{ang:96,len:4}, pD:{ang:84,len:4} };
+  },
+  padre(tt){
+    /* de pie, contento y con el brazo de fuera bajado y ABIERTO hacia
+       donde va el hijo, no pegado al costado.
+
+       Es una pose y no `quieto` porque `quieto` usa la cara «normal»,
+       que lleva boca de línea recta: a este tamaño y con un crío al
+       lado, eso no se lee como serenidad, se lee como que lo lleva
+       castigado. Con los arcos y la sonrisa de `feliz` el mismo cuerpo
+       cuenta lo contrario.
+
+       El brazo derecho a 58 grados y len 6 saca la mano fuera de la
+       silueta por abajo, que es lo que hace que los dos muñecos se lean
+       como un grupo y no como dos figuras que coinciden en la fila. */
+    const s = Math.sin(tt/900);
+    return { fase: s>0?1:0, dy: s>0.6?-1:0, cara:"feliz",
+      bI:{ang:100,len:5}, bD:{ang:58,len:6},
+      pI:{ang:96,len:4}, pD:{ang:84,len:4} };
+  },
+  tarta(tt){
+    /* soplando las velas, con gorro. Los brazos van abiertos y abajo, no
+       juntos por delante: las manos tienen que salir a los DOS EXTREMOS
+       del plato, que es lo que hace que la tarta se lea sostenida y no
+       apoyada en la barriga */
+    const f = Math.floor(tt/260) % 2;
+    return { fase:f, dy:0, cara:"sopla", gorro:true, tarta:true, sinGalon:true,
+      bI:{ang:108,len:6}, bD:{ang:72,len:6},
+      pI:{ang:96,len:4}, pD:{ang:84,len:4} };
+  },
+  patinete(tt){
+    /* de pie y con el patinete agarrado, igual que `maleta` y por la misma
+       razón: no anda. Con la mano pegada al manillar, mover las piernas
+       deja el patinete clavado en el sitio y se lee como que lo arrastra
+       a peso, no como que rueda. Así que solo el balanceo lento.
+
+       El brazo derecho a 70 y len 6: a len 5 el puño cae dentro de la
+       silueta y el manillar parece que sale del costado */
+    const s = Math.sin(tt/900);
+    return { fase: s>0?1:0, dy: s>0.6?-1:0, cara:"feliz", patinete:true,
+      bI:{ang:100,len:5}, bD:{ang:70,len:6},
+      pI:{ang:96,len:4}, pD:{ang:84,len:4} };
+  },
+  plaza(tt){
+    /* de pie al lado de su coche ya aparcado, y la cara hace media
+       pieza: aquí no se reclama nada, se llega y se aparca. El cartel va
+       de que venir a trabajar no cueste dinero NI LAS VUELTAS DE CADA
+       MAÑANA, y eso solo se lee en el muñeco si está a gusto -- con la
+       cara `normal`, la boca de línea recta lo deja esperando a que le
+       abran.
+
+       Quieto, como `maleta` y `patinete`: el coche está parado, y mover
+       las piernas al lado de un objeto fijo se lee como que pasa de
+       largo, que es justo lo contrario de lo que cuenta el cartel.
+
+       Y los brazos son los de `quieto`, no los de `medico`: aquí no
+       sostiene nada. El coche se apoya en el suelo, así que no hace
+       falta sacar el puño del contorno para que se lean juntos. */
+    const s = Math.sin(tt/900);
+    return { fase: s>0?1:0, dy: s>0.6?-1:0, cara: s>0.94 ? "parpadeo" : "feliz",
+      coche:true,
+      bI:{ang:100,len:5}, bD:{ang:80,len:5},
+      pI:{ang:96,len:4}, pD:{ang:84,len:4} };
+  },
+  medico(tt){
+    /* de pie, con el justificante en la mano derecha. NO HAY CICLO, solo
+       el balanceo de `quieto`: este cartel va de un trámite, no de una
+       urgencia, y mover el papel se lee como que lo está agitando para
+       reclamar algo. Aquí no se reclama, se enseña.
+
+       Y la cara va normal, no `cansado`: poner a Compi pachucho
+       convierte la pieza en «estoy malo» cuando va de que la hora ya
+       está concedida y solo cambia el sello. El brazo derecho sube a 62
+       para que el puño caiga en el borde izquierdo de la hoja y se lea
+       agarrada, no apoyada */
+    const s = Math.sin(tt/900);
+    return { fase: s>0?1:0, dy: s>0.6?-1:0, cara:"normal", justificante:true,
+      bI:{ang:100,len:5}, bD:{ang:62,len:5},
+      pI:{ang:96,len:4}, pD:{ang:84,len:4} };
+  },
+  vota(tt){
+    /* la mano arriba con la papeleta. No hay ciclo, solo el balanceo
+       lento de `quieto`: el gesto de votar es el brazo quieto en alto,
+       y moverlo lo convierte en saludar.
+
+       El brazo derecho va a 296 grados y len 9, y ese 9 es la única
+       licencia de la pose: los demás brazos miden 5 o 6. A esos largos
+       la mano no sube -- a 270 y len 6 el puño cae DENTRO de la cara--
+       y el gesto no se lee. A 9 el brazo se estira en diagonal, el puño
+       sale limpio del contorno y la papeleta asoma por encima de la
+       cabeza, que es lo que cuenta el gesto en una miniatura.
+
+       Y la cara va `feliz`, no `normal`: esto no es una reclamación, es
+       una mano levantada en una reunión. */
+    const s = Math.sin(tt/900);
+    return { fase: s>0?1:0, dy: s>0.6?-1:0, cara:"feliz", papeleta:true,
+      bI:{ang:100,len:5}, bD:{ang:296,len:9},
+      pI:{ang:96,len:4}, pD:{ang:84,len:4} };
+  },
+  violeta(tt){
+    /* de pie AL LADO del tótem, ni señalándolo ni sujetándolo. Es la
+       misma quietud de `maleta` y `patinete`, y aquí importa más: la
+       pieza va de que haya un sitio fijo, así que el muñeco tiene que
+       leerse como que está ahí, no como que está haciendo algo.
+
+       Cara `normal` y no `feliz`: el punto violeta no es una caseta de
+       feria. Tampoco `serio`, que a este tamaño se lee como enfado y lo
+       que se quiere es que alguien se acerque.
+
+       El brazo derecho a 62 grados, como el de `medico`: saca el puño
+       del contorno y lo deja por delante del poste, que es lo que
+       impide que el muñeco y el tótem se lean como una sola mancha. */
+    const s = Math.sin(tt/900);
+    return { fase: s>0?1:0, dy: s>0.6?-1:0, cara: s>0.94 ? "parpadeo" : "normal",
+      puntoVioleta:true,
+      bI:{ang:100,len:5}, bD:{ang:62,len:5},
+      pI:{ang:96,len:4}, pD:{ang:84,len:4} };
+  },
+  reloj(tt){
+    /* de pie con el despertador en la mano, igual que `medico` con el
+       justificante y por lo mismo: aquí no se reclama, se enseña. El
+       cartel va de saber la cuenta ANTES, no de protestar después, así
+       que no hay ciclo -- solo el balanceo lento y el parpadeo.
+
+       Brazo derecho a 62 grados, que es el que deja el puño justo bajo
+       las patas del reloj: agarrado por abajo y no flotando al costado. */
+    const s = Math.sin(tt/900);
+    return { fase: s>0?1:0, dy: s>0.6?-1:0, cara: s>0.94 ? "parpadeo" : "normal",
+      despertador:true,
+      bI:{ang:100,len:5}, bD:{ang:62,len:5},
+      pI:{ang:96,len:4}, pD:{ang:84,len:4} };
+  },
   sillon(tt){
     /* sentado en la butaca, descansando de verdad: no hay ciclo de
        animación, solo un pestañeo lento -- lo que se quiere transmitir es
@@ -491,11 +901,20 @@ function pintaCompi(canvas, modo, tt, esc, op){
   pierna(1,  cy, E.pD);
   brazo(-1, ty, inc, E.bI);
   caja(CX-2+inc, cy, 5, 1, "P"); px(CX+2+inc, cy, "p");
-  tronco(ty, inc);
+  tronco(ty, inc, !E.sinGalon);
   cabeza(hy, inc + Math.round(E.cabX || 0), E.cara || "normal", E.mira || M.mira);
   brazo(1, ty, inc, E.bD);
   if(E.sillon) sillonDelante(ty, cy);
   if(E.abanico) abanico(hy, inc + Math.round(E.cabX || 0), E.fase);
+  if(E.maleta)  maleta(inc, dy);
+  if(E.justificante) justificante(inc, dy);
+  if(E.papeleta) papeleta(inc, dy);
+  if(E.puntoVioleta) puntoVioleta(inc, dy);
+  if(E.despertador) despertador(inc, dy);
+  if(E.patinete) patinete(inc, dy);
+  if(E.coche)   coche(inc);
+  if(E.gorro)   gorro(hy, inc + Math.round(E.cabX || 0));
+  if(E.tarta)   tarta(Math.round(E.dy || 0), E.fase);
   if(E.sudor)   sudorFrente(hy, inc + Math.round(E.cabX || 0));
   if(E.gotaGorda) gotaGorda(hy, inc + Math.round(E.cabX || 0));
   if(E.nota)   glifo("nota",   CX+8, hy-4, "C");

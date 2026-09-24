@@ -3,7 +3,7 @@
 #
 #   ./carteles/exportar.sh            todos los carteles
 #   ./carteles/exportar.sh 2 6        solo esos dos
-#   ./carteles/exportar.sh pegatinas  las dos hojas A4 de pegatinas, a PDF y PNG
+#   ./carteles/exportar.sh pegatinas  las tres hojas A4 de pegatinas, a PDF y PNG
 #
 # Los números son identificadores del fuente (el ?n= de carteles.html),
 # no el orden de envío: los carteles no llevan numeración impresa para
@@ -31,14 +31,17 @@ declare -A NOMBRE=(
   [15]=bici-y-patinete [16]=cuatro-preguntas [17]=salarios-ipc
   [19]=condiciones-minimas [20]=carga-de-trabajo
   [21]=voto-por-correo [22]=a-que-hora-bajas [23]=tablas-2026
-  [24]=verano-intensiva
+  [24]=verano-intensiva [25]=cumpleanos [26]=medico [27]=dietas
+  [28]=igualdad [29]=cuidado-hijos [30]=parking [31]=jornada-4-dias [32]=las-diez [33]=como-votamos [34]=compensacion
+  [35]=os-escuchamos [36]=con-quien-hablas [37]=vota-sin-siglas
+  [38]=en-numeros [39]=despues-del-martes
 )
 
 # la hoja de pegatinas es A4 y va por otro sitio: lo que hace falta es
 # el PDF para llevarlo a imprimir, y un PNG solo para poder mirarlo
 if [ "${1:-}" = "pegatinas" ]; then
   mkdir -p "$SALIDA"
-  for hoja in pegatinas pegatinas-frases; do
+  for hoja in pegatinas pegatinas-frases pegatinas-compi-2; do
     google-chrome --headless --disable-gpu --user-data-dir="$PERFIL" \
       --allow-file-access-from-files --virtual-time-budget=5000 \
       --no-pdf-header-footer --print-to-pdf="$AQUI/$hoja.pdf" \
@@ -92,6 +95,29 @@ PY
   exit 0
 fi
 
+# el cartel resumen: A2 vertical, 1587x2245. El PNG normal es el del chat;
+# el 2x (3174x4490) sale a 190 ppp en A2 y 270 en A3. El PDF va en vector y
+# con @page a 420x594 mm, así que la copistería lo ajusta a cualquier A
+if [ "${1:-}" = "resumen" ]; then
+  mkdir -p "$SALIDA"
+  for esc in 1 2; do
+    sufijo=""; [ "$esc" = 2 ] && sufijo="-2x"
+    google-chrome --headless --disable-gpu --hide-scrollbars \
+      --force-device-scale-factor=$esc --window-size=1587,2245 \
+      --user-data-dir="$PERFIL" --allow-file-access-from-files \
+      --virtual-time-budget=6000 --screenshot="$SALIDA/resumen-campana$sufijo.png" \
+      "file://$AQUI/resumen-campana.html" 2>/dev/null
+    printf 'resumen-campana%s.png · %s\n' "$sufijo" \
+      "$(file -b "$SALIDA/resumen-campana$sufijo.png" | cut -d, -f2 | tr -d ' ')"
+  done
+  google-chrome --headless --disable-gpu --user-data-dir="$PERFIL" \
+    --allow-file-access-from-files --virtual-time-budget=6000 \
+    --no-pdf-header-footer --print-to-pdf="$AQUI/resumen-campana.pdf" \
+    "file://$AQUI/resumen-campana.html" 2>/dev/null
+  printf 'resumen-campana.pdf · %s\n' "$(file -b "$AQUI/resumen-campana.pdf" | cut -d, -f1)"
+  exit 0
+fi
+
 # el díptico: dos carteles a tamaño completo, uno al lado del otro, en un
 # lienzo de 2160x1350. Se manda como una sola imagen y se imprime en A3
 # apaisado, donde cada mitad queda casi en A4
@@ -125,7 +151,7 @@ if [ "${1:-}" = "diptico" ]; then
 fi
 
 CUALES=("$@")
-[ ${#CUALES[@]} -eq 0 ] && CUALES=(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 19 20 21 22 23 24)
+[ ${#CUALES[@]} -eq 0 ] && CUALES=(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34)
 
 mkdir -p "$SALIDA"
 for n in "${CUALES[@]}"; do

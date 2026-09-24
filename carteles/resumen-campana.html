@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>El martes 29 votas</title>
+<link rel="stylesheet" href="tipos.css">
+<style>
+/* ==================================================================
+   EL CARTEL RESUMEN · «El martes 29 votas. En enero, lo compruebas.»
+   Viernes 25 de septiembre, cierre de la serie
+   ------------------------------------------------------------------
+   A2 vertical (420 x 594 mm) = 1587 x 2245 px. Proporción ISO, así que
+   el mismo PDF imprime en A1, A2, A3 o A4 sin recortar. Se exporta con
+   ./exportar.sh resumen
+
+   Tres bandas: tinta (titular), papel (las nueve con su semáforo), coral
+   (el voto), y el pie de tinta con las once caras.
+
+   LAS NUEVE SON LAS QUE HAN SALIDO EN CARTEL, MÁS LA SALA DE DESCANSO.
+   Igualdad y cuidado de hijos se descartaron el 23 y no aparecen.
+
+   EL TITULAR JUNTA LAS DOS FECHAS. El voto y la comprobación en una
+   frase: es la idea de toda la campaña -- cosas que se pueden
+   comprobar -- dicha en imperativo y sin prometer ningún resultado. Lo
+   que se promete es el procedimiento: pedirlas el primer mes, publicar
+   lo que contesten, y el primer semáforo con marcas en enero de 2027.
+
+   CADA FILA LLEVA SUS CUATRO CASILLAS VACÍAS. Es lo que contesta al
+   «esto no sirve para nada»: algo que mirar en enero. Las filas no
+   llevan caras ni nombres: las nueve son de la lista entera, y los
+   once ya salen abajo. Las casillas van todas iguales; en coral solo el rótulo de
+   «se cayó», porque nueve casillas rojas parecían un fracaso anunciado.
+
+   SIN ARTÍCULOS. Cada cartel ya lleva los suyos; aquí se lee qué se
+   pide, no dónde se agarra. Lo que no se puede sí se queda dicho en su
+   fila: el cumpleaños sin norma y los cuatro días que cuestan.
+
+   Nada de «contrato» ni «cláusulas»: un contrato es una promesa, y el
+   cartel dice «no promesas». Lleva 29-S: es propaganda y no circula a
+   partir del lunes 28 (art. 8.4 RD 1844/1994).
+   ================================================================== */
+:root{
+  --w:1587px; --h:2245px; --m:92px;
+  --papel:#f6f2ea; --panel:#fffdf9;
+  --texto:#191820; --texto-2:#3a3742; --apagado:#5e574e;
+  --cian:#0d6f92; --coral:#bf3f2f; --cian-vivo:#3fc9f0; --coral-vivo:#f4796b;
+  --linea:rgba(74,58,46,.18); --linea-fuerte:rgba(74,58,46,.32);
+  --display:"Gellix","Helvetica Neue",Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  --img:"../a3-candidatura/img/";
+  /* columnas de la tabla: número · petición · cuatro casillas */
+  --cols:70px 1fr 78px 100px 78px 78px;
+}
+@page{size:420mm 594mm;margin:0}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--papel);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.cartel{
+  width:var(--w);height:var(--h);overflow:hidden;position:relative;
+  display:flex;flex-direction:column;font-family:var(--display);color:var(--texto);background:var(--papel)
+}
+p{margin:0}
+.fit{white-space:nowrap;display:block}
+.rotulo{
+  display:flex;justify-content:space-between;align-items:baseline;gap:24px;
+  font-family:var(--mono);font-size:19px;letter-spacing:.16em;text-transform:uppercase
+}
+.rotulo b{font-weight:500}
+
+/* ---------- 1 · tinta: titular ---------- */
+.cabeza{background:var(--texto);color:var(--papel);padding:30px var(--m) 28px}
+.cabeza .rotulo{color:var(--cian-vivo);border-bottom:2px solid rgba(246,242,234,.25);padding-bottom:14px}
+.cabeza .rotulo b{color:var(--coral-vivo)}
+.titular{margin:18px 0 0;font-weight:500;text-transform:uppercase;line-height:.9}
+.titular .fit{letter-spacing:-.035em}
+.titular .l2{color:var(--cian-vivo)}
+.bajada{margin-top:18px;font-size:27px;line-height:1.3;color:var(--papel);max-width:none}
+.bajada b{font-weight:500;color:var(--cian-vivo)}
+
+/* ---------- 2 · papel: las nueve ---------- */
+.lista{padding:18px var(--m) 0;flex:1 1 auto;display:flex;flex-direction:column}
+.lista > .rotulo{color:var(--cian);font-size:18px;letter-spacing:.1em}
+.lista > .rotulo span:last-child{letter-spacing:.04em;text-transform:none;color:var(--apagado)}
+.fila{display:grid;grid-template-columns:var(--cols);column-gap:16px;align-items:center}
+.cab{
+  margin-top:0;padding-bottom:10px;border-bottom:4px solid var(--texto);align-items:end;
+  font-family:var(--mono);font-size:18px;line-height:1.1;letter-spacing:.06em;text-transform:uppercase;color:var(--texto-2)
+}
+.cab .c{text-align:center}
+.cab__que{grid-column:1 / span 2;display:flex;flex-direction:column;gap:8px}
+.cab__que b{font-weight:500;color:var(--cian);letter-spacing:.14em}
+.cab__que span{text-transform:none;letter-spacing:0;white-space:nowrap;color:var(--apagado)}
+.cab .c--cayo{color:var(--coral);font-weight:500}
+.cab .enero{
+  grid-column:4 / span 4;text-align:center;font-weight:500;color:var(--texto);letter-spacing:.2em;
+  border-bottom:2px solid var(--texto);padding-bottom:6px;margin-bottom:8px
+}
+.cab .c,.cab .enero{align-self:end}
+.cab-casillas{grid-column:3 / span 4;display:grid;grid-template-columns:78px 100px 78px 78px;column-gap:16px}
+.pides{list-style:none;margin:0;padding:0;flex:1 1 auto;display:flex;flex-direction:column;justify-content:space-between}
+.pide{padding:5px 0 5px;border-bottom:2px solid var(--linea-fuerte)}
+.pide:last-child{border-bottom:4px solid var(--texto)}
+.pide__n{font-family:var(--mono);font-weight:500;font-size:40px;line-height:1;color:var(--cian);align-self:start;padding-top:4px}
+.pide--ojo .pide__n{color:var(--coral)}
+.pide h3{margin:0;font-weight:500;line-height:1;letter-spacing:-.02em;text-transform:uppercase;white-space:nowrap}
+.pide p{margin-top:4px;font-size:21px;line-height:1.3;color:var(--texto-2);text-wrap:balance}
+.pide p b{color:var(--coral);font-weight:500;white-space:nowrap}
+.casilla{justify-self:center;width:30px;height:30px;border:3px solid rgba(25,24,32,.6);border-radius:4px}
+.casilla--cayo{}
+
+/* ---------- 3 · lo que sí hacemos ---------- */
+.metodo{padding:16px var(--m) 16px}
+.metodo .rotulo{color:var(--texto)}
+.metodo .rotulo b{color:var(--cian)}
+.pasos{display:grid;grid-template-columns:repeat(4,1fr);gap:34px;margin-top:10px;padding-top:12px;border-top:2px solid var(--linea-fuerte)}
+.paso h4{margin:0;font-weight:500;font-size:32px;line-height:1;letter-spacing:-.025em;text-transform:uppercase;color:var(--cian);white-space:nowrap}
+.paso:nth-child(3) h4{color:var(--coral)}
+.paso p{margin-top:8px;font-size:20px;line-height:1.3;color:var(--texto-2)}
+.paso p b{color:var(--texto);font-weight:500}
+.paso .mono{font-family:var(--mono);font-size:18px;color:var(--cian);white-space:nowrap}
+
+/* ---------- 4 · coral: el voto ---------- */
+.voto{background:var(--coral);color:var(--papel);padding:20px var(--m) 24px;display:grid;grid-template-columns:auto 1fr;column-gap:52px;align-items:end}
+.voto .rotulo{grid-column:1 / -1;color:var(--papel);border-bottom:2px solid rgba(246,242,234,.4);padding-bottom:10px;margin-bottom:14px}
+.voto .rotulo b{color:var(--texto)}
+.voto__titular{margin:0;font-weight:500;font-size:96px;line-height:.9;letter-spacing:-.035em;text-transform:uppercase}
+.voto__titular span{display:block}
+.voto__titular .l2{color:var(--texto)}
+.voto__izq{display:flex;align-items:flex-end;gap:26px}
+.voto__izq canvas{display:block;image-rendering:pixelated;margin-bottom:4px}
+.voto__texto{font-size:21px;line-height:1.34;padding-bottom:4px}
+.voto__texto b{font-weight:500}
+.voto__clave{display:block;text-wrap:balance;font-size:24px;line-height:1.25;font-weight:500;margin-bottom:8px}
+
+/* ---------- 5 · pie de tinta: los once ---------- */
+.pie{background:var(--texto);color:var(--papel);padding:16px var(--m) 18px}
+.pie .rotulo{color:var(--cian-vivo);align-items:baseline}
+.pie__web{font-family:var(--display);font-size:34px;letter-spacing:-.02em;text-transform:none;color:var(--papel);font-weight:500}
+.once{list-style:none;margin:10px 0 0;padding:0;display:grid;grid-template-columns:repeat(11,1fr);gap:8px}
+.once li{text-align:center}
+.once img{width:54px;height:54px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 2px rgba(246,242,234,.35)}
+.once span{display:block;margin-top:5px;font-size:18px;line-height:1.12}
+.once small{display:inline-block;margin-top:4px;font-family:var(--mono);font-size:16px;letter-spacing:.06em;text-transform:uppercase;color:var(--coral-vivo);border:1.5px solid var(--coral-vivo);border-radius:99px;padding:1px 8px}
+.pie__bajo{margin-top:10px;padding-top:8px;border-top:2px solid rgba(246,242,234,.2);font-size:18px;line-height:1.35;color:rgba(246,242,234,.75)}
+.pie__bajo b{color:var(--papel);font-weight:500;white-space:nowrap}
+</style>
+</head>
+<body>
+<main class="cartel">
+
+  <header class="cabeza">
+    <p class="rotulo"><span>Sin siglas. Solo compañerxs. · Elecciones al comité de empresa</span><b>29-S</b></p>
+    <h1 class="titular">
+      <span class="fit l1">El martes 29 votas.</span>
+      <span class="fit l2">En enero, lo compruebas.</span>
+    </h1>
+    <p class="bajada"><b>Nueve peticiones, no promesas.</b> Todas las firma la empresa: nosotros las pedimos por escrito el primer mes, publicamos lo que contesten y en enero de 2027 sale el primer semáforo con marcas.</p>
+  </header>
+
+  <section class="lista">
+    <div class="fila cab">
+      <p class="cab__que"><b>Lo que vamos a pedir</b><span>Las nueve son de la lista entera: las pedimos los once</span></p>
+      <div class="cab-casillas">
+        <span class="enero" style="grid-column:1 / -1">Enero 2027</span>
+        <span class="c">Pedido</span><span class="c">En nego-<br>ciación</span><span class="c c--cayo">Se<br>cayó</span><span class="c">Conse-<br>guido</span>
+      </div>
+    </div>
+    <ol class="pides" id="pides"></ol>
+  </section>
+
+  <section class="metodo">
+    <p class="rotulo"><span>Lo que sí hacemos nosotros</span><b>Las propuestas, en sin-siglas.info/propuestas</b></p>
+    <div class="pasos">
+      <div class="paso"><h4>El primer mes</h4><p><b>Pedimos las nueve por escrito.</b></p></div>
+      <div class="paso"><h4>Tal cual</h4><p><b>Publicamos lo que contesten</b>, sea lo que sea.</p></div>
+      <div class="paso"><h4>Cada trimestre</h4><p><b>El semáforo</b>, con columna para lo que se caiga. Primero con marcas: <b>enero de 2027</b>.</p></div>
+      <div class="paso"><h4>23 respuestas</h4><p><b>Las del buzón van todas.</b> Sigue abierto después del 29.<br><span class="mono">sin-siglas.info/buzon</span></p></div>
+    </div>
+  </section>
+
+  <section class="voto">
+    <p class="rotulo"><span>Martes 29 de septiembre</span><b>En urna</b></p>
+    <div class="voto__izq">
+      <h2 class="voto__titular"><span class="l1">Para pedirlas,</span><span class="l2">vótanos.</span></h2>
+      <canvas data-pose="vota" data-tt="0"></canvas>
+    </div>
+    <p class="voto__texto"><span class="voto__clave">Las pide el comité, y el comité lo forma quien salga elegido el martes.</span> <b>Vota toda la plantilla que figure en el censo, afiliada o no</b>; si crees que no apareces, díselo a la mesa: se reclama. En urna, voto <b>personal, libre, directo y secreto</b>. Horario y sitio, los de la mesa electoral.</p>
+  </section>
+
+  <footer class="pie">
+    <p class="rotulo"><span>Once compañerxs, seis áreas, cero siglas</span><span class="pie__web">sin-siglas.info</span></p>
+    <ul class="once" id="once"></ul>
+    <p class="pie__bajo">Candidatura registrada conforme a la normativa de elecciones sindicales. La firmamos los once candidatos: no es una comunicación de la empresa.</p>
+  </footer>
+</main>
+
+<script src="compi.js"></script>
+<script>
+const IMG = "../a3-candidatura/img/";
+/* [título, texto, salvedad] */
+const NUEVE = [
+  ["Intensiva en julio", "Julio y agosto de intensiva: las mismas horas del año, movidas de sitio, y sin perder un día de vacaciones."],
+  ["Tu cumpleaños, libre", "Un día de permiso retribuido, además de tus vacaciones. Si cae en fin de semana o en vacaciones, se traslada. <b>No hay norma: se negocia.</b>", 1],
+  ["Sitio para bicis", "Un aparcamiento cerrado para bicis y patinetes: una jaula en la cochera o una zona con llave en el patio."],
+  ["Permiso de médico", "Que la hora del médico por lo privado cuente igual que por lo público. Y también para acompañar."],
+  ["Dietas adelantadas", "Anticipo o tarjeta de empresa antes de salir, para no poner las comidas y los taxis de tu bolsillo."],
+  ["Parking sin coste", "Plaza sin coste para quien tiene que venir a la oficina, con el criterio de reparto por escrito."],
+  ["Compensaciones", "Un criterio escrito e igual para todos: qué se compensa por guardia, por viaje y por hora de más."],
+  ["Semana de 4 días", "Abrir la negociación con un piloto pactado y evaluado, sin alargar el día. <b>La más cara: no prometemos que salga.</b>", 1],
+  ["Sala de descanso", "Un sitio para descansar y otro para comer, los dos separados del puesto de trabajo."],
+];
+document.getElementById("pides").innerHTML = NUEVE.map((f,i) => `
+  <li class="pide fila${f[2] ? " pide--ojo" : ""}">
+    <span class="pide__n">0${i+1}</span>
+    <div><h3>${f[0]}</h3><p>${f[1]}</p></div>
+    <span class="casilla"></span><span class="casilla"></span><span class="casilla casilla--cayo"></span><span class="casilla"></span>
+  </li>`).join("");
+
+const ONCE = [["munoz","Laura","Muñoz"],["navarro","Raúl","Navarro"],["galindo","Rocío","Galindo"],["fernandez","José Pablo","Fernández"],
+  ["lopezm","Rafael","López"],["bolivar","Fran","Bolívar"],["algarra","Leticia","Algarra"],["barchein","Mario","Barchéin"],
+  ["aranda","Mario","Aranda"],["lopeza","Violeta","López",1],["castillo","María Emilia","Castillo",1]];
+document.getElementById("once").innerHTML = ONCE.map(p =>
+  `<li><img src="${IMG}${p[0]}.jpg" alt=""><span>${p[1]}<br>${p[2]}</span>${p[3] ? "<small>suplente</small>" : ""}</li>`).join("");
+
+document.querySelectorAll("canvas[data-pose]").forEach(c => pintaCompi(c, c.dataset.pose, +c.dataset.tt, 4, {}));
+
+function ajusta(){
+  /* titular: cada línea llena el ancho */
+  document.querySelectorAll(".fit").forEach(el => {
+    const ancho = el.parentElement.clientWidth;
+    el.style.fontSize = "100px"; el.style.display = "inline-block";
+    el.style.fontSize = (100 * ancho / el.getBoundingClientRect().width * .995) + "px";
+    el.style.display = "block";
+  });
+  /* las nueve: un solo cuerpo, el mayor con el que cabe la más larga */
+  const h3 = [...document.querySelectorAll(".pide h3")];
+  h3.forEach(h => { h.style.fontSize = "100px"; h.style.display = "inline-block"; });
+  const f = Math.min(...h3.map(h => 100 * h.parentElement.clientWidth / h.getBoundingClientRect().width));
+  h3.forEach(h => { h.style.fontSize = Math.min(44, f * .99) + "px"; h.style.display = "block"; });
+}
+window.addEventListener("load", () => document.fonts.ready.then(ajusta));
+</script>
+</body>
+</html>
