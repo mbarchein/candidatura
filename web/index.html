@@ -334,11 +334,11 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
   color:var(--coral-txt);margin-top:auto;padding-top:.8rem
 }
 .prop__ley--sin{color:var(--muted-2)}
-/* el díptico va aparte y a dos columnas: son los dos carteles de tema,
-   no dos peticiones más, y mezclarlos descuadraría la cuenta de nueve */
+/* los carteles de marco van aparte: los dos de tema y el del buzón entero
+   no son peticiones, y mezclarlos descuadraría la cuenta de nueve */
 .props__par{margin-top:3.2rem;border-top:1px solid var(--line);padding-top:2rem}
 .props__par .eyebrow{margin-bottom:1.4rem}
-.props--par{grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));max-width:760px}
+.props--par{grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))}
 @media (max-width:560px){
   .props{grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:1.6rem 1rem}
   .prop h3{font-size:var(--step-0)}
@@ -1252,7 +1252,7 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
     </ul>
 
     <div class="props__par">
-      <p class="eyebrow">Y los dos carteles que abrieron la serie</p>
+      <p class="eyebrow">Y los tres que no son una petición más</p>
       <ul class="props props--par">
       <li class="prop">
         <a class="prop__cartel" href="img/propuestas/conciliacion.webp" target="_blank" rel="noopener">
@@ -1275,6 +1275,17 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
         <h3>No te prometemos lo que no podemos</h3>
         <p>Cinco de las once respuestas del buzón hablaban de dinero, y <b>un comité no firma tu nómina</b>. Así que este cartel dice lo que sí se puede hacer con cada una, con artículo y con plazo.</p>
         <p class="prop__ley">art. 87.1 · 26.5 · 28.2 · 64.5 ET</p>
+      </li>
+      <li class="prop">
+        <a class="prop__cartel" href="img/propuestas/os-escuchamos.webp" target="_blank" rel="noopener">
+          <img src="img/propuestas/os-escuchamos-sm.webp" width="540" height="675" loading="lazy" decoding="async"
+               alt="Cartel «Os escuchamos. Y lo vamos a pelear.»: las 23 respuestas del buzón, agrupadas por temas y sin quitar ninguna.">
+          <span class="prop__lupa">Ver entero</span>
+        </a>
+        <p class="prop__kicker">El buzón entero</p>
+        <h3>Os escuchamos. Y lo vamos a pelear</h3>
+        <p>Las 23 respuestas que llegaron al buzón, <b>sin quitar ni una</b>: el sueldo, la carga, el tiempo, crecer aquí y lo del día a día. Van todas por escrito el primer mes, y de cada una os contamos qué contestan.</p>
+        <p class="prop__ley prop__ley--sin">no elegimos cuáles llevar</p>
       </li>
       </ul>
     </div>
