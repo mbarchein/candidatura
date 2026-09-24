@@ -342,6 +342,8 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
 @media (max-width:560px){
   .props{grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:1.6rem 1rem}
   .prop h3{font-size:var(--step-0)}
+  /* a dos columnas, nueve y tres dejan una huérfana: la última va a lo ancho */
+  .prop:last-child:nth-child(odd){grid-column:1/-1}
   /* a este tamaño la chapa tapaba medio cartel */
   .prop__lupa{font-size:.56rem;padding:.26rem .45rem;right:.35rem;bottom:.35rem}
 }
