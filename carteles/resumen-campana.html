@@ -67,13 +67,13 @@ p{margin:0}
 .rotulo b{font-weight:500}
 
 /* ---------- 1 · tinta: titular ---------- */
-.cabeza{background:var(--texto);color:var(--papel);padding:30px var(--m) 28px}
+.cabeza{background:var(--texto);color:var(--papel);padding:28px var(--m) 24px}
 .cabeza .rotulo{color:var(--cian-vivo);border-bottom:2px solid rgba(246,242,234,.25);padding-bottom:14px}
 .cabeza .rotulo b{color:var(--coral-vivo)}
 .titular{margin:18px 0 0;font-weight:500;text-transform:uppercase;line-height:.9}
 .titular .fit{letter-spacing:-.035em}
 .titular .l2{color:var(--cian-vivo)}
-.bajada{margin-top:18px;font-size:27px;line-height:1.3;color:var(--papel);max-width:none}
+.bajada{margin-top:14px;font-size:27px;line-height:1.3;color:var(--papel);max-width:none}
 .bajada b{font-weight:500;color:var(--cian-vivo)}
 
 /* ---------- 2 · papel: las nueve ---------- */
@@ -97,18 +97,18 @@ p{margin:0}
 .cab .c,.cab .enero{align-self:end}
 .cab-casillas{grid-column:3 / span 4;display:grid;grid-template-columns:78px 100px 78px 78px;column-gap:16px}
 .pides{list-style:none;margin:0;padding:0;flex:1 1 auto;display:flex;flex-direction:column;justify-content:space-between}
-.pide{padding:5px 0 5px;border-bottom:2px solid var(--linea-fuerte)}
+.pide{padding:3px 0 3px;border-bottom:2px solid var(--linea-fuerte)}
 .pide:last-child{border-bottom:4px solid var(--texto)}
 .pide__n{font-family:var(--mono);font-weight:500;font-size:40px;line-height:1;color:var(--cian);align-self:start;padding-top:4px}
 .pide--ojo .pide__n{color:var(--coral)}
 .pide h3{margin:0;font-weight:500;line-height:1;letter-spacing:-.02em;text-transform:uppercase;white-space:nowrap}
-.pide p{margin-top:4px;font-size:21px;line-height:1.3;color:var(--texto-2);text-wrap:balance}
+.pide p{margin-top:4px;font-size:21px;line-height:1.26;color:var(--texto-2);text-wrap:balance}
 .pide p b{color:var(--coral);font-weight:500;white-space:nowrap}
 .casilla{justify-self:center;width:30px;height:30px;border:3px solid rgba(25,24,32,.6);border-radius:4px}
 .casilla--cayo{}
 
 /* ---------- 3 · lo que sí hacemos ---------- */
-.metodo{padding:16px var(--m) 16px}
+.metodo{padding:12px var(--m) 12px}
 .metodo .rotulo{color:var(--texto)}
 .metodo .rotulo b{color:var(--cian)}
 .pasos{display:grid;grid-template-columns:repeat(4,1fr);gap:34px;margin-top:10px;padding-top:12px;border-top:2px solid var(--linea-fuerte)}
@@ -119,7 +119,7 @@ p{margin:0}
 .paso .mono{font-family:var(--mono);font-size:18px;color:var(--cian);white-space:nowrap}
 
 /* ---------- 4 · coral: el voto ---------- */
-.voto{background:var(--coral);color:var(--papel);padding:20px var(--m) 24px;display:grid;grid-template-columns:auto 1fr;column-gap:52px;align-items:end}
+.voto{background:var(--coral);color:var(--papel);padding:18px var(--m) 20px;display:grid;grid-template-columns:auto 1fr;column-gap:52px;align-items:end}
 .voto .rotulo{grid-column:1 / -1;color:var(--papel);border-bottom:2px solid rgba(246,242,234,.4);padding-bottom:10px;margin-bottom:14px}
 .voto .rotulo b{color:var(--texto)}
 .voto__titular{margin:0;font-weight:500;font-size:96px;line-height:.9;letter-spacing:-.035em;text-transform:uppercase}
@@ -130,6 +130,10 @@ p{margin:0}
 .voto__texto{font-size:21px;line-height:1.34;padding-bottom:4px}
 .voto__texto b{font-weight:500}
 .voto__clave{display:block;text-wrap:balance;font-size:24px;line-height:1.25;font-weight:500;margin-bottom:8px}
+.voto__dni{grid-column:1 / -1;margin-top:14px;display:flex;align-items:center;gap:22px;background:var(--texto);color:var(--papel);border-radius:6px;padding:10px 24px}
+.voto__dni strong{font-weight:500;font-size:38px;line-height:1;letter-spacing:-.025em;text-transform:uppercase;color:var(--coral-vivo);white-space:nowrap}
+.voto__dni span{font-size:23px;line-height:1.3}
+.voto__dni b{font-weight:500;color:var(--cian-vivo)}
 
 /* ---------- 5 · pie de tinta: los once ---------- */
 .pie{background:var(--texto);color:var(--papel);padding:16px var(--m) 18px}
@@ -184,6 +188,7 @@ p{margin:0}
       <canvas data-pose="vota" data-tt="0"></canvas>
     </div>
     <p class="voto__texto"><span class="voto__clave">Las pide el comité, y el comité lo forma quien salga elegido el martes.</span> <b>Vota toda la plantilla que figure en el censo, afiliada o no</b>; si crees que no apareces, díselo a la mesa: se reclama. En urna, voto <b>personal, libre, directo y secreto</b>. Horario y sitio, los de la mesa electoral.</p>
+    <p class="voto__dni"><strong>Trae tu DNI físico</strong><span>La mesa te identifica antes de votar: <b>el DNI de verdad, no una foto ni el móvil</b>. Sin él, no votas.</span></p>
   </section>
 
   <footer class="pie">

@@ -334,6 +334,19 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
   color:var(--coral-txt);margin-top:auto;padding-top:.8rem
 }
 .prop__ley--sin{color:var(--muted-2)}
+/* el resumen va antes de las nueve: es el cartel que las junta y el
+   que lleva lo del DNI. Es A2, más alto que los demás, así que no entra
+   en la rejilla: va solo, cartel a un lado y texto al otro */
+.resumen{
+  display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:1.4rem 2.4rem;
+  align-items:center;margin:0 0 3rem;padding-bottom:3rem;border-bottom:1px solid var(--line)
+}
+.resumen h3{font-size:var(--step-2);font-weight:500;line-height:1.15;margin:.3rem 0 .7rem;text-transform:uppercase}
+.resumen p{color:var(--muted);line-height:1.55;margin:0;max-width:var(--measure)}
+.resumen p + p{margin-top:.8rem}
+.resumen__dni{border-left:3px solid var(--coral);padding-left:.9rem;color:var(--text-2)}
+.resumen .prop__kicker{margin-top:0}
+@media (max-width:640px){ .resumen{grid-template-columns:1fr} .resumen .prop__cartel{max-width:320px} }
 /* los carteles de marco van aparte: los dos de tema y el del buzón entero
    no son peticiones, y mezclarlos descuadraría la cuenta de nueve */
 .props__par{margin-top:3.2rem;border-top:1px solid var(--line);padding-top:2rem}
@@ -1150,6 +1163,20 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
       <b>Ninguna está pedida todavía</b>, y no vamos a decir que sí. Se piden en la primera reunión
       del comité, por escrito, y os enseñamos lo que contesten — <b>sea lo que sea</b>.
     </p>
+
+    <div class="resumen">
+      <a class="prop__cartel" href="img/propuestas/resumen.webp" target="_blank" rel="noopener">
+        <img src="img/propuestas/resumen-sm.webp" width="540" height="764" loading="lazy" decoding="async"
+             alt="Cartel resumen «El martes 29 votas. En enero, lo compruebas.»: las nueve peticiones con sus casillas del semáforo, lo que hacemos después del 29, el aviso de traer el DNI físico y las once caras.">
+        <span class="prop__lupa">Ver entero</span>
+      </a>
+      <div>
+        <p class="prop__kicker">Las nueve, en un cartel</p>
+        <h3>El martes 29 votas. En enero, lo compruebas</h3>
+        <p>Las nueve peticiones juntas, cada una con sus cuatro casillas vacías: pedido, en negociación, se cayó y conseguido. <b>En enero de 2027 sale el primer semáforo con marcas</b>, y ahí se ve qué ha pasado con cada una.</p>
+        <p class="resumen__dni"><b>El día de la votación, trae tu DNI físico.</b> La mesa te identifica antes de votar, y una foto o el móvil no valen.</p>
+      </div>
+    </div>
 
     <ul class="props">
       <li class="prop">
