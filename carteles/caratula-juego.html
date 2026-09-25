@@ -14,8 +14,10 @@
 
    La escena es la del propio juego (web/juego.html) y los muñecos
    salen del mismo juego-munecos.js, así que lo que se ve en la caja es
-   lo que te encuentras al abrir el enlace: Compi saltando el pozo, y
-   abajo los once en fila, como la pantalla de elegir personaje de la
+   lo que te encuentras al abrir el enlace: un compañero enjaulado a la
+   izquierda, Compi saltando el pozo con los churros en el arco del
+   salto y, a la derecha, el jefe final: el PM y su «¿cómo vas?», con
+   barra de vida como en las recreativas. Abajo los doce en fila, como la pantalla de elegir personaje de la
    parte de atrás de las cajas.
 
    Todo lo editable está en :root y en los nodos de texto. La escena
@@ -103,14 +105,37 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   white-space:nowrap
 }
 .rotulo--pozo{left:538px;bottom:18px}
-.rotulo--letra{left:64px;top:230px;border-color:var(--cian)}
-.rotulo--email{right:64px;top:92px;border-color:var(--cian)}
+.rotulo--jaula{left:40px;bottom:18px;border-color:var(--cian)}
+.rotulo--churros{left:350px;top:62px;border-color:var(--cian)}
+
+/* el bocadillo del PM: blanco y con pico hacia Compi, como en el juego */
+.bocadillo{
+  position:absolute;right:52px;top:128px;z-index:2;
+  font-family:var(--bloque);font-size:26px;text-transform:uppercase;letter-spacing:-.01em;
+  background:var(--crema);color:var(--noche);padding:10px 16px 9px;border:3px solid var(--noche)
+}
+.bocadillo::after{
+  content:"";position:absolute;left:44px;bottom:-21px;border:9px solid transparent;
+  border-top:12px solid var(--noche)
+}
+
+/* la barra de vida del jefe final, arriba a la derecha de la escena */
+.jefe{position:absolute;right:64px;top:18px;width:430px;z-index:2}
+.jefe p{
+  margin:0 0 6px;font-family:var(--mono);font-size:var(--t-rotulo);font-weight:500;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--texto);display:flex;justify-content:space-between
+}
+.jefe p b{color:var(--coral);font-weight:500}
+.jefe .vida{display:grid;grid-template-columns:repeat(12,1fr);gap:4px;padding:4px;
+  background:var(--noche);border:3px solid var(--texto)}
+.jefe .vida i{height:16px;background:var(--coral)}
+.jefe .vida i:nth-child(n+10){background:#3a3552}
 
 /* el sello de «nuevo» de las cajas, girado. Tapa una esquina de la
    escena a propósito: es lo que rompe la rejilla */
 .estrella{
-  position:absolute;right:70px;top:150px;width:168px;height:168px;z-index:3;
-  display:grid;place-items:center;text-align:center;transform:rotate(12deg);
+  position:absolute;left:40px;top:-40px;width:160px;height:160px;z-index:3;
+  display:grid;place-items:center;text-align:center;transform:rotate(-10deg);
   background:var(--coral);color:var(--noche);
   clip-path:polygon(50% 0,61% 13%,78% 7%,80% 24%,97% 28%,88% 43%,100% 57%,84% 64%,88% 82%,70% 81%,61% 97%,50% 86%,38% 97%,30% 81%,12% 82%,16% 64%,0 57%,12% 43%,3% 28%,20% 24%,22% 7%,39% 13%);
   font-family:var(--bloque);text-transform:uppercase;font-size:21px;line-height:1
@@ -171,8 +196,13 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 
   <div class="escena">
     <canvas id="escena" width="1080" height="520"></canvas>
-    <span class="rotulo rotulo--email">Email de las 23:00</span>
-    <span class="rotulo rotulo--letra">Letra pequeña</span>
+    <div class="jefe">
+      <p><b>Jefe final</b><span>El PM</span></p>
+      <div class="vida"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    </div>
+    <span class="bocadillo">¿Cómo vas?</span>
+    <span class="rotulo rotulo--churros">Churros gratis</span>
+    <span class="rotulo rotulo--jaula">Libera a la lista</span>
     <span class="rotulo rotulo--pozo">Pozo de las falsas promesas</span>
     <div class="estrella"><div><span>12</span>compis<br>jugables</div></div>
   </div>
@@ -239,31 +269,55 @@ r(0, SUELO, P0, 1, "#8a8177"); r(P1, SUELO, AN - P1, 1, "#8a8177");
 r(P0, SUELO, P1 - P0, AL - SUELO, "#05060c");
 for(let x = 2; x < AN; x += 7) if(x < P0 - 3 || x > P1) r(x, SUELO + 3, 3, 1, "#2a2640");
 
-/* la letra pequeña, ya saltada, a la izquierda */
-const LX = 16, LY = SUELO - 21;
-r(LX - 1, LY - 1, 14, 23, "#050c1c"); r(LX, LY, 12, 21, "#e9f2fc");
-for(let j = 3; j < 17; j += 2) r(LX + 2, LY + j, j > 12 ? 5 : 8, 1, "#b8c8dd");
-r(LX + 8, LY + 16, 3, 3, "#f4796b"); r(LX + 10, LY, 2, 2, "#050c1c");
+/* la jaula, a la izquierda: Rocío dentro pidiendo ayuda, barrotes
+   delante y el candado dorado. En el juego se abre al pasar por ella */
+g.setTransform(1, 0, 0, 1, 0, 0);
+const JX = 8;
+r(JX, SUELO - 40, 31, 40, "rgba(5,12,28,.25)");
+g.drawImage(MUNECOS.fotograma("galindo", "alerta", 0), (JX + 2) * E, (SUELO - 35) * E, 27 * E, 36 * E);
+r(JX - 1, SUELO - 41, 33, 4, "#050c1c"); r(JX, SUELO - 40, 31, 2, "#8a8f9c");
+r(JX - 1, SUELO - 3, 33, 3, "#050c1c"); r(JX, SUELO - 2, 31, 1, "#8a8f9c");
+for(let bx = JX + 2; bx < JX + 31; bx += 6) r(bx, SUELO - 38, 1, 35, "#8a8f9c");
+/* el candado en el lateral, no en medio: ahí caía justo en la cara */
+r(JX + 27, SUELO - 16, 5, 6, "#050c1c"); r(JX + 28, SUELO - 15, 3, 4, "#e0b04a");
 
-/* el email volando, arriba a la derecha */
-const MX = 112, MY = 3;
-r(MX - 1, MY - 1, 15, 11, "#050c1c"); r(MX, MY, 13, 9, "#e9f2fc");
-for(let i = 0; i < 6; i++){ r(MX + i, MY + i, 1, 1, "#f4796b"); r(MX + 12 - i, MY + i, 1, 1, "#f4796b"); }
-r(MX + 3, MY - 3, 7, 1, "#b8c8dd"); r(MX + 5, MY - 4, 3, 1, "#b8c8dd");
+/* los churros de cocina, en lo alto del arco del salto */
+{
+const x = 45, y = 15;
+  /* tres churros largos en abanico apoyados en la taza de chocolate:
+   finos, con la estría oscura cada tres píxeles y algo de azúcar. La
+   versión de antes, una caja de papel a rayas, se leía como una tarta */
+const palos = [[0, 1, -1], [1, 4, 0], [0, 7, 1]];        // [x0, y0, caída cada 5 px]
+const pos = (p0, i) => [x + p0[0] + i, y + p0[1] + Math.round(i * p0[2] / 5)];
+for(const pl of palos) for(let i = 0; i < 14; i++){ const [px, py] = pos(pl, i); r(px - 1, py - 1, 3, 4, "#050c1c"); }
+palos.forEach((pl, s) => { for(let i = 0; i < 14; i++){
+  const [px, py] = pos(pl, i);
+  r(px, py, 1, 1, i % 3 === 0 ? "#b87a2a" : "#f0c070");
+  r(px, py + 1, 1, 1, "#c98a3a");
+  if((i + s * 2) % 5 === 2) r(px, py, 1, 1, "#fff3d6");
+}});
+r(x + 12, y + 3, 9, 9, "#050c1c");
+r(x + 13, y + 4, 7, 7, "#e9f2fc"); r(x + 19, y + 4, 1, 7, "#b8c8dd");
+r(x + 13, y + 4, 7, 2, "#5a2f1a"); r(x + 14, y + 4, 2, 1, "#7a4a2a");
+r(x + 21, y + 5, 2, 4, "#050c1c"); r(x + 21, y + 6, 1, 2, "#e9f2fc");
+}
+
+/* el jefe final: el PM plantado al otro lado del pozo, mirando a Compi */
+g.drawImage(MUNECOS.fotograma("pm", "explica", 420, true), 106 * E, (SUELO - 35) * E, 27 * E, 36 * E);
 
 /* las papeletas en el arco del salto */
 const papeleta = (x, y) => {
   r(x - 1, y - 1, 9, 10, "#050c1c"); r(x, y, 7, 8, "#e9f2fc"); r(x + 1, y + 1, 5, 1, "#b8c8dd");
   [[2,3],[4,3],[3,4],[2,5],[4,5]].forEach(([a, b]) => r(x + a, y + b, 1, 1, "#f4796b"));
 };
-papeleta(46, 38); papeleta(104, 44); papeleta(118, 44);
+papeleta(46, 38);
 
 /* Compi en el aire, justo encima del pozo */
 g.setTransform(1, 0, 0, 1, 0, 0);
 g.drawImage(MUNECOS.fotograma("compi", "salta", 0), 72 * E, 10 * E, 27 * E, 36 * E);
 /* y el «+25» de la papeleta que acaba de coger */
 g.font = "500 34px 'IBM Plex Mono', monospace"; g.fillStyle = "#f9a79d";
-g.fillText("+25", 57 * E, 19 * E);
+g.fillText("+25", 44 * E, 35 * E);
 
 /* la tira de elegir personaje: cada canvas a 27x36 y escalado por CSS */
 const tira = document.getElementById("tira");

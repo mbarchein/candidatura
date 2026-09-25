@@ -1027,6 +1027,14 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
   .estreno--solo .wrap{display:block}
   .estreno--solo .sec__head{margin-bottom:2.4rem}
 }
+/* con vídeo y juego, lo mismo en pantallas anchas: texto a la izquierda
+   y las dos piezas a la derecha, a una altura que quepa al llegar */
+@media (min-width:1100px){
+  .estreno--lado .wrap{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:clamp(2rem,4vw,3.5rem);align-items:center}
+  .estreno--lado .sec__head{margin-bottom:0}
+  .estreno--lado .estreno__grid{flex-wrap:nowrap;gap:2rem}
+  .estreno--lado .estreno__pieza{--alto:clamp(380px,calc(100vh - 230px),600px)}
+}
 @media (max-width:620px){
   .estreno__pieza{--alto:auto;width:100%}
   .estreno__marco{width:100%;height:auto}
@@ -1044,6 +1052,7 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
       <a href="#equipo">Quiénes somos</a>
       <a href="#asamblea">Lo que dijimos</a>
       <a href="#faq">Dudas</a>
+      <a href="/juego">El juego</a>
       <a href="/buzon">El buzón</a>
       <button class="tema" id="tema" type="button" aria-pressed="false" aria-label="Cambiar a tema claro">
         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g class="tema__luna"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></g><g class="tema__sol"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.2 5.2l1.6 1.6M17.2 17.2l1.6 1.6M18.8 5.2l-1.6 1.6M6.8 17.2l-1.6 1.6"/></g></svg>
@@ -1058,7 +1067,7 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
   <canvas class="hero__mesh" id="mesh-hero" aria-hidden="true"></canvas>
   <div class="hero__glow" aria-hidden="true"></div>
   <div class="wrap hero__in">
-    <a class="aviso" href="#estreno"><b>Nuevo</b> Las nueve propuestas, en vídeo</a>
+    <a class="aviso" href="#estreno"><b>Nuevo</b> Las nueve propuestas en vídeo y el juego de la lista</a>
     <p class="eyebrow">Elecciones al Comité de Empresa · Nazaríes</p>
     <h1>Sin siglas.<em>Solo compañerxs.</em></h1>
     <p class="hero__sub">Representación de la plantilla, <b>hecha desde dentro</b>.</p>
@@ -1110,15 +1119,15 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
   </div>
 </section>
 
-<!-- ===================== ESTRENO: EL VÍDEO ===================== -->
-<section class="sec estreno estreno--solo" id="estreno">
+<!-- ===================== ESTRENO: VÍDEO Y JUEGO ===================== -->
+<section class="sec estreno estreno--lado" id="estreno">
   <div class="wrap">
     <div class="sec__head">
-      <p class="eyebrow eyebrow--coral">Estreno · para ver y compartir</p>
-      <h2>Compi te lo cuenta. <em>Las nueve, en menos de tres minutos.</em></h2>
+      <p class="eyebrow eyebrow--coral">Estreno · para ver y para jugar</p>
+      <h2>Compi te lo cuenta. <em>Luego te toca correr.</em></h2>
       <p class="lede muted">
-        Las nueve propuestas, una detrás de otra, contadas por Compi y con los once en píxeles.
-        Lleva subtítulos: se entiende sin sonido, en el móvil y de pie en el pasillo.
+        Las nueve propuestas en menos de tres minutos, contadas por Compi y con los once en
+        píxeles. Y un juego para saltar los problemas de siempre con quien tú elijas de la lista.
       </p>
     </div>
     <div class="estreno__grid">
@@ -1133,7 +1142,18 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
         <figcaption>
           <h3>Las nueve, en vídeo</h3>
           <p>Nueve propuestas, una detrás de otra. Lleva subtítulos, así que se entiende sin sonido.</p>
-          <p class="estreno__meta">2:40 · vertical · con subtítulos · sin-siglas.info/peli</p>
+          <p class="estreno__meta">2:40 · vertical · con subtítulos</p>
+        </figcaption>
+      </figure>
+      <figure class="estreno__pieza">
+        <a class="estreno__marco estreno__marco--juego" href="/juego">
+          <img src="img/caratula-juego.webp" width="720" height="900" loading="lazy"
+               alt="Carátula de La carrera hasta la urna: Compi salta el pozo de las falsas promesas entre una compañera enjaulada y el jefe final, el PM, que pregunta «¿cómo vas?»; abajo, los doce personajes para elegir">
+        </a>
+        <figcaption>
+          <h3>La carrera hasta la urna</h3>
+          <p>Salta la letra pequeña, esquiva al cansino del pasillo, coge los churros de cocina y sube al marcador.</p>
+          <a class="btn btn--coral" href="/juego">Jugar ahora</a>
         </figcaption>
       </figure>
     </div>

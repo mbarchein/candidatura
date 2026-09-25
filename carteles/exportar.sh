@@ -5,6 +5,7 @@
 #   ./carteles/exportar.sh 2 6        solo esos dos
 #   ./carteles/exportar.sh pegatinas  las cuatro hojas A4 de pegatinas, a PDF y PNG
 #   ./carteles/exportar.sh caratula   la carátula del juego, a 1x y 2x
+#   ./carteles/exportar.sh peli       el cartel de estreno de la peli, a 1x y 2x
 #
 # Los números son identificadores del fuente (el ?n= de carteles.html),
 # no el orden de envío: los carteles no llevan numeración impresa para
@@ -110,6 +111,23 @@ if [ "${1:-}" = "caratula" ]; then
       "file://$AQUI/caratula-juego.html" 2>/dev/null
     printf 'caratula-juego%s.png · %s\n' "$sufijo" \
       "$(file -b "$SALIDA/caratula-juego$sufijo.png" | cut -d, -f2 | tr -d ' ')"
+  done
+  exit 0
+fi
+
+# el cartel de estreno de la peli: 1080x1350 y 2x, como la carátula del
+# juego, que es de la misma familia
+if [ "${1:-}" = "peli" ]; then
+  mkdir -p "$SALIDA"
+  for esc in 1 2; do
+    sufijo=""; [ "$esc" = 2 ] && sufijo="-2x"
+    google-chrome --headless --disable-gpu --hide-scrollbars \
+      --force-device-scale-factor=$esc --window-size=1080,1350 \
+      --user-data-dir="$PERFIL" --allow-file-access-from-files \
+      --virtual-time-budget=5000 --screenshot="$SALIDA/cartel-peli$sufijo.png" \
+      "file://$AQUI/cartel-peli.html" 2>/dev/null
+    printf 'cartel-peli%s.png · %s\n' "$sufijo" \
+      "$(file -b "$SALIDA/cartel-peli$sufijo.png" | cut -d, -f2 | tr -d ' ')"
   done
   exit 0
 fi

@@ -308,9 +308,9 @@ canvas{display:block;image-rendering:pixelated;flex:0 0 auto}
     <div class="arte">
       <em>+100 cada uno · los churros, con subidón</em>
       <ul>
-        <li><canvas data-dib="churros" data-mmpx="0.9"></canvas><b>Churros gratis en cocina</b></li>
+        <li><canvas data-dib="churros" data-mmpx="0.75"></canvas><b>Churros gratis en cocina</b></li>
         <li><canvas data-dib="mollete" data-mmpx="0.9"></canvas><b>Mollete con jamón</b></li>
-        <li><canvas data-dib="pizza" data-mmpx="0.9"></canvas><b>Pizza pepperoni de Pedro</b></li>
+        <li><canvas data-dib="pizza" data-mmpx="0.9"></canvas><b>Pizza de Pedro Pepperoni</b></li>
         <li><canvas data-dib="hamburguesa" data-mmpx="0.9"></canvas><b>Hamburguesa del Mumama</b></li>
       </ul>
     </div>
@@ -372,13 +372,23 @@ const OBJ = {
     p.rect(x+2, y+3, 1, 1, C.R); p.rect(x+4, y+3, 1, 1, C.R); p.rect(x+3, y+4, 1, 1, C.R);
     p.rect(x+2, y+5, 1, 1, C.R); p.rect(x+4, y+5, 1, 1, C.R);
   },
-  /* y es la caja de papel: los churros asoman 5 píxeles encima */
   churros(p, x, y){
-    p.rect(x+1, y-4, 2, 6, C.O); p.rect(x+4, y-5, 2, 6, C.O); p.rect(x+7, y-3, 2, 5, C.O);
-    p.rect(x+1, y-3, 1, 5, "#d9a24a"); p.rect(x+4, y-4, 1, 5, "#e8b860"); p.rect(x+7, y-2, 1, 4, "#d9a24a");
-    p.silueta(x, y, 10, 8); p.rect(x, y, 10, 8, C.W);
-    p.rect(x, y+2, 10, 1, C.R); p.rect(x, y+5, 10, 1, C.R);
-    p.rect(x+1, y+7, 8, 1, C.gris);
+  /* tres churros largos en abanico apoyados en la taza de chocolate:
+     finos, con la estría oscura cada tres píxeles y algo de azúcar. La
+     versión de antes, una caja de papel a rayas, se leía como una tarta */
+  const palos = [[0, 1, -1], [1, 4, 0], [0, 7, 1]];        // [x0, y0, caída cada 5 px]
+  const pos = (p0, i) => [x + p0[0] + i, y + p0[1] + Math.round(i * p0[2] / 5)];
+  for(const pl of palos) for(let i = 0; i < 14; i++){ const [px, py] = pos(pl, i); p.rect(px - 1, py - 1, 3, 4, C.O); }
+  palos.forEach((pl, s) => { for(let i = 0; i < 14; i++){
+    const [px, py] = pos(pl, i);
+    p.rect(px, py, 1, 1, i % 3 === 0 ? "#b87a2a" : "#f0c070");
+    p.rect(px, py + 1, 1, 1, "#c98a3a");
+    if((i + s * 2) % 5 === 2) p.rect(px, py, 1, 1, "#fff3d6");
+  }});
+  p.rect(x + 12, y + 3, 9, 9, C.O);
+  p.rect(x + 13, y + 4, 7, 7, "#e9f2fc"); p.rect(x + 19, y + 4, 1, 7, "#b8c8dd");
+  p.rect(x + 13, y + 4, 7, 2, "#5a2f1a"); p.rect(x + 14, y + 4, 2, 1, "#7a4a2a");
+  p.rect(x + 21, y + 5, 2, 4, C.O); p.rect(x + 21, y + 6, 1, 2, "#e9f2fc");
   },
   /* el jamón sobresale un píxel por cada lado del pan */
   mollete(p, x, y){
@@ -431,7 +441,7 @@ const DIB = {
   cafetera:  { w: 16, h: 26, f: p => OBJ.cafetera(p, 1, 1) },
   impresora: { w: 20, h: 19, f: p => OBJ.impresora(p, 1, 6) },
   papeleta:  { w: 9,  h: 10, f: p => OBJ.papeleta(p, 1, 1) },
-  churros:   { w: 12, h: 15, f: p => OBJ.churros(p, 1, 6) },
+  churros:   { w: 26, h: 16, f: p => OBJ.churros(p, 2, 3) },
   mollete:   { w: 14, h: 10, f: p => OBJ.mollete(p, 1, 1) },
   pizza:     { w: 14, h: 9,  f: p => OBJ.pizza(p, 1, 1) },
   hamburguesa: { w: 14, h: 12, f: p => OBJ.hamburguesa(p, 1, 1) },

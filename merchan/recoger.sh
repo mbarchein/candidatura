@@ -31,8 +31,9 @@ declare -A PIEZAS=(
                pegatinas-compi-2.pdf png/pegatinas-compi-2.png
                pegatinas-juego.pdf png/pegatinas-juego.png"
   [juego]="png/caratula-juego.png png/caratula-juego-2x.png"
+  [peli]="png/cartel-peli.png png/cartel-peli-2x.png"
   [camisetas]="png/camiseta-clara.png png/camiseta-oscura.png"
-  [qr]="qr-juego.svg qr-reto.svg qr-buzon.svg"
+  [qr]="qr-juego.svg qr-peli.svg qr-reto.svg qr-buzon.svg"
 )
 
 # se comprueba todo antes de copiar nada: un paquete a medias es peor

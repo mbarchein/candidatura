@@ -35,6 +35,15 @@ Llevan el 29-S o la web: son de campaña y se reparten antes del martes.
 
 Reexportar: `./carteles/exportar.sh caratula`
 
+## peli/ · cartel del vídeo de las nueve propuestas
+
+| Pieza | Formato | Para qué |
+|---|---|---|
+| `cartel-peli.png` | 1080 × 1350 | Mandarlo al chat: el QR y la dirección llevan a sin-siglas.info/peli |
+| `cartel-peli-2x.png` | 2160 × 2700 | Imprimirlo. Lleva el martes 29: es de campaña |
+
+Reexportar: `./carteles/exportar.sh peli`
+
 ## camisetas/ · para la imprenta textil
 
 PNG con fondo transparente, 4200 × 5035 px: a 300 ppp son 35 × 42 cm, más
