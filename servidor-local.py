@@ -206,7 +206,8 @@ def juego_de(ruta):
 
 
 # las mismas que netlify.toml; si allí se añade una, aquí también
-REDIRECCIONES = {"/propuestas": "/#propuestas", "/peli": "/#estreno"}
+REDIRECCIONES = {"/propuestas": "/#propuestas", "/peli": "/#estreno",
+                 "/asesoramiento": "/#asesoramiento-juridico"}
 
 
 class Manejador(SimpleHTTPRequestHandler):

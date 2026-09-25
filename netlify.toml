@@ -30,6 +30,13 @@
   to = "/#estreno"
   status = 302
 
+# La aclaración de los servicios jurídicos, para enlazarla sola: abre la
+# pregunta en la sección de dudas de la portada.
+[[redirects]]
+  from = "/asesoramiento"
+  to = "/#asesoramiento-juridico"
+  status = 302
+
 # El ranking se llama igual en local y en producción: /api/ranking.
 # Así el mismo código de cliente vale para las dos cosas.
 [[redirects]]

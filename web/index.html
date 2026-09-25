@@ -499,7 +499,7 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
 
 /* ---------- faq ---------- */
 .faq{max-width:78ch;display:grid}
-.faq details{border-bottom:1px solid var(--line)}
+.faq details{border-bottom:1px solid var(--line);scroll-margin-top:84px}
 .faq summary{
   cursor:pointer;list-style:none;padding:1.05rem 2.2rem 1.05rem 0;position:relative;
   font-family:var(--display);font-weight:500;font-size:1.02rem;color:var(--text)
@@ -514,6 +514,9 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
 .faq summary:hover{color:var(--cian-txt)}
 .faq__a{padding:0 1.5rem 1.3rem 0;color:var(--muted);display:grid;gap:.8rem;max-width:var(--measure)}
 .faq__a strong{color:var(--text-2);font-weight:500}
+.faq__a ul{margin:0;padding-left:1.15rem;display:grid;gap:.35rem}
+.faq__a .ley{font-family:var(--cifras);font-size:.78rem;color:var(--muted-2);white-space:nowrap}
+.faq__a a{color:var(--cian-txt)}
 .pend{
   font-family:var(--mono);font-size:.72rem;letter-spacing:.04em;
   color:var(--coral-txt);border:1px dashed rgba(244,121,107,.45);border-radius:5px;padding:.05rem .35rem
@@ -1543,6 +1546,51 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
             de firmas de la plantilla: en concreto, <strong>el triple de firmas que puestos a
             cubrir</strong>. Es exactamente lo que hicimos, y por eso decimos que empezamos
             recogiendo firmas: sin ellas no estaríamos en la papeleta.
+          </p>
+        </div>
+      </details>
+
+      <!-- la aclaración de los servicios jurídicos, con las citas comprobadas
+           en el BOE. Lo de las tarifas va sin cifras, pero sale de las que
+           publica CCOO Andalucía (2021): la consulta y la demanda se pagan,
+           del todo o en parte, hasta uno y tres años de afiliación. Tiene
+           id propio para enlazarla: sin-siglas.info/asesoramiento -->
+      <details id="asesoramiento-juridico">
+        <summary>¿Sin sindicato, sin asesoramiento jurídico?</summary>
+        <div class="faq__a">
+          <p>
+            <strong>Votes a quien votes, siempre puedes usar los servicios jurídicos de un
+            sindicato:</strong> pagando aparte, o afiliándote y pagando la cuota. Tu voto no cambia
+            nada de eso.
+          </p>
+          <p>
+            <strong>Sus abogados son para quien paga la cuota, no para quien los vota.</strong> Y
+            la cuota no lo cubre todo: según sus propias tarifas, la consulta y la demanda se pagan
+            aparte, del todo o en parte, hasta que llevas años afiliado. Si estás afiliado, lo sigues
+            estando votes a quien votes.
+          </p>
+          <p>Lo que un sindicato consigue para todos te llega igual:</p>
+          <ul>
+            <li>El convenio que firma vale para toda la plantilla. <span class="ley">art. 82.3 ET</span></li>
+            <li>Lo que gana en un conflicto colectivo, también. <span class="ley">art. 160 LRJS</span></li>
+            <li>Desde el comité, te representa a ti también, votes a quien votes.</li>
+          </ul>
+          <p>
+            <strong>Y además, sin carné de nada.</strong> La justicia gratuita laboral es de todos:
+            orientación antes del juicio y abogado de oficio cuando hace falta. Y la Inspección de
+            Trabajo y la conciliación previa, sin coste para cualquiera.
+            <span class="ley">Ley 1/1996, arts. 2.d y 6</span>
+          </p>
+          <p>
+            <strong>El comité no depende de un sindicato.</strong> Puede ir a juicio, negociar el
+            convenio de empresa y plantear un conflicto colectivo por sí mismo, con abogados y
+            expertos. <span class="ley">arts. 65, 87 y 88 ET · art. 154 LRJS</span>
+          </p>
+          <p>
+            <strong>Sin siglas no es sin derechos.</strong> Vamos sin sindicato para responder solo
+            ante la plantilla, y la ley nos da las mismas garantías y la misma capacidad como comité
+            que a cualquier otra lista. ¿Tienes una duda concreta? <a href="/buzon">Escríbenos al
+            buzón</a>, que es anónimo.
           </p>
         </div>
       </details>
@@ -3878,4 +3926,18 @@ $("#end-form").addEventListener("submit", async ev=>{
     $("#end-send").disabled = false;
   }
 });
+</script>
+<script>
+/* un enlace a una pregunta de las dudas (sin-siglas.info/asesoramiento
+   lleva a #asesoramiento-juridico) la abre, además de llevar hasta ella:
+   sin esto se llegaba a una pregunta cerrada y parecía que no estaba */
+(function abreDuda(){
+  const abre = () => {
+    const id = decodeURIComponent(location.hash.slice(1));
+    const d = id && document.getElementById(id);
+    if(d && d.tagName === "DETAILS"){ d.open = true; d.scrollIntoView({ block: "start" }); }
+  };
+  abre();
+  window.addEventListener("hashchange", abre);
+})();
 </script>
