@@ -191,6 +191,10 @@ def juego_de(ruta):
     return JUEGOS.get(nombre)
 
 
+# las mismas que netlify.toml; si allí se añade una, aquí también
+REDIRECCIONES = {"/propuestas": "/#propuestas", "/peli": "/#estreno"}
+
+
 class Manejador(SimpleHTTPRequestHandler):
     def __init__(self, *a, **k):
         super().__init__(*a, directory=str(RAIZ), **k)
@@ -215,8 +219,15 @@ class Manejador(SimpleHTTPRequestHandler):
                 return self.responde({"error": "juego desconocido"}, 400)
             marcas = leer(juego["datos"])
             return self.responde({"top": mejores(marcas), "jugadas": len(marcas)})
-        # rutas sin extensión, para que /buzon funcione igual que en Netlify
         limpio = self.path.split("?")[0]
+        # las redirecciones de netlify.toml, para probar aquí las
+        # direcciones que salen impresas en los carteles
+        if limpio in REDIRECCIONES:
+            self.send_response(302)
+            self.send_header("location", REDIRECCIONES[limpio])
+            self.end_headers()
+            return None
+        # rutas sin extensión, para que /buzon funcione igual que en Netlify
         if limpio != "/" and not pathlib.Path(limpio).suffix:
             if (RAIZ / (limpio.lstrip("/") + ".html")).exists():
                 self.path = limpio + ".html"

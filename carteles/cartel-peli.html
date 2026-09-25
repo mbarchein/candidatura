@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Cartel · Las nueve, en vídeo</title>
+<link rel="stylesheet" href="tipos.css">
+<style>
+/* ==================================================================
+   CARTEL DEL VÍDEO · el estreno de las nueve, como un cartel de cine
+   ------------------------------------------------------------------
+   1080 × 1350, como el resto de la serie, y de la misma familia que la
+   carátula del juego: noche, título en relieve y QR en pegatina crema.
+
+   La pantalla del móvil es un fotograma de verdad de la peli, el de los
+   diez segundos: Compi presenta a los once y salen todos con su nombre.
+   Se saca con
+
+       ffmpeg -ss 10 -i carteles/video/peli-compi.mp4 -frames:v 1 -q:v 2 carteles/peli-fotograma.jpg
+
+   Abajo, el bloque de créditos de los carteles de cine: el reparto es la
+   lista entera, en su orden. No lleva premios ni festivales inventados:
+   un laurel falso en un cartel de campaña es justo lo que no queremos.
+
+   El QR y la dirección van a sin-siglas.info/peli, que netlify.toml
+   redirige a la portada, a la sección del vídeo.
+
+   Exportar: ./carteles/exportar.sh peli
+   ================================================================== */
+:root{
+  --w:1080px; --h:1350px; --margen:64px;
+
+  --noche:#0a0c16; --panel:#171525;
+  --texto:#f1efe9; --texto-2:#dbe6f4; --apagado:#b0aea8; --apagado-2:#8b8880;
+  --cian:#3fc9f0; --cian-hondo:#1b9fc9; --cian-noche:#0d4a63;
+  --coral:#f4796b; --coral-hondo:#c9584c; --coral-noche:#6b2a26;
+  --crema:#f6f2ea;
+
+  --bloque:"Archivo Black","Gellix",Arial,sans-serif;
+  --display:"Gellix","Helvetica Neue",Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+
+  --t-titular:150px; --t-titular-2:82px; --t-bajada:30px; --t-rotulo:17px; --t-creditos:15px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--noche)}
+body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+.cartel{
+  width:var(--w);height:var(--h);position:relative;overflow:hidden;
+  background:
+    radial-gradient(50% 36% at 78% 38%,rgba(63,201,240,.16),transparent 70%),
+    radial-gradient(46% 30% at 12% 70%,rgba(244,121,107,.12),transparent 72%),
+    var(--noche);
+  color:var(--texto);font-family:var(--display);
+  display:flex;flex-direction:column
+}
+/* el marco impreso, el mismo de la carátula: las dos piezas son familia */
+.cartel::after{
+  content:"";position:absolute;inset:22px;border:3px solid var(--coral);border-radius:6px;
+  pointer-events:none;z-index:5
+}
+
+/* ---------- franja de arriba ---------- */
+.franja{display:flex;justify-content:space-between;align-items:center;padding:48px var(--margen) 0}
+.sello{
+  font-family:var(--bloque);font-size:22px;text-transform:uppercase;
+  background:var(--coral);color:var(--noche);padding:10px 16px 9px;border-radius:4px;
+  box-shadow:5px 5px 0 var(--coral-noche)
+}
+.ficha{
+  font-family:var(--mono);font-size:var(--t-rotulo);letter-spacing:.18em;text-transform:uppercase;
+  color:var(--texto-2);text-align:right;line-height:1.5
+}
+.ficha b{color:var(--cian);font-weight:500}
+
+/* ---------- el cuerpo: título a la izquierda, pantalla a la derecha ---------- */
+.cuerpo{display:grid;grid-template-columns:1fr 372px;gap:40px;padding:40px var(--margen) 0;align-items:start}
+
+.presenta{
+  font-family:var(--mono);font-size:var(--t-rotulo);letter-spacing:.24em;text-transform:uppercase;
+  color:var(--coral);margin:26px 0 18px
+}
+/* el título en relieve de escalones, como el de la carátula del juego */
+.titulo{
+  font-family:var(--bloque);font-weight:900;text-transform:uppercase;margin:0;
+  font-size:var(--t-titular);line-height:.86;letter-spacing:-.035em;color:var(--texto);
+  text-shadow:
+    2px 2px 0 var(--cian-hondo),4px 4px 0 var(--cian-hondo),6px 6px 0 var(--cian-hondo),
+    8px 8px 0 var(--cian-noche),10px 10px 0 var(--cian-noche),12px 12px 0 var(--noche)
+}
+.titulo em{
+  display:block;font-style:normal;color:var(--coral);font-size:var(--t-titular-2);margin-top:14px;
+  text-shadow:
+    2px 2px 0 var(--coral-hondo),4px 4px 0 var(--coral-hondo),6px 6px 0 var(--coral-hondo),
+    8px 8px 0 var(--coral-noche),10px 10px 0 var(--coral-noche),12px 12px 0 var(--noche)
+}
+.bajada{font-size:var(--t-bajada);line-height:1.3;color:var(--texto-2);margin:42px 0 0;max-width:19ch}
+.bajada b{color:var(--texto);font-weight:500}
+
+/* la llamada y el QR, juntos: son la misma acción */
+.ver{display:flex;align-items:center;gap:26px;margin-top:44px}
+.pegatina{
+  background:var(--crema);color:#191820;padding:14px 14px 10px;border-radius:6px;
+  width:196px;text-align:center;transform:rotate(-3deg);box-shadow:6px 6px 0 var(--cian-noche);flex:0 0 auto
+}
+.pegatina img{display:block;width:168px;height:168px}
+.pegatina strong{display:block;font-family:var(--bloque);font-size:20px;text-transform:uppercase;margin-top:9px;line-height:1}
+.ver p{margin:0;font-family:var(--mono);font-size:19px;line-height:1.5;color:var(--texto-2)}
+.ver p b{display:block;font-family:var(--bloque);font-weight:900;font-size:25px;color:var(--cian);letter-spacing:-.01em;margin-top:4px}
+
+/* el móvil: un marco negro con esquinas de teléfono y el fotograma dentro */
+.movil{
+  position:relative;width:372px;height:661px;border-radius:44px;background:#000;
+  padding:14px;box-shadow:0 0 0 3px #2a2640,18px 22px 0 -2px rgba(63,201,240,.18);transform:rotate(2.5deg)
+}
+.movil img{display:block;width:100%;height:100%;object-fit:cover;border-radius:32px}
+.movil::before{
+  content:"";position:absolute;top:24px;left:50%;width:84px;height:22px;margin-left:-42px;
+  background:#000;border-radius:12px;z-index:2
+}
+/* el botón de play: el mismo coral de todo, con sombra dura. Va abajo,
+   en el hueco al lado de Compi: en el centro tapaba a media lista */
+.play{
+  position:absolute;left:72%;top:80%;width:104px;height:104px;margin:-52px 0 0 -52px;z-index:2;
+  border-radius:50%;background:var(--coral);box-shadow:6px 6px 0 var(--coral-noche);
+  display:grid;place-items:center
+}
+.play::after{
+  content:"";margin-left:10px;border-style:solid;border-width:26px 0 26px 42px;
+  border-color:transparent transparent transparent var(--noche)
+}
+
+/* ---------- el reparto y los créditos ---------- */
+.pie{margin-top:auto;padding:0 var(--margen) 54px}
+.reparto{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:22px}
+.reparto canvas{width:54px;height:72px;image-rendering:pixelated}
+.reparto canvas:first-child{width:81px;height:108px}
+/* el bloque de créditos: estrecho, en mayúsculas y apretado, como en
+   los carteles de cine. Los nombres en blanco, el resto apagado */
+.creditos{
+  margin:0;font-family:var(--display);font-size:var(--t-creditos);line-height:1.45;letter-spacing:.06em;
+  text-transform:uppercase;text-align:center;color:var(--apagado-2)
+}
+.creditos b{color:var(--texto);font-weight:500}
+.creditos .rol{color:var(--coral);font-weight:500}
+.cierre{
+  margin:18px 0 0;display:flex;justify-content:space-between;align-items:baseline;
+  font-family:var(--mono);font-size:var(--t-rotulo);letter-spacing:.14em;text-transform:uppercase;color:var(--apagado)
+}
+.cierre b{color:var(--coral);font-weight:500}
+
+.tubo{
+  position:absolute;inset:0;z-index:4;pointer-events:none;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.12) 0 2px,transparent 2px 4px)
+}
+</style>
+</head>
+<body>
+<div class="cartel">
+  <div class="franja">
+    <span class="sello">Sin siglas</span>
+    <span class="ficha"><b>Estreno</b> · 2:40 · con subtítulos<br>Se entiende sin sonido</span>
+  </div>
+
+  <div class="cuerpo">
+    <div>
+      <p class="presenta">Sin siglas presenta</p>
+      <h1 class="titulo">Las nueve<em>en vídeo</em></h1>
+      <p class="bajada">Nuestras <b>nueve propuestas</b> en menos de tres minutos, contadas por Compi y con los once en píxeles.</p>
+      <div class="ver">
+        <div class="pegatina">
+          <img src="qr-peli.svg" alt="QR a sin-siglas.info/peli">
+          <strong>Dale al play</strong>
+        </div>
+        <p>Ya en la web<b>sin-siglas.info/peli</b></p>
+      </div>
+    </div>
+    <div class="movil">
+      <img src="peli-fotograma.jpg" alt="Fotograma de la peli: Compi presenta a los once de la lista, cada uno con su nombre">
+      <span class="play" aria-hidden="true"></span>
+    </div>
+  </div>
+
+  <div class="pie">
+    <div class="reparto" id="reparto"></div>
+    <p class="creditos">
+      <span class="rol">Presenta</span> Compi · con
+      <b>Laura Muñoz</b> · <b>Raúl Navarro</b> · <b>Rocío Galindo</b> · <b>José Pablo Fernández</b> ·
+      <b>Rafael López</b> · <b>Fran Bolívar</b> · <b>Leticia Algarra</b> · <b>Mario Barchéin</b> ·
+      <b>Mario Aranda</b> · <b>Violeta López</b> · <b>María Emilia Castillo</b> ·
+      <span class="rol">Guion</span> las nueve propuestas de la candidatura ·
+      <span class="rol">Voz</span> Compi
+    </p>
+    <p class="cierre"><span>Candidatura independiente</span><span>Vota el <b>martes 29</b></span></p>
+  </div>
+
+  <div class="tubo"></div>
+</div>
+
+<script src="../web/juego-munecos.js"></script>
+<script>
+/* el reparto en píxeles: Compi delante, más grande, y los once en su
+   orden de la lista, cada uno a 27x36 escalado por CSS sin suavizado */
+const reparto = document.getElementById("reparto");
+["compi","munoz","navarro","galindo","fernandez","lopezm","bolivar","algarra","barchein","aranda","lopeza","castillo"]
+  .forEach((k, i) => {
+    const c = document.createElement("canvas");
+    c.width = 27; c.height = 36;
+    c.getContext("2d").drawImage(MUNECOS.fotograma(k, i ? "quieto" : "saluda", i ? 0 : 150), 0, 0);
+    reparto.appendChild(c);
+  });
+</script>
+</body>
+</html>

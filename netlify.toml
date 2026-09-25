@@ -23,6 +23,13 @@
   to = "/#propuestas"
   status = 302
 
+# El cartel de la peli imprime sin-siglas.info/peli: lleva a la portada,
+# a la sección del estreno. 302 por lo mismo que /propuestas.
+[[redirects]]
+  from = "/peli"
+  to = "/#estreno"
+  status = 302
+
 # El ranking se llama igual en local y en producción: /api/ranking.
 # Así el mismo código de cliente vale para las dos cosas.
 [[redirects]]

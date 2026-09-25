@@ -24,6 +24,7 @@ QR = {
     "qr-buzon.svg": "https://sin-siglas.info/buzon",
     "qr-reto.svg": "https://sin-siglas.info/#quiz",
     "qr-juego.svg": "https://sin-siglas.info/juego",
+    "qr-peli.svg": "https://sin-siglas.info/peli",
 }
 AQUI = pathlib.Path(__file__).parent
 TINTA = "#191820"          # --texto del tema claro
