@@ -134,7 +134,13 @@ h1 em{font-style:normal;color:var(--coral-txt);display:block}
   border-radius:var(--r);overflow:hidden;
   touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none
 }
-#lienzo{display:block;width:100%;image-rendering:pixelated;cursor:pointer}
+/* el lienzo se queda con todos los toques: con manipulation, en cuanto el
+   dedo se deslizaba unos píxeles el navegador lo tomaba por scroll,
+   cancelaba la pulsación (el salto salía corto aunque mantuvieras) y la
+   página se movía a mitad de partida */
+#lienzo{display:block;width:100%;image-rendering:pixelated;cursor:pointer;
+  touch-action:none;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;
+  -webkit-user-select:none;user-select:none}
 /* los botones van en una barra debajo del lienzo y no encima: en la
    esquina de arriba tapaban al muñeco en lo alto del doble salto */
 .controles{display:flex;justify-content:flex-end;gap:.35rem;padding:.4rem .5rem;border-top:1px solid var(--line)}
@@ -1272,13 +1278,35 @@ document.addEventListener("keydown", e => {
   }
 });
 document.addEventListener("keyup", e => { if(TECLAS.includes(e.code)) pulsado = false; });
-lienzo.addEventListener("pointerdown", e => {
-  e.preventDefault();
+/* el toque: con eventos de puntero donde los hay (Android, iOS 13 en
+   adelante) y con eventos táctiles donde no. El dedo se captura al bajar,
+   así que se sabe cuándo se levanta aunque salga del lienzo */
+function toca(e){
+  if(e.cancelable) e.preventDefault();
   if(estado === "fin") return;
   pulsado = true; salta();
-});
-window.addEventListener("pointerup", () => { pulsado = false; });
-window.addEventListener("pointercancel", () => { pulsado = false; });
+}
+const suelta = () => { pulsado = false; };
+if(window.PointerEvent){
+  lienzo.addEventListener("pointerdown", e => {
+    if(lienzo.setPointerCapture){ try{ lienzo.setPointerCapture(e.pointerId); }catch(err){} }
+    toca(e);
+  });
+  lienzo.addEventListener("pointerup", suelta);
+  lienzo.addEventListener("pointercancel", suelta);
+  window.addEventListener("pointerup", suelta);
+} else {
+  lienzo.addEventListener("touchstart", toca, { passive: false });
+  lienzo.addEventListener("touchend", suelta);
+  lienzo.addEventListener("touchcancel", suelta);
+}
+/* ni menú de «guardar imagen» ni selección con la pulsación larga */
+lienzo.addEventListener("contextmenu", e => e.preventDefault());
+/* el iPhone solo deja sonar el audio si se desbloquea al levantar el dedo
+   o con un clic, no al apoyarlo: se intenta en cada uno hasta que suene */
+for(const ev of ["touchend", "click"]){
+  document.addEventListener(ev, () => { if(!sonido.ac || sonido.ac.state !== "running") sonido.arranca(); }, { passive: true });
+}
 
 for(const b of document.querySelectorAll(".control, #tema")) b.addEventListener("click", () => b.blur());
 
