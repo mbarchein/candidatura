@@ -996,19 +996,37 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
 .aviso:hover{background:rgba(244,121,107,.2)}
 .estreno .sec__head h2 em{font-style:normal;color:var(--coral-txt);display:block}
 .estreno__grid{display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:clamp(1.5rem,4vw,3rem)}
-.estreno__pieza{--alto:clamp(420px,66vh,620px);display:flex;flex-direction:column;gap:.9rem;margin:0}
+/* la pieza mide lo que su marco y el texto se parte debajo: si manda el
+   texto, el marco se ensanchaba sin crecer en alto y el vídeo, en cover,
+   perdía hasta un tercio por arriba y por abajo en portátiles de 657 px */
+.estreno__pieza{--alto:clamp(420px,66vh,620px);display:flex;flex-direction:column;gap:.9rem;margin:0;width:min-content}
 .estreno__marco{
   height:var(--alto);border-radius:var(--r);overflow:hidden;background:#000;
   border:1px solid var(--line-strong);box-shadow:0 24px 60px -30px rgba(var(--sombra-rgb),.9)
 }
-.estreno__marco--video{aspect-ratio:9/16}
-.estreno__marco--juego{aspect-ratio:4/5;display:block;transition:transform .2s ease}
+.estreno__marco--video{aspect-ratio:9/16;align-self:flex-start}
+.estreno__marco--juego{aspect-ratio:4/5;display:block;align-self:flex-start;transition:transform .2s ease}
 .estreno__marco--juego:hover{transform:translateY(-3px) rotate(-.6deg)}
 .estreno__marco video,.estreno__marco img{display:block;width:100%;height:100%;object-fit:cover}
+/* el vídeo nunca se recorta: si la caja no casa, bandas negras antes que perder subtítulos */
+.estreno__marco video{object-fit:contain}
 .estreno__pieza h3{font-size:var(--step-2);font-weight:500;margin:0;text-transform:uppercase;letter-spacing:-.01em}
 .estreno__pieza p{margin:0;color:var(--text-2);max-width:34ch}
 .estreno__pieza .btn{align-self:flex-start}
 .estreno__meta{font-family:var(--cifras);font-size:.8rem;color:var(--muted)}
+/* con el vídeo solo, texto y vídeo lado a lado: quien llega por
+   sin-siglas.info/peli ve el vídeo entero sin bajar, también en un
+   portátil de 657 px de alto. La altura sale de la pantalla menos la
+   barra y el aire de la sección */
+/* el ancla deja sitio a la barra fija, que si no tapa el borde del vídeo */
+.estreno{scroll-margin-top:60px}
+.estreno--solo .wrap{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:clamp(2rem,5vw,4.5rem);align-items:center}
+.estreno--solo .sec__head{margin-bottom:0}
+.estreno--solo .estreno__pieza{--alto:clamp(400px,calc(100vh - 190px),640px)}
+@media (max-width:860px){
+  .estreno--solo .wrap{display:block}
+  .estreno--solo .sec__head{margin-bottom:2.4rem}
+}
 @media (max-width:620px){
   .estreno__pieza{--alto:auto;width:100%}
   .estreno__marco{width:100%;height:auto}
@@ -1093,7 +1111,7 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
 </section>
 
 <!-- ===================== ESTRENO: EL VÍDEO ===================== -->
-<section class="sec estreno" id="estreno">
+<section class="sec estreno estreno--solo" id="estreno">
   <div class="wrap">
     <div class="sec__head">
       <p class="eyebrow eyebrow--coral">Estreno · para ver y compartir</p>
