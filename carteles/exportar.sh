@@ -3,7 +3,8 @@
 #
 #   ./carteles/exportar.sh            todos los carteles
 #   ./carteles/exportar.sh 2 6        solo esos dos
-#   ./carteles/exportar.sh pegatinas  las tres hojas A4 de pegatinas, a PDF y PNG
+#   ./carteles/exportar.sh pegatinas  las cuatro hojas A4 de pegatinas, a PDF y PNG
+#   ./carteles/exportar.sh caratula   la carátula del juego, a 1x y 2x
 #
 # Los números son identificadores del fuente (el ?n= de carteles.html),
 # no el orden de envío: los carteles no llevan numeración impresa para
@@ -41,7 +42,7 @@ declare -A NOMBRE=(
 # el PDF para llevarlo a imprimir, y un PNG solo para poder mirarlo
 if [ "${1:-}" = "pegatinas" ]; then
   mkdir -p "$SALIDA"
-  for hoja in pegatinas pegatinas-frases pegatinas-compi-2; do
+  for hoja in pegatinas pegatinas-frases pegatinas-compi-2 pegatinas-juego; do
     google-chrome --headless --disable-gpu --user-data-dir="$PERFIL" \
       --allow-file-access-from-files --virtual-time-budget=5000 \
       --no-pdf-header-footer --print-to-pdf="$AQUI/$hoja.pdf" \
@@ -92,6 +93,24 @@ for nombre, caja in {"pie-marca": (0, 0, 400, 400),
     trozo.save(web / f"{nombre}.png", optimize=True)
     print(f"{nombre} · {trozo.width}x{trozo.height} · se ve a {trozo.width//2}x{trozo.height//2}")
 PY
+  exit 0
+fi
+
+# la carátula del juego: 1080x1350 como la serie, más un 2x por si se
+# imprime. Va en su propio fichero porque es la única pieza oscura y
+# pinta la escena con los muñecos de web/juego-munecos.js
+if [ "${1:-}" = "caratula" ]; then
+  mkdir -p "$SALIDA"
+  for esc in 1 2; do
+    sufijo=""; [ "$esc" = 2 ] && sufijo="-2x"
+    google-chrome --headless --disable-gpu --hide-scrollbars \
+      --force-device-scale-factor=$esc --window-size=1080,1350 \
+      --user-data-dir="$PERFIL" --allow-file-access-from-files \
+      --virtual-time-budget=5000 --screenshot="$SALIDA/caratula-juego$sufijo.png" \
+      "file://$AQUI/caratula-juego.html" 2>/dev/null
+    printf 'caratula-juego%s.png · %s\n' "$sufijo" \
+      "$(file -b "$SALIDA/caratula-juego$sufijo.png" | cut -d, -f2 | tr -d ' ')"
+  done
   exit 0
 fi
 

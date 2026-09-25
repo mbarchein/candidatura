@@ -147,9 +147,11 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
   color:var(--text);text-decoration:none;white-space:nowrap
 }
 .nav__mark span{color:var(--cian-txt)}
-.nav__links{display:flex;gap:1.1rem;margin-left:auto;flex-wrap:wrap;align-items:center}
+.nav__links{display:flex;gap:.8rem;margin-left:auto;flex-wrap:wrap;align-items:center}
 .nav__links a{
-  font-family:var(--mono);font-size:.76rem;letter-spacing:.06em;text-transform:uppercase;
+  /* el hueco y el tracking van justos: con el enlace al juego, a 1.1rem
+     y .06em el botón coral bajaba a una segunda fila */
+  font-family:var(--mono);font-size:.76rem;letter-spacing:.03em;text-transform:uppercase;
   color:var(--muted);text-decoration:none
 }
 .nav__links a:hover{color:var(--text)}
@@ -978,6 +980,40 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
   .result__label{font-size:.74rem}
   .mascota-pie{font-size:.74rem}
 }
+
+/* ---------- estreno: la peli de Compi y el juego ----------
+   Va justo debajo de las cifras porque es lo último que ha salido y lo
+   que más se comparte. Las dos piezas van a la misma altura y cada una
+   con su proporción de verdad (9:16 el vídeo, 4:5 la carátula): recortar
+   el vídeo para que case le quitaba los subtítulos de abajo */
+.aviso{
+  display:inline-flex;align-items:center;gap:.6rem;margin-bottom:1.1rem;
+  font-family:var(--mono);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;font-weight:500;
+  color:var(--text);text-decoration:none;border:1px solid var(--coral);border-radius:999px;
+  padding:.4rem .9rem .4rem .45rem;background:rgba(244,121,107,.1);transition:background .16s ease
+}
+.aviso b{background:var(--coral);color:#180a08;border-radius:999px;padding:.18rem .55rem;font-weight:500}
+.aviso:hover{background:rgba(244,121,107,.2)}
+.estreno .sec__head h2 em{font-style:normal;color:var(--coral-txt);display:block}
+.estreno__grid{display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:clamp(1.5rem,4vw,3rem)}
+.estreno__pieza{--alto:clamp(420px,66vh,620px);display:flex;flex-direction:column;gap:.9rem;margin:0}
+.estreno__marco{
+  height:var(--alto);border-radius:var(--r);overflow:hidden;background:#000;
+  border:1px solid var(--line-strong);box-shadow:0 24px 60px -30px rgba(var(--sombra-rgb),.9)
+}
+.estreno__marco--video{aspect-ratio:9/16}
+.estreno__marco--juego{aspect-ratio:4/5;display:block;transition:transform .2s ease}
+.estreno__marco--juego:hover{transform:translateY(-3px) rotate(-.6deg)}
+.estreno__marco video,.estreno__marco img{display:block;width:100%;height:100%;object-fit:cover}
+.estreno__pieza h3{font-size:var(--step-2);font-weight:500;margin:0;text-transform:uppercase;letter-spacing:-.01em}
+.estreno__pieza p{margin:0;color:var(--text-2);max-width:34ch}
+.estreno__pieza .btn{align-self:flex-start}
+.estreno__meta{font-family:var(--cifras);font-size:.8rem;color:var(--muted)}
+@media (max-width:620px){
+  .estreno__pieza{--alto:auto;width:100%}
+  .estreno__marco{width:100%;height:auto}
+  .estreno__marco--video{max-width:380px;margin-inline:auto}
+}
 </style>
 
 <!-- ===================== NAVEGACIÓN ===================== -->
@@ -990,6 +1026,7 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
       <a href="#equipo">Quiénes somos</a>
       <a href="#asamblea">Lo que dijimos</a>
       <a href="#faq">Dudas</a>
+      <a href="/juego">El juego</a>
       <a href="/buzon">El buzón</a>
       <button class="tema" id="tema" type="button" aria-pressed="false" aria-label="Cambiar a tema claro">
         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g class="tema__luna"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></g><g class="tema__sol"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.2 5.2l1.6 1.6M17.2 17.2l1.6 1.6M18.8 5.2l-1.6 1.6M6.8 17.2l-1.6 1.6"/></g></svg>
@@ -1004,6 +1041,7 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
   <canvas class="hero__mesh" id="mesh-hero" aria-hidden="true"></canvas>
   <div class="hero__glow" aria-hidden="true"></div>
   <div class="wrap hero__in">
+    <a class="aviso" href="#estreno"><b>Nuevo</b> La peli de Compi y el juego de la lista</a>
     <p class="eyebrow">Elecciones al Comité de Empresa · Nazaríes</p>
     <h1>Sin siglas.<em>Solo compañerxs.</em></h1>
     <p class="hero__sub">Representación de la plantilla, <b>hecha desde dentro</b>.</p>
@@ -1052,6 +1090,47 @@ a{color:var(--cian-txt);text-decoration-thickness:1px;text-underline-offset:3px}
     <div class="fact"><div class="fact__n tnum">0</div><div class="fact__l">Siglas<br>detrás</div></div>
     <div class="fact"><div class="fact__n tnum">4</div><div class="fact__l">Compromisos<br>concretos</div></div>
     <div class="fact"><div class="fact__n tnum">100%</div><div class="fact__l">Plantilla<br>a la que respondemos</div></div>
+  </div>
+</section>
+
+<!-- ===================== ESTRENO: VÍDEO Y JUEGO ===================== -->
+<section class="sec estreno" id="estreno">
+  <div class="wrap">
+    <div class="sec__head">
+      <p class="eyebrow eyebrow--coral">Estreno · para ver y para jugar</p>
+      <h2>Compi te lo cuenta. <em>Luego te toca correr.</em></h2>
+      <p class="lede muted">
+        Las nueve propuestas en menos de tres minutos, contadas por Compi y con los once en
+        píxeles. Y un juego para saltar los problemas de siempre con quien tú elijas de la lista.
+      </p>
+    </div>
+    <div class="estreno__grid">
+      <figure class="estreno__pieza">
+        <div class="estreno__marco estreno__marco--video">
+          <video controls playsinline preload="none" poster="video/peli-compi.jpg"
+                 aria-label="La peli de Compi: las nueve propuestas, con subtítulos">
+            <source src="video/peli-compi.mp4" type="video/mp4">
+            <a href="video/peli-compi.mp4">Descarga el vídeo</a>
+          </video>
+        </div>
+        <figcaption>
+          <h3>La peli de Compi</h3>
+          <p>Nueve propuestas, una detrás de otra. Lleva subtítulos, así que se entiende sin sonido.</p>
+          <p class="estreno__meta">2:40 · vertical · con subtítulos</p>
+        </figcaption>
+      </figure>
+      <figure class="estreno__pieza">
+        <a class="estreno__marco estreno__marco--juego" href="/juego">
+          <img src="img/caratula-juego.webp" width="720" height="900" loading="lazy"
+               alt="Carátula de La carrera hasta la urna: Compi salta el pozo de las falsas promesas y abajo están los doce personajes para elegir">
+        </a>
+        <figcaption>
+          <h3>La carrera hasta la urna</h3>
+          <p>Salta la letra pequeña, esquiva al cansino del pasillo, coge los churros de cocina y sube al marcador.</p>
+          <a class="btn btn--coral" href="/juego">Jugar ahora</a>
+        </figcaption>
+      </figure>
+    </div>
   </div>
 </section>
 

@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Pegatinas del juego · Sin siglas, solo compañerxs</title>
+<link rel="stylesheet" href="tipos.css">
+<style>
+/* Cuarta hoja A4 de pegatinas: la del minijuego, «La carrera hasta la
+   urna» (sin-siglas.info/juego). Las otras tres hablan de lo que se
+   pide; esta es la que se pega en el portátil o en la taza sin tener
+   que explicar nada, porque todo lo que sale ya lo ha sufrido quien la
+   mira: la cafetera sin agua, la impresora, el cansino del pasillo.
+   Y la que lleva el QR hace de puerta al juego.
+
+   Nada de lo que se ve está redibujado para la hoja. Los muñecos salen
+   de web/juego-munecos.js, el mismo fichero que usa el juego, y los
+   obstáculos son copia literal de TIPOS y ALMUERZOS de web/juego.html.
+   Copia y no import porque juego.html es una página entera y no un
+   módulo: si cambia un dibujo allí, se vuelve a pegar aquí.
+
+   Mismo sistema de producción que las otras tres hojas (ver
+   pegatinas-compi-2.html), que es lo que manda sobre el diseño:
+   - 3 mm de color antes de la línea de corte (el padding de .pieza):
+     el error de tijera cae en crema.
+   - Radio de esquina 6 mm mínimo, para cortarla de un solo arco.
+   - Nada a menos de 10 mm del borde del A4.
+   - Piezas en posición absoluta y giradas una a una, sin compartir
+     borde.
+
+   Lo propio de esta: el fondo de las pegatinas de escena es la noche
+   del juego (#100f1c) y no el crema, porque la pantalla del juego es
+   oscura y fuera de ella los muñecos no se reconocen como «los del
+   juego». Los objetos sueltos sí van en crema: con su contorno de
+   tinta se leen igual y la hoja no se convierte en un bloque negro.
+
+   Exportar: ./carteles/exportar.sh pegatinas */
+:root{
+  --papel:#f6f2ea; --tinta:#191820;
+  --cian:#0d6f92; --coral:#bf3f2f;
+  --cian-vivo:#3fc9f0; --coral-vivo:#f4796b; --coral-claro:#f9a79d;
+  --apagado:#5e574e; --apagado-2:#8a8177;
+  --corte:rgba(74,58,46,.55);
+  /* los tres tonos del juego: fondo, pared y el blanco de sus bocadillos */
+  --noche:#100f1c; --pared:#161424; --hueso:#e9f2fc;
+  --azul:#2a4a80; --azul-hondo:#1b3159; --cian-hondo:#1b9fc9; --cian-noche:#0d4a63;
+
+  --display:"Gellix","Helvetica Neue",Arial,sans-serif;
+  --grito:"Archivo Black","Arial Black",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  --mano:"Caveat",cursive;
+}
+
+@page{ size:A4; margin:0 }
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#fff;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+.hoja{width:210mm;height:297mm;position:relative;overflow:hidden;background:#fff;
+  font-family:var(--display);color:var(--tinta)}
+
+.tapa{position:absolute;left:10mm;top:7mm;width:190mm;
+  display:flex;justify-content:space-between;align-items:baseline;gap:6mm;
+  border-bottom:1pt solid rgba(74,58,46,.3);padding-bottom:2mm}
+.tapa h1{font-family:var(--grito);font-size:10pt;line-height:1;letter-spacing:-.02em;
+  text-transform:uppercase;margin:0}
+.tapa h1 em{font-style:normal;color:var(--coral)}
+.tapa p{font-family:var(--mono);font-size:5.4pt;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--apagado);margin:0;text-align:right;line-height:1.6}
+
+/* .pieza es la línea de tijera más el filete de seguridad (su padding);
+   .arte es lo único que se imprime en color. No se tocan nunca. */
+.pieza{position:absolute;border:.6mm dashed var(--corte);padding:3mm;background:var(--papel)}
+.pieza > .arte{width:100%;height:100%;overflow:hidden;position:relative;
+  display:flex;flex-direction:column}
+.r-m{border-radius:9mm} .r-m > .arte{border-radius:6mm}
+
+/* todos los dibujos: el canvas lleva el mapa de bits a escala 8 y el
+   CSS lo baja a su medida en mm; pixelated para que, si el navegador
+   lo reescala, el píxel siga cuadrado y no se emborrone */
+canvas{display:block;image-rendering:pixelated;flex:0 0 auto}
+
+/* ---------- la pantalla: el fondo del juego ---------- */
+.pantalla > .arte{background:var(--noche);border:1.4mm solid var(--tinta)}
+
+/* la portada: la escena arriba y el título debajo, como la carátula */
+.portada > .arte{padding:3mm 4mm 3mm;align-items:center;justify-content:space-between}
+.portada .escena{position:relative}
+.portada .suma{position:absolute;font-family:var(--mono);font-weight:500;font-size:7.5pt;
+  color:var(--coral-claro);letter-spacing:.02em}
+/* el relieve a escalones de la carátula, en pequeño: sombras duras sin
+   desenfoque, dos tintas planas */
+.portada h2{font-family:var(--grito);font-weight:900;font-size:14.5pt;line-height:1;
+  letter-spacing:-.03em;text-transform:uppercase;color:var(--hueso);margin:0;
+  transform:skewX(-9deg);
+  text-shadow:.35mm .35mm 0 var(--cian-hondo),.7mm .7mm 0 var(--cian-hondo),1.05mm 1.05mm 0 var(--cian-noche)}
+.portada h2 em{font-style:normal;color:var(--coral-vivo);
+  text-shadow:.35mm .35mm 0 #c9584c,.7mm .7mm 0 #c9584c,1.05mm 1.05mm 0 #6b2a26}
+.portada p{font-family:var(--mono);font-size:5.6pt;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--cian-vivo);margin:0}
+
+/* los que te paran: bocadillo arriba a la izquierda, muñeco a la derecha
+   mirando hacia él, y la placa con el nombre del obstáculo */
+.paron > .arte{justify-content:flex-end}
+.paron canvas{position:absolute;right:1mm;bottom:7mm}
+/* el bocadillo es el del juego: rectángulo claro con el pico de dos
+   píxeles hacia quien habla, sin redondear, que en píxel no hay curvas */
+.bocadillo{position:absolute;left:3.5mm;top:4mm;background:var(--hueso);color:var(--tinta);
+  font-family:var(--mono);font-weight:500;font-size:8pt;line-height:1.25;padding:1.6mm 2.2mm;
+  max-width:31mm}
+.bocadillo::after{content:"";position:absolute;right:-1.6mm;top:40%;width:1.6mm;height:1.6mm;
+  background:var(--hueso)}
+.placa{width:100%;background:var(--tinta);padding:1.6mm 2mm;text-align:center;position:relative}
+.placa b{font-family:var(--mono);font-weight:500;font-size:6.2pt;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--papel);display:block}
+.placa span{font-family:var(--mono);font-size:5pt;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--cian-vivo);display:block;margin-top:.6mm}
+.pantalla .placa{background:#05060c}
+
+/* ---------- la ficha: objeto suelto en crema ---------- */
+.ficha > .arte{background:var(--papel);border:1.4mm solid var(--tinta);align-items:center}
+.ficha canvas{margin:auto}
+
+/* ---------- el objeto: dibujo a la izquierda, texto a la derecha ---------- */
+.objeto > .arte{background:var(--tinta);flex-direction:row;align-items:center;gap:3.5mm;
+  padding:3mm 4.5mm}
+.objeto .txt{min-width:0}
+.objeto em{font-style:normal;font-family:var(--mono);font-size:5.4pt;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--coral-vivo);display:block;margin-bottom:1.2mm}
+.objeto b{font-family:var(--grito);font-size:10.5pt;line-height:1.02;letter-spacing:-.03em;
+  text-transform:uppercase;color:var(--papel);display:block}
+.objeto span{font-family:var(--mono);font-size:5.2pt;letter-spacing:.08em;color:var(--cian-vivo);
+  display:block;margin-top:1.3mm}
+/* los almuerzos: piezas estrechas, así que menos aire y letra algo menor
+   para que «Churros gratis en cocina» quepa sin partir palabras */
+.objeto--corto > .arte{gap:2.5mm;padding:3mm 3.5mm}
+.objeto--corto em{letter-spacing:.1em}
+.objeto--corto b{font-size:9pt}
+
+/* el menú de la ofi: los cuatro almuerzos en fila, cada uno con su
+   nombre debajo. Van juntos en una pieza porque en la hoja no cabían
+   cuatro pegatinas sueltas, y juntos se leen como la carta que son */
+.menu > .arte{background:var(--tinta);justify-content:center;gap:1.6mm;padding:2.4mm 3.5mm}
+.menu em{font-style:normal;font-family:var(--mono);font-size:5.4pt;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--coral-vivo);display:block}
+.menu ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:2mm;align-items:end}
+.menu li{display:flex;flex-direction:column;align-items:center;gap:1.3mm;text-align:center}
+.menu li b{font-family:var(--grito);font-size:6.6pt;line-height:1.05;letter-spacing:-.02em;color:var(--papel);text-transform:uppercase}
+
+/* la papeleta: el dibujo y el +25 que sale al cogerla, en grande */
+.voto > .arte{background:var(--coral);flex-direction:row;align-items:center;justify-content:center;
+  gap:2.5mm;padding:3mm}
+.voto b{font-family:var(--grito);font-size:17pt;line-height:1;letter-spacing:-.04em;color:var(--papel);
+  display:block}
+.voto span{font-family:var(--mono);font-size:5pt;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--papel);display:block;margin-top:1mm;opacity:.85}
+
+/* la reunión que se alarga: aquí el dibujo es el rótulo, así que va en
+   HTML y no en canvas -- es la barra azul del juego con su filo cian,
+   y el texto se puede cambiar sin tocar píxeles */
+.reunion > .arte{background:var(--azul);border:1.4mm solid var(--tinta);
+  border-left:3mm solid var(--cian-vivo);justify-content:center;padding:2mm 4mm}
+.reunion b{font-family:var(--mono);font-weight:500;font-size:15pt;line-height:1;color:var(--hueso);
+  display:block;letter-spacing:.01em}
+.reunion span{font-family:var(--mono);font-size:5.2pt;letter-spacing:.16em;text-transform:uppercase;
+  color:#9ce2f6;display:block;margin-top:1.4mm}
+
+/* la tira de elegir personaje */
+.tira > .arte{align-items:center;justify-content:center;gap:1.6mm;padding:2.5mm 4mm}
+.tira p{font-family:var(--mono);font-size:5.6pt;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--cian-vivo);margin:0}
+.tira p b{color:var(--hueso);font-weight:500}
+
+/* el QR, en crema como la pegatina de precio de la carátula: un QR
+   claro sobre oscuro no lo leen todos los móviles */
+.qr > .arte{background:var(--papel);border:1.4mm solid var(--tinta);align-items:center;
+  justify-content:center;padding:3mm}
+.qr img{display:block;width:34mm;height:34mm}
+.qr strong{display:block;font-family:var(--grito);font-size:12pt;text-transform:uppercase;
+  line-height:1;margin-top:2.6mm;letter-spacing:-.02em}
+.qr small{display:block;font-family:var(--mono);font-size:6.4pt;margin-top:1.2mm;color:var(--cian)}
+
+.pie{position:absolute;left:10mm;bottom:6mm;width:190mm;
+  display:flex;justify-content:space-between;align-items:baseline;gap:6mm;
+  border-top:1pt solid rgba(74,58,46,.2);padding-top:2mm}
+.pie p{font-family:var(--mono);font-size:5pt;letter-spacing:.05em;color:var(--apagado-2);
+  margin:0;line-height:1.6;max-width:132mm}
+.pie b{font-family:var(--mano);font-size:10pt;color:var(--tinta);font-weight:600;flex:0 0 auto}
+</style>
+</head>
+<body>
+<div class="hoja">
+
+  <div class="tapa">
+    <h1>La carrera<em> hasta la urna</em></h1>
+    <p>A4 adhesivo al 100 % · corta por los puntos · el filete crema es margen de tijera</p>
+  </div>
+
+  <!-- ===== fila 1: la portada y el QR ===== -->
+
+  <!-- la portada: Compi saltando el pozo, como en la carátula. El +25
+       va en HTML encima del canvas, en la papeleta que acaba de coger -->
+  <div class="pieza r-m pantalla portada" style="left:12mm;top:21mm;width:120mm;height:61mm;transform:rotate(-2deg)">
+    <div class="arte">
+      <div class="escena">
+        <canvas data-dib="portada" data-mmpx="0.8"></canvas>
+        <span class="suma" style="left:22%;top:14%">+25</span>
+      </div>
+      <h2>La carrera <em>hasta la urna</em></h2>
+      <p>1 jugador · 12 personajes · sin-siglas.info/juego</p>
+    </div>
+  </div>
+
+  <div class="pieza r-m qr" style="left:140mm;top:22mm;width:54mm;height:60mm;transform:rotate(3deg)">
+    <div class="arte">
+      <img src="qr-juego.svg" alt="QR a sin-siglas.info/juego">
+      <strong>Juega ya</strong>
+      <small>sin-siglas.info/juego</small>
+    </div>
+  </div>
+
+  <!-- ===== fila 2: los dos que te cortan el paso, y Compi que llega ===== -->
+
+  <!-- miran a la izquierda, como en el juego: hacia donde llegas tú, que
+       es donde está el bocadillo -->
+  <div class="pieza r-m pantalla paron" style="left:12mm;top:89mm;width:60mm;height:54mm;transform:rotate(2.5deg)">
+    <div class="arte">
+      <span class="bocadillo">¿Tienes un minutito?</span>
+      <canvas data-quien="cansino" data-pose="explica" data-tt="420" data-izq="1" data-mmpx="0.95"></canvas>
+      <div class="placa"><b>El cansino del pasillo</b><span>adiós a la mañana</span></div>
+    </div>
+  </div>
+
+  <div class="pieza r-m pantalla paron" style="left:79mm;top:91mm;width:56mm;height:52mm;transform:rotate(-3deg)">
+    <div class="arte">
+      <span class="bocadillo">¿Cómo vas?</span>
+      <canvas data-quien="pm" data-pose="anda" data-tt="155" data-izq="1" data-mmpx="0.95"></canvas>
+      <div class="placa"><b>Product manager</b><span>pues ya no voy</span></div>
+    </div>
+  </div>
+
+  <div class="pieza r-m ficha" style="left:143mm;top:92mm;width:52mm;height:54mm;transform:rotate(3.5deg)">
+    <div class="arte">
+      <canvas data-quien="compi" data-pose="celebra" data-tt="330" data-mmpx="0.95"></canvas>
+      <div class="placa"><b>Llegué a la urna</b><span>vota el martes 29-S</span></div>
+    </div>
+  </div>
+
+  <!-- ===== fila 3: los doce corriendo, y la reunión ===== -->
+
+  <!-- cada uno con un tt distinto para que no pisen todos a la vez: en
+       fila y con el mismo paso parecen un desfile, no una carrera -->
+  <div class="pieza r-m pantalla tira" style="left:12mm;top:151mm;width:120mm;height:33mm;transform:rotate(-1.5deg)">
+    <div class="arte">
+      <p>Elige con quién corres · <b>Compi y la lista</b></p>
+      <canvas data-dib="tira" data-mmpx="0.5"></canvas>
+    </div>
+  </div>
+
+  <div class="pieza r-m reunion" style="left:139mm;top:155mm;width:57mm;height:25mm;transform:rotate(-3.5deg)">
+    <div class="arte">
+      <b>10:00 – ¿?</b>
+      <span>la reunión que se alarga</span>
+    </div>
+  </div>
+
+  <!-- ===== fila 4: los obstáculos sueltos ===== -->
+
+  <div class="pieza r-m ficha" style="left:12mm;top:191mm;width:42mm;height:48mm;transform:rotate(-3deg)">
+    <div class="arte">
+      <canvas data-dib="cafetera" data-mmpx="1.1"></canvas>
+      <div class="placa"><b>Café sin agua</b><span>sin café no se corre</span></div>
+    </div>
+  </div>
+
+  <div class="pieza r-m ficha" style="left:59mm;top:192mm;width:44mm;height:46mm;transform:rotate(2.5deg)">
+    <div class="arte">
+      <canvas data-dib="impresora" data-mmpx="1.35"></canvas>
+      <div class="placa"><b>Impresora atascada</b><span>como todos los lunes</span></div>
+    </div>
+  </div>
+
+  <div class="pieza r-m ficha" style="left:108mm;top:190mm;width:40mm;height:48mm;transform:rotate(-2deg)">
+    <div class="arte">
+      <canvas data-dib="letra" data-mmpx="1.25"></canvas>
+      <div class="placa"><b>Letra pequeña</b><span>te enreda</span></div>
+    </div>
+  </div>
+
+  <div class="pieza r-m voto" style="left:153mm;top:193mm;width:42mm;height:40mm;transform:rotate(4.5deg)">
+    <div class="arte">
+      <canvas data-dib="papeleta" data-mmpx="2"></canvas>
+      <div><b>+25</b><span>por papeleta</span></div>
+    </div>
+  </div>
+
+  <!-- ===== fila 5: el pozo y los dos almuerzos ===== -->
+
+  <div class="pieza r-m objeto" style="left:12mm;top:246mm;width:66mm;height:32mm;transform:rotate(2deg)">
+    <div class="arte">
+      <canvas data-dib="pozo" data-mmpx="0.62"></canvas>
+      <div class="txt">
+        <em>Game over</em>
+        <b>Pozo de las falsas promesas</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="pieza r-m menu" style="left:83mm;top:244mm;width:113mm;height:33mm;transform:rotate(-1.5deg)">
+    <div class="arte">
+      <em>+100 cada uno · los churros, con subidón</em>
+      <ul>
+        <li><canvas data-dib="churros" data-mmpx="0.9"></canvas><b>Churros gratis en cocina</b></li>
+        <li><canvas data-dib="mollete" data-mmpx="0.9"></canvas><b>Mollete con jamón</b></li>
+        <li><canvas data-dib="pizza" data-mmpx="0.9"></canvas><b>Pizza pepperoni de Pedro</b></li>
+        <li><canvas data-dib="hamburguesa" data-mmpx="0.9"></canvas><b>Hamburguesa del Mumama</b></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="pie">
+    <p>Candidatura registrada conforme a la normativa de elecciones sindicales. La hacemos los
+      once candidatos: no es una comunicación de la empresa. Juega en sin-siglas.info/juego.</p>
+    <b>29 de septiembre</b>
+  </div>
+
+</div>
+
+<script src="../web/juego-munecos.js"></script>
+<script>
+/* ------------------------------------------------------------------
+   Cada dibujo se pinta a su tamaño real en píxeles del juego en un
+   lienzo aparte, y luego se copia a escala 8 sin suavizado al canvas
+   visible. El PDF recibe así un mapa de bits con resolución de sobra y
+   el píxel llega cuadrado a la impresora, igual que en las otras hojas.
+   ------------------------------------------------------------------ */
+const ESC = 8;
+
+/* la paleta y los obstáculos, copiados de web/juego.html (C, rect,
+   silueta, TIPOS, ALMUERZOS). Solo cambia que reciben el lienzo y la
+   y de arriba en vez de usar el SUELO del juego, y que los pilotos que
+   allí parpadean se quedan encendidos: en papel no hay fotograma dos */
+const C = {
+  O:"#050c1c", W:"#e9f2fc", gris:"#b8c8dd", R:"#f4796b", r:"#c9584c",
+  cian:"#3fc9f0", cianO:"#1b9fc9", azul:"#2a4a80", azulO:"#1b3159", madera:"#8a6440", maderaO:"#6a4630"
+};
+const OBJ = {
+  letra(p, x, y){
+    p.silueta(x, y, 12, 21); p.rect(x, y, 12, 21, C.W);
+    for(let j=3; j<17; j+=2) p.rect(x+2, y+j, j > 12 ? 5 : 8, 1, C.gris);
+    p.rect(x+8, y+16, 3, 3, C.R);
+    p.rect(x+10, y, 2, 2, C.O); p.rect(x+9, y+1, 1, 1, C.gris);
+  },
+  cafetera(p, x, y){
+    p.silueta(x, y, 14, 24); p.rect(x, y, 14, 24, "#2a2f3a"); p.rect(x+13, y, 1, 24, "#1b1f28");
+    p.rect(x+2, y+2, 10, 6, "#1b1f28");
+    p.rect(x+3, y+3, 8, 2, C.R);                                      // el piloto de sin agua
+    p.rect(x+3, y+6, 3, 1, C.gris); p.rect(x+7, y+6, 3, 1, C.gris);
+    p.rect(x+3, y+10, 2, 1, C.cian); p.rect(x+6, y+10, 2, 1, C.cian); p.rect(x+9, y+10, 2, 1, C.cian);
+    p.rect(x+3, y+14, 8, 7, "#0e1016"); p.rect(x+5, y+17, 4, 4, C.W); p.rect(x+5, y+17, 4, 1, C.gris);
+  },
+  /* y es la parte de arriba del cuerpo: el papel asoma 5 píxeles encima */
+  impresora(p, x, y){
+    p.rect(x+4, y-5, 10, 6, C.O); p.rect(x+5, y-4, 8, 5, C.W);       // el papel arrugado que asoma
+    p.rect(x+6, y-3, 2, 1, C.gris); p.rect(x+9, y-2, 3, 1, C.gris); p.rect(x+7, y-1, 1, 1, C.gris);
+    p.silueta(x, y, 18, 12); p.rect(x, y, 18, 12, C.gris); p.rect(x, y, 18, 2, "#dfe7ef");
+    p.rect(x+2, y+6, 14, 1, C.O);
+    p.rect(x+14, y+3, 2, 2, C.R);
+    p.rect(x+1, y+11, 16, 1, "#8a8f9c");
+  },
+  /* la de pintaPapeletas del juego, que allí va suelta dentro de pinta() */
+  papeleta(p, x, y){
+    p.silueta(x, y, 7, 8); p.rect(x, y, 7, 8, C.W); p.rect(x+1, y+1, 5, 1, C.gris);
+    p.rect(x+2, y+3, 1, 1, C.R); p.rect(x+4, y+3, 1, 1, C.R); p.rect(x+3, y+4, 1, 1, C.R);
+    p.rect(x+2, y+5, 1, 1, C.R); p.rect(x+4, y+5, 1, 1, C.R);
+  },
+  /* y es la caja de papel: los churros asoman 5 píxeles encima */
+  churros(p, x, y){
+    p.rect(x+1, y-4, 2, 6, C.O); p.rect(x+4, y-5, 2, 6, C.O); p.rect(x+7, y-3, 2, 5, C.O);
+    p.rect(x+1, y-3, 1, 5, "#d9a24a"); p.rect(x+4, y-4, 1, 5, "#e8b860"); p.rect(x+7, y-2, 1, 4, "#d9a24a");
+    p.silueta(x, y, 10, 8); p.rect(x, y, 10, 8, C.W);
+    p.rect(x, y+2, 10, 1, C.R); p.rect(x, y+5, 10, 1, C.R);
+    p.rect(x+1, y+7, 8, 1, C.gris);
+  },
+  /* el jamón sobresale un píxel por cada lado del pan */
+  mollete(p, x, y){
+    p.silueta(x, y, 12, 8);
+    p.rect(x, y, 12, 3, "#e3bf86"); p.rect(x+1, y, 10, 1, "#f0d4a0");
+    p.rect(x-1, y+3, 14, 2, "#c9584c"); p.rect(x, y+3, 3, 1, "#f9a79d"); p.rect(x+7, y+4, 3, 1, "#f9a79d");
+    p.rect(x, y+5, 12, 3, "#c99a5a");
+  },
+  /* la porción con la punta hacia abajo, borde arriba y tres pepperonis */
+  pizza(p, x, y){
+    const filas = [[0,12],[0,12],[1,10],[2,8],[3,6],[4,4],[5,2]];
+    filas.forEach(([a, w], i) => p.rect(x + a - 1, y + i - 1, w + 2, 3, C.O));
+    p.rect(x, y, 12, 2, "#c98a3a"); p.rect(x, y, 12, 1, "#e0a85a");
+    filas.slice(2).forEach(([a, w], i) => p.rect(x + a, y + 2 + i, w, 1, "#f2c94c"));
+    p.rect(x + 2, y + 2, 2, 2, "#c9584c"); p.rect(x + 7, y + 3, 2, 2, "#c9584c"); p.rect(x + 5, y + 5, 2, 1, "#c9584c");
+  },
+  hamburguesa(p, x, y){
+    p.silueta(x, y, 12, 10);
+    p.rect(x + 1, y, 10, 1, "#d9a24a"); p.rect(x, y + 1, 12, 2, "#d9a24a");
+    p.rect(x + 3, y + 1, 1, 1, "#fff3d6"); p.rect(x + 7, y + 1, 1, 1, "#fff3d6"); p.rect(x + 5, y, 1, 1, "#fff3d6");
+    p.rect(x, y + 3, 12, 1, "#5cb85c"); p.rect(x + 1, y + 4, 11, 1, "#f2c94c");
+    p.rect(x, y + 5, 12, 2, "#6a3a22"); p.rect(x, y + 7, 12, 3, "#c98a3a");
+  }
+};
+
+/* la pared y el suelo del juego, con los pozos recortados. El suelo va
+   DESPUÉS del muñeco, como allí, para que al caer lo tapen los bordes */
+function pared(p, w, suelo){
+  p.rect(0, 0, w, suelo, "#100f1c");
+  p.rect(0, suelo - 12, w, 12, "#161424"); p.rect(0, suelo - 12, w, 1, "#2a2640");
+}
+function suelo(p, w, h, y, huecos){
+  let x0 = 0;
+  const tramo = (a, b) => {
+    if(b <= a) return;
+    p.rect(a, y, b - a, h - y, "#1d1a2e");
+    p.rect(a, y, b - a, 1, "rgba(208,192,176,.35)");
+  };
+  for(const [a, b] of huecos){ tramo(x0, a); p.rect(a, y, b - a, h - y, "#05060c"); x0 = b; }
+  tramo(x0, w);
+  for(let i = 2; i < w; i += 9)
+    if(!huecos.some(([a, b]) => i + 3 > a && i < b)) p.rect(i, y + 3 + (i % 3) * 2, 3, 1, "rgba(208,192,176,.14)");
+}
+
+/* las escenas de más de un objeto: tamaño en píxeles del juego y cómo
+   se pintan. Las de un solo objeto dejan un píxel de aire para la
+   silueta, que se pinta por fuera de la caja */
+const DIB = {
+  letra:     { w: 14, h: 23, f: p => OBJ.letra(p, 1, 1) },
+  cafetera:  { w: 16, h: 26, f: p => OBJ.cafetera(p, 1, 1) },
+  impresora: { w: 20, h: 19, f: p => OBJ.impresora(p, 1, 6) },
+  papeleta:  { w: 9,  h: 10, f: p => OBJ.papeleta(p, 1, 1) },
+  churros:   { w: 12, h: 15, f: p => OBJ.churros(p, 1, 6) },
+  mollete:   { w: 14, h: 10, f: p => OBJ.mollete(p, 1, 1) },
+  pizza:     { w: 14, h: 9,  f: p => OBJ.pizza(p, 1, 1) },
+  hamburguesa: { w: 14, h: 12, f: p => OBJ.hamburguesa(p, 1, 1) },
+
+  /* Compi en lo alto del salto, justo encima del pozo; la letra pequeña
+     ya saltada detrás y las papeletas por delante */
+  portada: { w: 130, h: 40, f: p => {
+    pared(p, 130, 34);
+    OBJ.letra(p, 12, 13);
+    OBJ.papeleta(p, 30, 12); OBJ.papeleta(p, 101, 16); OBJ.papeleta(p, 112, 16);
+    p.sprite("compi", "salta", 0, 62, -4);
+    suelo(p, 130, 40, 34, [[62, 90]]);
+  }},
+
+  /* cayendo: el muñeco se pinta antes que el suelo, así que los bordes
+     del pozo le tapan los lados y se ve que está dentro */
+  pozo: { w: 40, h: 34, f: p => {
+    pared(p, 40, 24);
+    p.sprite("compi", "cae", 0, 7, -2);
+    suelo(p, 40, 34, 24, [[12, 28]]);
+  }},
+
+  /* los doce: separados 15 píxeles, un par más que el ancho del
+     muñeco, y con el lienzo de cada uno solapado con el del vecino */
+  tira: { w: 12 * 15 + 14, h: 37, f: p => {
+    ["compi","munoz","navarro","galindo","fernandez","lopezm","bolivar","algarra","barchein","aranda","lopeza","castillo"]
+      .forEach((k, i) => p.sprite(k, "anda", (i % 4) * 155, i * 15 - 6, 0));
+  }}
+};
+
+function lienzo(w, h, f){
+  const n = document.createElement("canvas");
+  n.width = w; n.height = h;
+  const g = n.getContext("2d");
+  g.imageSmoothingEnabled = false;
+  const rect = (x, y, ww, hh, k) => { g.fillStyle = k; g.fillRect(Math.round(x), Math.round(y), ww, hh); };
+  f({
+    rect,
+    silueta: (x, y, ww, hh) => rect(x - 1, y - 1, ww + 2, hh + 2, C.O),
+    sprite: (quien, pose, tt, x, y, izq) => g.drawImage(MUNECOS.fotograma(quien, pose, tt, izq), x, y)
+  });
+  return n;
+}
+
+document.querySelectorAll("canvas[data-dib], canvas[data-quien]").forEach(c => {
+  const d = c.dataset;
+  const n = d.dib
+    ? lienzo(DIB[d.dib].w, DIB[d.dib].h, DIB[d.dib].f)
+    : MUNECOS.fotograma(d.quien, d.pose, +d.tt, !!d.izq);
+  c.width = n.width * ESC; c.height = n.height * ESC;
+  const g = c.getContext("2d");
+  g.imageSmoothingEnabled = false;
+  g.drawImage(n, 0, 0, c.width, c.height);
+  /* la medida en papel sale de los milímetros por píxel del juego, así
+     que un objeto y un muñeco a la misma data-mmpx guardan proporción */
+  c.style.width  = (n.width  * d.mmpx).toFixed(2) + "mm";
+  c.style.height = (n.height * d.mmpx).toFixed(2) + "mm";
+});
+</script>
+</body>
+</html>

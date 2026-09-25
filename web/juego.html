@@ -1,0 +1,1301 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La carrera · Sin siglas, solo compañerxs</title>
+<meta name="description" content="Salta los problemas de siempre, coge papeletas y no caigas en el pozo de las falsas promesas.">
+<link rel="icon" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="gellix.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script>
+  try{ if((localStorage.getItem("candidatura-tema") || "claro") === "claro") document.documentElement.dataset.tema = "claro"; }
+  catch(e){ document.documentElement.dataset.tema = "claro"; }
+</script>
+<style>
+/* ==================================================================
+   LA CARRERA · el juego del dinosaurio, con los nuestros
+   ------------------------------------------------------------------
+   Eliges a quién llevas, corres, saltas los problemas de siempre y
+   coges papeletas. Se acaba al chocar con uno o al caer en el pozo de
+   las falsas promesas. La marca va al marcador común, el mismo de
+   /api/ranking que usa el reto de la portada pero con ?juego=carrera,
+   que es un tablero aparte.
+
+   Los muñecos salen de juego-munecos.js: son los del vídeo, pintados
+   en directo. La música y los efectos se sintetizan con WebAudio, así
+   que no hay ningún fichero de sonido que cargar.
+   ================================================================== */
+:root{
+  --ink:#0a0c16; --ink-2:#100f1c; --panel:#171525; --panel-2:#211d31;
+  --line:rgba(208,192,176,.13); --line-strong:rgba(208,192,176,.26);
+  --text:#f1efe9; --text-2:#dbe6f4; --muted:#b0aea8;
+  --cian:#3fc9f0; --coral:#f4796b; --coral-soft:#f9a79d;
+  --display:"Gellix","Helvetica Neue",Arial,sans-serif;
+  --cifras:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --r:14px;
+  /* los acentos se separan en relleno y texto: en claro, el cian y el
+     coral vivos siguen valiendo de fondo pero no dan contraste como letra */
+  --cian-txt:var(--cian); --coral-txt:var(--coral); --boton-fondo:rgba(10,12,22,.7);
+}
+/* el tema claro es el de la web, y se guarda en la misma clave, así que
+   si en la portada tienes el claro, aquí también */
+:root[data-tema="claro"]{
+  --ink:#f6f2ea; --ink-2:#efe9df; --panel:#fffdf9; --panel-2:#f4ede2;
+  --line:rgba(74,58,46,.16); --line-strong:rgba(74,58,46,.3);
+  --text:#191820; --text-2:#3a3742; --muted:#5e574e;
+  --cian-txt:#0d6f92; --coral-txt:#bf3f2f; --coral-soft:#bf3f2f; --boton-fondo:rgba(255,253,249,.85);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{color-scheme:dark}
+:root[data-tema="claro"]{color-scheme:light}
+body{
+  margin:0;background:var(--ink);color:var(--text);font-family:var(--display);
+  line-height:1.55;-webkit-font-smoothing:antialiased;
+  padding:clamp(1.25rem,4vw,3rem) 16px 3rem;
+}
+.hoja{max-width:52rem;margin:0 auto}
+.marca{
+  display:inline-block;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--cian-txt);text-decoration:none;margin-bottom:1.25rem
+}
+.marca:hover{text-decoration:underline}
+h1{
+  font-weight:500;font-size:clamp(2.2rem,8vw,3.6rem);line-height:.95;letter-spacing:-.04em;
+  text-transform:uppercase;margin:0
+}
+h1 em{font-style:normal;color:var(--coral-txt);display:block}
+.entrada{font-size:1.05rem;color:var(--text-2);margin:1.1rem 0 1.75rem;max-width:36rem}
+
+/* ---------- el escenario ---------- */
+.escenario{
+  position:relative;background:var(--ink-2);border:1px solid var(--line-strong);
+  border-radius:var(--r);overflow:hidden;
+  touch-action:manipulation;user-select:none;-webkit-user-select:none
+}
+#lienzo{display:block;width:100%;image-rendering:pixelated;cursor:pointer}
+.controles{position:absolute;top:.5rem;left:.5rem;display:flex;gap:.35rem}
+.control{
+  font:500 .72rem/1 var(--display);letter-spacing:.08em;text-transform:uppercase;
+  color:var(--muted);background:var(--boton-fondo);border:1px solid var(--line-strong);
+  border-radius:999px;padding:.45rem .7rem;cursor:pointer
+}
+.control:hover{color:var(--text)}
+#sonido[aria-pressed="false"]{text-decoration:line-through}
+.ayuda{font-size:.88rem;color:var(--muted);margin:.7rem 0 0}
+.ayuda kbd{
+  font:500 .78rem var(--cifras);border:1px solid var(--line-strong);border-radius:5px;
+  padding:.05rem .35rem;color:var(--text-2)
+}
+
+/* ---------- paneles: elegir y final ---------- */
+.panel{
+  margin-top:1.25rem;background:var(--panel);border:1px solid var(--line);
+  border-radius:var(--r);padding:clamp(1rem,3vw,1.5rem)
+}
+.panel h2{font-weight:500;font-size:1.35rem;letter-spacing:-.02em;margin:0 0 .25rem}
+.panel p{margin:0;color:var(--text-2)}
+.gente{
+  list-style:none;margin:1rem 0 0;padding:0;
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(5.6rem,1fr));gap:.5rem
+}
+.gente button{
+  width:100%;display:flex;flex-direction:column;align-items:center;gap:.35rem;
+  background:var(--panel-2);border:1px solid var(--line);border-radius:10px;
+  padding:.6rem .3rem .55rem;color:var(--text);font:inherit;font-size:.8rem;line-height:1.15;
+  cursor:pointer;transition:border-color .15s,transform .15s
+}
+.gente button:hover,.gente button:focus-visible{border-color:var(--cian);transform:translateY(-2px)}
+.gente button:focus-visible{outline:2px solid var(--cian);outline-offset:2px}
+.gente button[aria-pressed="true"]{border-color:var(--coral)}
+.gente canvas{width:54px;height:72px;image-rendering:pixelated}
+.gente small{display:block;color:var(--muted);font-size:.72rem}
+
+.fin__cifras{
+  display:flex;flex-wrap:wrap;gap:.5rem 1.5rem;margin:1rem 0;
+  font-family:var(--cifras);font-size:.9rem;color:var(--muted)
+}
+.fin__cifras b{display:block;font-size:1.6rem;font-weight:500;color:var(--text)}
+.fin__cifras .total b{color:var(--coral-txt)}
+.fin__por{margin-top:.5rem!important;font-size:.95rem}
+.fin__por a{color:var(--cian-txt)}
+.fin__libres{margin-top:.25rem!important;font-size:.95rem}
+.fin__caras{display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.6rem}
+.fin__caras canvas{width:36px;height:48px;image-rendering:pixelated;background:var(--panel-2);border-radius:6px}
+.form{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem}
+.form input{
+  flex:1 1 12rem;min-width:0;background:var(--ink);color:var(--text);
+  border:1px solid var(--line-strong);border-radius:10px;padding:.7rem .85rem;font:inherit
+}
+.form input:focus{outline:2px solid var(--cian);outline-offset:1px;border-color:transparent}
+.boton{
+  font:500 .95rem var(--display);border-radius:10px;padding:.7rem 1.1rem;cursor:pointer;
+  border:1px solid var(--line-strong);background:transparent;color:var(--text)
+}
+.boton--fuerte{background:var(--coral);border-color:var(--coral);color:#1a0d0b}
+.boton:hover{filter:brightness(1.1)}
+.boton:disabled{opacity:.6;cursor:default}
+.nota{font-size:.88rem;color:var(--muted);margin-top:.5rem!important;min-height:1.3em}
+.nota b{color:var(--text);font-weight:500}
+.nota .no{color:var(--coral-soft)}
+.acciones{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.1rem}
+
+/* ---------- marcador ---------- */
+.tabla{list-style:none;margin:.9rem 0 0;padding:0;font-family:var(--cifras);font-size:.88rem}
+.tabla li{
+  display:grid;grid-template-columns:2.2rem 1fr auto;gap:.5rem;align-items:baseline;
+  padding:.45rem .2rem;border-top:1px solid var(--line)
+}
+.tabla li:first-child{border-top:0}
+.tabla .pos{color:var(--muted)}
+.tabla .alias{font-family:var(--display);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tabla .yo{background:rgba(63,201,240,.08);border-radius:6px}
+.tabla .yo .alias{color:var(--cian-txt)}
+.tabla .vacia{grid-column:1/-1;color:var(--muted);font-family:var(--display)}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main class="hoja">
+  <a class="marca" href="/">Sin siglas · solo compañerxs</a>
+  <h1>La carrera <em>hasta la urna</em></h1>
+  <p class="entrada">Salta los problemas de siempre, coge papeletas, no le des conversación al cansino del pasillo y no caigas en el pozo de las falsas promesas. Si ves churros en cocina, la pizza de Pedro o la hamburguesa del Mumama, a por ellos.</p>
+
+  <div class="escenario" id="escenario">
+    <canvas id="lienzo" aria-label="El juego. Pulsa espacio o toca para saltar."></canvas>
+    <div class="controles">
+      <button class="control" id="sonido" type="button" aria-pressed="true">Sonido</button>
+      <button class="control" id="tema" type="button">Tema</button>
+    </div>
+  </div>
+  <p class="ayuda"><kbd>Espacio</kbd> o <kbd>↑</kbd> para saltar, o toca la pantalla. Si mantienes, saltas más alto; si vuelves a pulsar en el aire, das un doble salto.</p>
+
+  <section class="panel" id="elige" aria-labelledby="elige-t">
+    <h2 id="elige-t">¿Con quién corres?</h2>
+    <p>Elige a alguien de la lista y pulsa espacio o toca el escenario para salir. Los demás te esperan enjaulados por el camino: pasa por encima de la jaula para liberarlos y correrán contigo.</p>
+    <ul class="gente" id="gente"></ul>
+  </section>
+
+  <section class="panel" id="fin" hidden aria-live="polite">
+    <h2 id="fin-t">Fuera</h2>
+    <p class="fin__por" id="fin-por"></p>
+    <p class="fin__libres" id="fin-libres"></p>
+    <div class="fin__caras" id="fin-caras"></div>
+    <div class="fin__cifras">
+      <span><b id="fin-metros">0</b>metros</span>
+      <span><b id="fin-votos">0</b>papeletas</span>
+      <span><b id="fin-almuerzos">0</b>almuerzos</span>
+      <span class="total"><b id="fin-puntos">0</b>puntos</span>
+    </div>
+    <form class="form" id="form">
+      <input id="alias" name="alias" aria-label="Alias para el marcador" maxlength="24" autocomplete="nickname" placeholder="Tu alias para el marcador">
+      <button class="boton boton--fuerte" id="enviar" type="submit">Guardar marca</button>
+    </form>
+    <p class="nota" id="nota"></p>
+    <div class="acciones">
+      <button class="boton" id="otra" type="button">Otra vez</button>
+      <button class="boton" id="cambiar" type="button">Cambiar de personaje</button>
+    </div>
+  </section>
+
+  <section class="panel" aria-labelledby="tabla-t">
+    <h2 id="tabla-t">Marcador</h2>
+    <p id="tabla-sub">Las diez mejores marcas.</p>
+    <ol class="tabla" id="tabla"></ol>
+  </section>
+</main>
+
+<script src="juego-munecos.js"></script>
+<script>
+"use strict";
+const $ = s => document.querySelector(s);
+
+/* ------------------------------------------------------------------
+   Quién puede correr. Los nombres son los de la lista, en su orden.
+   ------------------------------------------------------------------ */
+const GENTE = [
+  ["compi", "Compi", ""],
+  ["munoz", "Laura", "Muñoz"], ["navarro", "Raúl", "Navarro"], ["galindo", "Rocío", "Galindo"],
+  ["fernandez", "José Pablo", "Fernández"], ["lopezm", "Rafael", "López"], ["bolivar", "Fran", "Bolívar"],
+  ["algarra", "Leticia", "Algarra"], ["barchein", "Mario", "Barchéin"], ["aranda", "Mario", "Aranda"],
+  ["lopeza", "Violeta", "López"], ["castillo", "María Emilia", "Castillo"]
+];
+
+/* ------------------------------------------------------------------
+   Reglas. VOTO, EXTRA, VEL_MAX, SEP_VOTO y SEP_EXTRA son las mismas que
+   comprueba el servidor en ranking.mjs: si se tocan aquí, se tocan
+   allí, o las marcas buenas se rechazan.
+   Todo se mide en píxeles del juego; 10 píxeles son un metro.
+   ------------------------------------------------------------------ */
+const VOTO = 25;             // puntos por papeleta
+const VEL_MIN = 12, VEL_MAX = 32;   // metros por segundo
+const SEP_VOTO = 6;          // metros mínimos entre dos papeletas
+const EXTRA = 100;           // puntos por almuerzo: churros o mollete
+const SEP_EXTRA = 50;        // metros mínimos entre dos almuerzos
+const SUBIDON = 4000;        // ms que dura el subidón de los churros
+const PX_M = 10;
+/* PX deja sitio a la izquierda para los que vas liberando, que corren detrás */
+const ALTO = 108, SUELO = 90, PX = 40;       // alto del mundo, línea del suelo, x del muñeco
+const GRAVEDAD = 760, IMPULSO = 250, CORTE = 0.45;
+/* lo que sube el salto sin cortar aunque sueltes: sin este mínimo, un
+   toque rápido se quedaba en un saltito que no pasaba ni el cable */
+const SALTO_MIN_MS = 90;
+/* el doble salto: una segunda pulsación en el aire suma DOBLE_ALTO
+   píxeles a lo que ibas a subir, pulses cuando pulses. Solo uno por salto */
+const DOBLE_ALTO = 18;
+
+/* ------------------------------------------------------------------
+   Guardado local: el id del navegador y el alias. Si ya se jugó al
+   reto de la portada se reutilizan los suyos, para no pedir el alias
+   dos veces a la misma persona.
+   ------------------------------------------------------------------ */
+const CLAVE = "candidatura-carrera";
+function leer(k){ try{ return JSON.parse(localStorage.getItem(k) || "{}"); }catch(e){ return {}; } }
+function guardar(d){ try{ localStorage.setItem(CLAVE, JSON.stringify(d)); }catch(e){} }
+const local = Object.assign({}, (({id, alias}) => ({id, alias}))(leer("candidatura-quiz")), leer(CLAVE));
+function miId(){
+  if(local.id) return local.id;
+  local.id = (crypto.randomUUID ? crypto.randomUUID()
+              : String(Date.now()) + "-" + Math.random().toString(36).slice(2, 10))
+             .replace(/[^a-z0-9-]/gi, "").toLowerCase().slice(0, 48);
+  guardar(local);
+  return local.id;
+}
+const slug = a => a.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "")
+  .replace(/[^a-z0-9_-]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 40);
+
+/* ==================================================================
+   SONIDO · un chiptune de dieciséis compases y cuatro efectos
+   ------------------------------------------------------------------
+   Todo sintetizado: cuadrada para la melodía, triangular para el bajo
+   y ruido para el charles. El tempo sube con la velocidad de la
+   carrera, que es lo que hace que al final se note la prisa.
+   El AudioContext solo se crea con el primer gesto, que es lo que
+   exigen los navegadores para dejar sonar nada.
+   ================================================================== */
+const MELODIA = [
+  72,0,76,79, 81,79,76,0,   74,0,77,81, 79,77,74,0,
+  72,0,76,79, 84,83,81,79,  77,76,74,76, 72,0,0,0,
+  69,0,72,76, 77,76,72,0,   71,0,74,77, 79,77,74,71,
+  72,76,79,84, 83,79,76,74, 72,74,76,77, 79,0,0,0
+];
+const BAJOS = [48, 50, 48, 43, 45, 43, 48, 43];   // la fundamental de cada compás de ocho corcheas
+const hz = n => 440 * Math.pow(2, (n - 69) / 12);
+
+const sonido = {
+  ac: null, master: null, ruido: null, on: local.sonido !== false,
+  paso: 0, siguiente: 0, reloj: null, tempo: 1, sonando: false,
+
+  arranca(){
+    if(!this.ac){
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if(!AC) return;
+      this.ac = new AC();
+      this.master = this.ac.createGain();
+      this.master.gain.value = this.on ? 0.16 : 0;
+      this.master.connect(this.ac.destination);
+      const b = this.ac.createBuffer(1, this.ac.sampleRate * 0.2, this.ac.sampleRate);
+      const d = b.getChannelData(0);
+      for(let i=0;i<d.length;i++) d[i] = Math.random()*2 - 1;
+      this.ruido = b;
+    }
+    if(this.ac.state === "suspended") this.ac.resume();
+  },
+  nota(f, t, dur, tipo, vol, hasta){
+    const o = this.ac.createOscillator(), g = this.ac.createGain();
+    o.type = tipo; o.frequency.setValueAtTime(f, t);
+    if(hasta) o.frequency.exponentialRampToValueAtTime(hasta, t + dur);
+    g.gain.setValueAtTime(vol, t);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(this.master);
+    o.start(t); o.stop(t + dur + 0.02);
+  },
+  charles(t, vol){
+    const s = this.ac.createBufferSource(), f = this.ac.createBiquadFilter(), g = this.ac.createGain();
+    s.buffer = this.ruido; f.type = "highpass"; f.frequency.value = 7000;
+    g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.04);
+    s.connect(f); f.connect(g); g.connect(this.master);
+    s.start(t); s.stop(t + 0.05);
+  },
+  corchea(){ return 60 / (144 * this.tempo) / 2; },
+  toca(){
+    const c = this.corchea();
+    while(this.siguiente < this.ac.currentTime + 0.12){
+      const t = this.siguiente, i = this.paso % MELODIA.length;
+      const n = MELODIA[i];
+      if(n) this.nota(hz(n), t, c * 0.9, "square", 0.22);
+      const raiz = BAJOS[Math.floor(i / 8)], k = i % 4;
+      this.nota(hz(raiz + [0, 12, 7, 12][k]), t, c * 0.8, "triangle", 0.5);
+      if(i % 2) this.charles(t, 0.12);
+      if(i % 4 === 0) this.nota(150, t, 0.12, "sine", 0.6, 45);   // bombo
+      this.paso++; this.siguiente += c;
+    }
+  },
+  musica(si){
+    if(!this.ac) return;
+    if(si && !this.sonando){
+      this.sonando = true; this.paso = 0; this.siguiente = this.ac.currentTime + 0.05;
+      this.reloj = setInterval(() => this.toca(), 25);
+    } else if(!si && this.sonando){
+      this.sonando = false; clearInterval(this.reloj);
+    }
+  },
+  alterna(){
+    this.on = !this.on;
+    local.sonido = this.on; guardar(local);
+    if(this.master) this.master.gain.setTargetAtTime(this.on ? 0.16 : 0, this.ac.currentTime, 0.02);
+    return this.on;
+  },
+  /* los efectos */
+  salto(k = 1){ if(this.ac) this.nota(330 * k, this.ac.currentTime, 0.14, "square", 0.25, 700 * k); },
+  voto(){
+    if(!this.ac) return;
+    const t = this.ac.currentTime;
+    this.nota(hz(88), t, 0.07, "square", 0.25); this.nota(hz(93), t + 0.07, 0.12, "square", 0.25);
+  },
+  libera(){
+    if(!this.ac) return;
+    const t = this.ac.currentTime;
+    [72, 76, 79, 84, 88].forEach((n, i) => this.nota(hz(n), t + i * 0.05, 0.12, "triangle", 0.5));
+  },
+  almuerzo(){
+    if(!this.ac) return;
+    const t = this.ac.currentTime;
+    [84, 88, 91, 96].forEach((n, i) => this.nota(hz(n), t + i * 0.06, 0.1, "square", 0.22));
+  },
+  choque(){
+    if(!this.ac) return;
+    const t = this.ac.currentTime;
+    this.nota(220, t, 0.35, "sawtooth", 0.3, 55);
+    this.charles(t, 0.5);
+  },
+  caida(){ if(this.ac) this.nota(700, this.ac.currentTime, 0.9, "square", 0.22, 60); }
+};
+
+/* ==================================================================
+   EL LIENZO · resolución fija de 120 de alto y ancho según pantalla
+   ------------------------------------------------------------------
+   El mundo mide 108 píxeles de alto y lo que haga falta de ancho, y se
+   escala por un entero para que cada píxel del muñeco sea un cuadrado
+   limpio. El ancho que se busca va de 240 en un móvil a 420 en
+   escritorio: en el móvil, con más mundo, el muñeco salía de dos dedos
+   y los rótulos no se leían; en una pantalla ancha, sin tope, se vería
+   venir todo con demasiado tiempo y el juego se volvería trivial.
+   ================================================================== */
+const lienzo = $("#lienzo"), g = lienzo.getContext("2d");
+let ANCHO = 320, ESC = 3;
+function mide(){
+  const dpr = window.devicePixelRatio || 1;
+  const css = lienzo.parentElement.clientWidth, cw = css * dpr;
+  const objetivo = Math.min(420, Math.max(240, css * 0.5));
+  ESC = Math.max(1, Math.round(cw / objetivo));
+  ANCHO = Math.floor(cw / ESC);
+  lienzo.width = ANCHO * ESC; lienzo.height = ALTO * ESC;
+  lienzo.style.height = (ALTO * ESC / dpr) + "px";
+  g.imageSmoothingEnabled = false;
+  if(estado !== "corre") pinta();
+}
+
+/* ------------------------------------------------------------------
+   Los obstáculos: los problemas del trabajo. Cada uno sabe pintarse
+   en píxeles del juego y trae la frase del final si te tumba.
+   ------------------------------------------------------------------ */
+const C = {
+  O:"#050c1c", W:"#e9f2fc", gris:"#b8c8dd", R:"#f4796b", r:"#c9584c",
+  cian:"#3fc9f0", cianO:"#1b9fc9", azul:"#2a4a80", azulO:"#1b3159", madera:"#8a6440", maderaO:"#6a4630"
+};
+/* la escena en los dos temas. Solo cambia el decorado, el suelo y los
+   rótulos: los obstáculos y los muñecos llevan su contorno oscuro y se
+   leen igual sobre los dos fondos */
+const PALETAS = {
+  oscuro: {
+    fondo:"#100f1c", techo:"#0c0b16", lampara:"#3a3552", luz:"rgba(220,230,255,.07)",
+    zocalo:"#161424", zocaloFilo:"#2a2640", velo:"rgba(16,15,28,.45)",
+    suelo:"#1d1a2e", sueloFilo:"rgba(208,192,176,.35)", sueloMarca:"rgba(208,192,176,.14)", hueco:"#05060c",
+    rotulo:"rgba(241,239,233,.6)", almuerzo:"rgba(156,226,246,.85)", jaula:"rgba(249,167,157,.95)",
+    puntos:"249,167,157", hud:"rgba(241,239,233,.85)", hud2:"rgba(176,174,168,.9)", aviso:"#dbe6f4",
+    sombra:"rgba(0,0,0,.45)",
+    marco:"#2a2640", cristal:"#0d1830", edificio:"#162440", ventanaLuz:"rgba(63,201,240,.6)", repisa:"#3a3552",
+    puerta:"#2a2640", puertaDentro:"#1d1a2e", placa:"#3a3552",
+    cuadroMarco:"#3a3552", cuadroDentro:"#211d31", cuadroMonte:"#553234"
+  },
+  claro: {
+    fondo:"#f3ede3", techo:"#e2d9cb", lampara:"#fffdf9", luz:"rgba(255,248,225,.6)",
+    zocalo:"#e4dacc", zocaloFilo:"#cbbfae", velo:"rgba(246,242,234,.3)",
+    suelo:"#d6cbbb", sueloFilo:"rgba(74,58,46,.4)", sueloMarca:"rgba(74,58,46,.16)", hueco:"#2a2438",
+    rotulo:"rgba(25,24,32,.62)", almuerzo:"rgba(13,111,146,.95)", jaula:"rgba(191,63,47,.95)",
+    puntos:"191,63,47", hud:"rgba(25,24,32,.85)", hud2:"rgba(94,87,78,.95)", aviso:"#3a3742",
+    sombra:"rgba(74,58,46,.28)",
+    marco:"#cbbfae", cristal:"#bfe3f2", edificio:"#9dbacb", ventanaLuz:"rgba(255,255,255,.9)", repisa:"#bcae9b",
+    puerta:"#cbbfae", puertaDentro:"#e2d9cb", placa:"#bcae9b",
+    cuadroMarco:"#bcae9b", cuadroDentro:"#efe6d9", cuadroMonte:"#e3bda6"
+  }
+};
+let PAL = PALETAS[document.documentElement.dataset.tema === "claro" ? "claro" : "oscuro"];
+
+function rect(x, y, w, h, k){ g.fillStyle = k; g.fillRect(Math.round(x), Math.round(y), w, h); }
+function silueta(x, y, w, h){ rect(x-1, y-1, w+2, h+2, C.O); }
+
+const TIPOS = {
+  letra: {
+    w: 12, h: 21, etiqueta: "LETRA PEQUEÑA", frase: "Te ha enredado la letra pequeña.",
+    pinta(x){
+      const y = SUELO - this.h;
+      silueta(x, y, 12, 21); rect(x, y, 12, 21, C.W);
+      for(let j=3; j<17; j+=2) rect(x+2, y+j, j > 12 ? 5 : 8, 1, C.gris);
+      rect(x+8, y+16, 3, 3, C.R);
+      rect(x+10, y, 2, 2, C.O); rect(x+9, y+1, 1, 1, C.gris);
+    }
+  },
+  silla: {
+    w: 12, h: 17, etiqueta: "LA SILLA ROTA", frase: "La silla rota. Otra vez.",
+    pinta(x){
+      const y = SUELO - this.h;
+      rect(x-1, y-1, 4, 18, C.O); rect(x, y, 2, 17, C.r);
+      silueta(x, y, 8, 5); rect(x, y, 8, 5, C.R); rect(x, y, 8, 1, "#f9a79d");
+      silueta(x, y+8, 12, 2); rect(x, y+8, 12, 2, C.r);
+      rect(x+9, y+11, 2, 3, C.O); rect(x+9, y+10, 2, 3, C.r);            // la pata rota, colgando
+      rect(x+8, y+15, 4, 2, C.r);                                          // y el trozo en el suelo
+    }
+  },
+  fichaje: {
+    w: 11, h: 17, etiqueta: "FICHAJE 8:00", frase: "Te has comido el fichaje de las 8:00.",
+    pinta(x){
+      const y = SUELO - this.h;
+      rect(x+3, y+8, 4, 9, C.O); rect(x+4, y+8, 2, 9, C.azulO);
+      silueta(x, y, 11, 9); rect(x, y, 11, 9, C.azul); rect(x+10, y, 1, 9, C.azulO);
+      rect(x+2, y+2, 7, 3, C.R); rect(x+3, y+3, 1, 1, C.O); rect(x+5, y+3, 1, 1, C.O); rect(x+7, y+3, 1, 1, C.O);
+      rect(x+3, y+6, 5, 1, C.O);
+    }
+  },
+  reunion: {
+    w: 26, h: 19, etiqueta: "REUNIÓN QUE PODÍA SER UN CORREO", frase: "Te ha atrapado una reunión que podía ser un correo.",
+    pinta(x){
+      const y = SUELO - this.h;
+      silueta(x+8, y, 10, 7); rect(x+8, y, 10, 7, C.azulO); rect(x+9, y+1, 8, 5, C.cian); rect(x+9, y+1, 8, 1, "#9ce2f6");
+      silueta(x+20, y+4, 3, 3); rect(x+20, y+4, 3, 3, C.R);
+      silueta(x, y+7, 26, 2); rect(x, y+7, 26, 2, C.madera);
+      rect(x+1, y+9, 4, 10, C.O); rect(x+2, y+9, 2, 10, C.maderaO);
+      rect(x+21, y+9, 4, 10, C.O); rect(x+22, y+9, 2, 10, C.maderaO);
+    }
+  },
+  /* el correo va por el aire: si va alto, se pasa por debajo sin saltar;
+     si va bajo, hay que saltarlo. Es el único que castiga saltar por
+     saltar, que es lo que evita que se gane pulsando sin parar */
+  correo: {
+    w: 13, h: 9, vuela: true, etiqueta: "EMAIL DE LAS 23:00", frase: "Te ha pillado el email de las 23:00.",
+    pinta(x, o){
+      const y = o.y + Math.round(Math.sin(t / 140) * 1);
+      silueta(x, y, 13, 9); rect(x, y, 13, 9, C.W);
+      for(let i=0;i<6;i++){ rect(x+i, y+i, 1, 1, C.R); rect(x+12-i, y+i, 1, 1, C.R); }
+      const ala = Math.floor(t / 120) % 2;
+      rect(x+3, y - 2 - ala, 7, 1, C.gris); rect(x+5, y - 3 - ala, 3, 1, C.gris);
+    }
+  },
+  cafetera: {
+    w: 14, h: 24, etiqueta: "CAFÉ SIN AGUA", frase: "La máquina del café, sin agua. Sin café no hay quien corra.",
+    pinta(x){
+      const y = SUELO - this.h;
+      silueta(x, y, 14, 24); rect(x, y, 14, 24, "#2a2f3a"); rect(x+13, y, 1, 24, "#1b1f28");
+      rect(x+2, y+2, 10, 6, "#1b1f28");
+      rect(x+3, y+3, 8, 2, Math.floor(t / 300) % 2 ? C.R : "#6b2a26");   // el piloto de sin agua, parpadeando
+      rect(x+3, y+6, 3, 1, C.gris); rect(x+7, y+6, 3, 1, C.gris);
+      rect(x+3, y+10, 2, 1, C.cian); rect(x+6, y+10, 2, 1, C.cian); rect(x+9, y+10, 2, 1, C.cian);
+      rect(x+3, y+14, 8, 7, "#0e1016"); rect(x+5, y+17, 4, 4, C.W); rect(x+5, y+17, 4, 1, C.gris);
+    }
+  },
+  impresora: {
+    w: 18, h: 16, etiqueta: "IMPRESORA ATASCADA", frase: "Atascado en la impresora. Como todos los lunes.",
+    pinta(x){
+      const y = SUELO - 12;
+      rect(x+4, y-5, 10, 6, C.O); rect(x+5, y-4, 8, 5, C.W);             // el papel arrugado que asoma
+      rect(x+6, y-3, 2, 1, C.gris); rect(x+9, y-2, 3, 1, C.gris); rect(x+7, y-1, 1, 1, C.gris);
+      silueta(x, y, 18, 12); rect(x, y, 18, 12, C.gris); rect(x, y, 18, 2, "#dfe7ef");
+      rect(x+2, y+6, 14, 1, C.O);
+      rect(x+14, y+3, 2, 2, Math.floor(t / 250) % 2 ? C.R : "#6b2a26");
+      rect(x+1, y+11, 16, 1, "#8a8f9c");
+    }
+  },
+  cable: {
+    w: 27, h: 6, etiqueta: "EL CABLE DEL CARGADOR", frase: "Tropiezo con el cable del cargador de alguien.",
+    /* cable naranja de dos píxeles con bucles y el cargador al final: en
+       negro y de un píxel no se veía contra el suelo y se tropezaba
+       siempre sin saber con qué. Y corto: con 34 de largo, un toque rápido
+       no daba para pasarlo y había que saltarlo como la letra pequeña */
+    pinta(x){
+      const onda = [0, 1, 2, 3, 3, 2, 1, 0];
+      for(let i=0;i<21;i++){
+        const yy = SUELO - 3 - onda[(i >> 1) % 8];
+        rect(x+i, yy - 1, 1, 4, C.O);
+      }
+      for(let i=0;i<21;i++){
+        const yy = SUELO - 3 - onda[(i >> 1) % 8];
+        rect(x+i, yy, 1, 2, "#f0a030");
+      }
+      rect(x+20, SUELO-6, 6, 6, C.O); rect(x+21, SUELO-5, 4, 4, "#2a2f3a");
+      rect(x+22, SUELO-4, 1, 1, "#5cd0a0"); rect(x+26, SUELO-4, 1, 1, C.O); rect(x+26, SUELO-2, 1, 1, C.O);
+    }
+  },
+  /* los dos que te cortan el paso son muñecos como los nuestros, de gris
+     y verde para que no se confundan con nadie de la lista. El cansino
+     está plantado; el PM viene andando hacia ti, así que llega antes */
+  cansino: {
+    w: 27, h: 31, caja: [8, 11], etiqueta: "EL CANSINO DEL PASILLO", bocadillo: "¿Tienes un minutito?",
+    frase: "El cansino del pasillo te ha pillado. Adiós a la mañana.",
+    pinta(x){
+      g.drawImage(MUNECOS.fotograma("cansino", "explica", (Math.floor(t / 420) % 4) * 420, true), Math.round(x), SUELO - 35);
+    }
+  },
+  pm: {
+    w: 27, h: 31, caja: [8, 11], anda: 22, etiqueta: "PRODUCT MANAGER", bocadillo: "¿Cómo vas?",
+    frase: "Te ha parado el PM: «¿cómo vas?». Pues ya no voy.",
+    pinta(x){
+      g.drawImage(MUNECOS.fotograma("pm", "anda", (Math.floor(t / 155) % 4) * 155, true), Math.round(x), SUELO - 35);
+    }
+  },
+  /* la reunión que se alarga va por el aire, como el correo alto: se
+     pasa por debajo sin saltar. Y se alarga de verdad mientras la miras */
+  alarga: {
+    h: 10, vuela: true, crece: 14, tope: 96, etiqueta: "LA REUNIÓN QUE SE ALARGA",
+    frase: "La reunión que se alarga. Ibas a salir a las tres.",
+    pinta(x, o){
+      const w = Math.round(o.w);
+      silueta(x, o.y, w, 10); rect(x, o.y, w, 10, C.azul); rect(x, o.y, 2, 10, C.cian);
+      rect(x+2, o.y, w-2, 1, "#3a5a90");
+      texto("10:00 – ¿?", x + 5, o.y + 7, "#e9f2fc", 5, "left");
+    }
+  },
+  pozo: {
+    etiqueta: "POZO DE LAS FALSAS PROMESAS", frase: "Has caído en el pozo de las falsas promesas.",
+    pinta(){}
+  }
+};
+
+/* ------------------------------------------------------------------
+   Los almuerzos: lo bueno de la ofi. Churros, mollete, la pizza de Pedro
+   y la hamburguesa del Mumama. Valen EXTRA puntos cada uno, y los
+   churros además dan el subidón: unos segundos atravesando problemas.
+   El pozo no, que las falsas promesas no se arreglan con azúcar.
+   ------------------------------------------------------------------ */
+const ALMUERZOS = {
+  churros: {
+    etiqueta: "CHURROS GRATIS EN COCINA",
+    pinta(x, y){
+      rect(x+1, y-4, 2, 6, C.O); rect(x+4, y-5, 2, 6, C.O); rect(x+7, y-3, 2, 5, C.O);
+      rect(x+1, y-3, 1, 5, "#d9a24a"); rect(x+4, y-4, 1, 5, "#e8b860"); rect(x+7, y-2, 1, 4, "#d9a24a");
+      silueta(x, y, 10, 8); rect(x, y, 10, 8, C.W);
+      rect(x, y+2, 10, 1, C.R); rect(x, y+5, 10, 1, C.R);
+      rect(x+1, y+7, 8, 1, C.gris);
+    }
+  },
+  mollete: {
+    etiqueta: "MOLLETE CON JAMÓN",
+    pinta(x, y){
+      silueta(x, y, 12, 8);
+      rect(x, y, 12, 3, "#e3bf86"); rect(x+1, y, 10, 1, "#f0d4a0");
+      rect(x-1, y+3, 14, 2, "#c9584c"); rect(x, y+3, 3, 1, "#f9a79d"); rect(x+7, y+4, 3, 1, "#f9a79d");
+      rect(x, y+5, 12, 3, "#c99a5a");
+    }
+  },
+  /* la porción con la punta hacia abajo, como se coge: el borde arriba
+     y los pepperonis sueltos, que son lo que la hace leerse pizza */
+  pizza: {
+    etiqueta: "PIZZA PEPPERONI DE PEDRO",
+    pinta(x, y){
+      const filas = [[0,12],[0,12],[1,10],[2,8],[3,6],[4,4],[5,2]];
+      filas.forEach(([a, w], i) => rect(x + a - 1, y + i - 1, w + 2, 3, C.O));
+      rect(x, y, 12, 2, "#c98a3a"); rect(x, y, 12, 1, "#e0a85a");
+      filas.slice(2).forEach(([a, w], i) => rect(x + a, y + 2 + i, w, 1, "#f2c94c"));
+      rect(x + 2, y + 2, 2, 2, "#c9584c"); rect(x + 7, y + 3, 2, 2, "#c9584c"); rect(x + 5, y + 5, 2, 1, "#c9584c");
+    }
+  },
+  hamburguesa: {
+    etiqueta: "HAMBURGUESA DEL MUMAMA",
+    pinta(x, y){
+      silueta(x, y, 12, 10);
+      rect(x + 1, y, 10, 1, "#d9a24a"); rect(x, y + 1, 12, 2, "#d9a24a");
+      rect(x + 3, y + 1, 1, 1, "#fff3d6"); rect(x + 7, y + 1, 1, 1, "#fff3d6"); rect(x + 5, y, 1, 1, "#fff3d6");
+      rect(x, y + 3, 12, 1, "#5cb85c"); rect(x + 1, y + 4, 11, 1, "#f2c94c");
+      rect(x, y + 5, 12, 2, "#6a3a22"); rect(x, y + 7, 12, 3, "#c98a3a");
+    }
+  }
+};
+
+/* ------------------------------------------------------------------
+   Estado de la partida
+   ------------------------------------------------------------------ */
+let estado = "elige";          // elige · espera · corre · fin
+let quien = local.quien && GENTE.some(p => p[0] === local.quien) ? local.quien : "compi";
+let t = 0, ms = 0, dist = 0, vel = VEL_MIN, votos = 0, almuerzos = 0, subidon = 0, causa = null;
+let y = SUELO, vy = 0, enAire = false, pulsado = false, cayendo = false, doble = false, tSalto = 0;
+let cosas = [], papeletas = [], comida = [], rotulos = [], fondo = [];
+let jaulas = [], pendientes = [], libres = [], rastro = [], ultimaJaula = -1e9;
+let proximo = 0, ultimaPapeleta = -1e9, ultimoAlmuerzo = -1e9, fase = 0, tMuerte = 0;
+
+const metros = () => Math.floor(dist / PX_M);
+const puntos = () => metros() + votos * VOTO + almuerzos * EXTRA;
+
+function reinicia(){
+  t = 0; ms = 0; dist = 0; vel = VEL_MIN; votos = 0; almuerzos = 0; subidon = 0; causa = null;
+  y = SUELO; vy = 0; enAire = false; cayendo = false; doble = false; fase = 0;
+  cosas = []; papeletas = []; comida = []; rotulos = [];
+  /* los once que no llevas, en orden al azar: cada jaula saca al siguiente */
+  pendientes = GENTE.map(p => p[0]).filter(k => k !== quien).sort(() => Math.random() - 0.5);
+  jaulas = []; libres = []; rastro = []; ultimaJaula = -1e9;
+  proximo = 260; ultimaPapeleta = -1e9; ultimoAlmuerzo = -1e9;
+  fondo = [];
+  for(let x = 8; x < 700; ){
+    const d = decorado();
+    fondo.push({ x, ...d });
+    x += d.w + 14 + Math.floor(Math.random() * 30);
+  }
+}
+
+/* ------------------------------------------------------------------
+   El fondo: la pared de la oficina, no una ciudad. Con los edificios
+   de antes, las ventanas se recalculaban con la posición en cada frame
+   y bailaban hacia abajo: daba la sensación de ir cayendo. Aquí cada
+   cosa se pinta igual siempre, relativa a su propio borde, y en
+   posiciones enteras.
+   ------------------------------------------------------------------ */
+const DECORADO = {
+  ventana: 30, pizarra: 32, planta: 12, reloj: 10, corcho: 18, puerta: 20, cuadro: 14
+};
+function decorado(){
+  const tipos = Object.keys(DECORADO);
+  const tipo = tipos[Math.floor(Math.random() * tipos.length)];
+  return { tipo, w: DECORADO[tipo], luces: Math.floor(Math.random() * 1000) };
+}
+function pintaDecorado(f){
+  const X = Math.round(f.x), P = SUELO - 12;       // P: el filo del zócalo
+  switch(f.tipo){
+    case "ventana":
+      rect(X, P-34, 30, 26, PAL.marco); rect(X+2, P-32, 26, 22, PAL.cristal);
+      rect(X+2, P-18, 6, 8, PAL.edificio); rect(X+9, P-22, 5, 12, PAL.edificio);
+      rect(X+15, P-16, 6, 6, PAL.edificio); rect(X+22, P-20, 6, 10, PAL.edificio);
+      for(let i=0;i<5;i++) if((f.luces >> i) & 1) rect(X + 4 + i * 5, P - 17 + (i % 2) * 3, 1, 1, PAL.ventanaLuz);
+      rect(X+14, P-32, 2, 22, PAL.marco); rect(X-1, P-8, 32, 2, PAL.repisa);
+      break;
+    case "pizarra":
+      rect(X, P-32, 32, 20, "#8a8177"); rect(X+1, P-31, 30, 18, "#dfe7ef");
+      rect(X+4, P-27, 12, 1, "#c9584c"); rect(X+4, P-24, 17, 1, "#6f8fbf"); rect(X+4, P-21, 9, 1, "#6f8fbf");
+      rect(X+23, P-20, 2, 5, "#1b9fc9"); rect(X+26, P-23, 2, 8, "#c9584c");
+      rect(X+2, P-12, 28, 1, "#5e574e");
+      break;
+    case "planta":
+      rect(X+2, SUELO-9, 8, 9, "#6b2a26"); rect(X+2, SUELO-9, 8, 1, "#8a3a33");
+      rect(X+5, SUELO-22, 2, 13, "#2f6a50");
+      rect(X+1, SUELO-19, 4, 2, "#3f8a66"); rect(X+7, SUELO-21, 4, 2, "#3f8a66");
+      rect(X, SUELO-14, 4, 2, "#2f6a50"); rect(X+8, SUELO-15, 4, 2, "#2f6a50");
+      break;
+    case "reloj":
+      rect(X, P-34, 10, 10, PAL.cuadroMarco); rect(X+1, P-33, 8, 8, "#dfe7ef");
+      rect(X+4, P-32, 1, 4, "#050c1c"); rect(X+5, P-29, 3, 1, "#050c1c");
+      break;
+    case "corcho":
+      rect(X, P-30, 18, 14, "#6a4630"); rect(X+1, P-29, 16, 12, "#8a6440");
+      rect(X+2, P-28, 5, 6, "#e9f2fc"); rect(X+9, P-28, 6, 4, "#f9a79d"); rect(X+8, P-22, 7, 4, "#9ce2f6");
+      break;
+    case "puerta":
+      rect(X, SUELO-38, 20, 38, PAL.puerta); rect(X+2, SUELO-36, 16, 36, PAL.puertaDentro);
+      rect(X+14, SUELO-19, 2, 1, "#8a8f9c"); rect(X+4, SUELO-44, 12, 4, PAL.placa);
+      rect(X+6, SUELO-43, 8, 2, "#4fa9a2");
+      break;
+    case "cuadro":
+      rect(X, P-30, 14, 12, PAL.cuadroMarco); rect(X+1, P-29, 12, 10, PAL.cuadroDentro);
+      rect(X+2, P-22, 10, 3, PAL.cuadroMonte); rect(X+7, P-27, 3, 3, "#f4796b");
+      break;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Lo que va saliendo. Al principio los obstáculos bajos; el pozo, la
+   reunión y el cansino, que piden saltar a tiempo y alto, a partir de
+   100 metros; el PM y el correo a partir de 200; y la reunión que se
+   alarga, que pide NO saltar durante un buen rato, a partir de 300.
+   ------------------------------------------------------------------ */
+function saca(){
+  const m = metros();
+  const lista = ["letra", "silla", "fichaje", "cafetera", "impresora", "cable"];
+  if(m > 100) lista.push("pozo", "pozo", "reunion", "cansino");
+  if(m > 200) lista.push("pm", "correo");
+  if(m > 300) lista.push("alarga", "correo");
+  const tipo = lista[Math.floor(Math.random() * lista.length)];
+  const x = ANCHO + 12;
+  const v = vel * PX_M;
+  let w;
+  if(tipo === "pozo"){
+    w = Math.round(22 + Math.random() * Math.min(28, v * 0.12));
+    cosas.push({ tipo, x, w, pozo: true });
+  } else if(tipo === "correo"){
+    const alto = Math.random() < 0.5;
+    w = TIPOS.correo.w;
+    cosas.push({ tipo, x, w, h: 9, y: alto ? SUELO - 44 : SUELO - 15 });
+  } else if(tipo === "alarga"){
+    w = 40 + Math.floor(Math.random() * 20);
+    cosas.push({ tipo, x, w, h: 10, y: SUELO - 46 });
+    w = TIPOS.alarga.tope;                 // el hueco se calcula con lo que llegará a medir
+  } else {
+    w = TIPOS[tipo].w;
+    cosas.push({ tipo, x, w, h: TIPOS[tipo].h });
+  }
+  /* papeletas: encima del obstáculo, en el arco del salto, que es donde
+     se ganan; o a ras de suelo en el hueco de después, que es gratis */
+  const encima = !TIPOS[tipo].vuela && Math.random() < 0.55;
+  if(encima) ponPapeleta(x + w / 2 - 3, SUELO - 50);
+  else if(Math.random() < 0.6){
+    const n = 1 + Math.floor(Math.random() * 3);
+    for(let i=0;i<n;i++) ponPapeleta(x + w + 40 + i * (SEP_VOTO * PX_M + 2), SUELO - 14);
+  }
+  /* un almuerzo de vez en cuando, en el hueco de después */
+  const donde = dist + (x + w + 70 - PX);
+  if(!TIPOS[tipo].vuela && donde - ultimoAlmuerzo > (SEP_EXTRA + 5) * PX_M && Math.random() < 0.3){
+    const menu = Object.keys(ALMUERZOS);
+    comida.push({ tipo: menu[Math.floor(Math.random() * menu.length)], x: x + w + 70, y: Math.random() < 0.5 ? SUELO - 12 : SUELO - 44 });
+    ultimoAlmuerzo = donde;
+  } else if(pendientes.length && !TIPOS[tipo].vuela && donde - ultimaJaula > 55 * PX_M && Math.random() < 0.55){
+    /* una jaula en el hueco: no es obstáculo, se atraviesa y se libera */
+    jaulas.push({ quien: pendientes.shift(), x: x + w + 64 });
+    ultimaJaula = donde;
+  }
+  /* el hueco hasta el siguiente: en tiempo y no en píxeles, para que a
+     cualquier velocidad dé para caer y volver a saltar */
+  proximo = w + v * (0.85 + Math.random() * 0.9);
+}
+function ponPapeleta(x, py){
+  if(x - ultimaPapeleta < SEP_VOTO * PX_M + 1) return;
+  papeletas.push({ x, y: py });
+  ultimaPapeleta = x;
+}
+
+/* ------------------------------------------------------------------
+   Un paso de simulación
+   ------------------------------------------------------------------ */
+function sobrePozo(){
+  const pie = PX + 13;
+  return cosas.some(o => o.pozo && pie > o.x + 3 && pie < o.x + o.w - 3);
+}
+function choca(o){
+  if(o.pozo || ms < subidon) return false;
+  const ax = PX + 9, aw = 10, ay = y - 30, ah = 29;
+  const oy = o.y !== undefined ? o.y : SUELO - o.h;
+  const caja = TIPOS[o.tipo].caja, bx = o.x + (caja ? caja[0] : 0), bw = caja ? caja[1] : o.w;
+  return ax < bx + bw && ax + aw > bx && ay < oy + o.h && ay + ah > oy;
+}
+
+function paso(dt){
+  t += dt * 1000;
+  if(estado === "fin"){
+    if(cayendo){ vy += GRAVEDAD * dt; y += vy * dt; }
+    tMuerte += dt * 1000;
+    return;
+  }
+  if(estado !== "corre") return;
+
+  ms += dt * 1000;
+  /* por dónde ha ido el muñeco: los liberados repiten sus saltos con un
+     poco de retraso, como una fila de patitos */
+  rastro.push({ ms, y, enAire });
+  while(rastro.length && rastro[0].ms < ms - 800) rastro.shift();
+  vel = Math.min(VEL_MAX, VEL_MIN + metros() * 0.02);
+  sonido.tempo = 1 + (vel - VEL_MIN) / (VEL_MAX - VEL_MIN) * 0.22;
+  const dx = vel * PX_M * dt;
+  dist += dx;
+  fase += dt * (8 + vel * 0.35);
+
+  for(const o of cosas){
+    const T = TIPOS[o.tipo];
+    o.x -= dx + (T.anda || 0) * dt;
+    if(T.crece) o.w = Math.min(T.tope, o.w + T.crece * dt);
+  }
+  for(const p of papeletas) p.x -= dx;
+  for(const c of comida) c.x -= dx;
+  for(const j of jaulas) j.x -= dx;
+  /* la que se escapa sin abrir vuelve a la cola: saldrá más adelante */
+  for(const j of jaulas) if(j.x < -34 && !j.libre) pendientes.unshift(j.quien);
+  jaulas = jaulas.filter(j => j.x >= -34 && !j.libre);
+  for(const r of rotulos){ r.x -= dx; r.y -= dt * 18; r.vida -= dt; }
+  for(const f of fondo) f.x -= dx * 0.5;
+  ultimaPapeleta -= dx;
+  cosas = cosas.filter(o => o.x + (o.w || 0) > -20);
+  papeletas = papeletas.filter(p => p.x > -12 && !p.cogida);
+  comida = comida.filter(c => c.x > -14 && !c.cogida);
+  rotulos = rotulos.filter(r => r.vida > 0);
+  for(const f of fondo) if(f.x + f.w < 0){
+    const ult = fondo.reduce((a, b) => b.x > a.x ? b : a);
+    Object.assign(f, decorado());
+    f.x = ult.x + ult.w + 14 + Math.floor(Math.random() * 30);
+  }
+
+  proximo -= dx;
+  if(proximo <= 0) saca();
+
+  /* el salto: si se suelta antes de la cima, se corta la subida */
+  if(enAire){
+    if(!pulsado && vy < 0 && ms - tSalto > SALTO_MIN_MS) vy *= Math.pow(CORTE, dt * 20);
+    vy += GRAVEDAD * dt; y += vy * dt;
+    if(y >= SUELO && !sobrePozo()){ y = SUELO; vy = 0; enAire = false; doble = false; }
+  }
+  if(!enAire && sobrePozo()){ enAire = true; vy = Math.max(vy, 0); }
+  if(y > SUELO + 2 && sobrePozo()) return muere(cosas.find(o => o.pozo && PX + 13 > o.x));
+
+  for(const o of cosas) if(choca(o)) return muere(o);
+  for(const p of papeletas){
+    if(!p.cogida && PX + 6 < p.x + 7 && PX + 21 > p.x && y - 32 < p.y + 8 && y > p.y){
+      p.cogida = true; votos++;
+      rotulos.push({ x: p.x, y: p.y - 4, vida: 0.7, texto: "+" + VOTO });
+      sonido.voto();
+    }
+  }
+  for(const j of jaulas){
+    if(!j.libre && PX + 9 < j.x + 29 && PX + 19 > j.x + 2 && y > SUELO - 38){
+      j.libre = true; libres.push(j.quien);
+      const n = nombre(j.quien);
+      rotulos.push({ x: j.x + 10, y: SUELO - 44, vida: 1.3, texto: libres.length === GENTE.length - 1 ? "¡LA LISTA, COMPLETA!" : "¡" + n.toUpperCase() + " SE UNE!" });
+      sonido.libera();
+    }
+  }
+  for(const c of comida){
+    if(!c.cogida && PX + 6 < c.x + 12 && PX + 21 > c.x && y - 32 < c.y + 8 && y > c.y - 4){
+      c.cogida = true; almuerzos++;
+      rotulos.push({ x: c.x, y: c.y - 6, vida: 0.9, texto: "+" + EXTRA });
+      if(c.tipo === "churros"){
+        subidon = ms + SUBIDON;
+        rotulos.push({ x: c.x, y: c.y - 14, vida: 1.2, texto: "¡SUBIDÓN!" });
+      }
+      sonido.almuerzo();
+    }
+  }
+}
+
+function salta(){
+  sonido.arranca();
+  if(estado === "elige" || estado === "espera"){ empieza(); }
+  if(estado !== "corre") return;
+  if(enAire){
+    /* ya dentro del pozo no hay doble salto que valga */
+    if(doble || y > SUELO) return;
+    /* no se suma velocidad, se suma altura: sumando velocidad, dos
+       pulsaciones seguidas sacaban al muñeco por arriba de la pantalla, y
+       fijándola, pulsar pronto daba un salto MÁS BAJO que el normal */
+    const queda = vy < 0 ? vy * vy / (2 * GRAVEDAD) : 0;
+    doble = true; vy = -Math.sqrt(2 * GRAVEDAD * (queda + DOBLE_ALTO));
+    sonido.salto(1.4);
+    return;
+  }
+  enAire = true; vy = -IMPULSO; y = SUELO - 0.01; tSalto = ms;
+  sonido.salto();
+}
+
+function empieza(){
+  reinicia();
+  estado = "corre";
+  $("#elige").hidden = true; $("#fin").hidden = true;
+  sonido.musica(true);
+}
+
+function muere(o){
+  estado = "fin"; tMuerte = 0;
+  causa = o;
+  cayendo = !!(o && o.pozo);
+  if(cayendo){ vy = 40; sonido.caida(); } else sonido.choque();
+  sonido.musica(false);
+  setTimeout(final, 650);
+}
+
+/* ------------------------------------------------------------------
+   Pintado
+   ------------------------------------------------------------------ */
+function texto(s, x, yy, color, tam, alinea){
+  g.font = "500 " + (tam || 5) + "px Gellix, 'Helvetica Neue', Arial, sans-serif";
+  g.textAlign = alinea || "center"; g.textBaseline = "alphabetic";
+  g.fillStyle = color; g.fillText(s, x, yy);
+}
+/* el bocadillo de los que te paran: a la izquierda de la cabeza, que es
+   por donde llegas, con el pico hacia ellos */
+function bocadillo(s, x, yy){
+  g.font = "500 5px Gellix, 'Helvetica Neue', Arial, sans-serif";
+  const w = Math.ceil(g.measureText(s).width) + 6;
+  const bx = Math.round(x - w), by = Math.round(yy - 5);
+  rect(bx - 1, by - 1, w + 2, 10, C.O); rect(bx + w, by + 2, 3, 4, C.O);
+  rect(bx, by, w, 8, C.W); rect(bx + w, by + 3, 2, 2, C.W);
+  texto(s, bx + 3, by + 6, "#191820", 5, "left");
+}
+function pinta(){
+  g.setTransform(ESC, 0, 0, ESC, 0, 0);
+  g.imageSmoothingEnabled = false;
+  rect(0, 0, ANCHO, ALTO, PAL.fondo);
+
+  /* la pared: techo con fluorescentes, zócalo y lo que cuelga */
+  rect(0, 0, ANCHO, 5, PAL.techo);
+  const desp = Math.round(dist * 0.5) % 64;
+  for(let lx = -desp; lx < ANCHO; lx += 64){
+    rect(lx + 20, 5, 24, 2, PAL.lampara); rect(lx + 22, 7, 20, 1, PAL.luz);
+  }
+  rect(0, SUELO - 12, ANCHO, 12, PAL.zocalo); rect(0, SUELO - 12, ANCHO, 1, PAL.zocaloFilo);
+  for(const f of fondo) pintaDecorado(f);
+  /* un velo sobre la pared para que el decorado se quede atrás y no
+     compita con los obstáculos */
+  rect(0, 0, ANCHO, SUELO, PAL.velo);
+
+  /* los rótulos van detrás de todo lo demás y en tenue: cuentan el
+     chiste pero no deben confundirse con el obstáculo */
+  for(const o of cosas){
+    const T = TIPOS[o.tipo];
+    /* el correo lleva alas encima: el rótulo sube para no pisarlas */
+    const top = o.pozo ? SUELO - 8 : o.tipo === "correo" ? o.y - 7 : T.vuela ? o.y - 3 : SUELO - o.h - 4;
+    texto(T.etiqueta, o.x + o.w / 2, top, PAL.rotulo, 6);
+    if(T.bocadillo) bocadillo(T.bocadillo, o.x + 8, SUELO - 24);
+  }
+  for(const c of comida) texto(ALMUERZOS[c.tipo].etiqueta, c.x + 5, c.y - 8, PAL.almuerzo, 6);
+
+  for(const p of papeletas){
+    const by = p.y + Math.round(Math.sin((t + p.x * 20) / 200));
+    silueta(p.x, by, 7, 8); rect(p.x, by, 7, 8, C.W); rect(p.x+1, by+1, 5, 1, C.gris);
+    rect(p.x+2, by+3, 1, 1, C.R); rect(p.x+4, by+3, 1, 1, C.R); rect(p.x+3, by+4, 1, 1, C.R);
+    rect(p.x+2, by+5, 1, 1, C.R); rect(p.x+4, by+5, 1, 1, C.R);
+  }
+  for(const j of jaulas) pintaJaula(j);
+  for(const o of cosas) if(!o.pozo) TIPOS[o.tipo].pinta(o.x, o);
+  for(const c of comida) ALMUERZOS[c.tipo].pinta(c.x, c.y + Math.round(Math.sin((t + c.x * 20) / 200)));
+
+  pintaSeguidores();
+  pintaMuneco();
+
+  /* el suelo, con los pozos recortados. Va después del muñeco para que
+     al caer por el pozo lo tapen los bordes */
+  const huecos = cosas.filter(o => o.pozo).sort((a, b) => a.x - b.x);
+  let x0 = 0;
+  const tramo = (a, b) => {
+    if(b <= a) return;
+    rect(a, SUELO, b - a, ALTO - SUELO, PAL.suelo);
+    rect(a, SUELO, b - a, 1, PAL.sueloFilo);
+  };
+  for(const h of huecos){
+    tramo(x0, h.x);
+    rect(h.x, SUELO, h.w, ALTO - SUELO, PAL.hueco);
+    x0 = h.x + h.w;
+  }
+  tramo(x0, ANCHO);
+  for(let i = 0; i < ANCHO; i += 9){
+    const px = Math.round(i - (dist * 1) % 9);
+    if(!huecos.some(h => px >= h.x && px <= h.x + h.w)) rect(px, SUELO + 4 + (i % 3) * 4, 3, 1, PAL.sueloMarca);
+  }
+
+  for(const r of rotulos) texto(r.texto, r.x + 3, r.y, "rgba(" + PAL.puntos + "," + Math.min(1, r.vida * 2) + ")", 6);
+
+  /* marcador arriba a la derecha */
+  g.font = "500 7px 'IBM Plex Mono', ui-monospace, monospace";
+  g.textAlign = "right"; g.fillStyle = PAL.hud;
+  g.fillText(String(puntos()).padStart(5, "0"), ANCHO - 6, 12);
+  g.font = "400 5px 'IBM Plex Mono', ui-monospace, monospace";
+  g.fillStyle = PAL.hud2;
+  g.fillText(metros() + " m · " + votos + (votos === 1 ? " papeleta" : " papeletas")
+    + (almuerzos ? " · " + almuerzos + (almuerzos === 1 ? " almuerzo" : " almuerzos") : ""), ANCHO - 6, 20);
+  if(estado !== "elige") g.fillText("liberados " + libres.length + "/" + (GENTE.length - 1), ANCHO - 6, 27);
+
+  if(estado === "espera") texto("Pulsa espacio o toca para salir", ANCHO / 2, 40, PAL.aviso, 7);
+  if(estado === "elige")  texto("Elige con quién corres", ANCHO / 2, 40, PAL.aviso, 7);
+}
+
+/* el nombre corto, y con la inicial del apellido cuando se repite:
+   hay dos Marios en la lista */
+const nombre = k => {
+  const [, n, ap] = GENTE.find(p => p[0] === k);
+  return GENTE.filter(p => p[1] === n).length > 1 ? n + " " + ap[0] + "." : n;
+};
+
+/* la jaula: el muñeco dentro, pidiendo ayuda, y los barrotes delante */
+function pintaJaula(j){
+  const x = Math.round(j.x);
+  rect(x, SUELO - 40, 31, 40, "rgba(5,12,28,.18)");
+  g.drawImage(MUNECOS.fotograma(j.quien, "alerta", 0), x + 2, SUELO - 35);
+  rect(x - 1, SUELO - 41, 33, 4, C.O); rect(x, SUELO - 40, 31, 2, "#8a8f9c");
+  rect(x - 1, SUELO - 3, 33, 3, C.O); rect(x, SUELO - 2, 31, 1, "#8a8f9c");
+  for(let bx = x + 2; bx < x + 31; bx += 6) rect(bx, SUELO - 38, 1, 35, "#6b6f7c");
+  rect(x + 13, SUELO - 22, 5, 5, C.O); rect(x + 14, SUELO - 21, 3, 3, "#e0b04a");   // el candado
+  texto("LIBERA A " + nombre(j.quien).toUpperCase(), x + 15, SUELO - 45, PAL.jaula, 6);
+}
+
+/* los tres últimos liberados corren detrás, cada uno con el salto del
+   de delante unos milisegundos más tarde */
+function pintaSeguidores(){
+  const n = Math.min(3, libres.length);
+  for(let i = 0; i < n; i++){
+    const k = libres[libres.length - 1 - i];
+    const x = PX - 12 * (i + 1);
+    let py = SUELO, aire = false;
+    if(estado === "corre"){
+      const objetivo = ms - 130 * (i + 1);
+      const r = rastro.find(e => e.ms >= objetivo) || rastro[rastro.length - 1];
+      if(r){ py = r.y; aire = r.enAire; }
+    }
+    if(py > SUELO) py = SUELO;       // al pozo solo cae el de delante
+    const pose = estado === "fin" ? "alerta" : aire ? "salta" : "fuga";
+    const tt = pose === "fuga" ? ((Math.floor(fase) + i + 1) % 4) * 92 : 0;
+    const an = Math.max(4, 9 - Math.round((SUELO - py) / 5));
+    rect(x + 13 - (an >> 1), SUELO - 1, an, 1, PAL.sombra);
+    g.drawImage(MUNECOS.fotograma(k, pose, tt), x, Math.round(py) - MUNECOS.REJ_H + 1);
+  }
+}
+
+function pintaMuneco(){
+  let pose = "quieto", tt = Math.floor(t / 100) * 100 % 5700;
+  if(estado === "corre"){
+    if(enAire){ pose = "salta"; tt = 0; }
+    else { pose = "fuga"; tt = (Math.floor(fase) % 4) * 92; }
+  } else if(estado === "fin"){
+    if(cayendo){ pose = "cae"; tt = (Math.floor(tMuerte / 120) % 2) * 120; }
+    else { pose = "pillado"; tt = Math.floor(tMuerte / 40) * 40 % 560; }
+  }
+  const aire = Math.max(0, SUELO - y);
+  if(!cayendo){
+    const an = Math.max(4, 11 - Math.round(aire / 5));
+    rect(PX + 13 - (an >> 1), SUELO - 1, an, 1, PAL.sombra);
+  }
+  const f = MUNECOS.fotograma(quien, pose, tt);
+  /* con el subidón parpadea, y más rápido cuando se va a acabar */
+  const queda = subidon - ms;
+  if(estado === "corre" && queda > 0 && Math.floor(t / (queda < 1000 ? 60 : 120)) % 2) g.globalAlpha = 0.45;
+  g.drawImage(f, PX, Math.round(y) - MUNECOS.REJ_H + 1);
+  g.globalAlpha = 1;
+}
+
+/* ------------------------------------------------------------------
+   El bucle. Con la pestaña oculta el navegador para requestAnimationFrame,
+   y al volver el dt sería de minutos: se topa en 1/30 de segundo.
+   ------------------------------------------------------------------ */
+let antes = performance.now();
+function bucle(ahora){
+  const dt = Math.min(1 / 30, (ahora - antes) / 1000);
+  antes = ahora;
+  paso(dt);
+  pinta();
+  requestAnimationFrame(bucle);
+}
+document.addEventListener("visibilitychange", () => {
+  if(document.hidden && estado === "corre") sonido.musica(false);
+  if(!document.hidden && estado === "corre") sonido.musica(true);
+});
+
+/* ------------------------------------------------------------------
+   Controles
+   ------------------------------------------------------------------ */
+const TECLAS = ["Space", "ArrowUp", "KeyW"];
+const escribiendo = () => document.activeElement && document.activeElement.tagName === "INPUT";
+document.addEventListener("keydown", e => {
+  if(escribiendo()) return;
+  if(TECLAS.includes(e.code)){
+    /* en el final, espacio no relanza: con el formulario delante se
+       escapaba una partida nueva sin querer al ir a escribir el alias */
+    if(estado === "fin") return;
+    e.preventDefault();
+    if(e.repeat) return;
+    pulsado = true; salta();
+  } else if(e.code === "KeyM"){
+    $("#sonido").click();
+  }
+});
+document.addEventListener("keyup", e => { if(TECLAS.includes(e.code)) pulsado = false; });
+lienzo.addEventListener("pointerdown", e => {
+  e.preventDefault();
+  if(estado === "fin") return;
+  pulsado = true; salta();
+});
+window.addEventListener("pointerup", () => { pulsado = false; });
+window.addEventListener("pointercancel", () => { pulsado = false; });
+
+for(const b of document.querySelectorAll(".control")) b.addEventListener("click", () => b.blur());
+
+/* el tema: misma clave que la portada, y el claro por defecto como allí */
+function pintaTema(){
+  const claro = document.documentElement.dataset.tema === "claro";
+  PAL = PALETAS[claro ? "claro" : "oscuro"];
+  $("#tema").textContent = claro ? "Oscuro" : "Claro";
+  $("#tema").setAttribute("aria-label", claro ? "Cambiar a tema oscuro" : "Cambiar a tema claro");
+}
+$("#tema").addEventListener("click", () => {
+  const claro = document.documentElement.dataset.tema !== "claro";
+  if(claro) document.documentElement.dataset.tema = "claro"; else delete document.documentElement.dataset.tema;
+  try{ localStorage.setItem("candidatura-tema", claro ? "claro" : "oscuro"); }catch(e){}
+  pintaTema();
+});
+pintaTema();
+
+$("#sonido").setAttribute("aria-pressed", String(sonido.on));
+$("#sonido").addEventListener("click", () => {
+  sonido.arranca();
+  $("#sonido").setAttribute("aria-pressed", String(sonido.alterna()));
+});
+
+/* ------------------------------------------------------------------
+   Elegir personaje. Cada botón lleva su muñeco en pequeño, que saluda
+   al pasar el ratón o al llegar con el tabulador.
+   ------------------------------------------------------------------ */
+function retrato(canvas, k, pose, tt){
+  const c = canvas.getContext("2d");
+  c.clearRect(0, 0, canvas.width, canvas.height);
+  c.drawImage(MUNECOS.fotograma(k, pose, tt), 0, 0);
+}
+function montaGente(){
+  const ul = $("#gente");
+  for(const [k, nombre, apellido] of GENTE){
+    const li = document.createElement("li");
+    const b = document.createElement("button");
+    b.type = "button"; b.dataset.quien = k;
+    b.setAttribute("aria-pressed", String(k === quien));
+    const cv = document.createElement("canvas");
+    cv.width = MUNECOS.REJ_W; cv.height = MUNECOS.REJ_H;
+    retrato(cv, k, "quieto", 0);
+    const n = document.createElement("span");
+    n.textContent = nombre;
+    if(apellido){ const s = document.createElement("small"); s.textContent = apellido; n.appendChild(s); }
+    b.append(cv, n);
+    let reloj = null;
+    const saluda = () => { if(reloj) return; let i = 0; reloj = setInterval(() => retrato(cv, k, "saluda", (i++ % 2) * 150), 150); };
+    const para = () => { clearInterval(reloj); reloj = null; retrato(cv, k, "quieto", 0); };
+    b.addEventListener("mouseenter", saluda); b.addEventListener("focus", saluda);
+    b.addEventListener("mouseleave", para); b.addEventListener("blur", para);
+    b.addEventListener("click", () => {
+      quien = k; local.quien = k; guardar(local);
+      for(const o of ul.querySelectorAll("button")) o.setAttribute("aria-pressed", String(o === b));
+      sonido.arranca();
+      estado = "espera"; reinicia();
+      lienzo.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    });
+    li.appendChild(b); ul.appendChild(li);
+  }
+}
+
+/* ------------------------------------------------------------------
+   El final y el marcador
+   ------------------------------------------------------------------ */
+function final(){
+  const T = causa ? TIPOS[causa.tipo] : null;
+  const persona = GENTE.find(p => p[0] === quien);
+  $("#fin-t").textContent = persona[1] + " se queda aquí";
+  $("#fin-por").innerHTML = "";
+  $("#fin-por").append(
+    (T ? T.frase : "Fuera.") + " Por cosas así nos presentamos: ",
+    Object.assign(document.createElement("a"), { href: "/#propuestas", textContent: "mira qué proponemos" }),
+    "."
+  );
+  $("#fin-metros").textContent = metros();
+  $("#fin-votos").textContent = votos;
+  $("#fin-almuerzos").textContent = almuerzos;
+  const caras = $("#fin-caras");
+  caras.innerHTML = "";
+  if(libres.length){
+    const nombres = libres.map(nombre);
+    const lista = nombres.length > 1 ? nombres.slice(0, -1).join(", ") + " y " + nombres[nombres.length - 1] : nombres[0];
+    $("#fin-libres").textContent = libres.length === GENTE.length - 1
+      ? "Has liberado a la lista entera. Así sí."
+      : "Has liberado a " + lista + ". Quedan " + (GENTE.length - 1 - libres.length) + " en las jaulas.";
+    for(const k of libres){
+      const c = document.createElement("canvas");
+      c.width = MUNECOS.REJ_W; c.height = MUNECOS.REJ_H;
+      c.getContext("2d").drawImage(MUNECOS.fotograma(k, "celebra", 0), 0, 0);
+      c.title = nombre(k);
+      caras.appendChild(c);
+    }
+  } else {
+    $("#fin-libres").textContent = "Esta vez no has liberado a nadie: los demás siguen en las jaulas del camino.";
+  }
+  $("#fin-puntos").textContent = puntos();
+  $("#alias").value = local.alias || "";
+  $("#nota").textContent = local.mejor ? "Tu mejor marca: " + local.mejor + " puntos." : "";
+  $("#enviar").disabled = puntos() === 0;
+  $("#enviar").textContent = "Guardar marca";
+  if(puntos() > (local.mejor || 0)){ local.mejor = puntos(); guardar(local); }
+  marca = { puntos: puntos(), votos, extras: almuerzos, metros: metros(), ms: Math.round(ms) };
+  $("#fin").hidden = false;
+  $("#otra").focus({ preventScroll: true });
+}
+let marca = null;
+
+$("#otra").addEventListener("click", () => { sonido.arranca(); empieza(); });
+$("#cambiar").addEventListener("click", () => {
+  estado = "elige"; reinicia();
+  $("#fin").hidden = true; $("#elige").hidden = false;
+  const b = $("#gente button[aria-pressed='true']") || $("#gente button");
+  b.focus();
+});
+
+const RANKING = "/api/ranking?juego=carrera";
+let miSlug = local.alias ? slug(local.alias) : null;
+function pintaTabla(filas){
+  const ol = $("#tabla");
+  ol.innerHTML = "";
+  if(!filas.length){
+    const li = document.createElement("li");
+    li.innerHTML = "<span class='vacia'>Aún no hay marcas. La primera puede ser la tuya.</span>";
+    ol.appendChild(li); return;
+  }
+  const top = filas.slice(0, 10);
+  const mia = filas.findIndex(f => f.slug === miSlug);
+  const fila = (f, i) => {
+    const li = document.createElement("li");
+    if(f.slug === miSlug) li.className = "yo";
+    const a = document.createElement("span"); a.className = "pos"; a.textContent = i + 1;
+    const b = document.createElement("span"); b.className = "alias"; b.textContent = f.alias;
+    const c = document.createElement("span"); c.textContent = f.puntos;
+    li.append(a, b, c); ol.appendChild(li);
+  };
+  top.forEach(fila);
+  if(mia >= 10) fila(filas[mia], mia);
+  $("#tabla-sub").textContent = filas.length === 1 ? "Una persona ha jugado." : filas.length + " personas han jugado. Las diez mejores:";
+}
+async function traeTabla(){
+  try{
+    const r = await fetch(RANKING, { headers: { accept: "application/json" } });
+    if(!r.ok) throw new Error("HTTP " + r.status);
+    const d = await r.json();
+    pintaTabla(Array.isArray(d.top) ? d.top : []);
+  }catch(e){
+    $("#tabla-sub").textContent = "No se puede alcanzar el marcador ahora mismo.";
+  }
+}
+
+$("#form").addEventListener("submit", async ev => {
+  ev.preventDefault();
+  const alias = $("#alias").value.trim().replace(/\s+/g, " ").slice(0, 24);
+  const nota = $("#nota");
+  if(alias.length < 2){ nota.innerHTML = "<b class='no'>Escribe un alias de al menos dos letras.</b>"; return; }
+  if(!marca) return;
+  local.alias = alias; guardar(local);
+  miSlug = slug(alias);
+  $("#enviar").disabled = true;
+  nota.textContent = "Guardando…";
+  try{
+    const r = await fetch(RANKING, {
+      method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ id: miId(), alias, ...marca })
+    });
+    const d = await r.json().catch(() => ({}));
+    if(!r.ok) throw new Error(d.error || ("HTTP " + r.status));
+    if(Array.isArray(d.top)) pintaTabla(d.top);
+    if(d.guardada) nota.innerHTML = "<b>Dentro.</b> " + marca.puntos + " puntos en el marcador.";
+    else if(d.renombrada) nota.innerHTML = "<b>Alias cambiado.</b> Mantienes tus " + d.anterior + " puntos.";
+    else nota.textContent = "Ya tenías " + d.anterior + " puntos: se queda tu mejor marca.";
+    $("#enviar").textContent = "Cambiar alias";
+  }catch(e){
+    nota.innerHTML = "<b class='no'>No se pudo guardar</b> (" + (e.message || "error") + ").";
+  }
+  $("#enviar").disabled = false;
+});
+
+/* ------------------------------------------------------------------
+   Arranque
+   ------------------------------------------------------------------ */
+montaGente();
+reinicia();
+window.addEventListener("resize", mide);
+mide();
+if(document.fonts) document.fonts.ready.then(pinta);
+requestAnimationFrame(bucle);
+traeTabla();
+</script>
+</body>
+</html>

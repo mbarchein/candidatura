@@ -9,9 +9,17 @@ a3-candidatura/vista.png
 # extracciones temporales para validar sintaxis
 /[a-z][0-9].js
 
-# el marcador de pruebas del servidor local
+# los marcadores de pruebas del servidor local (reto y carrera)
 ranking-local.json
+ranking-local-carrera.json
 
 # borradores que no se publican. El repo es público, así que lo delicado
 # se queda en disco y no entra en git
 carteles/borradores/
+
+# las voces del vídeo repaso, y el vídeo montado con ellas. Nueve
+# compañeros grabándose hablando de su empresa no entra en un repo
+# público: misma razón que los borradores. Se queda en disco y se manda
+# por el canal de siempre. Ver carteles/GUION-VIDEO.md
+carteles/voz/
+carteles/video/

@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Carátula · La carrera hasta la urna</title>
+<link rel="stylesheet" href="tipos.css">
+<style>
+/* ==================================================================
+   CARÁTULA · la caja del juego, como las de cartucho de los 80
+   ------------------------------------------------------------------
+   1080 × 1350, como el resto de la serie, para que en el chat se vea
+   igual de grande. Es la única pieza oscura: una caja de juego retro
+   en papel crema no se lee como caja de juego.
+
+   La escena es la del propio juego (web/juego.html) y los muñecos
+   salen del mismo juego-munecos.js, así que lo que se ve en la caja es
+   lo que te encuentras al abrir el enlace: Compi saltando el pozo, y
+   abajo los once en fila, como la pantalla de elegir personaje de la
+   parte de atrás de las cajas.
+
+   Todo lo editable está en :root y en los nodos de texto. La escena
+   se pinta en el <canvas> con el script del final; sus rótulos son
+   HTML encima, para poder cambiarlos sin tocar el dibujo.
+
+   Exportar: ./carteles/exportar.sh caratula
+   ================================================================== */
+:root{
+  --w:1080px; --h:1350px; --margen:64px;
+
+  --noche:#0a0c16; --noche-2:#100f1c; --panel:#171525;
+  --texto:#f1efe9; --texto-2:#dbe6f4; --apagado:#b0aea8;
+  --cian:#3fc9f0; --cian-hondo:#1b9fc9; --cian-noche:#0d4a63;
+  --coral:#f4796b; --coral-hondo:#c9584c; --coral-noche:#6b2a26;
+  --crema:#f6f2ea;
+
+  --bloque:"Archivo Black","Gellix",Arial,sans-serif;
+  --display:"Gellix","Helvetica Neue",Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+
+  --t-titular:124px; --t-titular-2:96px; --t-rotulo:17px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--noche)}
+body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+.caja{
+  width:var(--w);height:var(--h);position:relative;overflow:hidden;
+  background:var(--noche);color:var(--texto);font-family:var(--display);
+  display:flex;flex-direction:column
+}
+/* el marco de caja: un filo cian por dentro, como el borde impreso de
+   las cajas de cartón. Es lo que sujeta todo lo demás */
+.caja::after{
+  content:"";position:absolute;inset:22px;border:3px solid var(--cian);border-radius:6px;
+  pointer-events:none;z-index:5
+}
+
+/* ---------- la franja de arriba: sello y ficha ---------- */
+.franja{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:48px var(--margen) 0;z-index:2
+}
+.sello{
+  font-family:var(--bloque);font-size:22px;letter-spacing:.02em;text-transform:uppercase;
+  background:var(--coral);color:var(--noche);padding:10px 16px 9px;border-radius:4px;
+  box-shadow:5px 5px 0 var(--coral-noche)
+}
+.ficha{
+  font-family:var(--mono);font-size:var(--t-rotulo);letter-spacing:.18em;text-transform:uppercase;
+  color:var(--texto-2);text-align:right;line-height:1.5
+}
+.ficha b{color:var(--cian);font-weight:500}
+
+/* ---------- el título ---------- */
+/* inclinado y con relieve de escalones: el relieve son sombras duras
+   una detrás de otra, sin desenfoque, que es como se hacía el 3D en
+   las cajas de la época. Sin degradados: dos tintas planas */
+.titulo{margin:34px var(--margen) 0;transform:skewX(-9deg);transform-origin:left bottom;z-index:2}
+.titulo h1{
+  font-family:var(--bloque);font-weight:900;text-transform:uppercase;margin:0;
+  font-size:var(--t-titular);line-height:.84;letter-spacing:-.035em;color:var(--texto);
+  text-shadow:
+    2px 2px 0 var(--cian-hondo),4px 4px 0 var(--cian-hondo),6px 6px 0 var(--cian-hondo),
+    8px 8px 0 var(--cian-hondo),10px 10px 0 var(--cian-noche),12px 12px 0 var(--cian-noche),
+    14px 14px 0 var(--noche)
+}
+.titulo h1 em{
+  display:block;font-style:normal;color:var(--coral);font-size:var(--t-titular-2);
+  letter-spacing:-.02em;margin-top:16px;
+  text-shadow:
+    2px 2px 0 var(--coral-hondo),4px 4px 0 var(--coral-hondo),6px 6px 0 var(--coral-noche),
+    8px 8px 0 var(--coral-noche),10px 10px 0 var(--noche)
+}
+
+/* ---------- la escena ---------- */
+.escena{position:relative;margin-top:34px;height:520px;z-index:1}
+.escena canvas{display:block;width:100%;height:100%;image-rendering:pixelated}
+/* los rótulos de la escena: el mismo cartelito que en el juego */
+.rotulo{
+  position:absolute;font-family:var(--mono);font-size:var(--t-rotulo);font-weight:500;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--texto);
+  background:rgba(10,12,22,.78);border:2px solid var(--coral);padding:7px 11px 6px;
+  white-space:nowrap
+}
+.rotulo--pozo{left:538px;bottom:18px}
+.rotulo--letra{left:64px;top:230px;border-color:var(--cian)}
+.rotulo--email{right:64px;top:92px;border-color:var(--cian)}
+
+/* el sello de «nuevo» de las cajas, girado. Tapa una esquina de la
+   escena a propósito: es lo que rompe la rejilla */
+.estrella{
+  position:absolute;right:70px;top:150px;width:168px;height:168px;z-index:3;
+  display:grid;place-items:center;text-align:center;transform:rotate(12deg);
+  background:var(--coral);color:var(--noche);
+  clip-path:polygon(50% 0,61% 13%,78% 7%,80% 24%,97% 28%,88% 43%,100% 57%,84% 64%,88% 82%,70% 81%,61% 97%,50% 86%,38% 97%,30% 81%,12% 82%,16% 64%,0 57%,12% 43%,3% 28%,20% 24%,22% 7%,39% 13%);
+  font-family:var(--bloque);text-transform:uppercase;font-size:21px;line-height:1
+}
+.estrella span{display:block;font-size:44px}
+
+/* ---------- el pie: elegir personaje y el QR ---------- */
+.pie{
+  flex:1;display:grid;grid-template-columns:1fr auto;gap:36px;align-items:end;
+  padding:20px var(--margen) 52px;z-index:2
+}
+.elige{
+  font-family:var(--mono);font-size:var(--t-rotulo);letter-spacing:.18em;text-transform:uppercase;
+  color:var(--cian);margin:0 0 12px
+}
+.elige b{color:var(--texto);font-weight:500}
+/* la tira de elegir: los doce en dos filas, con el cursor coral en
+   Compi, que es el que corre en la escena */
+.tira{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.tira canvas{
+  width:100%;aspect-ratio:27/36;image-rendering:pixelated;display:block;
+  background:var(--panel);border:2px solid #2a2640;border-radius:4px;padding:8px 6px 2px
+}
+.tira canvas:first-child{border-color:var(--coral)}
+.cierre{
+  font-family:var(--mono);font-size:var(--t-rotulo);letter-spacing:.14em;text-transform:uppercase;
+  color:var(--apagado);margin:16px 0 0
+}
+.cierre b{color:var(--coral);font-weight:500}
+
+/* el QR va en una pegatina crema, como la de precio de la tienda: sobre
+   la noche, un QR claro-sobre-oscuro no lo leen todos los móviles */
+.pegatina{
+  background:var(--crema);color:#191820;padding:18px 18px 14px;border-radius:6px;
+  width:236px;text-align:center;transform:rotate(-3deg);box-shadow:6px 6px 0 var(--cian-noche)
+}
+.pegatina img{display:block;width:200px;height:200px}
+.pegatina strong{display:block;font-family:var(--bloque);font-size:24px;text-transform:uppercase;margin-top:12px;line-height:1}
+.pegatina small{display:block;font-family:var(--mono);font-size:15px;margin-top:6px;letter-spacing:.02em}
+
+/* líneas de tubo, muy suaves: dan la textura de pantalla sin ensuciar */
+.tubo{
+  position:absolute;inset:0;z-index:4;pointer-events:none;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.14) 0 2px,transparent 2px 4px)
+}
+</style>
+</head>
+<body>
+<div class="caja">
+  <div class="franja">
+    <span class="sello">Sin siglas</span>
+    <span class="ficha"><b>1 jugador</b> · 12 personajes<br>Para cualquier navegador</span>
+  </div>
+
+  <div class="titulo">
+    <h1>La carrera <em>hasta la urna</em></h1>
+  </div>
+
+  <div class="escena">
+    <canvas id="escena" width="1080" height="520"></canvas>
+    <span class="rotulo rotulo--email">Email de las 23:00</span>
+    <span class="rotulo rotulo--letra">Letra pequeña</span>
+    <span class="rotulo rotulo--pozo">Pozo de las falsas promesas</span>
+    <div class="estrella"><div><span>12</span>compis<br>jugables</div></div>
+  </div>
+
+  <div class="pie">
+    <div>
+      <p class="elige">Elige con quién corres · <b>Compi y la lista</b></p>
+      <div class="tira" id="tira"></div>
+      <p class="cierre">Candidatura independiente · Vota el <b>martes 29</b></p>
+    </div>
+    <div class="pegatina">
+      <img src="qr-juego.svg" alt="QR a sin-siglas.info/juego">
+      <strong>Juega ya</strong>
+      <small>sin-siglas.info/juego</small>
+    </div>
+  </div>
+
+  <div class="tubo"></div>
+</div>
+
+<script src="../web/juego-munecos.js"></script>
+<script>
+/* ------------------------------------------------------------------
+   La escena, en píxeles gordos. El fondo va a escala 8 (135 x 80 del
+   juego); el pelotón del fondo a 4, que es lo que da la profundidad;
+   Compi delante a 8, el mismo tamaño que el decorado que salta.
+   ------------------------------------------------------------------ */
+const cv = document.getElementById("escena"), g = cv.getContext("2d");
+g.imageSmoothingEnabled = false;
+const E = 8, AN = 135, AL = 65, SUELO = 57, HORIZONTE = 35;
+const r = (x, y, w, h, k) => { g.fillStyle = k; g.fillRect(x * E, y * E, w * E, h * E); };
+
+/* cielo por bandas, sin degradado: de noche arriba a coral en el horizonte */
+const BANDAS = ["#0a0c16", "#100f1c", "#171525", "#211d31", "#2e2238", "#3d2a3a", "#553234"];
+BANDAS.forEach((k, i) => r(0, i * 5, AN, 5, k));
+r(0, HORIZONTE, AN, SUELO - HORIZONTE, "#171525");
+
+/* el sol partido de las cajas de la época: medio disco coral cortado
+   por rayas de cielo, más frecuentes hacia el horizonte */
+const SX = 40, RAD = 16;
+for(let y = -RAD; y < 0; y++){
+  const w = Math.round(Math.sqrt(RAD * RAD - y * y));
+  const corte = y > -8 && ((y + 8) % 3 === 0);
+  if(!corte) r(SX - w, HORIZONTE + y, w * 2, 1, y < -9 ? "#f9a79d" : "#f4796b");
+}
+
+/* edificios: dos capas, la de delante más oscura, con ventanas cian */
+const edificio = (x, w, h, k, luz) => {
+  r(x, HORIZONTE - h, w, h, k);
+  for(let wy = HORIZONTE - h + 2; wy < HORIZONTE - 1; wy += 3)
+    for(let wx = x + 1; wx < x + w - 1; wx += 2)
+      if((wx * 5 + wy * 3) % 7 === 0) r(wx, wy, 1, 1, luz);
+};
+[[0,9,14],[64,8,12],[74,12,19],[88,7,10],[97,11,16],[117,9,13],[127,8,20]]
+  .forEach(([x, w, h]) => edificio(x, w, h, "#1d1a2e", "rgba(63,201,240,.35)"));
+[[10,6,5],[58,9,7],[84,7,9],[108,10,6]]
+  .forEach(([x, w, h]) => edificio(x, w, h, "#141222", "rgba(63,201,240,.5)"));
+r(0, HORIZONTE, AN, 1, "#3a3552");
+
+/* el suelo, con el pozo abierto */
+const P0 = 70, P1 = 100;
+r(0, SUELO, P0, AL - SUELO, "#1d1a2e"); r(P1, SUELO, AN - P1, AL - SUELO, "#1d1a2e");
+r(0, SUELO, P0, 1, "#8a8177"); r(P1, SUELO, AN - P1, 1, "#8a8177");
+r(P0, SUELO, P1 - P0, AL - SUELO, "#05060c");
+for(let x = 2; x < AN; x += 7) if(x < P0 - 3 || x > P1) r(x, SUELO + 3, 3, 1, "#2a2640");
+
+/* la letra pequeña, ya saltada, a la izquierda */
+const LX = 16, LY = SUELO - 21;
+r(LX - 1, LY - 1, 14, 23, "#050c1c"); r(LX, LY, 12, 21, "#e9f2fc");
+for(let j = 3; j < 17; j += 2) r(LX + 2, LY + j, j > 12 ? 5 : 8, 1, "#b8c8dd");
+r(LX + 8, LY + 16, 3, 3, "#f4796b"); r(LX + 10, LY, 2, 2, "#050c1c");
+
+/* el email volando, arriba a la derecha */
+const MX = 112, MY = 3;
+r(MX - 1, MY - 1, 15, 11, "#050c1c"); r(MX, MY, 13, 9, "#e9f2fc");
+for(let i = 0; i < 6; i++){ r(MX + i, MY + i, 1, 1, "#f4796b"); r(MX + 12 - i, MY + i, 1, 1, "#f4796b"); }
+r(MX + 3, MY - 3, 7, 1, "#b8c8dd"); r(MX + 5, MY - 4, 3, 1, "#b8c8dd");
+
+/* las papeletas en el arco del salto */
+const papeleta = (x, y) => {
+  r(x - 1, y - 1, 9, 10, "#050c1c"); r(x, y, 7, 8, "#e9f2fc"); r(x + 1, y + 1, 5, 1, "#b8c8dd");
+  [[2,3],[4,3],[3,4],[2,5],[4,5]].forEach(([a, b]) => r(x + a, y + b, 1, 1, "#f4796b"));
+};
+papeleta(46, 38); papeleta(104, 44); papeleta(118, 44);
+
+/* Compi en el aire, justo encima del pozo */
+g.setTransform(1, 0, 0, 1, 0, 0);
+g.drawImage(MUNECOS.fotograma("compi", "salta", 0), 72 * E, 10 * E, 27 * E, 36 * E);
+/* y el «+25» de la papeleta que acaba de coger */
+g.font = "500 34px 'IBM Plex Mono', monospace"; g.fillStyle = "#f9a79d";
+g.fillText("+25", 57 * E, 19 * E);
+
+/* la tira de elegir personaje: cada canvas a 27x36 y escalado por CSS */
+const tira = document.getElementById("tira");
+["compi","munoz","navarro","galindo","fernandez","lopezm","bolivar","algarra","barchein","aranda","lopeza","castillo"]
+  .forEach(k => {
+    const c = document.createElement("canvas");
+    c.width = 27; c.height = 36;
+    c.getContext("2d").drawImage(MUNECOS.fotograma(k, "quieto", 0), 0, 0);
+    tira.appendChild(c);
+  });
+</script>
+</body>
+</html>
