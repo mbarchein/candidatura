@@ -181,8 +181,22 @@ JUEGOS = {
         "revisa": revisa_carrera,
         "guarda": lambda c: {"votos": entero(c["votos"]), "metros": entero(c["metros"]),
                              "extras": entero(c.get("extras", 0))},
+        # en el juego manda el nombre y no el navegador, como en la función:
+        # se juega desde varios dispositivos y hay navegadores que no guardan
+        # nada, así que tu propio nombre salía como «de otra persona»
+        "por_nombre": True,
     },
 }
+
+
+def por_nombre(marcas):
+    """Una fila por nombre, la más alta. Convierte lo guardado por id."""
+    filas = {}
+    for k, m in marcas.items():
+        s = slug(m["alias"]) or k
+        if s not in filas or m["puntos"] > filas[s]["puntos"]:
+            filas[s] = {"id": m.get("id", k), **m}
+    return filas
 
 
 def juego_de(ruta):
@@ -218,6 +232,8 @@ class Manejador(SimpleHTTPRequestHandler):
             if not juego:
                 return self.responde({"error": "juego desconocido"}, 400)
             marcas = leer(juego["datos"])
+            if juego.get("por_nombre"):
+                marcas = por_nombre(marcas)
             return self.responde({"top": mejores(marcas), "jugadas": len(marcas)})
         limpio = self.path.split("?")[0]
         # las redirecciones de netlify.toml, para probar aquí las
@@ -232,6 +248,27 @@ class Manejador(SimpleHTTPRequestHandler):
             if (RAIZ / (limpio.lstrip("/") + ".html")).exists():
                 self.path = limpio + ".html"
         return super().do_GET()
+
+    def guarda_por_nombre(self, juego, datos, cuerpo, ident, alias, puntos):
+        filas = por_nombre(leer(datos))
+        s = slug(alias)
+        existente = filas.get(s)
+        # cambiar el alias de la marca recién guardada: misma persona, mismos
+        # puntos, otro nombre libre. Se mueve la fila
+        mia = next((k for k, m in filas.items()
+                    if k != s and m.get("id") == ident and m["puntos"] == puntos), None)
+        if mia and not existente:
+            filas[s] = {**filas.pop(mia), "alias": alias}
+            escribir(datos, filas)
+            return self.responde({"guardada": False, "renombrada": True,
+                                  "anterior": puntos, "top": mejores(filas)})
+        if existente and existente["puntos"] >= puntos:
+            return self.responde({"guardada": False, "anterior": existente["puntos"],
+                                  "top": mejores(filas)})
+        filas[s] = {"id": ident, "alias": alias, "puntos": puntos,
+                    **juego["guarda"](cuerpo), "ts": int(time.time() * 1000)}
+        escribir(datos, filas)
+        return self.responde({"guardada": True, "top": mejores(filas), "jugadas": len(filas)})
 
     def do_POST(self):
         if self.path.split("?")[0] != "/api/ranking":
@@ -262,6 +299,8 @@ class Manejador(SimpleHTTPRequestHandler):
             return self.responde({"error": fallo}, 422)
 
         puntos = int(float(cuerpo["puntos"]))
+        if juego.get("por_nombre"):
+            return self.guarda_por_nombre(juego, datos, cuerpo, ident, alias, puntos)
         marcas = leer(datos)
 
         # el primero que coge un alias se lo queda: si no, dos filas iguales

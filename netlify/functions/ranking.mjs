@@ -126,8 +126,49 @@ const JUEGOS = {
     clave: 'carrera',
     revisa: revisaCarrera,
     guarda: c => ({ votos: Number(c.votos), metros: Number(c.metros), extras: Number(c.extras ?? 0) }),
+    /* en el juego manda el nombre y no el navegador: se juega desde el
+       móvil y desde el portátil, y hay navegadores (los que abre Outlook
+       o WhatsApp) que no guardan nada, así que el id cambiaba y tu propio
+       nombre salía como «de otra persona». Con el nombre como clave, se
+       guarde desde donde se guarde, se queda la marca más alta */
+    porNombre: true,
   },
 };
+
+/* El tablero por nombre. Las marcas que ya estaban guardadas por id de
+   navegador se convierten al leerlas: una fila por nombre, la más alta. */
+function porNombre(marcas) {
+  const filas = {};
+  for (const [k, m] of Object.entries(marcas)) {
+    const s = slug(m.alias) || k;
+    if (!filas[s] || m.puntos > filas[s].puntos) filas[s] = { id: m.id || k, ...m };
+  }
+  return filas;
+}
+
+async function guardaPorNombre(almacen, juego, cuerpo, id, alias, puntos) {
+  const filas = porNombre((await almacen.get(juego.clave, { type: 'json' })) || {});
+  const s = slug(alias);
+  const existente = filas[s];
+
+  /* cambiar el alias de la marca que se acaba de guardar: misma persona,
+     mismos puntos, otro nombre que nadie usa. Se mueve la fila */
+  const mia = Object.entries(filas).find(([k, m]) => k !== s && m.id === id && m.puntos === puntos);
+  if (mia && !existente) {
+    delete filas[mia[0]];
+    filas[s] = { ...mia[1], alias };
+    await almacen.setJSON(juego.clave, filas);
+    return json({ guardada: false, renombrada: true, anterior: puntos, top: mejores(filas) });
+  }
+
+  if (existente && existente.puntos >= puntos) {
+    return json({ guardada: false, anterior: existente.puntos, top: mejores(filas) });
+  }
+
+  filas[s] = { id, alias, puntos, ...juego.guarda(cuerpo), ts: Date.now() };
+  await almacen.setJSON(juego.clave, filas);
+  return json({ guardada: true, top: mejores(filas), jugadas: Object.keys(filas).length });
+}
 
 export default async function (peticion) {
   const nombre = new URL(peticion.url).searchParams.get('juego') || 'reto';
@@ -140,7 +181,8 @@ export default async function (peticion) {
   const almacen = getStore({ name: 'reto', consistency: 'strong' });
 
   if (peticion.method === 'GET') {
-    const marcas = (await almacen.get(clave, { type: 'json' })) || {};
+    let marcas = (await almacen.get(clave, { type: 'json' })) || {};
+    if (juego.porNombre) marcas = porNombre(marcas);
     return json({ top: mejores(marcas), jugadas: Object.keys(marcas).length });
   }
 
@@ -161,6 +203,7 @@ export default async function (peticion) {
   if (fallo) return json({ error: fallo }, 422);
 
   const puntos = Number(cuerpo.puntos);
+  if (juego.porNombre) return guardaPorNombre(almacen, juego, cuerpo, id, alias, puntos);
   const marcas = (await almacen.get(clave, { type: 'json' })) || {};
 
   /* dos personas con el mismo alias dejarían dos filas iguales y el

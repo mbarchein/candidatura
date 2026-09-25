@@ -1518,7 +1518,7 @@ $("#form").addEventListener("submit", async ev => {
     if(Array.isArray(d.top)) pintaTabla(d.top);
     if(d.guardada) nota.innerHTML = "<b>Dentro.</b> " + marca.puntos + " puntos en el marcador.";
     else if(d.renombrada) nota.innerHTML = "<b>Alias cambiado.</b> Mantienes tus " + d.anterior + " puntos.";
-    else nota.textContent = "Ya tenías " + d.anterior + " puntos: se queda tu mejor marca.";
+    else nota.textContent = "Con ese nombre ya hay " + d.anterior + " puntos: se queda la más alta.";
     $("#enviar").textContent = "Cambiar alias";
   }catch(e){
     nota.innerHTML = "<b class='no'>No se pudo guardar</b> (" + (e.message || "error") + ").";
