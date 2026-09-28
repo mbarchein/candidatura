@@ -189,6 +189,12 @@ h1 em{font-style:normal;color:var(--coral-txt);display:block}
 .gente button:hover,.gente button:focus-visible{border-color:var(--cian);transform:translateY(-2px)}
 .gente button:focus-visible{outline:2px solid var(--cian);outline-offset:2px}
 .gente button[aria-pressed="true"]{border-color:var(--coral)}
+/* los jefes, con el borde a rayas para que se lean como otra cosa */
+.gente .jefe{border-style:dashed;border-color:var(--line-strong)}
+.gente .cerrado{cursor:default;color:var(--muted)}
+.gente .cerrado:hover{transform:none;border-color:var(--line-strong)}
+.fin__jefe{margin-top:.5rem!important;padding:.55rem .75rem;border-radius:10px;
+  background:rgba(63,201,240,.1);color:var(--text)!important;font-weight:500}
 .gente canvas{width:54px;height:72px;image-rendering:pixelated}
 .gente small{display:block;color:var(--muted);font-size:.72rem}
 
@@ -365,7 +371,7 @@ h1 em{font-style:normal;color:var(--coral-txt);display:block}
 
   <section class="panel" id="elige" aria-labelledby="elige-t">
     <h2 id="elige-t">¿Con quién corres?</h2>
-    <p>Elige a alguien de la lista y pulsa espacio o toca el escenario para salir. Los demás te esperan enjaulados por el camino: pasa por encima de la jaula para liberarlos y correrán contigo.</p>
+    <p>Elige a alguien de la lista y pulsa espacio o toca el escenario para salir. Los demás te esperan enjaulados por el camino: pasa por encima de la jaula para liberarlos y correrán contigo. Los dos jefes del final se desbloquean jugando.</p>
     <ul class="gente" id="gente"></ul>
   </section>
 
@@ -373,6 +379,7 @@ h1 em{font-style:normal;color:var(--coral-txt);display:block}
     <h2 id="fin-t">Fuera</h2>
     <p class="fin__por" id="fin-por"></p>
     <p class="fin__libres" id="fin-libres"></p>
+    <p class="fin__jefe" id="fin-jefe" hidden></p>
     <div class="fin__caras" id="fin-caras"></div>
     <div class="fin__cifras">
       <span><b id="fin-metros">0</b>metros</span>
@@ -430,6 +437,15 @@ const GENTE = [
   ["algarra", "Leticia", "Algarra"], ["barchein", "Mario", "Barchéin"], ["aranda", "Mario", "Aranda"],
   ["lopeza", "Violeta", "López"], ["castillo", "María Emilia", "Castillo"]
 ];
+/* los jefes: los dos que te cortan el paso, jugables cuando se cumple su
+   hito. No salen en las jaulas, que son de la lista; al correr con ellos
+   se puede liberar a los doce. El desbloqueo se guarda en este navegador */
+const JEFES = [
+  ["cansino", "El cansino", "del pasillo", "Llega a 2000 m", "Corre 2000 metros en una partida", "al cansino del pasillo"],
+  ["pm", "El PM", "Product Manager", "Libera a la lista", "Libera a la lista entera en una partida", "al PM"]
+];
+const TODOS = GENTE.concat(JEFES);
+const abierto = k => !JEFES.some(p => p[0] === k) || !!(local.jefes && local.jefes[k]);
 
 /* ------------------------------------------------------------------
    Reglas. VOTO, EXTRA, VEL_MAX, SEP_VOTO y SEP_EXTRA son las mismas que
@@ -936,14 +952,16 @@ const COMIDAS = {
    Estado de la partida
    ------------------------------------------------------------------ */
 let estado = "elige";          // elige · espera · corre · fin
-let quien = local.quien && GENTE.some(p => p[0] === local.quien) ? local.quien : "compi";
+let quien = local.quien && TODOS.some(p => p[0] === local.quien) && abierto(local.quien) ? local.quien : "compi";
 let t = 0, ms = 0, dist = 0, vel = VEL_MIN, votos = 0, almuerzos = 0, subidon = 0, causa = null;
 let y = SUELO, vy = 0, enAire = false, pulsado = false, cayendo = false, doble = false, tSalto = 0;
 let cosas = [], papeletas = [], comida = [], rotulos = [], fondo = [];
 let jaulas = [], pendientes = [], libres = [], rastro = [], ultimaJaula = -1e9;
 let hechos = {}, comidos = {}, recientes = [], ultimaComida = null;
 let proximo = 0, ultimaPapeleta = -1e9, ultimoAlmuerzo = -1e9, fase = 0, tMuerte = 0;
-let aviso = 0, anuncio = null;
+let aviso = 0, anuncio = null, estrenos = [];
+/* los que se pueden liberar en esta partida: los de la lista menos tú */
+const enJaulas = () => GENTE.filter(p => p[0] !== quien).length;
 
 /* lo que se avisa en grande cuando la carrera sube de nivel */
 const AVISOS = [
@@ -962,7 +980,7 @@ const puntos = () => metros() + votos * VOTO + almuerzos * EXTRA;
 function reinicia(){
   t = 0; ms = 0; dist = 0; vel = VEL_MIN; votos = 0; almuerzos = 0; subidon = 0; causa = null;
   y = SUELO; vy = 0; enAire = false; cayendo = false; doble = false; fase = 0;
-  aviso = 0; anuncio = null;
+  aviso = 0; anuncio = null; estrenos = [];
   cosas = []; papeletas = []; comida = []; rotulos = [];
   /* los once que no llevas, en orden al azar: cada jaula saca al siguiente */
   pendientes = GENTE.map(p => p[0]).filter(k => k !== quien).sort(() => Math.random() - 0.5);
@@ -1165,6 +1183,7 @@ function paso(dt){
     anuncio = { texto: AVISOS[aviso][1], vida: 2.4 };
     aviso++;
   }
+  if(m >= 2000) desbloquea("cansino");
   if(anuncio){ anuncio.vida -= dt; if(anuncio.vida <= 0) anuncio = null; }
   sonido.tempo = 1 + (vel - VEL_MIN) / (VEL_MAX - VEL_MIN) * 0.22;
   const dx = vel * PX_M * dt;
@@ -1225,7 +1244,8 @@ function paso(dt){
     if(!j.libre && PX + 9 < j.x + 29 && PX + 19 > j.x + 2 && y > SUELO - 38){
       j.libre = true; libres.push(j.quien);
       const n = nombre(j.quien);
-      rotulos.push({ x: j.x + 10, y: SUELO - 44, vida: 1.3, texto: libres.length === GENTE.length - 1 ? "¡LA LISTA, COMPLETA!" : "¡" + n.toUpperCase() + " SE UNE!" });
+      rotulos.push({ x: j.x + 10, y: SUELO - 44, vida: 1.3, texto: libres.length === enJaulas() ? "¡LA LISTA, COMPLETA!" : "¡" + n.toUpperCase() + " SE UNE!" });
+      if(libres.length === enJaulas()) desbloquea("pm");
       sonido.libera();
     }
   }
@@ -1397,7 +1417,7 @@ function pinta(){
   g.fillStyle = PAL.hud2;
   g.fillText(metros() + " m · " + votos + (votos === 1 ? " papeleta" : " papeletas")
     + (almuerzos ? " · " + almuerzos + (almuerzos === 1 ? " almuerzo" : " almuerzos") : ""), ANCHO - 6, 20);
-  if(estado !== "elige") g.fillText("liberados " + libres.length + "/" + (GENTE.length - 1), ANCHO - 6, 27);
+  if(estado !== "elige") g.fillText("liberados " + libres.length + "/" + enJaulas(), ANCHO - 6, 27);
 
   if(estado === "espera") texto(TACTIL ? "Pulsa «Comenzar» o toca para salir" : "Pulsa «Comenzar», espacio o haz clic para salir", ANCHO / 2, 40, PAL.aviso, 7);
   if(estado === "fin" && repetible){
@@ -1410,8 +1430,8 @@ function pinta(){
 /* el nombre corto, y con la inicial del apellido cuando se repite:
    hay dos Marios en la lista */
 const nombre = k => {
-  const [, n, ap] = GENTE.find(p => p[0] === k);
-  return GENTE.filter(p => p[1] === n).length > 1 ? n + " " + ap[0] + "." : n;
+  const [, n, ap] = TODOS.find(p => p[0] === k);
+  return TODOS.filter(p => p[1] === n).length > 1 ? n + " " + ap[0] + "." : n;
 };
 
 /* la jaula: el muñeco dentro, pidiendo ayuda, y los barrotes delante */
@@ -1587,18 +1607,36 @@ function retrato(canvas, k, pose, tt){
   c.clearRect(0, 0, canvas.width, canvas.height);
   c.drawImage(MUNECOS.fotograma(k, pose, tt), 0, 0);
 }
+/* el jefe sin desbloquear, a contraluz: se ve quién es pero no se elige */
+function sombra(canvas, k){
+  retrato(canvas, k, "quieto", 0);
+  const c = canvas.getContext("2d");
+  c.globalCompositeOperation = "source-in";
+  c.fillStyle = "#3a3552"; c.fillRect(0, 0, canvas.width, canvas.height);
+  c.globalCompositeOperation = "source-over";
+}
 function montaGente(){
   const ul = $("#gente");
-  for(const [k, nombre, apellido] of GENTE){
+  ul.innerHTML = "";
+  for(const [k, nombre, apellido, pista, hito] of TODOS){
     const li = document.createElement("li");
     const b = document.createElement("button");
     b.type = "button"; b.dataset.quien = k;
     b.setAttribute("aria-pressed", String(k === quien));
     const cv = document.createElement("canvas");
     cv.width = MUNECOS.REJ_W; cv.height = MUNECOS.REJ_H;
-    retrato(cv, k, "quieto", 0);
     const n = document.createElement("span");
     n.textContent = nombre;
+    if(pista) b.classList.add("jefe");
+    if(!abierto(k)){
+      sombra(cv, k);
+      b.disabled = true; b.classList.add("cerrado"); b.title = hito;
+      b.setAttribute("aria-label", nombre + " " + apellido + ": bloqueado. " + hito + " para desbloquearlo.");
+      const s = document.createElement("small"); s.textContent = pista; n.appendChild(s);
+      b.append(cv, n); li.appendChild(b); ul.appendChild(li);
+      continue;
+    }
+    retrato(cv, k, "quieto", 0);
     if(apellido){ const s = document.createElement("small"); s.textContent = apellido; n.appendChild(s); }
     b.append(cv, n);
     let reloj = null;
@@ -1617,12 +1655,22 @@ function montaGente(){
   }
 }
 
+/* un jefe se desbloquea en cuanto se cumple su hito, a mitad de carrera,
+   con su aviso en grande. El panel de elegir se rehace al acabar */
+function desbloquea(k){
+  if(abierto(k)) return;
+  local.jefes = Object.assign({}, local.jefes, { [k]: true }); guardar(local);
+  estrenos.push(k);
+  anuncio = { texto: "¡Desbloqueado: " + nombre(k) + "!", vida: 2.8 };
+  sonido.libera();
+}
+
 /* ------------------------------------------------------------------
    El final y el marcador
    ------------------------------------------------------------------ */
 function final(){
   const T = causa ? TIPOS[causa.tipo] : null;
-  const persona = GENTE.find(p => p[0] === quien);
+  const persona = TODOS.find(p => p[0] === quien);
   $("#fin-t").textContent = persona[1] + " se queda aquí";
   $("#fin-por").innerHTML = "";
   $("#fin-por").append(
@@ -1639,9 +1687,9 @@ function final(){
   if(libres.length){
     const nombres = libres.map(nombre);
     const lista = nombres.length > 1 ? nombres.slice(0, -1).join(", ") + " y " + nombres[nombres.length - 1] : nombres[0];
-    $("#fin-libres").textContent = libres.length === GENTE.length - 1
+    $("#fin-libres").textContent = libres.length === enJaulas()
       ? "Has liberado a la lista entera. Así sí."
-      : "Has liberado a " + lista + ". Quedan " + (GENTE.length - 1 - libres.length) + " en las jaulas.";
+      : "Has liberado a " + lista + ". Quedan " + (enJaulas() - libres.length) + " en las jaulas.";
     for(const k of libres){
       const c = document.createElement("canvas");
       c.width = MUNECOS.REJ_W; c.height = MUNECOS.REJ_H;
@@ -1653,6 +1701,13 @@ function final(){
     $("#fin-libres").textContent = "Esta vez no has liberado a nadie: los demás siguen en las jaulas del camino.";
   }
   $("#fin-puntos").textContent = puntos();
+  const nuevo = $("#fin-jefe");
+  nuevo.hidden = !estrenos.length;
+  if(estrenos.length){
+    nuevo.textContent = "Has desbloqueado " + estrenos.map(k => JEFES.find(q => q[0] === k)[5]).join(" y ")
+      + ". Ya puedes correr con " + (estrenos.length > 1 ? "ellos" : "él") + ": «Cambiar de personaje».";
+    montaGente();
+  }
   $("#alias").value = local.alias || "";
   $("#nota").textContent = local.mejor ? "Tu mejor marca: " + local.mejor + " puntos." : "";
   $("#enviar").disabled = puntos() === 0;
@@ -1724,7 +1779,7 @@ const POR_PAGINA = 10;
 let filasTabla = [], pagina = 0, destacar = false;
 const miPuesto = () => filasTabla.findIndex(f => f.slug === miSlug);
 const paginas = () => Math.max(1, Math.ceil(filasTabla.length / POR_PAGINA));
-const corredor = f => GENTE.some(p => p[0] === f.quien) ? f.quien : "compi";
+const corredor = f => TODOS.some(p => p[0] === f.quien) ? f.quien : "compi";
 
 /* la medalla de píxeles del reto, 11x15: el cordón arriba y el disco */
 const MEDALLA = [
