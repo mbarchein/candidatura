@@ -40,7 +40,7 @@ MS_MINIMOS = 12000
 
 # las reglas de la carrera, iguales que en juego.html y en la función
 VOTO = 25                  # puntos por papeleta
-VEL_MAX = 32               # metros por segundo, el techo de velocidad del juego
+VEL_MAX = 40               # metros por segundo, el techo de velocidad del juego
 SEP_VOTO = 6               # metros mínimos entre dos papeletas
 EXTRA = 100                # puntos por churros o mollete
 SEP_EXTRA = 50             # metros mínimos entre dos de esos
@@ -67,6 +67,8 @@ def escribir(datos, marcas):
 
 
 ID_VALIDO = re.compile(r"^[a-z0-9-]{8,48}$")
+# el personaje de la carrera, para el podio; si no existe, el juego pinta a Compi
+QUIEN_VALIDO = re.compile(r"^[a-z]{2,16}$")
 
 
 def mejores(marcas):
@@ -74,7 +76,7 @@ def mejores(marcas):
     # que es con lo que el cliente marca cuál es la tuya
     filas = [
         {"slug": slug(m["alias"]) or i, "alias": m["alias"],
-         "puntos": m["puntos"], "ts": m["ts"]}
+         "puntos": m["puntos"], "ts": m["ts"], **({"quien": m["quien"]} if m.get("quien") else {})}
         for i, m in marcas.items()
     ]
     # la lista entera: pagina el cliente, así quien va el 47 puede
@@ -180,7 +182,8 @@ JUEGOS = {
         "datos": AQUI / "ranking-local-carrera.json",
         "revisa": revisa_carrera,
         "guarda": lambda c: {"votos": entero(c["votos"]), "metros": entero(c["metros"]),
-                             "extras": entero(c.get("extras", 0))},
+                             "extras": entero(c.get("extras", 0)),
+                             "quien": c["quien"] if QUIEN_VALIDO.fullmatch(str(c.get("quien", ""))) else "compi"},
         # en el juego manda el nombre y no el navegador, como en la función:
         # se juega desde varios dispositivos y hay navegadores que no guardan
         # nada, así que tu propio nombre salía como «de otra persona»

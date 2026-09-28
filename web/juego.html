@@ -237,6 +237,73 @@ h1 em{font-style:normal;color:var(--coral-txt);display:block}
 .tabla .yo{background:rgba(63,201,240,.08);border-radius:6px}
 .tabla .yo .alias{color:var(--cian-txt)}
 .tabla .vacia{grid-column:1/-1;color:var(--muted);font-family:var(--display)}
+/* los tres primeros con medalla, como en el reto de la portada. Todas las
+   filas miden lo mismo que la de la medalla, para que la lista no dé
+   saltos al pasar de página */
+.tabla .pos{display:grid;place-items:center;height:1.9rem}
+.tabla .pos--medalla{position:relative;width:1.4rem;justify-self:center}
+.tabla .medalla{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated}
+.tabla .medalla .cordon{fill:var(--cian-txt)}
+.tabla .cifra{
+  position:absolute;left:0;right:0;top:63%;transform:translateY(-50%);
+  font-style:normal;font-size:.72rem;font-weight:500;line-height:1;text-align:center
+}
+.tabla .p1 .borde{fill:#a9741c} .tabla .p1 .cara{fill:#e9ae3a}
+.tabla .p2 .borde{fill:#7e8590} .tabla .p2 .cara{fill:#b8bec9}
+.tabla .p3 .borde{fill:#8a4f28} .tabla .p3 .cara{fill:#bd7b45}
+.tabla .p1 .cifra,.tabla .p2 .cifra{color:#2b1c06}
+.tabla .p3 .cifra{color:#fdf4e8}
+.tabla .p1 .alias,.tabla .p2 .alias,.tabla .p3 .alias{font-weight:500}
+.tabla .p1 .alias{color:var(--coral-txt)}
+.tabla .yo .alias::after{content:" · tú";color:var(--muted);font-family:var(--cifras);font-size:.72rem}
+.tabla .destello{animation:destello 900ms cubic-bezier(.4,0,.2,1) both}
+@keyframes destello{0%{background:rgba(63,201,240,.34)}100%{background:rgba(63,201,240,.08)}}
+
+/* el podio: los tres primeros con el muñeco con el que corrieron, de pie
+   sobre su caja. Van en orden 2-1-3 y cada uno se apoya en su caja con
+   align-items:end, así que las cajas marcan la altura */
+.podio{
+  display:grid;grid-template-columns:repeat(3,minmax(0,7.5rem));justify-content:center;
+  align-items:end;gap:.35rem;margin:1.2rem 0 .4rem
+}
+.podio__hueco{display:flex;flex-direction:column;align-items:center;min-width:0}
+.podio__hueco canvas{width:54px;height:72px;image-rendering:pixelated;margin-bottom:-2px}
+.podio__caja{
+  width:100%;display:grid;place-items:start center;padding-top:.2rem;
+  background:var(--line-strong);border-radius:4px 4px 0 0;
+  font:500 .8rem var(--cifras);color:var(--muted)
+}
+.podio__hueco--1 .podio__caja{height:3rem;background:var(--cian-txt);color:var(--panel)}
+.podio__hueco--2 .podio__caja{height:2rem}
+.podio__hueco--3 .podio__caja{height:1.3rem}
+.podio__alias{
+  margin-top:.4rem;max-width:100%;font-size:.85rem;font-weight:500;line-height:1.2;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap
+}
+.podio__hueco--1 .podio__alias{color:var(--coral-txt)}
+.podio__pts{font:400 .78rem var(--cifras);color:var(--muted)}
+.podio__hueco--vacio{visibility:hidden}
+
+/* pie del marcador: en qué puesto vas y el paso de página */
+.tabla__pies{
+  margin-top:.8rem;padding-top:.7rem;border-top:1px solid var(--line);
+  display:flex;flex-wrap:wrap;align-items:center;gap:.5rem .7rem
+}
+.tabla__yo{
+  font:500 .72rem var(--cifras);letter-spacing:.06em;text-transform:uppercase;
+  color:var(--cian-txt);margin:0 auto 0 0!important
+}
+.tabla__yo b{color:var(--text);font-weight:500}
+.paso{
+  font:500 .72rem var(--cifras);letter-spacing:.06em;text-transform:uppercase;
+  color:var(--text-2);background:none;border:1px solid var(--line-strong);
+  border-radius:999px;padding:.35rem .75rem;cursor:pointer;min-height:36px
+}
+.paso:hover:not(:disabled){color:var(--text);border-color:var(--cian-txt)}
+.paso:disabled{opacity:.38;cursor:default}
+.paso--yo{color:var(--cian-txt);border-color:var(--cian-txt)}
+.tabla__cuenta{font:400 .72rem var(--cifras);letter-spacing:.06em;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){ .tabla .destello{animation:none} }
 /* ---------- en el móvil ----------
    la ayuda de teclado se cambia por la de dedo, los botones del
    escenario crecen hasta un tamaño que se acierta con el pulgar, los
@@ -255,6 +322,8 @@ h1 em{font-style:normal;color:var(--coral-txt);display:block}
   .gente canvas{width:40px;height:54px}
   .gente small{font-size:.66rem}
   .fin__cifras{display:grid;grid-template-columns:1fr 1fr;gap:.6rem 1rem}
+  .podio__hueco canvas{width:40px;height:54px}
+  .podio__alias{font-size:.76rem}
   .acciones .boton,.form .boton{flex:1 1 auto}
 }
 [hidden]{display:none!important}
@@ -325,8 +394,10 @@ h1 em{font-style:normal;color:var(--coral-txt);display:block}
 
   <section class="panel" aria-labelledby="tabla-t">
     <h2 id="tabla-t">Marcador</h2>
-    <p id="tabla-sub">Las diez mejores marcas.</p>
+    <p id="tabla-sub">Cargando marcas…</p>
+    <div class="podio" id="podio" hidden></div>
     <ol class="tabla" id="tabla"></ol>
+    <div class="tabla__pies" id="tabla-pies" hidden></div>
   </section>
 </main>
 
@@ -367,7 +438,11 @@ const GENTE = [
    Todo se mide en píxeles del juego; 10 píxeles son un metro.
    ------------------------------------------------------------------ */
 const VOTO = 25;             // puntos por papeleta
-const VEL_MIN = 12, VEL_MAX = 32;   // metros por segundo
+const VEL_MIN = 12, VEL_MAX = 40;   // metros por segundo
+/* la velocidad sube deprisa hasta 32 a los 1000 metros y luego despacio
+   hasta el techo, que se alcanza a los 5000: antes se quedaba en 32 para
+   siempre y quien le cogía el ritmo no se caía nunca */
+const VEL_CRUCERO = 32, M_CRUCERO = 1000, M_TECHO = 5000;
 const SEP_VOTO = 6;          // metros mínimos entre dos papeletas
 const EXTRA = 100;           // puntos por almuerzo: churros o mollete
 const SEP_EXTRA = 50;        // metros mínimos entre dos almuerzos
@@ -705,6 +780,61 @@ const TIPOS = {
       texto("10:00 – ¿?", x + 5, o.y + 7, "#e9f2fc", 5, "left");
     }
   },
+  /* a partir de aquí, los que salen cuando la carrera ya va lanzada */
+  /* el chat sube y baja mientras llega: arriba se pasa por debajo, abajo
+     hay que saltarlo, y a media altura te da de cara. Hay que mirarlo */
+  chat: {
+    w: 14, h: 10, vuela: true, etiqueta: "EL CHAT A LAS 18:59", frase: "Te han escrito a las 18:59: «es un momentito».",
+    mueve(o, dt){ o.fase += dt * o.ritmo; o.y = SUELO - 30 + Math.round(Math.sin(o.fase) * 15); },
+    pinta(x, o){
+      const y = o.y;
+      silueta(x, y, 14, 8); rect(x, y, 14, 8, C.W); rect(x, y + 7, 14, 1, C.gris);
+      rect(x + 2, y + 8, 3, 1, C.O); rect(x + 2, y + 9, 1, 1, C.O); rect(x + 3, y + 8, 1, 1, C.W);   // el pico
+      const f = Math.floor(t / 200) % 3;
+      for(let i = 0; i < 3; i++) rect(x + 3 + i * 3, y + 3 + (i === f ? -1 : 0), 2, 2, C.azul);
+      silueta(x + 11, y - 3, 4, 4); rect(x + 11, y - 3, 4, 4, C.R); rect(x + 12, y - 2, 2, 2, C.W);   // el globito rojo
+    }
+  },
+  /* el bug viene hacia ti dando saltitos: no está nunca a la misma altura */
+  bug: {
+    w: 13, h: 8, anda: 34, etiqueta: "BUG EN PRODUCCIÓN", etiquetaY: 28, frase: "Un bug en producción. Viernes, 17:55.",
+    mueve(o, dt){
+      o.reloj += dt;
+      const c = o.reloj % 0.9;                    // salta cada 0,9 segundos y está 0,4 en el aire
+      o.y = SUELO - 8 - (c < 0.4 ? Math.round(Math.sin(c / 0.4 * Math.PI) * 13) : 0);
+    },
+    pinta(x, o){
+      const y = o.y, pata = Math.floor(t / 90) % 2;
+      for(let i = 0; i < 3; i++){ rect(x + 2 + i * 4, y + 6 + ((i + pata) % 2), 1, 2, C.O); rect(x + 3 + i * 4, y + 7 - ((i + pata) % 2), 1, 1, C.O); }
+      silueta(x + 1, y, 11, 6); rect(x + 1, y, 11, 6, C.r); rect(x + 6, y, 1, 6, C.O);
+      rect(x + 2, y + 1, 2, 1, C.R); rect(x + 8, y + 2, 2, 2, C.O); rect(x + 3, y + 3, 2, 2, C.O);
+      silueta(x - 2, y + 1, 3, 4); rect(x - 2, y + 1, 3, 4, "#2a2f3a"); rect(x - 2, y + 2, 1, 1, C.W);   // la cabeza, mirando hacia ti
+      rect(x - 4, y - 2, 1, 2, C.O); rect(x - 3, y, 1, 1, C.O); rect(x - 1, y - 2, 1, 2, C.O);
+    }
+  },
+  /* el deadline cuelga del techo y cae cuando te acercas. Si saltas
+     antes de tiempo te lo comes en el aire; si esperas a que caiga, es
+     un obstáculo más. La sombra del suelo avisa de dónde va a caer */
+  deadline: {
+    w: 14, h: 16, etiqueta: "EL DEADLINE", frase: "Te ha caído encima el deadline. Era para ayer.",
+    mueve(o, dt){
+      if(!o.cae && o.x - PX < vel * PX_M * 0.95) o.cae = true;
+      if(o.cae && o.y < SUELO - 16){ o.vy += 900 * dt; o.y = Math.min(SUELO - 16, o.y + o.vy * dt); }
+    },
+    pinta(x, o){
+      const y = Math.round(o.y);
+      if(o.y < SUELO - 16){
+        const an = 6 + Math.round((o.y - 6) / (SUELO - 22) * 8);
+        rect(x + 7 - (an >> 1), SUELO - 1, an, 1, PAL.sombra);
+        if(!o.cae) rect(x + 6, 5, 2, y - 5, "#8a8f9c");                      // el hilo del que cuelga
+      }
+      silueta(x, y, 14, 16); rect(x, y, 14, 16, C.W); rect(x + 13, y, 1, 16, C.gris);
+      rect(x, y, 14, 4, C.R); rect(x + 3, y - 1, 1, 3, C.O); rect(x + 10, y - 1, 1, 3, C.O);
+      texto("VIE", x + 7, y + 10, "#191820", 5);
+      rect(x + 3, y + 12, 8, 1, C.gris);
+      rect(x + 9, y + 5, 1, 1, C.r); rect(x + 10, y + 6, 1, 1, C.r); rect(x + 11, y + 5, 1, 1, C.r); rect(x + 9, y + 7, 1, 1, C.r); rect(x + 11, y + 7, 1, 1, C.r);
+    }
+  },
   pozo: {
     etiqueta: "POZO DE LAS FALSAS PROMESAS", frase: "Has caído en el pozo de las falsas promesas.",
     pinta(){}
@@ -790,6 +920,9 @@ const LOGROS = {
   reunion:   ["Te saltaste", "reunión que podía ser un correo", "reuniones que podían ser un correo"],
   alarga:    ["Sobreviviste a", "reunión que se alarga", "reuniones que se alargan"],
   correo:    ["Esquivaste", "email de las 23:00", "emails de las 23:00"],
+  chat:      ["Dejaste en visto", "chat de las 18:59", "chats de las 18:59"],
+  bug:       ["Esquivaste", "bug en producción", "bugs en producción"],
+  deadline:  ["Sobreviviste a", "deadline", "deadlines"],
   pozo:      ["Saltaste", "pozo de las falsas promesas", "pozos de las falsas promesas"]
 };
 const COMIDAS = {
@@ -810,6 +943,18 @@ let cosas = [], papeletas = [], comida = [], rotulos = [], fondo = [];
 let jaulas = [], pendientes = [], libres = [], rastro = [], ultimaJaula = -1e9;
 let hechos = {}, comidos = {}, recientes = [], ultimaComida = null;
 let proximo = 0, ultimaPapeleta = -1e9, ultimoAlmuerzo = -1e9, fase = 0, tMuerte = 0;
+let aviso = 0, anuncio = null;
+
+/* lo que se avisa en grande cuando la carrera sube de nivel */
+const AVISOS = [
+  [500,  "¡Empieza a sonar el chat!"],
+  [800,  "¡Bugs en producción!"],
+  [1000, "Hora punta: esto acelera"],
+  [1200, "Mira arriba: llega el deadline"],
+  [1500, "De dos en dos, como los lunes"],
+  [2500, "Cierre de trimestre"],
+  [4000, "Auditoría: ya no hay piedad"]
+];
 
 const metros = () => Math.floor(dist / PX_M);
 const puntos = () => metros() + votos * VOTO + almuerzos * EXTRA;
@@ -817,6 +962,7 @@ const puntos = () => metros() + votos * VOTO + almuerzos * EXTRA;
 function reinicia(){
   t = 0; ms = 0; dist = 0; vel = VEL_MIN; votos = 0; almuerzos = 0; subidon = 0; causa = null;
   y = SUELO; vy = 0; enAire = false; cayendo = false; doble = false; fase = 0;
+  aviso = 0; anuncio = null;
   cosas = []; papeletas = []; comida = []; rotulos = [];
   /* los once que no llevas, en orden al azar: cada jaula saca al siguiente */
   pendientes = GENTE.map(p => p[0]).filter(k => k !== quien).sort(() => Math.random() - 0.5);
@@ -893,13 +1039,22 @@ function pintaDecorado(f){
    reunión y el cansino, que piden saltar a tiempo y alto, a partir de
    100 metros; el PM y el correo a partir de 200; y la reunión que se
    alarga, que pide NO saltar durante un buen rato, a partir de 300.
+   Luego, para quien ya le ha cogido el ritmo: el chat que sube y baja a
+   los 500, el bug que salta a los 800, el deadline que cae del techo a
+   los 1200 y, desde los 1500, problemas bajos de dos en dos. A partir de
+   los 1000 metros los huecos entre problemas se van estrechando.
    ------------------------------------------------------------------ */
+const BAJOS_DOBLES = ["letra", "silla", "fichaje", "cable", "impresora"];
 function saca(){
   const m = metros();
   const lista = ["letra", "silla", "fichaje", "cafetera", "impresora", "cable"];
   if(m > 100) lista.push("pozo", "pozo", "reunion", "cansino");
   if(m > 200) lista.push("pm", "correo");
   if(m > 300) lista.push("alarga", "correo");
+  if(m > 500) lista.push("chat");
+  if(m > 800) lista.push("bug", "bug");
+  if(m > 1200) lista.push("deadline", "deadline");
+  if(m > 2500) lista.push("chat", "pm");
   /* sin repetir ninguno de los tres últimos: al azar puro salían tres
      sillas seguidas y parecía que el juego solo tenía sillas. Los que
      están dos veces en la lista siguen saliendo más, pero no en racha */
@@ -918,6 +1073,15 @@ function saca(){
     const alto = Math.random() < 0.5;
     w = TIPOS.correo.w;
     cosas.push({ tipo, x, w, h: 9, y: alto ? SUELO - 44 : SUELO - 15 });
+  } else if(tipo === "chat"){
+    w = TIPOS.chat.w;
+    cosas.push({ tipo, x, w, h: 10, y: SUELO - 30, fase: Math.random() * Math.PI * 2, ritmo: 3.2 + Math.random() * 1.4 });
+  } else if(tipo === "bug"){
+    w = TIPOS.bug.w;
+    cosas.push({ tipo, x, w, h: 8, y: SUELO - 8, reloj: Math.random() * 0.9 });
+  } else if(tipo === "deadline"){
+    w = TIPOS.deadline.w;
+    cosas.push({ tipo, x, w, h: 16, y: 8, vy: 0 });
   } else if(tipo === "alarga"){
     w = 40 + Math.floor(Math.random() * 20);
     cosas.push({ tipo, x, w, h: 10, y: SUELO - 46 });
@@ -925,6 +1089,14 @@ function saca(){
   } else {
     w = TIPOS[tipo].w;
     cosas.push({ tipo, x, w, h: TIPOS[tipo].h });
+    /* de dos en dos: el segundo tan cerca que hay que pasar los dos de un
+       salto largo, manteniendo. Sin rótulo, que se pisaría con el primero */
+    if(m > 1500 && BAJOS_DOBLES.includes(tipo) && Math.random() < Math.min(0.5, 0.2 + (m - 1500) / 6000)){
+      const otro = BAJOS_DOBLES[Math.floor(Math.random() * BAJOS_DOBLES.length)];
+      const x2 = x + w + Math.round(v * 0.16);
+      cosas.push({ tipo: otro, x: x2, w: TIPOS[otro].w, h: TIPOS[otro].h, mudo: true });
+      w = x2 + TIPOS[otro].w - x;
+    }
   }
   /* papeletas: encima del obstáculo, en el arco del salto, que es donde
      se ganan; o a ras de suelo en el hueco de después, que es gratis */
@@ -948,7 +1120,8 @@ function saca(){
   }
   /* el hueco hasta el siguiente: en tiempo y no en píxeles, para que a
      cualquier velocidad dé para caer y volver a saltar */
-  proximo = w + v * (0.85 + Math.random() * 0.9);
+  const k = Math.min(1, Math.max(0, (m - M_CRUCERO) / (M_TECHO - M_CRUCERO)));
+  proximo = w + v * (0.85 - 0.12 * k + Math.random() * (0.9 - 0.4 * k));
 }
 function ponPapeleta(x, py){
   if(x - ultimaPapeleta < SEP_VOTO * PX_M + 1) return;
@@ -985,7 +1158,14 @@ function paso(dt){
      poco de retraso, como una fila de patitos */
   rastro.push({ ms, y, enAire });
   while(rastro.length && rastro[0].ms < ms - 800) rastro.shift();
-  vel = Math.min(VEL_MAX, VEL_MIN + metros() * 0.02);
+  const m = metros();
+  vel = m < M_CRUCERO ? VEL_MIN + (VEL_CRUCERO - VEL_MIN) * m / M_CRUCERO
+      : Math.min(VEL_MAX, VEL_CRUCERO + (VEL_MAX - VEL_CRUCERO) * (m - M_CRUCERO) / (M_TECHO - M_CRUCERO));
+  while(aviso < AVISOS.length && m >= AVISOS[aviso][0]){
+    anuncio = { texto: AVISOS[aviso][1], vida: 2.4 };
+    aviso++;
+  }
+  if(anuncio){ anuncio.vida -= dt; if(anuncio.vida <= 0) anuncio = null; }
   sonido.tempo = 1 + (vel - VEL_MIN) / (VEL_MAX - VEL_MIN) * 0.22;
   const dx = vel * PX_M * dt;
   dist += dx;
@@ -995,6 +1175,7 @@ function paso(dt){
     const T = TIPOS[o.tipo];
     o.x -= dx + (T.anda || 0) * dt;
     if(T.crece) o.w = Math.min(T.tope, o.w + T.crece * dt);
+    if(T.mueve) T.mueve(o, dt);
   }
   for(const p of papeletas) p.x -= dx;
   for(const c of comida) c.x -= dx;
@@ -1158,7 +1339,11 @@ function pinta(){
   for(const o of cosas){
     const T = TIPOS[o.tipo];
     /* el correo lleva alas encima: el rótulo sube para no pisarlas */
-    const top = o.pozo ? SUELO - 8 : o.tipo === "correo" ? o.y - 7 : T.vuela ? o.y - 3 : SUELO - o.h - 4;
+    if(o.mudo) continue;
+    /* el deadline, mientras cuelga del techo, lleva el rótulo debajo */
+    const top = o.pozo ? SUELO - 8 : o.tipo === "correo" || o.tipo === "chat" ? o.y - 7
+      : o.tipo === "deadline" ? (o.y < 30 ? o.y + o.h + 8 : o.y - 4)
+      : T.etiquetaY ? SUELO - T.etiquetaY : T.vuela ? o.y - 3 : SUELO - o.h - 4;
     texto(T.etiqueta, o.x + o.w / 2, top, PAL.rotulo, 6);
     if(T.bocadillo) bocadillo(T.bocadillo, o.x + 8, SUELO - 24);
   }
@@ -1198,6 +1383,11 @@ function pinta(){
   }
 
   for(const r of rotulos) texto(r.texto, r.x + 3, r.y, "rgba(" + PAL.puntos + "," + Math.min(1, r.vida * 2) + ")", 6);
+  if(anuncio && estado === "corre"){
+    g.globalAlpha = Math.min(1, anuncio.vida * 2, (2.4 - anuncio.vida) * 4);
+    texto(anuncio.texto.toUpperCase(), ANCHO / 2, 42, "rgb(" + PAL.puntos + ")", 8);
+    g.globalAlpha = 1;
+  }
 
   /* marcador arriba a la derecha */
   g.font = "500 7px 'IBM Plex Mono', ui-monospace, monospace";
@@ -1468,7 +1658,7 @@ function final(){
   $("#enviar").disabled = puntos() === 0;
   $("#enviar").textContent = "Guardar marca";
   if(puntos() > (local.mejor || 0)){ local.mejor = puntos(); guardar(local); }
-  marca = { puntos: puntos(), votos, extras: almuerzos, metros: metros(), ms: Math.round(ms) };
+  marca = { puntos: puntos(), votos, extras: almuerzos, metros: metros(), ms: Math.round(ms), quien };
   $("#fin").hidden = false;
   /* la página no se mueve al acabar: se repite desde el escenario, y el
      panel con la marca queda debajo para quien quiera guardarla */
@@ -1523,34 +1713,134 @@ $("#cambiar").addEventListener("click", () => {
 
 const RANKING = "/api/ranking?juego=carrera";
 let miSlug = local.alias ? slug(local.alias) : null;
-function pintaTabla(filas){
+
+/* ------------------------------------------------------------------
+   El marcador se pagina de diez en diez, como el del reto: con cien
+   personas jugando, quien va el 47 no se veía en ninguna parte. Encima,
+   el podio con los tres primeros y el muñeco con el que corrieron. Las
+   marcas de antes de guardar el personaje salen con Compi.
+   ------------------------------------------------------------------ */
+const POR_PAGINA = 10;
+let filasTabla = [], pagina = 0, destacar = false;
+const miPuesto = () => filasTabla.findIndex(f => f.slug === miSlug);
+const paginas = () => Math.max(1, Math.ceil(filasTabla.length / POR_PAGINA));
+const corredor = f => GENTE.some(p => p[0] === f.quien) ? f.quien : "compi";
+
+/* la medalla de píxeles del reto, 11x15: el cordón arriba y el disco */
+const MEDALLA = [
+  ["M3 0h1v1H3zM7 0h1v1H7zM3 1h1v1H3zM7 1h1v1H7zM4 2h1v1H4zM6 2h1v1H6zM4 3h3v1H4z", "cordon"],
+  ["M4 4h3v1H4zM2 5h7v1H2zM1 6h9v1H1zM1 7h9v1H1zM0 8h11v1H0zM0 9h11v1H0zM0 10h11v1H0zM1 11h9v1H1zM1 12h9v1H1zM2 13h7v1H2zM4 14h3v1H4z", "borde"],
+  ["M4 6h3v1H4zM3 7h5v1H3zM2 8h7v1H2zM2 9h7v1H2zM2 10h7v1H2zM3 11h5v1H3zM4 12h3v1H4z", "cara"]
+];
+function medalla(){
+  const NS = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(NS, "svg");
+  svg.setAttribute("viewBox", "0 0 11 15"); svg.setAttribute("class", "medalla"); svg.setAttribute("aria-hidden", "true");
+  for(const [d, k] of MEDALLA){
+    const path = document.createElementNS(NS, "path");
+    path.setAttribute("d", d); path.setAttribute("class", k); svg.appendChild(path);
+  }
+  return svg;
+}
+
+function pintaTabla(filas, nueva){
+  filasTabla = filas;
+  if(nueva && miPuesto() >= 0){ destacar = true; pagina = Math.floor(miPuesto() / POR_PAGINA); }
+  pagina = Math.min(Math.max(0, pagina), paginas() - 1);
+  pintaPodio();
+  pintaPagina();
+  $("#tabla-sub").textContent = !filas.length ? "Nadie ha guardado marca todavía."
+    : filas.length === 1 ? "Una persona ha jugado." : filas.length + " personas han jugado.";
+}
+
+function pintaPagina(){
   const ol = $("#tabla");
   ol.innerHTML = "";
-  if(!filas.length){
+  if(!filasTabla.length){
     const li = document.createElement("li");
     li.innerHTML = "<span class='vacia'>Aún no hay marcas. La primera puede ser la tuya.</span>";
-    ol.appendChild(li); return;
+    ol.appendChild(li);
+    $("#tabla-pies").hidden = true;
+    return;
   }
-  const top = filas.slice(0, 10);
-  const mia = filas.findIndex(f => f.slug === miSlug);
-  const fila = (f, i) => {
+  const desde = pagina * POR_PAGINA;
+  filasTabla.slice(desde, desde + POR_PAGINA).forEach((f, n) => {
+    const puesto = desde + n + 1, mia = f.slug === miSlug;
     const li = document.createElement("li");
-    if(f.slug === miSlug) li.className = "yo";
-    const a = document.createElement("span"); a.className = "pos"; a.textContent = i + 1;
+    li.className = [puesto <= 3 ? "p" + puesto : "", mia ? "yo" : "", mia && destacar ? "destello" : ""].join(" ").trim();
+    const a = document.createElement("span"); a.className = "pos";
+    if(puesto <= 3){
+      a.classList.add("pos--medalla");
+      const i = document.createElement("i"); i.className = "cifra"; i.textContent = puesto;
+      a.append(medalla(), i);
+    } else a.textContent = puesto;
     const b = document.createElement("span"); b.className = "alias"; b.textContent = f.alias;
     const c = document.createElement("span"); c.textContent = f.puntos;
     li.append(a, b, c); ol.appendChild(li);
-  };
-  top.forEach(fila);
-  if(mia >= 10) fila(filas[mia], mia);
-  $("#tabla-sub").textContent = filas.length === 1 ? "Una persona ha jugado." : filas.length + " personas han jugado. Las diez mejores:";
+  });
+  destacar = false;
+
+  const pies = $("#tabla-pies"), yo = miPuesto();
+  pies.innerHTML = ""; pies.hidden = false;
+  const mio = document.createElement("p"); mio.className = "tabla__yo";
+  if(yo >= 0) mio.innerHTML = "Vas <b>" + (yo + 1) + ".º</b> de " + filasTabla.length;
+  else mio.textContent = "Guarda tu marca y sal en la lista";
+  pies.appendChild(mio);
+  if(paginas() > 1){
+    const boton = (txt, clase, fn, off) => {
+      const b = document.createElement("button");
+      b.type = "button"; b.className = clase; b.textContent = txt; b.disabled = !!off;
+      b.addEventListener("click", fn); pies.appendChild(b);
+    };
+    if(yo >= 0 && Math.floor(yo / POR_PAGINA) !== pagina)
+      boton("Ver mi puesto", "paso paso--yo", () => { pagina = Math.floor(miPuesto() / POR_PAGINA); destacar = true; pintaPagina(); });
+    boton("‹ Antes", "paso", () => { pagina--; pintaPagina(); }, pagina === 0);
+    const cuenta = document.createElement("span"); cuenta.className = "tabla__cuenta";
+    cuenta.textContent = (pagina + 1) + " / " + paginas();
+    pies.appendChild(cuenta);
+    boton("Después ›", "paso", () => { pagina++; pintaPagina(); }, pagina >= paginas() - 1);
+  }
+}
+
+/* el podio en orden 2-1-3. El primero celebra, el segundo se chulea y
+   el tercero saluda, que bastante tiene con estar ahí */
+const PODIO = [[1, "chuleo", 190], [0, "celebra", 115], [2, "saluda", 150]];
+let relojPodio = null;
+function pintaPodio(){
+  const caja = $("#podio");
+  caja.innerHTML = "";
+  clearInterval(relojPodio);
+  caja.hidden = !filasTabla.length;
+  if(!filasTabla.length) return;
+  const lienzos = [];
+  for(const [i, pose, ritmo] of PODIO){
+    const f = filasTabla[i];
+    const hueco = document.createElement("div");
+    hueco.className = "podio__hueco podio__hueco--" + (i + 1) + (f ? "" : " podio__hueco--vacio");
+    const cv = document.createElement("canvas");
+    cv.width = MUNECOS.REJ_W; cv.height = MUNECOS.REJ_H;
+    const puesto = document.createElement("div"); puesto.className = "podio__caja"; puesto.textContent = i + 1;
+    const al = document.createElement("span"); al.className = "podio__alias";
+    const pt = document.createElement("span"); pt.className = "podio__pts";
+    if(f){
+      al.textContent = f.alias; pt.textContent = f.puntos + " pts";
+      cv.title = f.alias + " corrió con " + nombre(corredor(f));
+      lienzos.push([cv, corredor(f), pose, ritmo]);
+    }
+    hueco.append(cv, puesto, al, pt);
+    caja.appendChild(hueco);
+  }
+  let paso = 0;
+  const anima = () => { for(const [cv, k, pose, ritmo] of lienzos) retrato(cv, k, pose, (paso % 2) * ritmo); paso++; };
+  anima();
+  if(!MUNECOS.QUIETO) relojPodio = setInterval(anima, 380);
 }
 async function traeTabla(){
   try{
     const r = await fetch(RANKING, { headers: { accept: "application/json" } });
     if(!r.ok) throw new Error("HTTP " + r.status);
     const d = await r.json();
-    pintaTabla(Array.isArray(d.top) ? d.top : []);
+    pintaTabla(Array.isArray(d.top) ? d.top : [], false);
   }catch(e){
     $("#tabla-sub").textContent = "No se puede alcanzar el marcador ahora mismo.";
   }
@@ -1573,7 +1863,7 @@ $("#form").addEventListener("submit", async ev => {
     });
     const d = await r.json().catch(() => ({}));
     if(!r.ok) throw new Error(d.error || ("HTTP " + r.status));
-    if(Array.isArray(d.top)) pintaTabla(d.top);
+    if(Array.isArray(d.top)) pintaTabla(d.top, true);
     if(d.guardada) nota.innerHTML = "<b>Dentro.</b> " + marca.puntos + " puntos en el marcador.";
     else if(d.renombrada) nota.innerHTML = "<b>Alias cambiado.</b> Mantienes tus " + d.anterior + " puntos.";
     else nota.textContent = "Con ese nombre ya hay " + d.anterior + " puntos: se queda la más alta.";

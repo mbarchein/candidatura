@@ -38,7 +38,7 @@ const MS_MINIMOS = 12000;
 /* Las reglas de la carrera, tal como están en juego.html. Igual que con
    el reto: si allí cambian, aquí también. */
 const VOTO = 25;              // puntos por papeleta recogida
-const VEL_MAX = 32;           // metros por segundo: el techo de velocidad del juego
+const VEL_MAX = 40;           // metros por segundo: el techo de velocidad del juego
 const SEP_VOTO = 6;           // metros mínimos entre dos papeletas seguidas
 const EXTRA = 100;            // puntos por churros o mollete
 const SEP_EXTRA = 50;         // metros mínimos entre dos de esos
@@ -48,6 +48,10 @@ const SEP_EXTRA = 50;         // metros mínimos entre dos de esos
 const MS_MINIMOS_CARRERA = 2000;
 
 const ID_VALIDO = /^[a-z0-9-]{8,48}$/;
+/* el personaje con el que se corrió, para pintarlo en el podio. Solo la
+   forma de la clave: si llega uno que no existe, el juego pinta a Compi,
+   que es también lo que sale en las marcas de antes de guardarlo */
+const QUIEN_VALIDO = /^[a-z]{2,16}$/;
 
 const slug = a => a.toLowerCase().normalize('NFD')
   .replace(/[̀-ͯ]/g, '')
@@ -64,7 +68,7 @@ const json = (cuerpo, estado = 200) => new Response(JSON.stringify(cuerpo), {
    El slug que sale es el del alias, que es lo que el cliente usa para
    marcar cuál es la tuya en el tablero. */
 const mejores = marcas => Object.entries(marcas)
-  .map(([id, m]) => ({ slug: slug(m.alias) || id, alias: m.alias, puntos: m.puntos, ts: m.ts }))
+  .map(([id, m]) => ({ slug: slug(m.alias) || id, alias: m.alias, puntos: m.puntos, ts: m.ts, ...(m.quien && { quien: m.quien }) }))
   .sort((a, b) => b.puntos - a.puntos || a.ts - b.ts);
 /* Se devuelve la lista entera y pagina el cliente. Con ciento y pico
    marcas son unos pocos kilobytes, y así quien va en el puesto 47 puede
@@ -125,7 +129,8 @@ const JUEGOS = {
   carrera: {
     clave: 'carrera',
     revisa: revisaCarrera,
-    guarda: c => ({ votos: Number(c.votos), metros: Number(c.metros), extras: Number(c.extras ?? 0) }),
+    guarda: c => ({ votos: Number(c.votos), metros: Number(c.metros), extras: Number(c.extras ?? 0),
+                    quien: typeof c.quien === 'string' && QUIEN_VALIDO.test(c.quien) ? c.quien : 'compi' }),
     /* en el juego manda el nombre y no el navegador: se juega desde el
        móvil y desde el portátil, y hay navegadores (los que abre Outlook
        o WhatsApp) que no guardan nada, así que el id cambiaba y tu propio
