@@ -374,7 +374,7 @@ h1 em{font-style:normal;color:var(--coral-txt);display:block}
 
 <main class="hoja">
   <h1>La carrera <em>hasta la urna <span class="version">2.0</span></em></h1>
-  <p class="entrada">Salta los problemas de siempre, coge papeletas, no le des conversación al cansino del pasillo, que no te impugnen las del sindicato (ni te digan que tu sobre es distinto) y no caigas en el pozo de las falsas promesas. Si ves churros en cocina, un mollete, la pizza de Pedro Pepperoni, la hamburguesa del Mumama o el porrón, a por ellos: cada uno te da un poder durante un rato.</p>
+  <p class="entrada">Salta los problemas de siempre, coge papeletas, no le des conversación al cansino del pasillo, que no te impugnen las impugnadoras (ni te digan que tu sobre es distinto) y no caigas en el pozo de las falsas promesas. Si ves churros en cocina, un mollete, la pizza de Pedro Pepperoni, la hamburguesa del Mumama o el porrón, a por ellos: cada uno te da un poder durante un rato.</p>
 
   <div class="escenario" id="escenario">
     <canvas id="lienzo" aria-label="El juego. Pulsa espacio o toca para saltar."></canvas>
@@ -463,8 +463,8 @@ const GENTE = [
 const JEFES = [
   ["cansino", "El cansino", "del pasillo", "Llega a 2000 m", "Corre 2000 metros en una partida", "al cansino del pasillo"],
   ["pm", "El PM", "Product Manager", "Libera a la lista", "Libera a la lista entera en una partida", "al PM"],
-  ["impugna", "La que impugna", "del sindicato", "Coge 72 papeletas", "Coge 72 papeletas en una partida", "a la que impugna", "f"],
-  ["recurre", "La que recurre", "del sindicato", "Esquiva 3 impugnaciones", "Esquiva 3 impugnaciones en una partida (los sobres «distintos» también cuentan)", "a la que recurre", "f"]
+  ["impugna", "La que impugna", "impugnadora", "Coge 72 papeletas", "Coge 72 papeletas en una partida", "a la que impugna", "f"],
+  ["recurre", "La que recurre", "impugnadora", "Esquiva 3 impugnaciones", "Esquiva 3 impugnaciones en una partida (los sobres «distintos» también cuentan)", "a la que recurre", "f"]
 ];
 const TODOS = GENTE.concat(JEFES);
 const abierto = k => !JEFES.some(p => p[0] === k) || !!(local.jefes && local.jefes[k]);
@@ -828,14 +828,14 @@ const TIPOS = {
       g.drawImage(MUNECOS.fotograma("pm", "anda", (Math.floor(t / 155) % 4) * 155, true), Math.round(x), SUELO - 35);
     }
   },
-  /* las del sindicato van juntas y lo impugnan todo: plantadas como el
+  /* las impugnadoras van juntas y lo impugnan todo: plantadas como el
      cansino pero el doble de anchas, y en cuanto te tienen a tiro, sin
      nada en medio, te tiran una impugnación o un sobre «distinto» a la
      cara o a los pies */
-  sindicato: {
-    w: 43, h: 31, caja: [8, 27], etiqueta: "LAS DEL SINDICATO",
+  impugnadoras: {
+    w: 43, h: 31, caja: [8, 27], etiqueta: "LAS IMPUGNADORAS",
     bocadillo: () => ["¡Impugnamos!", "¡Los sobres no son iguales!", "¡Eso también!"][Math.floor(t / 700) % 3],
-    frase: "Te han parado las del sindicato: querían impugnarlo todo.",
+    frase: "Te han parado las impugnadoras: querían impugnarlo todo.",
     mueve(o){
       if(o.tirado || o.x > ANCHO - 8) return;
       /* sin nada por medio que saltar a la vez; y si ya están encima, no tiran */
@@ -886,7 +886,7 @@ const TIPOS = {
       silueta(x, y, 12, 8); rect(x, y, 12, 8, "#f3e6c8"); rect(x, y + 7, 12, 1, "#d8c9ab");
       /* la solapa, en uve hasta el centro */
       for(let i = 0; i < 6; i++){ rect(x + i, y + Math.floor(i * 0.7), 1, 1, "#b8a888"); rect(x + 11 - i, y + Math.floor(i * 0.7), 1, 1, "#b8a888"); }
-      /* el lupazo de las del sindicato, buscando la diferencia */
+      /* el lupazo de las impugnadoras, buscando la diferencia */
       rect(x + 8, y + 4, 3, 3, C.O); rect(x + 9, y + 5, 1, 1, C.cian); rect(x + 7, y + 7, 1, 1, C.O);
       rect(x + 13 + (Math.floor(t / 80) % 2), y + 2, 3, 1, C.gris); rect(x + 14, y + 5, 3, 1, C.gris);
     }
@@ -1122,7 +1122,7 @@ const LOGROS = {
   cable:     ["No tropezaste con", "cable del cargador", "cables del cargador"],
   cansino:   ["Esquivaste", "cansino del pasillo", "cansinos del pasillo"],
   pm:        ["Te libraste de", "«¿cómo vas?» del PM", "«¿cómo vas?» del PM"],
-  sindicato: ["Dejaste atrás", "vez a las del sindicato", "veces a las del sindicato"],
+  impugnadoras: ["Dejaste atrás", "vez a las impugnadoras", "veces a las impugnadoras"],
   impugnacion: ["Esquivaste", "impugnación", "impugnaciones"],
   sobre:     ["Esquivaste", "sobre «distinto»", "sobres «distintos»"],
   reunion:   ["Te saltaste", "reunión que podía ser un correo", "reuniones que podían ser un correo"],
@@ -1168,7 +1168,7 @@ const enJaulas = () => GENTE.filter(p => p[0] !== quien).length;
 /* lo que se avisa en grande cuando la carrera sube de nivel */
 const AVISOS = [
   [150,  "Lo que va a la cara, agachándose"],
-  [400,  "Llegan las del sindicato: lo impugnan todo"],
+  [400,  "Llegan las impugnadoras: lo impugnan todo"],
   [500,  "¡Empieza a sonar el chat!"],
   [800,  "¡Bugs en producción!"],
   [1000, "Hora punta: esto acelera"],
@@ -1276,8 +1276,8 @@ function saca(){
   if(m > 100) lista.push("pozo", "pozo", "reunion", "cansino");
   if(m > 200) lista.push("pm", "correo");
   if(m > 300) lista.push("alarga", "correo");
-  if(m > 400) lista.push("sindicato");
-  if(m > 1500) lista.push("sindicato");
+  if(m > 400) lista.push("impugnadoras");
+  if(m > 1500) lista.push("impugnadoras");
   if(m > 150) lista.push("circular");
   if(m > 500) lista.push("chat");
   if(m > 800) lista.push("bug", "bug");

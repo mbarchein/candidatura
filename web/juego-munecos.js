@@ -11,7 +11,7 @@
 
    Si cambia alguno de los dos, se vuelve a pegar el trozo que toque.
    Al final va lo único propio del juego: las poses de saltar y caer,
-   los que te cortan el paso (el cansino, el PM y las del sindicato) y la caché de
+   los que te cortan el paso (el cansino, el PM y las impugnadoras) y la caché de
    fotogramas ya pintados.
 
    Todo va dentro de una función para no dejar B, px, caja y compañía
@@ -1101,7 +1101,7 @@ const OBSTACULOS = {
              ropa:{ C:"#8a8f9c", c:"#6b6f7c", L:"#aab0bc" } },
   pm:      { pelo:["#1d1512","#35271f"], flequillo:true, melena:4, gafas:true,
              ropa:{ C:"#4fa9a2", c:"#357a74", L:"#7fcac4", Q:"#e9f2fc" }, estampado:"rombos" },
-  /* las del sindicato, que van juntas: mostaza y morado, que no son de
+  /* las impugnadoras, que van juntas: mostaza y morado, que no son de
      nadie de la lista */
   impugna: { pelo:["#2b2f3a","#4a4f5c"], melena:9, flequillo:true, gafas:true, gafasColor:"#c9584c",
              ropa:{ C:"#c9a23a", c:"#a17e24", L:"#e0c46a" } },
