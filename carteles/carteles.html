@@ -508,6 +508,21 @@ body.diptico .cartel.elegido + .cartel.elegido{box-shadow:inset 2px 0 0 var(--li
 .caras11 span{display:block;margin-top:5px;font-size:14px;line-height:1.1;color:var(--texto-2)}
 #c37 .rotulo{margin:22px 0 14px}
 #c37 .remate{margin-top:16px;padding:16px 24px;font-size:24px}
+/* c40: lo de los abogados es el ataque concreto, así que va en un bloque
+   propio y grande nada más empezar; lo demás, debajo y más callado */
+#c40 .titular{font-size:62px}
+#c40 .destacado{margin:26px 0 30px;padding:24px 30px 26px;background:var(--panel);
+  border:2px solid var(--linea-fuerte);border-left:8px solid var(--coral-vivo);border-radius:14px}
+#c40 .destacado strong{display:block;font-size:33px;line-height:1.12;font-weight:500;letter-spacing:-.02em;color:var(--texto)}
+#c40 .destacado p{margin:14px 0 0;font-size:21px;line-height:1.42;color:var(--texto-2)}
+#c40 .destacado b{color:var(--coral);font-weight:500}
+#c40 .casos{grid-template-columns:repeat(3,1fr);margin:10px 0 28px}
+#c40 .casos li{font-size:18.5px}
+#c40 .casos .ley{display:block;width:max-content;margin-top:8px;font-size:12.5px;padding:2px 9px}
+#c40 .razones{grid-template-columns:repeat(2,1fr);gap:24px 36px}
+#c40 .razones p{font-size:19px}
+#c40 .razones .ley{white-space:nowrap}
+#c40 .ultimo{margin-top:22px}
 #c37 .bajada{margin-top:16px}
 
 /* 13 · el programa entero en un cartel: cada petición en una línea con su
@@ -4749,6 +4764,88 @@ body.diptico .cartel.elegido + .cartel.elegido{box-shadow:inset 2px 0 0 var(--li
 
   <footer class="pie">
     <div class="compi"><p class="compi__globo">Apúntalo.</p><canvas data-pose="reloj" data-tt="300"></canvas></div>
+    <div class="pie__medio">
+      <p class="pie__quien">Lo firmamos los once</p>
+      <p class="pie__nombres">Once personas, seis áreas<span> &middot; cero siglas</span></p>
+    </div>
+    <div class="pie__voto">
+      <p class="pie__fecha">29 de septiembre</p>
+      <p class="pie__url">sin-siglas.info</p>
+    </div>
+  </footer>
+</section>
+
+<!-- ==================================================================
+     ¿SIN SINDICATO, SIN ASESORAMIENTO JURÍDICO? · aclaración
+     ------------------------------------------------------------------
+     Responde a que «por ir sin siglas no podremos usar los servicios
+     jurídicos de un sindicato». Es verdad a medias, y el cartel dice
+     las dos mitades: esos servicios son del afiliado que paga la cuota
+     y no de la lista que vota, y en lo laboral hay justicia gratuita y
+     un comité que puede ir a juicio por sí mismo.
+
+     Arranca en positivo: lo que un sindicato consigue para toda la
+     plantilla por ley (convenio, art. 82.3 ET; conflicto colectivo,
+     art. 160 LRJS). Lo de los abogados va sin cifras a propósito, pero
+     sale de las tarifas 2021 que publica CCOO Andalucía: la consulta y
+     la demanda se pagan, del todo o en parte, hasta uno y tres años de
+     afiliación respectivamente.
+
+     Tres cosas que se quedaron fuera a propósito:
+     - no se nombra a ningún sindicato: se sostiene sin atacar a nadie;
+     - no dice «justicia gratuita para todo»: la Ley 1/1996 la da a los
+       trabajadores en lo social, con orientación previa y abogado de
+       oficio cuando es preceptivo o la empresa lleva el suyo (arts. 2.d
+       y 6; art. 21 LRJS), así que dice «en lo laboral» y «cuando hace
+       falta»;
+     - no dice que los sindicatos atiendan gratis a cualquiera por estar
+       financiados con fondos públicos: no hay norma que lo obligue y es
+       la frase que se podría desmontar. En su lugar, las puertas que sí
+       son gratis para todos: Inspección y conciliación previa.
+     Las citas están comprobadas en el texto consolidado del BOE.
+     ================================================================== -->
+<section class="cartel" id="c40">
+  <div class="tapa"><span>Una aclaración</span><b>29-S</b></div>
+
+  <h1 class="titular">¿Sin sindicato,<em>sin asesoramiento jurídico?</em></h1>
+  <p class="bajada bajada--ancha">
+    Ir <b>sin siglas</b> no te deja sin nada. Empezando por los abogados:
+  </p>
+
+  <div class="destacado">
+    <strong>Sus abogados son para quien paga la cuota,<br>no para quien los vota.</strong>
+    <p>Y la cuota <b>no lo cubre todo</b>: según sus propias tarifas, la consulta y la demanda se
+      pagan aparte, del todo o en parte, <b>hasta que llevas años afiliado</b>. Si estás
+      afiliado, lo sigues estando votes a quien votes.</p>
+  </div>
+
+  <p class="rotulo">Lo que un sindicato consigue para todos te llega igual</p>
+  <ul class="casos">
+    <li>El <b>convenio</b> que firma vale para toda la plantilla. <span class="ley">art. 82.3 ET</span></li>
+    <li>Lo que gana en un <b>conflicto colectivo</b>, también. <span class="ley">art. 160 LRJS</span></li>
+    <li>Desde el comité, <b>te representa a ti también</b>, votes a quien votes.</li>
+  </ul>
+
+  <ul class="razones">
+    <li>
+      <strong>La justicia gratuita laboral es de todos</strong>
+      <p>Sin carné: orientación antes del juicio y abogado de oficio cuando hace falta. Y la
+        <b>Inspección</b> y la <b>conciliación previa</b>, sin coste para cualquiera.</p>
+      <span class="ley">Ley 1/1996, arts. 2.d y 6</span>
+    </li>
+    <li>
+      <strong>El comité no depende de un sindicato</strong>
+      <p>Puede <b>ir a juicio</b>, negociar el convenio de empresa y plantear un conflicto
+        colectivo por sí mismo, con abogados y expertos.</p>
+      <span class="ley">arts. 65, 87, 88 ET &middot; 154 LRJS</span>
+    </li>
+  </ul>
+
+  <p class="ultimo"><b>Sin siglas no es sin derechos.</b> ¿Tienes una duda concreta? Pregúntanos
+    &middot; sin-siglas.info/buzon</p>
+
+  <footer class="pie">
+    <div class="compi"><p class="compi__globo">Con la ley en la mano.</p><canvas data-pose="medico" data-tt="300"></canvas></div>
     <div class="pie__medio">
       <p class="pie__quien">Lo firmamos los once</p>
       <p class="pie__nombres">Once personas, seis áreas<span> &middot; cero siglas</span></p>

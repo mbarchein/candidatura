@@ -36,7 +36,7 @@ declare -A NOMBRE=(
   [24]=verano-intensiva [25]=cumpleanos [26]=medico [27]=dietas
   [28]=igualdad [29]=cuidado-hijos [30]=parking [31]=jornada-4-dias [32]=las-diez [33]=como-votamos [34]=compensacion
   [35]=os-escuchamos [36]=con-quien-hablas [37]=vota-sin-siglas
-  [38]=en-numeros [39]=despues-del-martes
+  [38]=en-numeros [39]=despues-del-martes [40]=sin-sindicato-sin-asesoramiento
 )
 
 # la hoja de pegatinas es A4 y va por otro sitio: lo que hace falta es
