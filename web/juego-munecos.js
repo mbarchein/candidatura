@@ -11,7 +11,7 @@
 
    Si cambia alguno de los dos, se vuelve a pegar el trozo que toque.
    Al final va lo único propio del juego: las poses de saltar y caer,
-   los dos que te cortan el paso (el cansino y el PM) y la caché de
+   los que te cortan el paso (el cansino, el PM y las del sindicato) y la caché de
    fotogramas ya pintados.
 
    Todo va dentro de una función para no dejar B, px, caja y compañía
@@ -1100,7 +1100,13 @@ const OBSTACULOS = {
   cansino: { pelo:["#6b6f7c","#8a8f9c"], entradas:true, gafas:true, gafasColor:"#1d1512",
              ropa:{ C:"#8a8f9c", c:"#6b6f7c", L:"#aab0bc" } },
   pm:      { pelo:["#1d1512","#35271f"], flequillo:true, melena:4, gafas:true,
-             ropa:{ C:"#4fa9a2", c:"#357a74", L:"#7fcac4", Q:"#e9f2fc" }, estampado:"rombos" }
+             ropa:{ C:"#4fa9a2", c:"#357a74", L:"#7fcac4", Q:"#e9f2fc" }, estampado:"rombos" },
+  /* las del sindicato, que van juntas: mostaza y morado, que no son de
+     nadie de la lista */
+  impugna: { pelo:["#2b2f3a","#4a4f5c"], melena:9, flequillo:true, gafas:true, gafasColor:"#c9584c",
+             ropa:{ C:"#c9a23a", c:"#a17e24", L:"#e0c46a" } },
+  recurre: { pelo:["#2a1c14","#44302a"], rizos:12,
+             ropa:{ C:"#6a5a9c", c:"#4f4278", L:"#8a7cbc" } }
 };
 
 const cache = new Map();

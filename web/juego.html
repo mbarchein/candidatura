@@ -374,7 +374,7 @@ h1 em{font-style:normal;color:var(--coral-txt);display:block}
 
 <main class="hoja">
   <h1>La carrera <em>hasta la urna <span class="version">2.0</span></em></h1>
-  <p class="entrada">Salta los problemas de siempre, coge papeletas, no le des conversación al cansino del pasillo y no caigas en el pozo de las falsas promesas. Si ves churros en cocina, un mollete, la pizza de Pedro Pepperoni, la hamburguesa del Mumama o el porrón, a por ellos: cada uno te da un poder durante un rato.</p>
+  <p class="entrada">Salta los problemas de siempre, coge papeletas, no le des conversación al cansino del pasillo, que no te impugnen las del sindicato (ni te digan que tu sobre es distinto) y no caigas en el pozo de las falsas promesas. Si ves churros en cocina, un mollete, la pizza de Pedro Pepperoni, la hamburguesa del Mumama o el porrón, a por ellos: cada uno te da un poder durante un rato.</p>
 
   <div class="escenario" id="escenario">
     <canvas id="lienzo" aria-label="El juego. Pulsa espacio o toca para saltar."></canvas>
@@ -390,7 +390,7 @@ h1 em{font-style:normal;color:var(--coral-txt);display:block}
 
   <section class="panel" id="elige" aria-labelledby="elige-t">
     <h2 id="elige-t">¿Con quién corres?</h2>
-    <p>Elige a alguien de la lista y pulsa espacio o toca el escenario para salir. Los demás te esperan enjaulados por el camino: pasa por encima de la jaula para liberarlos y correrán contigo. Los dos jefes del final se desbloquean jugando.</p>
+    <p>Elige a alguien de la lista y pulsa espacio o toca el escenario para salir. Los demás te esperan enjaulados por el camino: pasa por encima de la jaula para liberarlos y correrán contigo. Los jefes del final se desbloquean jugando.</p>
     <ul class="gente" id="gente"></ul>
   </section>
 
@@ -456,12 +456,15 @@ const GENTE = [
   ["algarra", "Leticia", "Algarra"], ["barchein", "Mario", "Barchéin"], ["aranda", "Mario", "Aranda"],
   ["lopeza", "Violeta", "López"], ["castillo", "María Emilia", "Castillo"]
 ];
-/* los jefes: los dos que te cortan el paso, jugables cuando se cumple su
+/* los jefes: los que te cortan el paso, jugables cuando se cumple su
    hito. No salen en las jaulas, que son de la lista; al correr con ellos
-   se puede liberar a los doce. El desbloqueo se guarda en este navegador */
+   se puede liberar a los doce. El desbloqueo se guarda en este navegador.
+   El séptimo campo, "f", es para decir «ella» y no «él» al desbloquear */
 const JEFES = [
   ["cansino", "El cansino", "del pasillo", "Llega a 2000 m", "Corre 2000 metros en una partida", "al cansino del pasillo"],
-  ["pm", "El PM", "Product Manager", "Libera a la lista", "Libera a la lista entera en una partida", "al PM"]
+  ["pm", "El PM", "Product Manager", "Libera a la lista", "Libera a la lista entera en una partida", "al PM"],
+  ["impugna", "La que impugna", "del sindicato", "Coge 72 papeletas", "Coge 72 papeletas en una partida", "a la que impugna", "f"],
+  ["recurre", "La que recurre", "del sindicato", "Esquiva 3 impugnaciones", "Esquiva 3 impugnaciones en una partida (los sobres «distintos» también cuentan)", "a la que recurre", "f"]
 ];
 const TODOS = GENTE.concat(JEFES);
 const abierto = k => !JEFES.some(p => p[0] === k) || !!(local.jefes && local.jefes[k]);
@@ -825,6 +828,69 @@ const TIPOS = {
       g.drawImage(MUNECOS.fotograma("pm", "anda", (Math.floor(t / 155) % 4) * 155, true), Math.round(x), SUELO - 35);
     }
   },
+  /* las del sindicato van juntas y lo impugnan todo: plantadas como el
+     cansino pero el doble de anchas, y en cuanto te tienen a tiro, sin
+     nada en medio, te tiran una impugnación o un sobre «distinto» a la
+     cara o a los pies */
+  sindicato: {
+    w: 43, h: 31, caja: [8, 27], etiqueta: "LAS DEL SINDICATO",
+    bocadillo: () => ["¡Impugnamos!", "¡Los sobres no son iguales!", "¡Eso también!"][Math.floor(t / 700) % 3],
+    frase: "Te han parado las del sindicato: querían impugnarlo todo.",
+    mueve(o){
+      if(o.tirado || o.x > ANCHO - 8) return;
+      /* sin nada por medio que saltar a la vez; y si ya están encima, no tiran */
+      if(o.x - PX < 100){ o.tirado = true; return; }
+      if(cosas.some(c => c !== o && !c.pasado && !c.zona && c.x < o.x)) return;
+      o.tirado = true; o.tiro = t;
+      cosas.push({ tipo: Math.random() < 0.5 ? "impugnacion" : "sobre", x: o.x + 4, w: 12, h: 8, y: Math.random() < 0.5 ? SUELO - 30 : SUELO - 11, dichas: 0 });
+    },
+    pinta(x, o){
+      const tira = o.tiro && t - o.tiro < 400;
+      g.drawImage(MUNECOS.fotograma("impugna", tira ? "senala" : "explica", tira ? 0 : (Math.floor(t / 420) % 4) * 420, true), Math.round(x), SUELO - 35);
+      g.drawImage(MUNECOS.fotograma("recurre", "senala", Math.floor(t / 900) * 900, true), Math.round(x) + 16, SUELO - 35);
+    }
+  },
+  /* la impugnación vuela hacia ti y, de paso, impugna lo que pilla: las
+     papeletas se pierden y la jaula vuelve a la cola, que saldrá luego */
+  impugnacion: {
+    w: 12, h: 8, vuela: true, anda: 110, etiqueta: "IMPUGNACIÓN",
+    frase: "Te ha dado de lleno una impugnación. A votar otra vez.",
+    mueve(o){
+      const di = s => { if(o.dichas++ < 2) rotulos.push({ x: o.x, y: o.y - 6, vida: 1, texto: s }); };
+      for(const p of papeletas){
+        if(!p.cogida && p.x > PX && o.x < p.x + 7 && o.x + o.w > p.x && o.y < p.y + 8 && o.y + o.h > p.y){ p.cogida = true; di("¡IMPUGNADA!"); }
+      }
+      for(const j of jaulas){
+        if(!j.libre && j.x > PX && o.x < j.x + 29 && o.x + o.w > j.x + 2){
+          j.libre = true; pendientes.unshift(j.quien); di("¡LISTA IMPUGNADA!");
+        }
+      }
+    },
+    pinta(x, o){
+      const y = o.y + Math.round(Math.sin(t / 110));
+      silueta(x, y, 12, 8); rect(x, y, 12, 8, C.W);
+      rect(x + 1, y + 1, 5, 1, C.gris); rect(x + 1, y + 3, 4, 1, C.gris); rect(x + 1, y + 5, 5, 1, C.gris);
+      /* el sello rojo, una equis */
+      for(let i = 0; i < 5; i++){ rect(x + 6 + i, y + 1 + i, 1, 1, C.R); rect(x + 10 - i, y + 1 + i, 1, 1, C.R); }
+      rect(x + 13 + (Math.floor(t / 80) % 2), y + 2, 3, 1, C.gris); rect(x + 14, y + 5, 3, 1, C.gris);   // las rayas del vuelo
+    }
+  },
+  /* el sobre «distinto», el de la otra polémica: vuela como la
+     impugnación y, visto de cerca, es igual que todos */
+  sobre: {
+    w: 12, h: 8, vuela: true, anda: 110, etiqueta: "SOBRE «DISTINTO»",
+    frase: "Te ha dado un sobre «distinto». Era igual que todos los demás.",
+    mueve(o){ TIPOS.impugnacion.mueve(o); },
+    pinta(x, o){
+      const y = o.y + Math.round(Math.sin(t / 110));
+      silueta(x, y, 12, 8); rect(x, y, 12, 8, "#f3e6c8"); rect(x, y + 7, 12, 1, "#d8c9ab");
+      /* la solapa, en uve hasta el centro */
+      for(let i = 0; i < 6; i++){ rect(x + i, y + Math.floor(i * 0.7), 1, 1, "#b8a888"); rect(x + 11 - i, y + Math.floor(i * 0.7), 1, 1, "#b8a888"); }
+      /* el lupazo de las del sindicato, buscando la diferencia */
+      rect(x + 8, y + 4, 3, 3, C.O); rect(x + 9, y + 5, 1, 1, C.cian); rect(x + 7, y + 7, 1, 1, C.O);
+      rect(x + 13 + (Math.floor(t / 80) % 2), y + 2, 3, 1, C.gris); rect(x + 14, y + 5, 3, 1, C.gris);
+    }
+  },
   /* la reunión que se alarga va por el aire, como el correo alto: se
      pasa por debajo sin saltar. Y se alarga de verdad mientras la miras */
   alarga: {
@@ -1056,6 +1122,9 @@ const LOGROS = {
   cable:     ["No tropezaste con", "cable del cargador", "cables del cargador"],
   cansino:   ["Esquivaste", "cansino del pasillo", "cansinos del pasillo"],
   pm:        ["Te libraste de", "«¿cómo vas?» del PM", "«¿cómo vas?» del PM"],
+  sindicato: ["Dejaste atrás", "vez a las del sindicato", "veces a las del sindicato"],
+  impugnacion: ["Esquivaste", "impugnación", "impugnaciones"],
+  sobre:     ["Esquivaste", "sobre «distinto»", "sobres «distintos»"],
   reunion:   ["Te saltaste", "reunión que podía ser un correo", "reuniones que podían ser un correo"],
   alarga:    ["Sobreviviste a", "reunión que se alarga", "reuniones que se alargan"],
   correo:    ["Esquivaste", "email de las 23:00", "emails de las 23:00"],
@@ -1099,6 +1168,7 @@ const enJaulas = () => GENTE.filter(p => p[0] !== quien).length;
 /* lo que se avisa en grande cuando la carrera sube de nivel */
 const AVISOS = [
   [150,  "Lo que va a la cara, agachándose"],
+  [400,  "Llegan las del sindicato: lo impugnan todo"],
   [500,  "¡Empieza a sonar el chat!"],
   [800,  "¡Bugs en producción!"],
   [1000, "Hora punta: esto acelera"],
@@ -1206,6 +1276,8 @@ function saca(){
   if(m > 100) lista.push("pozo", "pozo", "reunion", "cansino");
   if(m > 200) lista.push("pm", "correo");
   if(m > 300) lista.push("alarga", "correo");
+  if(m > 400) lista.push("sindicato");
+  if(m > 1500) lista.push("sindicato");
   if(m > 150) lista.push("circular");
   if(m > 500) lista.push("chat");
   if(m > 800) lista.push("bug", "bug");
@@ -1374,6 +1446,8 @@ function paso(dt){
      detrás del muñeco: a partir de ahí ya no puede tocarle */
   for(const o of cosas) if(!o.pasado && o.x + (o.w || 0) < PX + 9){
     o.pasado = true; hechos[o.tipo] = (hechos[o.tipo] || 0) + 1;
+    if(o.tipo === "sobre") rotulos.push({ x: PX + 40, y: o.y - 6, vida: 1.2, texto: "ERA IGUAL QUE TODOS" });
+    if((hechos.impugnacion || 0) + (hechos.sobre || 0) >= 3) desbloquea("recurre");
   }
   cosas = cosas.filter(o => o.x + (o.w || 0) > -20);
   papeletas = papeletas.filter(p => p.x > -12 && !p.cogida);
@@ -1419,6 +1493,7 @@ function paso(dt){
   for(const p of papeletas){
     if(!p.cogida && PX + 6 < p.x + 7 && PX + 21 > p.x && y - altoMuneco() - 2 < p.y + 8 && y > p.y){
       p.cogida = true; votos++;
+      if(votos >= 72) desbloquea("impugna");
       rotulos.push({ x: p.x, y: p.y - 4, vida: 0.7, texto: "+" + VOTO });
       sonido.voto();
     }
@@ -1564,7 +1639,7 @@ function pinta(){
       : o.tipo === "circular" ? o.y - 4
       : o.zona ? 19 : T.etiquetaY ? SUELO - T.etiquetaY : T.vuela ? o.y - 3 : SUELO - o.h - 4;
     texto(T.etiqueta, o.x + o.w / 2, top, PAL.rotulo, 6);
-    if(T.bocadillo) bocadillo(T.bocadillo, o.x + 8, SUELO - 24);
+    if(T.bocadillo) bocadillo(typeof T.bocadillo === "function" ? T.bocadillo(o) : T.bocadillo, o.x + 8, SUELO - 24);
   }
   for(const c of comida) texto(ALMUERZOS[c.tipo].etiqueta, c.x + (ALMUERZOS[c.tipo].w || 12) / 2, c.y - 8, PAL.almuerzo, 6);
 
@@ -1944,7 +2019,8 @@ function montaGente(){
     if(!abierto(k)){
       sombra(cv, k);
       b.disabled = true; b.classList.add("cerrado"); b.title = hito;
-      b.setAttribute("aria-label", nombre + " " + apellido + ": bloqueado. " + hito + " para desbloquearlo.");
+      const f = JEFES.find(q => q[0] === k)[6] === "f";
+      b.setAttribute("aria-label", nombre + " " + apellido + (f ? ": bloqueada. " : ": bloqueado. ") + hito + (f ? " para desbloquearla." : " para desbloquearlo."));
       const s = document.createElement("small"); s.textContent = pista; n.appendChild(s);
       b.append(cv, n); li.appendChild(b); ul.appendChild(li);
       continue;
@@ -2018,7 +2094,7 @@ function final(){
   nuevo.hidden = !estrenos.length;
   if(estrenos.length){
     nuevo.textContent = "Has desbloqueado " + estrenos.map(k => JEFES.find(q => q[0] === k)[5]).join(" y ")
-      + ". Ya puedes correr con " + (estrenos.length > 1 ? "ellos" : "él") + ": «Cambiar de personaje».";
+      + ". Ya puedes correr con " + pronombre(estrenos) + ": «Cambiar de personaje».";
     montaGente();
   }
   $("#alias").value = local.alias || "";
@@ -2032,6 +2108,11 @@ function final(){
      panel con la marca queda debajo para quien quiera guardarla */
 }
 let marca = null;
+/* «él», «ella», «ellos» o «ellas», según a quién se haya desbloqueado */
+function pronombre(ks){
+  const f = ks.every(k => JEFES.find(q => q[0] === k)[6] === "f");
+  return ks.length > 1 ? (f ? "ellas" : "ellos") : (f ? "ella" : "él");
+}
 
 /* «Esquivaste 2 cansinos del pasillo»: de más a menos, y al final lo que
    te has comido. Se monta con nodos y no con innerHTML */
