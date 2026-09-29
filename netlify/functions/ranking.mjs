@@ -38,7 +38,7 @@ const MS_MINIMOS = 12000;
 /* Las reglas de la carrera, tal como están en juego.html. Igual que con
    el reto: si allí cambian, aquí también. */
 const VOTO = 25;              // puntos por papeleta recogida
-const VEL_MAX = 40;           // metros por segundo: el techo de velocidad del juego
+const VEL_MAX = 60;           // metros por segundo: los 40 del techo del juego por 1,5 del acelerón
 const SEP_VOTO = 6;           // metros mínimos entre dos papeletas seguidas
 const EXTRA = 100;            // puntos por churros o mollete
 const SEP_EXTRA = 50;         // metros mínimos entre dos de esos

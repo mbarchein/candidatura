@@ -41,7 +41,7 @@ MS_MINIMOS = 12000
 
 # las reglas de la carrera, iguales que en juego.html y en la función
 VOTO = 25                  # puntos por papeleta
-VEL_MAX = 40               # metros por segundo, el techo de velocidad del juego
+VEL_MAX = 60               # metros por segundo: los 40 del juego por 1,5 del acelerón
 SEP_VOTO = 6               # metros mínimos entre dos papeletas
 EXTRA = 100                # puntos por churros o mollete
 SEP_EXTRA = 50             # metros mínimos entre dos de esos

@@ -1080,6 +1080,16 @@ POSES.cae = function(tt){
     pI:{ang:104,len:4}, pD:{ang:76,len:4} };
 };
 
+/* agachado: el cuerpo baja seis píxeles, las rodillas se doblan hacia
+   delante y la cabeza se hunde entre los hombros. Dos fotogramas, que al
+   correr agachado los pies siguen moviéndose */
+POSES.agacha = function(tt){
+  const f = Math.floor(tt/92) % 2;
+  return { fase:f, dy:6, cabY:3, lean:1, cara:"corre",
+    bI:{ang:200,len:4}, bD:{ang:340,len:5},
+    pI:{dx: f?-4:-2, dy:0, kx: f?0:1, ky:-2}, pD:{dx: f?4:3, dy:0, kx: f?5:4, ky:-2} };
+};
+
 /* Cada fotograma se pinta una vez a 27x36 en un canvas propio y luego
    se escala con drawImage sin suavizado. Pintar píxel a píxel en cada
    frame del juego son mil rectángulos por muñeco: con la caché es un

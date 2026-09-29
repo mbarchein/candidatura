@@ -153,12 +153,23 @@ h1 em{font-style:normal;color:var(--coral-txt);display:block}
 /* el botón de saltar solo en pantallas táctiles: es donde cae el pulgar.
    Toda la barra salta igual; el botón es para que se vea dónde tocar */
 .saltar{
-  display:none;flex:1;min-height:48px;border-radius:12px;border:0;cursor:pointer;
+  display:block;flex:1;min-height:48px;border-radius:12px;border:0;cursor:pointer;
   font:500 1rem var(--display);letter-spacing:.06em;text-transform:uppercase;
   background:var(--coral);color:#1a0d0b;touch-action:none;-webkit-tap-highlight-color:transparent
 }
 .saltar:active{filter:brightness(.92)}
-@media (pointer:coarse){ .saltar{display:block} }
+/* agacharse y acelerón, a los lados del de saltar */
+.accion{
+  flex:0 1 9rem;min-height:48px;border-radius:12px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:.4rem;
+  font:500 .85rem var(--display);letter-spacing:.05em;text-transform:uppercase;
+  background:var(--panel-2);color:var(--text);border:1px solid var(--line-strong);
+  touch-action:none;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none
+}
+.accion span[aria-hidden]{font-family:var(--cifras);font-size:1rem;color:var(--cian-txt)}
+.accion:active,.accion.pulsado{border-color:var(--cian-txt);background:var(--panel)}
+.accion[aria-disabled="true"]{opacity:.45;cursor:default}
+@media (max-width:420px){ .accion{flex-basis:3.4rem} .accion__txt{display:none} }
 /* en el ordenador no hace falta botón para saltar, pero sí para «Otra vez»
    y «Comenzar»: ahí aparece también */
 .escenario.pide .saltar{display:block}
@@ -368,12 +379,14 @@ h1 em{font-style:normal;color:var(--coral-txt);display:block}
   <div class="escenario" id="escenario">
     <canvas id="lienzo" aria-label="El juego. Pulsa espacio o toca para saltar."></canvas>
     <div class="controles">
+      <button class="accion" id="agachar" type="button" aria-disabled="true" aria-label="Agacharse"><span aria-hidden="true">↓</span><span class="accion__txt">Agacharse</span></button>
       <button class="saltar" id="saltar" type="button">Comenzar</button>
+      <button class="accion" id="acelerar" type="button" aria-disabled="true" aria-label="Acelerón"><span aria-hidden="true">→→</span><span class="accion__txt">Acelerón</span></button>
       <button class="control" id="sonido" type="button" aria-pressed="true">Sonido</button>
     </div>
   </div>
-  <p class="ayuda ayuda--teclado"><kbd>Espacio</kbd> o <kbd>↑</kbd> para saltar, o toca la pantalla. Si mantienes, saltas más alto; si vuelves a pulsar en el aire, das un doble salto.</p>
-  <p class="ayuda ayuda--tactil">Toca el escenario o el botón de saltar. Si dejas el dedo, saltas más alto; si vuelves a tocar en el aire, das un doble salto.</p>
+  <p class="ayuda ayuda--teclado"><kbd>Espacio</kbd> o <kbd>↑</kbd> para saltar, o haz clic en el escenario: si mantienes, saltas más alto, y si vuelves a pulsar en el aire, das un doble salto. <kbd>↓</kbd> para agacharte (en el aire, bajas de golpe) y <kbd>→</kbd><kbd>→</kbd> para un acelerón. También con los botones de debajo.</p>
+  <p class="ayuda ayuda--tactil">Toca el escenario o «Saltar»: si dejas el dedo, saltas más alto, y si vuelves a tocar en el aire, das un doble salto. Mantén «Agacharse» para pasar por debajo y toca «Acelerón» para ir más deprisa un momento.</p>
 
   <section class="panel" id="elige" aria-labelledby="elige-t">
     <h2 id="elige-t">¿Con quién corres?</h2>
@@ -454,9 +467,10 @@ const TODOS = GENTE.concat(JEFES);
 const abierto = k => !JEFES.some(p => p[0] === k) || !!(local.jefes && local.jefes[k]);
 
 /* ------------------------------------------------------------------
-   Reglas. VOTO, EXTRA, VEL_MAX, SEP_VOTO y SEP_EXTRA son las mismas que
-   comprueba el servidor en ranking.mjs: si se tocan aquí, se tocan
-   allí, o las marcas buenas se rechazan.
+   Reglas. VOTO, EXTRA, SEP_VOTO y SEP_EXTRA son las mismas que
+   comprueba el servidor en ranking.mjs, y allí el techo de velocidad es
+   VEL_MAX por ACELERON: si se tocan aquí, se tocan allí, o las marcas
+   buenas se rechazan.
    Todo se mide en píxeles del juego; 10 píxeles son un metro.
    ------------------------------------------------------------------ */
 const VOTO = 25;             // puntos por papeleta
@@ -472,12 +486,17 @@ const SUBIDON = 4000;        // ms que dura el subidón de los churros
 /* cada almuerzo da su poder durante un rato. Ninguno toca los puntos,
    que el servidor los quiere exactos: metros, papeletas y almuerzos */
 const PODERES = {
-  mollete:     { ms: 6000,  nombre: "IMÁN DE PAPELETAS" },
-  pizza:       { ms: 7000,  nombre: "TRIPLE SALTO" },
-  hamburguesa: { ms: 10000, nombre: "ESCUDO" },
-  porron:      { ms: 5000,  nombre: "CON CALMA" }
+  mollete:     { ms: 6000,  nombre: "IMÁN DE PAPELETAS", efecto: "Las papeletas vienen solas" },
+  pizza:       { ms: 7000,  nombre: "TRIPLE SALTO",      efecto: "Dos saltos más en el aire" },
+  hamburguesa: { ms: 10000, nombre: "ESCUDO",            efecto: "Aguanta un golpe" },
+  porron:      { ms: 5000,  nombre: "CON CALMA",         efecto: "Todo va más despacio" }
 };
 const CALMA = 0.65;          // lo que se frena el mundo con el porrón
+/* el acelerón: dos veces hacia delante (o su botón) y durante un rato
+   vas más deprisa, que son más metros. Luego hay que esperar para el
+   siguiente. El servidor admite el techo por ACELERON */
+const ACELERON = 1.5, ACELERON_MS = 700, ACELERON_ESPERA = 2500;
+const DOBLE_TOQUE_MS = 320;  // lo que puede pasar entre los dos «hacia delante»
 const PX_M = 10;
 /* PX deja sitio a la izquierda para los que vas liberando, que corren detrás */
 const ALTO = 108, SUELO = 90, PX = 40;       // alto del mundo, línea del suelo, x del muñeco
@@ -615,6 +634,7 @@ const sonido = {
     this.charles(t, 0.5);
   },
   caida(){ if(this.ac) this.nota(700, this.ac.currentTime, 0.9, "square", 0.22, 60); },
+  acelera(){ if(this.ac) this.nota(180, this.ac.currentTime, 0.3, "sawtooth", 0.18, 900); },
   hielo(){
     if(!this.ac) return;
     const t = this.ac.currentTime;
@@ -815,6 +835,21 @@ const TIPOS = {
       silueta(x, o.y, w, 10); rect(x, o.y, w, 10, C.azul); rect(x, o.y, 2, 10, C.cian);
       rect(x+2, o.y, w-2, 1, "#3a5a90");
       texto("10:00 – ¿?", x + 5, o.y + 7, "#e9f2fc", 5, "left");
+    }
+  },
+  /* la circular de dirección llega planeando a la altura de la cara:
+     o te agachas o saltas alto. Viene más deprisa que el suelo */
+  circular: {
+    w: 14, h: 7, vuela: true, anda: 45, etiqueta: "LA CIRCULAR DE DIRECCIÓN",
+    frase: "Te ha dado en la cara la circular de dirección. Nadie la había leído.",
+    mueve(o){ o.y = SUELO - 30 + Math.round(Math.sin(t / 180 + o.x / 40)); },
+    pinta(x, o){
+      const y = o.y;
+      /* el avión de papel, con el morro hacia ti */
+      const filas = [[0, 3, 14], [1, 2, 13], [2, 1, 12], [3, 0, 14], [4, 3, 11], [5, 6, 9]];
+      for(const [j, a, b] of filas) rect(x + a - 1, y + j - 1, b - a + 2, 3, C.O);
+      for(const [j, a, b] of filas) rect(x + a, y + j, b - a, 1, j === 3 ? C.gris : C.W);
+      rect(x + 7, y + 1, 4, 1, C.R);
     }
   },
   /* a partir de aquí, los que salen cuando la carrera ya va lanzada */
@@ -1024,6 +1059,7 @@ const LOGROS = {
   reunion:   ["Te saltaste", "reunión que podía ser un correo", "reuniones que podían ser un correo"],
   alarga:    ["Sobreviviste a", "reunión que se alarga", "reuniones que se alargan"],
   correo:    ["Esquivaste", "email de las 23:00", "emails de las 23:00"],
+  circular:  ["Esquivaste", "circular de dirección", "circulares de dirección"],
   chat:      ["Dejaste en visto", "chat de las 18:59", "chats de las 18:59"],
   bug:       ["Esquivaste", "bug en producción", "bugs en producción"],
   deadline:  ["Sobreviviste a", "deadline", "deadlines"],
@@ -1049,6 +1085,9 @@ let y = SUELO, vy = 0, enAire = false, pulsado = false, cayendo = false, doble =
 /* cuándo se acaba cada poder, en ms de partida; el escudo, además, se
    gasta al primer golpe */
 let poder = {};
+/* agacharse: mientras se mantiene abajo. En el aire, baja de golpe */
+let abajo = false, abajoId = null;
+let acelera = 0, enfria = 0, ultimaDelante = 0;
 let cosas = [], papeletas = [], comida = [], rotulos = [], fondo = [];
 let jaulas = [], pendientes = [], libres = [], rastro = [], ultimaJaula = -1e9;
 let hechos = {}, comidos = {}, recientes = [], ultimaComida = null;
@@ -1059,6 +1098,7 @@ const enJaulas = () => GENTE.filter(p => p[0] !== quien).length;
 
 /* lo que se avisa en grande cuando la carrera sube de nivel */
 const AVISOS = [
+  [150,  "Lo que va a la cara, agachándose"],
   [500,  "¡Empieza a sonar el chat!"],
   [800,  "¡Bugs en producción!"],
   [1000, "Hora punta: esto acelera"],
@@ -1076,6 +1116,7 @@ const puntos = () => metros() + votos * VOTO + almuerzos * EXTRA;
 function reinicia(){
   t = 0; ms = 0; dist = 0; vel = VEL_MIN; votos = 0; almuerzos = 0; subidon = 0; causa = null; congelado = false;
   y = SUELO; vy = 0; enAire = false; cayendo = false; doble = 0; fase = 0; poder = {};
+  abajo = false; abajoId = null; acelera = 0; enfria = 0;
   aviso = 0; anuncio = null; estrenos = [];
   cosas = []; papeletas = []; comida = []; rotulos = [];
   /* los once que no llevas, en orden al azar: cada jaula saca al siguiente */
@@ -1165,6 +1206,7 @@ function saca(){
   if(m > 100) lista.push("pozo", "pozo", "reunion", "cansino");
   if(m > 200) lista.push("pm", "correo");
   if(m > 300) lista.push("alarga", "correo");
+  if(m > 150) lista.push("circular");
   if(m > 500) lista.push("chat");
   if(m > 800) lista.push("bug", "bug");
   if(m > 1200) lista.push("deadline", "deadline");
@@ -1186,9 +1228,14 @@ function saca(){
     w = Math.round(22 + Math.random() * Math.min(28, v * 0.12));
     cosas.push({ tipo, x, w, pozo: true });
   } else if(tipo === "correo"){
-    const alto = Math.random() < 0.5;
+    /* tres alturas: alto, que se pasa de pie; bajo, que se salta; y desde
+       los 150 metros a media altura, que pide agacharse o saltar alto */
+    const r = Math.random();
     w = TIPOS.correo.w;
-    cosas.push({ tipo, x, w, h: 9, y: alto ? SUELO - 44 : SUELO - 15 });
+    cosas.push({ tipo, x, w, h: 9, y: m > 150 && r < 0.4 ? SUELO - 31 : r < 0.7 ? SUELO - 44 : SUELO - 15 });
+  } else if(tipo === "circular"){
+    w = TIPOS.circular.w;
+    cosas.push({ tipo, x, w, h: 7, y: SUELO - 30 });
   } else if(tipo === "chat"){
     w = TIPOS.chat.w;
     cosas.push({ tipo, x, w, h: 10, y: SUELO - 30, fase: Math.random() * Math.PI * 2, ritmo: 3.2 + Math.random() * 1.4 });
@@ -1259,6 +1306,10 @@ function sobrePozo(){
   return cosas.some(o => o.pozo && pie > o.x + 3 && pie < o.x + o.w - 3);
 }
 const activo = k => (poder[k] || 0) > ms;
+const agachado = () => abajo && !enAire && estado === "corre";
+/* la caja del muñeco: 30 de pie y 20 agachado, que es lo que deja pasar
+   por debajo del correo y de la circular que van a media altura */
+const altoMuneco = () => agachado() ? 20 : 30;
 /* el aire acondicionado: debajo de él, la gravedad aprieta y el salto se queda corto */
 const AIRE = 1.9;
 const bajoElAire = () => cosas.some(o => o.zona && PX + 13 > o.x && PX + 13 < o.x + o.w);
@@ -1266,7 +1317,7 @@ function choca(o){
   if(o.pozo || ms < subidon) return false;
   /* del aire solo toca el aparato del techo, que se alcanza con el doble salto */
   if(o.zona){ const cx = o.x + o.w / 2 - 11; return y - 30 < 11 && PX + 19 > cx && PX + 9 < cx + 22; }
-  const ax = PX + 9, aw = 10, ay = y - 30, ah = 29;
+  const ax = PX + 9, aw = 10, ay = y - altoMuneco(), ah = altoMuneco() - 1;
   const oy = o.y !== undefined ? o.y : SUELO - o.h;
   const caja = TIPOS[o.tipo].caja, bx = o.x + (caja ? caja[0] : 0), bw = caja ? caja[1] : o.w;
   return ax < bx + bw && ax + aw > bx && ay < oy + o.h && ay + ah > oy;
@@ -1286,7 +1337,7 @@ function paso(dt){
   ms += dt * 1000;
   /* por dónde ha ido el muñeco: los liberados repiten sus saltos con un
      poco de retraso, como una fila de patitos */
-  rastro.push({ ms, y, enAire });
+  rastro.push({ ms, y, enAire, agacha: agachado() });
   while(rastro.length && rastro[0].ms < ms - 800) rastro.shift();
   const m = metros();
   vel = m < M_CRUCERO ? VEL_MIN + (VEL_CRUCERO - VEL_MIN) * m / M_CRUCERO
@@ -1296,6 +1347,7 @@ function paso(dt){
     aviso++;
   }
   if(activo("porron")) vel *= CALMA;
+  if(acelera > ms) vel *= ACELERON;
   if(m >= 2000) desbloquea("cansino");
   if(anuncio){ anuncio.vida -= dt; if(anuncio.vida <= 0) anuncio = null; }
   sonido.tempo = 1 + (vel - VEL_MIN) / (VEL_MAX - VEL_MIN) * 0.22;
@@ -1339,7 +1391,7 @@ function paso(dt){
   /* el salto: si se suelta antes de la cima, se corta la subida */
   if(enAire){
     if(!pulsado && vy < 0 && ms - tSalto > SALTO_MIN_MS) vy *= Math.pow(CORTE, dt * 20);
-    vy += GRAVEDAD * (bajoElAire() ? AIRE : 1) * dt; y += vy * dt;
+    vy += GRAVEDAD * (bajoElAire() ? AIRE : 1) * (abajo ? 3 : 1) * dt; y += vy * dt;
     if(y >= SUELO && !sobrePozo()){ y = SUELO; vy = 0; enAire = false; doble = 0; }
   }
   if(!enAire && sobrePozo()){ enAire = true; vy = Math.max(vy, 0); }
@@ -1365,7 +1417,7 @@ function paso(dt){
     }
   }
   for(const p of papeletas){
-    if(!p.cogida && PX + 6 < p.x + 7 && PX + 21 > p.x && y - 32 < p.y + 8 && y > p.y){
+    if(!p.cogida && PX + 6 < p.x + 7 && PX + 21 > p.x && y - altoMuneco() - 2 < p.y + 8 && y > p.y){
       p.cogida = true; votos++;
       rotulos.push({ x: p.x, y: p.y - 4, vida: 0.7, texto: "+" + VOTO });
       sonido.voto();
@@ -1381,20 +1433,28 @@ function paso(dt){
     }
   }
   for(const c of comida){
-    if(!c.cogida && PX + 6 < c.x + (ALMUERZOS[c.tipo].w || 12) && PX + 21 > c.x && y - 32 < c.y + 8 && y > c.y - 4){
+    if(!c.cogida && PX + 6 < c.x + (ALMUERZOS[c.tipo].w || 12) && PX + 21 > c.x && y - altoMuneco() - 2 < c.y + 8 && y > c.y - 4){
       c.cogida = true; almuerzos++;
       comidos[c.tipo] = (comidos[c.tipo] || 0) + 1;
       rotulos.push({ x: c.x, y: c.y - 6, vida: 0.9, texto: "+" + EXTRA });
       if(c.tipo === "churros"){
         subidon = ms + SUBIDON;
-        rotulos.push({ x: c.x, y: c.y - 14, vida: 1.2, texto: "¡SUBIDÓN!" });
+        anuncio = { texto: "¡Subidón! · " + SUBIDON / 1000 + " s", sub: "Atraviesas los problemas", vida: 2.4 };
       } else if(PODERES[c.tipo]){
-        poder[c.tipo] = ms + PODERES[c.tipo].ms;
-        rotulos.push({ x: c.x, y: c.y - 14, vida: 1.2, texto: "¡" + PODERES[c.tipo].nombre + "!" });
+        const P = PODERES[c.tipo];
+        poder[c.tipo] = ms + P.ms;
+        anuncio = { texto: "¡" + P.nombre + "! · " + P.ms / 1000 + " s", sub: P.efecto, vida: 2.4 };
       }
       sonido.almuerzo();
     }
   }
+}
+
+function acelerar(){
+  if(estado !== "corre" || ms < enfria) return;
+  acelera = ms + ACELERON_MS; enfria = ms + ACELERON_ESPERA;
+  rotulos.push({ x: PX + 4, y: y - 40, vida: 0.8, texto: "¡ACELERÓN!" });
+  sonido.acelera();
 }
 
 function salta(){
@@ -1501,6 +1561,7 @@ function pinta(){
     /* el deadline, mientras cuelga del techo, lleva el rótulo debajo */
     const top = o.pozo ? SUELO - 8 : o.tipo === "correo" || o.tipo === "chat" ? o.y - 7
       : o.tipo === "deadline" ? (o.y < 30 ? o.y + o.h + 8 : o.y - 4)
+      : o.tipo === "circular" ? o.y - 4
       : o.zona ? 19 : T.etiquetaY ? SUELO - T.etiquetaY : T.vuela ? o.y - 3 : SUELO - o.h - 4;
     texto(T.etiqueta, o.x + o.w / 2, top, PAL.rotulo, 6);
     if(T.bocadillo) bocadillo(T.bocadillo, o.x + 8, SUELO - 24);
@@ -1544,6 +1605,7 @@ function pinta(){
   if(anuncio && estado === "corre"){
     g.globalAlpha = Math.min(1, anuncio.vida * 2, (2.4 - anuncio.vida) * 4);
     texto(anuncio.texto.toUpperCase(), ANCHO / 2, 42, "rgb(" + PAL.puntos + ")", 8);
+    if(anuncio.sub) texto(anuncio.sub, ANCHO / 2, 51, PAL.aviso, 6);
     g.globalAlpha = 1;
   }
 
@@ -1633,15 +1695,15 @@ function pintaSeguidores(){
   for(let i = 0; i < n; i++){
     const k = libres[libres.length - 1 - i];
     const x = PX - 12 * (i + 1);
-    let py = SUELO, aire = false;
+    let py = SUELO, aire = false, agacha = false;
     if(estado === "corre"){
       const objetivo = ms - 130 * (i + 1);
       const r = rastro.find(e => e.ms >= objetivo) || rastro[rastro.length - 1];
-      if(r){ py = r.y; aire = r.enAire; }
+      if(r){ py = r.y; aire = r.enAire; agacha = r.agacha; }
     }
     if(py > SUELO) py = SUELO;       // al pozo solo cae el de delante
-    const pose = estado === "fin" ? "alerta" : aire ? "salta" : "fuga";
-    const tt = pose === "fuga" ? ((Math.floor(fase) + i + 1) % 4) * 92 : 0;
+    const pose = estado === "fin" ? "alerta" : aire ? "salta" : agacha ? "agacha" : "fuga";
+    const tt = pose === "fuga" ? ((Math.floor(fase) + i + 1) % 4) * 92 : pose === "agacha" ? ((Math.floor(fase) + i + 1) % 2) * 92 : 0;
     const an = Math.max(4, 9 - Math.round((SUELO - py) / 5));
     rect(x + 13 - (an >> 1), SUELO - 1, an, 1, PAL.sombra);
     g.drawImage(MUNECOS.fotograma(k, pose, tt), x, Math.round(py) - MUNECOS.REJ_H + 1);
@@ -1652,6 +1714,7 @@ function pintaMuneco(){
   let pose = "quieto", tt = Math.floor(t / 100) * 100 % 5700;
   if(estado === "corre"){
     if(enAire){ pose = "salta"; tt = 0; }
+    else if(agachado()){ pose = "agacha"; tt = (Math.floor(fase) % 2) * 92; }
     else { pose = "fuga"; tt = (Math.floor(fase) % 4) * 92; }
   } else if(estado === "fin"){
     if(cayendo){ pose = "cae"; tt = (Math.floor(tMuerte / 120) % 2) * 120; }
@@ -1664,6 +1727,13 @@ function pintaMuneco(){
     rect(PX + 13 - (an >> 1), SUELO - 1, an, 1, PAL.sombra);
   }
   const f = MUNECOS.fotograma(quien, pose, tt);
+  /* las rayas del acelerón, detrás */
+  if(estado === "corre" && acelera > ms){
+    for(let i = 0; i < 4; i++){
+      const ly = Math.round(y) - 26 + i * 7, lx = PX - 4 - ((Math.floor(t / 40) + i * 3) % 8);
+      rect(lx - 10, ly, 10, 1, PAL.rotulo);
+    }
+  }
   /* con el subidón parpadea, y más rápido cuando se va a acabar */
   const queda = subidon - ms;
   if(estado === "corre" && queda > 0 && Math.floor(t / (queda < 1000 ? 60 : 120)) % 2) g.globalAlpha = 0.45;
@@ -1690,12 +1760,26 @@ function pintaCubito(){
    El bucle. Con la pestaña oculta el navegador para requestAnimationFrame,
    y al volver el dt sería de minutos: se topa en 1/30 de segundo.
    ------------------------------------------------------------------ */
+/* los botones de agacharse y del acelerón solo valen corriendo, y el del
+   acelerón se apaga mientras se recarga. Se toca el DOM solo al cambiar */
+let estadoBotones = "";
+function botones(){
+  const corre = estado === "corre";
+  const clave = corre + "|" + (ms < enfria);
+  if(clave === estadoBotones) return;
+  estadoBotones = clave;
+  $("#agachar").setAttribute("aria-disabled", String(!corre));
+  $("#acelerar").setAttribute("aria-disabled", String(!corre || ms < enfria));
+  if(!corre){ abajo = false; abajoId = null; $("#agachar").classList.remove("pulsado"); }
+}
+
 let antes = performance.now();
 function bucle(ahora){
   const dt = Math.min(1 / 30, (ahora - antes) / 1000);
   antes = ahora;
   paso(dt);
   pinta();
+  botones();
   requestAnimationFrame(bucle);
 }
 document.addEventListener("visibilitychange", () => {
@@ -1708,8 +1792,24 @@ document.addEventListener("visibilitychange", () => {
    ------------------------------------------------------------------ */
 const TECLAS = ["Space", "ArrowUp", "KeyW"];
 const escribiendo = () => document.activeElement && document.activeElement.tagName === "INPUT";
+const TECLAS_ABAJO = ["ArrowDown", "KeyS"], TECLAS_DELANTE = ["ArrowRight", "KeyD"];
 document.addEventListener("keydown", e => {
   if(escribiendo()) return;
+  /* abajo y hacia delante solo cuentan corriendo: fuera de la carrera
+     las flechas siguen moviendo la página */
+  if(TECLAS_ABAJO.includes(e.code)){
+    if(estado === "corre"){ e.preventDefault(); abajo = true; }
+    return;
+  }
+  if(TECLAS_DELANTE.includes(e.code)){
+    if(estado !== "corre") return;
+    e.preventDefault();
+    if(e.repeat) return;
+    const ahora = performance.now();
+    if(ahora - ultimaDelante < DOBLE_TOQUE_MS){ acelerar(); ultimaDelante = 0; }
+    else ultimaDelante = ahora;
+    return;
+  }
   if(TECLAS.includes(e.code)){
     /* en el final, espacio no relanza: con el formulario delante se
        escapaba una partida nueva sin querer al ir a escribir el alias */
@@ -1721,7 +1821,10 @@ document.addEventListener("keydown", e => {
     $("#sonido").click();
   }
 });
-document.addEventListener("keyup", e => { if(TECLAS.includes(e.code)) pulsado = false; });
+document.addEventListener("keyup", e => {
+  if(TECLAS.includes(e.code)) pulsado = false;
+  if(TECLAS_ABAJO.includes(e.code)) abajo = false;
+});
 /* el toque: con eventos de puntero donde los hay (Android, iOS 13 en
    adelante) y con eventos táctiles donde no. El dedo se captura al bajar,
    así que se sabe cuándo se levanta aunque salga del lienzo */
@@ -1732,6 +1835,14 @@ const escenario = $("#escenario");
 function toca(e){
   if(e.target.closest && e.target.closest("#sonido")) return;
   if(e.cancelable) e.preventDefault();
+  /* los botones de agacharse y del acelerón no saltan: cada uno lo suyo.
+     Se apunta qué dedo agacha, para que al soltar el de saltar no se
+     levante también el muñeco */
+  if(e.target.closest && e.target.closest("#agachar")){
+    if(estado === "corre"){ abajo = true; abajoId = e.pointerId ?? "toque"; $("#agachar").classList.add("pulsado"); }
+    return;
+  }
+  if(e.target.closest && e.target.closest("#acelerar")){ acelerar(); return; }
   if(estado === "fin"){
     /* al acabar solo cuenta el botón: «Otra vez» prepara, no arranca.
        Un toque en el escenario aquí no hace nada, que suele ser el dedo
@@ -1741,7 +1852,11 @@ function toca(e){
   }
   pulsado = true; salta();
 }
-const suelta = () => { pulsado = false; };
+const suelta = e => {
+  const id = e && e.pointerId !== undefined ? e.pointerId : "toque";
+  if(abajoId !== null && (id === abajoId || id === "toque")){ abajo = false; abajoId = null; $("#agachar").classList.remove("pulsado"); }
+  if(!(e && e.pointerId !== undefined && e.pointerId === abajoId)) pulsado = false;
+};
 if(window.PointerEvent){
   escenario.addEventListener("pointerdown", e => {
     if(e.target.closest && e.target.closest("#sonido")) return;
@@ -1767,6 +1882,8 @@ for(const ev of ["touchend", "click"]){
 for(const b of document.querySelectorAll(".control, #tema")) b.addEventListener("click", () => b.blur());
 /* con teclado (Intro sobre el botón) no hay pointerdown: el clic sin
    ratón, detail 0, hace lo mismo que el toque */
+$("#acelerar").addEventListener("click", e => { if(e.detail === 0) acelerar(); });
+
 $("#saltar").addEventListener("click", e => {
   if(e.detail !== 0) return;
   if(estado === "fin"){ if(repetible){ sonido.arranca(); prepara(); } }
@@ -1935,7 +2052,12 @@ function pintaStats(){
     const [verbo, uno, varios] = LOGROS[k];
     linea([verbo + " ", n, " " + (n === 1 ? uno : varios) + "."]);
   }
-  const platos = Object.entries(comidos).sort((a, b) => b[1] - a[1]);
+  /* el porrón no se come: va en su propia línea, con «te bebiste» */
+  const platos = Object.entries(comidos).filter(([k]) => k !== "porron").sort((a, b) => b[1] - a[1]);
+  if(comidos.porron){
+    const n = comidos.porron;
+    linea(["Te bebiste ", n, " " + (n === 1 ? COMIDAS.porron[0] : COMIDAS.porron[1]) + "."], "comida");
+  }
   if(platos.length){
     const partes = ["Te comiste "];
     platos.forEach(([k, n], i) => {
@@ -1945,7 +2067,7 @@ function pintaStats(){
     partes.push(".");
     linea(partes, "comida");
   }
-  if(!filas.length && !platos.length) linea(["No te dio tiempo a dejar nada atrás. La siguiente sale mejor."]);
+  if(!filas.length && !platos.length && !comidos.porron) linea(["No te dio tiempo a dejar nada atrás. La siguiente sale mejor."]);
 }
 
 /* «Otra vez» desde el panel sube al escenario y lo deja listo, pero no
