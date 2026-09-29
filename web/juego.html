@@ -357,7 +357,7 @@ h1 em{font-style:normal;color:var(--coral-txt);display:block}
 
 <main class="hoja">
   <h1>La carrera <em>hasta la urna</em></h1>
-  <p class="entrada">Salta los problemas de siempre, coge papeletas, no le des conversación al cansino del pasillo y no caigas en el pozo de las falsas promesas. Si ves churros en cocina, la pizza de Pedro Pepperoni o la hamburguesa del Mumama, a por ellos.</p>
+  <p class="entrada">Salta los problemas de siempre, coge papeletas, no le des conversación al cansino del pasillo y no caigas en el pozo de las falsas promesas. Si ves churros en cocina, un mollete, la pizza de Pedro Pepperoni, la hamburguesa del Mumama o el porrón, a por ellos: cada uno te da un poder durante un rato.</p>
 
   <div class="escenario" id="escenario">
     <canvas id="lienzo" aria-label="El juego. Pulsa espacio o toca para saltar."></canvas>
@@ -463,6 +463,15 @@ const SEP_VOTO = 6;          // metros mínimos entre dos papeletas
 const EXTRA = 100;           // puntos por almuerzo: churros o mollete
 const SEP_EXTRA = 50;        // metros mínimos entre dos almuerzos
 const SUBIDON = 4000;        // ms que dura el subidón de los churros
+/* cada almuerzo da su poder durante un rato. Ninguno toca los puntos,
+   que el servidor los quiere exactos: metros, papeletas y almuerzos */
+const PODERES = {
+  mollete:     { ms: 6000,  nombre: "IMÁN DE PAPELETAS" },
+  pizza:       { ms: 7000,  nombre: "TRIPLE SALTO" },
+  hamburguesa: { ms: 10000, nombre: "ESCUDO" },
+  porron:      { ms: 5000,  nombre: "CON CALMA" }
+};
+const CALMA = 0.65;          // lo que se frena el mundo con el porrón
 const PX_M = 10;
 /* PX deja sitio a la izquierda para los que vas liberando, que corren detrás */
 const ALTO = 108, SUELO = 90, PX = 40;       // alto del mundo, línea del suelo, x del muñeco
@@ -851,6 +860,37 @@ const TIPOS = {
       rect(x + 9, y + 5, 1, 1, C.r); rect(x + 10, y + 6, 1, 1, C.r); rect(x + 11, y + 5, 1, 1, C.r); rect(x + 9, y + 7, 1, 1, C.r); rect(x + 11, y + 7, 1, 1, C.r);
     }
   },
+  /* la silla con ruedas viene rodando hacia ti mucho más deprisa que el
+     PM: se ve tarde y hay que saltarla sin pensar */
+  ruedas: {
+    w: 14, h: 16, anda: 80, etiqueta: "LA SILLA CON RUEDAS", frase: "Te ha arrollado la silla con ruedas del de al lado.",
+    pinta(x){
+      const y = SUELO - this.h, r = Math.floor(t / 70) % 2;
+      silueta(x + 8, y, 5, 8); rect(x + 8, y, 5, 8, C.azulO); rect(x + 9, y + 1, 3, 6, C.azul);   // el respaldo
+      silueta(x + 1, y + 7, 12, 3); rect(x + 1, y + 7, 12, 3, C.azul); rect(x + 1, y + 7, 12, 1, "#3a5a90");
+      rect(x + 6, y + 10, 2, 3, C.O);
+      rect(x + 1, y + 13, 12, 1, C.O);
+      for(const rx of [x + 1, x + 6, x + 11]){ rect(rx - 1, y + 13, 3, 3, C.O); rect(rx, y + 14, 1, 1, r ? C.gris : "#6b6f7c"); }
+      rect(x - 3 - r, y + 12, 2, 1, C.gris); rect(x - 6, y + 14, 3, 1, C.gris);                      // las rayas de la velocidad
+    }
+  },
+  /* el aire acondicionado no mata: cuelga del techo y, debajo, el salto
+     se queda corto. Siempre sale con algo bajo debajo que hay que saltar */
+  aire: {
+    w: 64, vuela: true, etiqueta: "EL AIRE A 18 GRADOS", frase: "El aire a 18 grados. Otra vez.",
+    pinta(x, o){
+      const cx = Math.round(x + o.w / 2 - 11);
+      silueta(cx, 5, 22, 6); rect(cx, 5, 22, 6, "#dfe7ef"); rect(cx, 9, 22, 2, "#b8c8dd");
+      for(let i = 2; i < 20; i += 3) rect(cx + i, 10, 2, 1, "#8a8f9c");
+      rect(cx + 18, 6, 2, 1, "#5cd0a0");
+      /* el chorro de frío, bajando */
+      const baja = Math.floor(t / 60) % 8;
+      for(let i = 0; i < 6; i++){
+        const lx = Math.round(x + 4 + i * (o.w - 8) / 5);
+        for(let yy = 14 + baja; yy < SUELO - 4; yy += 8) rect(lx + ((yy >> 3) % 2), yy, 1, 3, "rgba(120,200,240,.55)");
+      }
+    }
+  },
   pozo: {
     etiqueta: "POZO DE LAS FALSAS PROMESAS", frase: "Has caído en el pozo de las falsas promesas.",
     pinta(){}
@@ -858,11 +898,33 @@ const TIPOS = {
 };
 
 /* ------------------------------------------------------------------
-   Los almuerzos: lo bueno de la ofi. Churros, mollete, la pizza de Pedro Pepperoni
-   y la hamburguesa del Mumama. Valen EXTRA puntos cada uno, y los
-   churros además dan el subidón: unos segundos atravesando problemas.
+   Los almuerzos: lo bueno de la ofi. Churros, mollete, la pizza de Pedro Pepperoni,
+   la hamburguesa del Mumama y el porrón. Valen EXTRA puntos cada uno y
+   cada uno da su poder (ver PODERES); los churros, el subidón: unos
+   segundos atravesando problemas.
    El pozo no, que las falsas promesas no se arreglan con azúcar.
    ------------------------------------------------------------------ */
+/* el porrón: cuello arriba, barriga abajo y el pitorro que sale de lado
+   hacia arriba. Se pinta por píxeles: primero el contorno de todos y
+   luego el cristal y el vino, para que el pitorro no quede suelto */
+const tramos = filas => filas.flatMap(([yy, a, b]) => Array.from({ length: b - a + 1 }, (_, i) => [a + i, yy]));
+const PORRON = {
+  cristal: tramos([[0,4,5],[1,4,5],[2,4,5],[3,4,5],[4,4,5],[5,3,6],[6,2,7],[7,1,8],[8,1,8],[9,1,8],[10,1,8],[11,2,7]])
+    .concat([[8,6],[9,5],[10,4],[11,3],[12,2]]),
+  vino: tramos([[8,1,8],[9,1,8],[10,1,8],[11,2,7]]),
+  brillo: [[2,7],[4,1]]
+};
+const PORRON_MINI = {
+  cristal: tramos([[0,2,2],[1,2,2],[2,1,3],[3,0,4],[4,0,4],[5,1,3]]).concat([[4,2],[5,1],[6,0]]),
+  vino: tramos([[4,0,4],[5,1,3]]),
+  brillo: []
+};
+function porron(x, y, P){
+  for(const [i, j] of P.cristal) rect(x + i - 1, y + j - 1, 3, 3, C.O);
+  for(const [i, j] of P.cristal) rect(x + i, y + j, 1, 1, "#cfe8f2");
+  for(const [i, j] of P.vino) rect(x + i, y + j, 1, 1, "#8a1f3a");
+  for(const [i, j] of P.brillo) rect(x + i, y + j, 1, 1, C.W);
+}
 const ALMUERZOS = {
   churros: {
     w: 23, etiqueta: "CHURROS GRATIS EN COCINA",
@@ -907,6 +969,12 @@ const ALMUERZOS = {
       rect(x + 2, y + 2, 2, 2, "#c9584c"); rect(x + 7, y + 3, 2, 2, "#c9584c"); rect(x + 5, y + 5, 2, 1, "#c9584c");
     }
   },
+  /* el porrón de cristal, con el vino dentro y el pitorro largo hacia
+     arriba. Da el poder de la calma: todo va más despacio un rato */
+  porron: {
+    etiqueta: "PORRÓN DE VINO",
+    pinta(x, y){ porron(x, y - 2, PORRON); }
+  },
   hamburguesa: {
     etiqueta: "HAMBURGUESA DEL MUMAMA",
     pinta(x, y){
@@ -939,13 +1007,16 @@ const LOGROS = {
   chat:      ["Dejaste en visto", "chat de las 18:59", "chats de las 18:59"],
   bug:       ["Esquivaste", "bug en producción", "bugs en producción"],
   deadline:  ["Sobreviviste a", "deadline", "deadlines"],
+  ruedas:    ["Saltaste", "silla con ruedas", "sillas con ruedas"],
+  aire:      ["Aguantaste", "aire a 18 grados", "aires a 18 grados"],
   pozo:      ["Saltaste", "pozo de las falsas promesas", "pozos de las falsas promesas"]
 };
 const COMIDAS = {
   churros:     ["ración de churros", "raciones de churros"],
   mollete:     ["mollete con jamón", "molletes con jamón"],
   pizza:       ["pizza de Pedro Pepperoni", "pizzas de Pedro Pepperoni"],
-  hamburguesa: ["hamburguesa del Mumama", "hamburguesas del Mumama"]
+  hamburguesa: ["hamburguesa del Mumama", "hamburguesas del Mumama"],
+  porron:      ["trago del porrón", "tragos del porrón"]
 };
 
 /* ------------------------------------------------------------------
@@ -954,7 +1025,10 @@ const COMIDAS = {
 let estado = "elige";          // elige · espera · corre · fin
 let quien = local.quien && TODOS.some(p => p[0] === local.quien) && abierto(local.quien) ? local.quien : "compi";
 let t = 0, ms = 0, dist = 0, vel = VEL_MIN, votos = 0, almuerzos = 0, subidon = 0, causa = null;
-let y = SUELO, vy = 0, enAire = false, pulsado = false, cayendo = false, doble = false, tSalto = 0;
+let y = SUELO, vy = 0, enAire = false, pulsado = false, cayendo = false, doble = 0, tSalto = 0;
+/* cuándo se acaba cada poder, en ms de partida; el escudo, además, se
+   gasta al primer golpe */
+let poder = {};
 let cosas = [], papeletas = [], comida = [], rotulos = [], fondo = [];
 let jaulas = [], pendientes = [], libres = [], rastro = [], ultimaJaula = -1e9;
 let hechos = {}, comidos = {}, recientes = [], ultimaComida = null;
@@ -970,6 +1044,8 @@ const AVISOS = [
   [1000, "Hora punta: esto acelera"],
   [1200, "Mira arriba: llega el deadline"],
   [1500, "De dos en dos, como los lunes"],
+  [1800, "¡Sillas con ruedas sueltas!"],
+  [2200, "Alguien ha puesto el aire a 18°"],
   [2500, "Cierre de trimestre"],
   [4000, "Auditoría: ya no hay piedad"]
 ];
@@ -979,7 +1055,7 @@ const puntos = () => metros() + votos * VOTO + almuerzos * EXTRA;
 
 function reinicia(){
   t = 0; ms = 0; dist = 0; vel = VEL_MIN; votos = 0; almuerzos = 0; subidon = 0; causa = null;
-  y = SUELO; vy = 0; enAire = false; cayendo = false; doble = false; fase = 0;
+  y = SUELO; vy = 0; enAire = false; cayendo = false; doble = 0; fase = 0; poder = {};
   aviso = 0; anuncio = null; estrenos = [];
   cosas = []; papeletas = []; comida = []; rotulos = [];
   /* los once que no llevas, en orden al azar: cada jaula saca al siguiente */
@@ -1072,6 +1148,8 @@ function saca(){
   if(m > 500) lista.push("chat");
   if(m > 800) lista.push("bug", "bug");
   if(m > 1200) lista.push("deadline", "deadline");
+  if(m > 1800) lista.push("ruedas", "ruedas");
+  if(m > 2200) lista.push("aire");
   if(m > 2500) lista.push("chat", "pm");
   /* sin repetir ninguno de los tres últimos: al azar puro salían tres
      sillas seguidas y parecía que el juego solo tenía sillas. Los que
@@ -1097,6 +1175,12 @@ function saca(){
   } else if(tipo === "bug"){
     w = TIPOS.bug.w;
     cosas.push({ tipo, x, w, h: 8, y: SUELO - 8, reloj: Math.random() * 0.9 });
+  } else if(tipo === "aire"){
+    /* la zona del aire, y debajo, hacia el final, algo bajo que saltar */
+    w = TIPOS.aire.w;
+    cosas.push({ tipo, x, w, zona: true, y: 5, h: 6 });
+    const bajo = ["cable", "silla", "fichaje"][Math.floor(Math.random() * 3)];
+    cosas.push({ tipo: bajo, x: x + w - 26, w: TIPOS[bajo].w, h: TIPOS[bajo].h });
   } else if(tipo === "deadline"){
     w = TIPOS.deadline.w;
     cosas.push({ tipo, x, w, h: 16, y: 8, vy: 0 });
@@ -1154,8 +1238,12 @@ function sobrePozo(){
   const pie = PX + 13;
   return cosas.some(o => o.pozo && pie > o.x + 3 && pie < o.x + o.w - 3);
 }
+const activo = k => (poder[k] || 0) > ms;
+/* el aire acondicionado: debajo de él, la gravedad aprieta y el salto se queda corto */
+const AIRE = 1.6;
+const bajoElAire = () => cosas.some(o => o.zona && PX + 13 > o.x && PX + 13 < o.x + o.w);
 function choca(o){
-  if(o.pozo || ms < subidon) return false;
+  if(o.pozo || o.zona || ms < subidon) return false;
   const ax = PX + 9, aw = 10, ay = y - 30, ah = 29;
   const oy = o.y !== undefined ? o.y : SUELO - o.h;
   const caja = TIPOS[o.tipo].caja, bx = o.x + (caja ? caja[0] : 0), bw = caja ? caja[1] : o.w;
@@ -1183,6 +1271,7 @@ function paso(dt){
     anuncio = { texto: AVISOS[aviso][1], vida: 2.4 };
     aviso++;
   }
+  if(activo("porron")) vel *= CALMA;
   if(m >= 2000) desbloquea("cansino");
   if(anuncio){ anuncio.vida -= dt; if(anuncio.vida <= 0) anuncio = null; }
   sonido.tempo = 1 + (vel - VEL_MIN) / (VEL_MAX - VEL_MIN) * 0.22;
@@ -1226,13 +1315,31 @@ function paso(dt){
   /* el salto: si se suelta antes de la cima, se corta la subida */
   if(enAire){
     if(!pulsado && vy < 0 && ms - tSalto > SALTO_MIN_MS) vy *= Math.pow(CORTE, dt * 20);
-    vy += GRAVEDAD * dt; y += vy * dt;
-    if(y >= SUELO && !sobrePozo()){ y = SUELO; vy = 0; enAire = false; doble = false; }
+    vy += GRAVEDAD * (bajoElAire() ? AIRE : 1) * dt; y += vy * dt;
+    if(y >= SUELO && !sobrePozo()){ y = SUELO; vy = 0; enAire = false; doble = 0; }
   }
   if(!enAire && sobrePozo()){ enAire = true; vy = Math.max(vy, 0); }
   if(y > SUELO + 2 && sobrePozo()) return muere(cosas.find(o => o.pozo && PX + 13 > o.x));
 
-  for(const o of cosas) if(choca(o)) return muere(o);
+  for(const o of cosas) if(choca(o)){
+    /* el escudo se lleva el golpe y el problema por delante */
+    if(activo("hamburguesa")){
+      poder.hamburguesa = 0; subidon = ms + 600;
+      cosas = cosas.filter(c => c !== o);
+      hechos[o.tipo] = (hechos[o.tipo] || 0) + 1;
+      rotulos.push({ x: o.x, y: SUELO - 40, vida: 1, texto: "¡PARADO POR EL ESCUDO!" });
+      sonido.choque();
+      break;
+    }
+    return muere(o);
+  }
+  /* el imán: las papeletas que tienes delante vienen solas */
+  if(activo("mollete")) for(const p of papeletas){
+    if(p.x > PX - 4 && p.x < PX + 90){
+      const k = Math.min(1, dt * 7);
+      p.x += (PX + 10 - p.x) * k; p.y += (y - 20 - p.y) * k;
+    }
+  }
   for(const p of papeletas){
     if(!p.cogida && PX + 6 < p.x + 7 && PX + 21 > p.x && y - 32 < p.y + 8 && y > p.y){
       p.cogida = true; votos++;
@@ -1257,6 +1364,9 @@ function paso(dt){
       if(c.tipo === "churros"){
         subidon = ms + SUBIDON;
         rotulos.push({ x: c.x, y: c.y - 14, vida: 1.2, texto: "¡SUBIDÓN!" });
+      } else if(PODERES[c.tipo]){
+        poder[c.tipo] = ms + PODERES[c.tipo].ms;
+        rotulos.push({ x: c.x, y: c.y - 14, vida: 1.2, texto: "¡" + PODERES[c.tipo].nombre + "!" });
       }
       sonido.almuerzo();
     }
@@ -1269,12 +1379,12 @@ function salta(){
   if(estado !== "corre") return;
   if(enAire){
     /* ya dentro del pozo no hay doble salto que valga */
-    if(doble || y > SUELO) return;
+    if(doble >= (activo("pizza") ? 2 : 1) || y > SUELO) return;
     /* no se suma velocidad, se suma altura: sumando velocidad, dos
        pulsaciones seguidas sacaban al muñeco por arriba de la pantalla, y
        fijándola, pulsar pronto daba un salto MÁS BAJO que el normal */
     const queda = vy < 0 ? vy * vy / (2 * GRAVEDAD) : 0;
-    doble = true; vy = -Math.sqrt(2 * GRAVEDAD * (queda + DOBLE_ALTO));
+    doble++; vy = -Math.sqrt(2 * GRAVEDAD * (queda + DOBLE_ALTO));
     sonido.salto(1.4);
     return;
   }
@@ -1363,7 +1473,7 @@ function pinta(){
     /* el deadline, mientras cuelga del techo, lleva el rótulo debajo */
     const top = o.pozo ? SUELO - 8 : o.tipo === "correo" || o.tipo === "chat" ? o.y - 7
       : o.tipo === "deadline" ? (o.y < 30 ? o.y + o.h + 8 : o.y - 4)
-      : T.etiquetaY ? SUELO - T.etiquetaY : T.vuela ? o.y - 3 : SUELO - o.h - 4;
+      : o.zona ? 19 : T.etiquetaY ? SUELO - T.etiquetaY : T.vuela ? o.y - 3 : SUELO - o.h - 4;
     texto(T.etiqueta, o.x + o.w / 2, top, PAL.rotulo, 6);
     if(T.bocadillo) bocadillo(T.bocadillo, o.x + 8, SUELO - 24);
   }
@@ -1415,16 +1525,58 @@ function pinta(){
   g.fillText(String(puntos()).padStart(5, "0"), ANCHO - 6, 12);
   g.font = "400 5px 'IBM Plex Mono', ui-monospace, monospace";
   g.fillStyle = PAL.hud2;
-  g.fillText(metros() + " m · " + votos + (votos === 1 ? " papeleta" : " papeletas")
-    + (almuerzos ? " · " + almuerzos + (almuerzos === 1 ? " almuerzo" : " almuerzos") : ""), ANCHO - 6, 20);
+  g.fillText(metros() + " m", ANCHO - 6, 20);
   if(estado !== "elige") g.fillText("liberados " + libres.length + "/" + enJaulas(), ANCHO - 6, 27);
 
+  if(estado !== "elige") pintaHud();
+  if(activo("porron") && estado === "corre") rect(0, 0, ANCHO, ALTO, "rgba(138,31,58,.07)");
   if(estado === "espera") texto(TACTIL ? "Pulsa «Comenzar» o toca para salir" : "Pulsa «Comenzar», espacio o haz clic para salir", ANCHO / 2, 40, PAL.aviso, 7);
   if(estado === "fin" && repetible){
     texto("Pulsa «Otra vez» para repetir", ANCHO / 2, 38, PAL.aviso, 7);
     texto("Tu marca y el marcador, abajo", ANCHO / 2, 47, PAL.hud2, 5);
   }
   if(estado === "elige")  texto("Elige con quién corres", ANCHO / 2, 40, PAL.aviso, 7);
+}
+
+/* ------------------------------------------------------------------
+   Arriba a la izquierda, lo que llevas: cada cosa con su icono y cuántas,
+   y debajo los poderes que tienes puestos con la barra de lo que les
+   queda. Los iconos son de 7 píxeles, hechos aposta: los dibujos del
+   escenario a este tamaño no se leían
+   ------------------------------------------------------------------ */
+const ICONOS = {
+  papeleta(x, y){ silueta(x + 1, y, 5, 7); rect(x + 1, y, 5, 7, C.W); rect(x + 2, y + 2, 1, 1, C.R); rect(x + 4, y + 2, 1, 1, C.R); rect(x + 3, y + 3, 1, 1, C.R); rect(x + 2, y + 4, 1, 1, C.R); rect(x + 4, y + 4, 1, 1, C.R); },
+  churros(x, y){ for(let i = 0; i < 7; i++){ rect(x + i - 1, y + 6 - i - 1, 3, 3, C.O); } for(let i = 0; i < 7; i++){ rect(x + i, y + 6 - i, 1, 1, i % 3 ? "#f0c070" : "#b87a2a"); rect(x + i + 1, y + 6 - i, 1, 1, "#c98a3a"); } },
+  mollete(x, y){ silueta(x, y + 1, 8, 5); rect(x, y + 1, 8, 2, "#e3bf86"); rect(x, y + 3, 8, 1, "#c9584c"); rect(x, y + 4, 8, 2, "#c99a5a"); },
+  pizza(x, y){ [[0, 8], [1, 6], [2, 4], [3, 2]].forEach(([a, w], i) => rect(x + a - 1, y + 1 + i * 1.5 - 1, w + 2, 3, C.O)); rect(x, y + 1, 8, 1, "#c98a3a"); rect(x + 1, y + 2, 6, 1, "#f2c94c"); rect(x + 2, y + 3, 4, 2, "#f2c94c"); rect(x + 3, y + 5, 2, 1, "#f2c94c"); rect(x + 3, y + 2, 1, 1, "#c9584c"); },
+  hamburguesa(x, y){ silueta(x, y + 1, 8, 6); rect(x, y + 1, 8, 2, "#d9a24a"); rect(x, y + 3, 8, 1, "#5cb85c"); rect(x, y + 4, 8, 1, "#6a3a22"); rect(x, y + 5, 8, 2, "#c98a3a"); },
+  porron(x, y){ porron(x, y, PORRON_MINI); }
+};
+function pintaHud(){
+  g.font = "500 5px 'IBM Plex Mono', ui-monospace, monospace";
+  g.textAlign = "left";
+  let x = 5;
+  const pon = (k, n) => {
+    ICONOS[k](x, 4);
+    g.fillStyle = PAL.hud; g.fillText("×" + n, x + 9, 10);
+    x += 9 + Math.ceil(g.measureText("×" + n).width) + 5;
+  };
+  pon("papeleta", votos);
+  for(const k of Object.keys(ALMUERZOS)) if(comidos[k]) pon(k, comidos[k]);
+  /* los poderes, a la derecha bajo el marcador, que a la izquierda los
+     tapaba el muñeco al saltar: nombre, icono y la barra de lo que queda */
+  let py = 32;
+  const barra = (k, nombre, queda, total) => {
+    const bx = ANCHO - 6 - 24;
+    rect(bx, py + 2, 24, 3, PAL.sombra);
+    rect(bx, py + 2, Math.max(1, Math.round(24 * queda / total)), 3, "rgb(" + PAL.puntos + ")");
+    ICONOS[k](bx - 11, py - 1);
+    g.fillStyle = PAL.hud2; g.textAlign = "right"; g.fillText(nombre, bx - 14, py + 5);
+    py += 9;
+  };
+  if(estado !== "corre") return;
+  if(subidon > ms) barra("churros", "SUBIDÓN", subidon - ms, SUBIDON);
+  for(const [k, P] of Object.entries(PODERES)) if(activo(k)) barra(k, P.nombre, poder[k] - ms, P.ms);
 }
 
 /* el nombre corto, y con la inicial del apellido cuando se repite:
