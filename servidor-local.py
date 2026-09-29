@@ -25,6 +25,7 @@ import math
 import pathlib
 import re
 import sys
+import threading
 import time
 import unicodedata
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
@@ -213,6 +214,9 @@ REDIRECCIONES = {"/propuestas": "/#propuestas", "/peli": "/#estreno",
                  "/asesoramiento": "/#asesoramiento-juridico"}
 
 
+CERROJO = threading.Lock()
+
+
 class Manejador(SimpleHTTPRequestHandler):
     def __init__(self, *a, **k):
         super().__init__(*a, directory=str(RAIZ), **k)
@@ -275,6 +279,12 @@ class Manejador(SimpleHTTPRequestHandler):
         return self.responde({"guardada": True, "top": mejores(filas), "jugadas": len(filas)})
 
     def do_POST(self):
+        # de uno en uno: el servidor atiende en hilos y dos guardados a la
+        # vez leerían el mismo fichero y el segundo pisaría al primero
+        with CERROJO:
+            return self.guarda()
+
+    def guarda(self):
         if self.path.split("?")[0] != "/api/ranking":
             return self.responde({"error": "no existe"}, 404)
         juego = juego_de(self.path)

@@ -151,28 +151,52 @@ function porNombre(marcas) {
   return filas;
 }
 
-async function guardaPorNombre(almacen, juego, cuerpo, id, alias, puntos) {
-  const filas = porNombre((await almacen.get(juego.clave, { type: 'json' })) || {});
-  const s = slug(alias);
-  const existente = filas[s];
-
-  /* cambiar el alias de la marca que se acaba de guardar: misma persona,
-     mismos puntos, otro nombre que nadie usa. Se mueve la fila */
-  const mia = Object.entries(filas).find(([k, m]) => k !== s && m.id === id && m.puntos === puntos);
-  if (mia && !existente) {
-    delete filas[mia[0]];
-    filas[s] = { ...mia[1], alias };
-    await almacen.setJSON(juego.clave, filas);
-    return json({ guardada: false, renombrada: true, anterior: puntos, top: mejores(filas) });
+/* Leer, cambiar y escribir el tablero entero deja un hueco: si dos
+   personas guardan a la vez, las dos leen la misma versión y la segunda
+   en escribir pisa a la primera, que pierde su marca o vuelve a la de
+   antes. Por eso se escribe solo si el blob sigue en la versión que se
+   leyó (onlyIfMatch con su etag) y, si no, se lee otra vez y se repite.
+   cambia() recibe las marcas y devuelve { escribe, respuesta }: escribe
+   es lo que hay que guardar, o null si no hay nada que tocar. */
+async function conVersion(almacen, clave, cambia) {
+  for (let intento = 0; intento < 10; intento++) {
+    /* entre intento e intento, una espera corta y al azar para que los
+       que chocaron no vuelvan a chocar a la vez */
+    if (intento) await new Promise(r => setTimeout(r, Math.random() * 60 * intento));
+    const leido = await almacen.getWithMetadata(clave, { type: 'json' });
+    const { escribe, respuesta } = cambia(leido?.data || {});
+    if (!escribe) return respuesta;
+    const { modified } = await almacen.setJSON(clave, escribe,
+      leido ? { onlyIfMatch: leido.etag } : { onlyIfNew: true });
+    if (modified) return respuesta;
   }
+  return json({ error: 'hay mucha gente guardando a la vez, prueba otra vez' }, 503);
+}
 
-  if (existente && existente.puntos >= puntos) {
-    return json({ guardada: false, anterior: existente.puntos, top: mejores(filas) });
-  }
+/* en el juego se queda siempre la marca más alta de cada nombre: una
+   partida peor con el mismo nombre no la baja nunca */
+function guardaPorNombre(almacen, juego, cuerpo, id, alias, puntos) {
+  return conVersion(almacen, juego.clave, marcas => {
+    const filas = porNombre(marcas);
+    const s = slug(alias);
+    const existente = filas[s];
 
-  filas[s] = { id, alias, puntos, ...juego.guarda(cuerpo), ts: Date.now() };
-  await almacen.setJSON(juego.clave, filas);
-  return json({ guardada: true, top: mejores(filas), jugadas: Object.keys(filas).length });
+    /* cambiar el alias de la marca que se acaba de guardar: misma persona,
+       mismos puntos, otro nombre que nadie usa. Se mueve la fila */
+    const mia = Object.entries(filas).find(([k, m]) => k !== s && m.id === id && m.puntos === puntos);
+    if (mia && !existente) {
+      delete filas[mia[0]];
+      filas[s] = { ...mia[1], alias };
+      return { escribe: filas, respuesta: json({ guardada: false, renombrada: true, anterior: puntos, top: mejores(filas) }) };
+    }
+
+    if (existente && existente.puntos >= puntos) {
+      return { escribe: null, respuesta: json({ guardada: false, anterior: existente.puntos, top: mejores(filas) }) };
+    }
+
+    filas[s] = { id, alias, puntos, ...juego.guarda(cuerpo), ts: Date.now() };
+    return { escribe: filas, respuesta: json({ guardada: true, top: mejores(filas), jugadas: Object.keys(filas).length }) };
+  });
 }
 
 export default async function (peticion) {
@@ -209,34 +233,31 @@ export default async function (peticion) {
 
   const puntos = Number(cuerpo.puntos);
   if (juego.porNombre) return guardaPorNombre(almacen, juego, cuerpo, id, alias, puntos);
-  const marcas = (await almacen.get(clave, { type: 'json' })) || {};
+  return conVersion(almacen, clave, marcas => {
+    /* dos personas con el mismo alias dejarían dos filas iguales y el
+       tablero ilegible, así que el primero que lo coge se lo queda */
+    const pillado = Object.entries(marcas)
+      .find(([otro, m]) => otro !== id && slug(m.alias) === slug(alias));
+    if (pillado) return { escribe: null, respuesta: json({ error: 'ese alias ya lo está usando otra persona' }, 409) };
 
-  /* dos personas con el mismo alias dejarían dos filas iguales y el
-     tablero ilegible, así que el primero que lo coge se lo queda */
-  const pillado = Object.entries(marcas)
-    .find(([otro, m]) => otro !== id && slug(m.alias) === slug(alias));
-  if (pillado) return json({ error: 'ese alias ya lo está usando otra persona' }, 409);
+    const previa = marcas[id];
 
-  const previa = marcas[id];
-
-  /* si no mejora la marca pero cambia el alias, se renombra y se
-     conservan los puntos: así se puede corregir sin jugar otra vez */
-  if (previa && previa.puntos >= puntos) {
-    if (previa.alias === alias) {
-      return json({ guardada: false, anterior: previa.puntos, top: mejores(marcas) });
+    /* si no mejora la marca pero cambia el alias, se renombra y se
+       conservan los puntos: así se puede corregir sin jugar otra vez */
+    if (previa && previa.puntos >= puntos) {
+      if (previa.alias === alias) {
+        return { escribe: null, respuesta: json({ guardada: false, anterior: previa.puntos, top: mejores(marcas) }) };
+      }
+      marcas[id] = { ...previa, alias };
+      return { escribe: marcas, respuesta: json({ guardada: false, renombrada: true, anterior: previa.puntos, top: mejores(marcas) }) };
     }
-    marcas[id] = { ...previa, alias };
-    await almacen.setJSON(clave, marcas);
-    return json({ guardada: false, renombrada: true, anterior: previa.puntos, top: mejores(marcas) });
-  }
 
-  marcas[id] = {
-    alias,
-    puntos,
-    ...juego.guarda(cuerpo),
-    ts: Date.now(),
-  };
-  await almacen.setJSON(clave, marcas);
-
-  return json({ guardada: true, top: mejores(marcas), jugadas: Object.keys(marcas).length });
+    marcas[id] = {
+      alias,
+      puntos,
+      ...juego.guarda(cuerpo),
+      ts: Date.now(),
+    };
+    return { escribe: marcas, respuesta: json({ guardada: true, top: mejores(marcas), jugadas: Object.keys(marcas).length }) };
+  });
 }
